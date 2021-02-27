@@ -10,7 +10,7 @@
 # 想定しているペルソナ
 - 読書を習慣化したい20代以上の学生・社会人
 - 読書習慣はあるがいまいち日々の生活に活かせていないと感じる方
-- dibookを一通り読み終わったが次に読む本が決まらないdiv社員
+- 推薦図書を一通り読み終わったが次に読む本が決まらない社員
 
 # デプロイURL
 今後記載予定
@@ -21,8 +21,8 @@
 # 利用方法
 
 # 解決したい課題
-①dibookを読み終わった人が読むべき本が定まっていない。読書習慣がない人は特にdibookを読み終わった後どのような本を読めばいいかわからない
-②①の結果divワークルールに「週1冊以上本を読む」とあるものの、読書習慣がある人とない人で体現度にばらつきが出やすい構造である。
+①推薦図書を読み終わった人が読むべき本が定まっていない。読書習慣がない人は特に推薦図書を読み終わった後どのような本を読めばいいかわからない
+②①の結果会社のルールとして「週1冊以上本を読む」とあるものの、読書習慣がある人とない人で体現度にばらつきが出やすい構造である。
 ③輪読会開催が個人の自主性に委ねられている。
 
 # 洗い出した要件
@@ -64,6 +64,9 @@
 |encrypted_password|string|null: false|
 
 ### Associations
+- has_many :books
+- has_many  :likes
+- has_many  :action_plans
 
 ## booksテーブル
 |Column|Type|Options|
@@ -72,27 +75,33 @@
 |recommends|string|null: false|
 |description|text|null: false|
 |author|string|null: false|
-|genre|references|null: false, foreign_key: true|
+|publisher|string|null: false|
+|genre_id|integer|null: false ※ActiveHashを用いて実装|
+|price|integer|null: false|
+|amazon_link|text||
 
 ### Associations
-
-## genresテーブル
-|Column|Type|Options|
-|------|----|-------|
-|name|string|null: false, unique: true|
+- belongs_to :user
+- has_many :likes
+- has_many :action_plans
 
 ## likesテーブル
 |Column|Type|Options|
 |------|----|-------|
+|status_id|integer|null: false ※ActiceHashを用いて実装|
+|book|references|null: false, foreign_key: true|
+|user|references|null: false, foreign_key: true|
+
+### Associations
+- belongs_to :book
+- belongs_to :user
 
 ## action_plansテーブル
 |Column|Type|Options|
 |------|----|-------|
+|like|references|null: false, foreign_key: true|
 
-
-
-
-
-
+### Associations
+- belongs_to :like
 
 # ローカルでの動作方法
