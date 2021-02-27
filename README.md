@@ -88,9 +88,10 @@
 ## likesテーブル
 |Column|Type|Options|
 |------|----|-------|
-|status_id|integer|null: false ※ActiceHashを用いて実装|
 |book|references|null: false, foreign_key: true|
 |user|references|null: false, foreign_key: true|
+|status_id|integer|null: false ※ActiceHashを用いて実装|
+
 
 ### Associations
 - belongs_to :book
