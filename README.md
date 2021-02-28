@@ -62,6 +62,7 @@
 |nickname|string|null: false, unique: true|
 |email|string|null: false, unique: true|
 |encrypted_password|string|null: false|
+|avatar||ActiveStorageで実装|
 
 ### Associations
 - has_many :books
@@ -78,6 +79,7 @@
 |genre_id|integer|null: false ※ActiveHashを用いて実装|
 |price|integer|null: false|
 |amazon_link|text||
+|image||ActiveStorageで実装|
 
 ### Associations
 - belongs_to :user
