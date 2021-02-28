@@ -1,0 +1,31 @@
+{
+  "name": "MyRecommendedBooks",
+  "version": "1.0.0",
+  "description": "package for this app ver1",
+  "main": "./src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/togo-mentor/my_recommended_books.git"
+  },
+  "keywords": [
+    "MyRecommendedBooks"
+  ],
+  "author": "TogoMori",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/togo-mentor/my_recommended_books/issues"
+  },
+  "homepage": "https://github.com/togo-mentor/my_recommended_books#readme",
+  "devDependencies": {
+    "vue-loader": "^15.9.6",
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0"
+  },
+  "dependencies": {
+    "vue": "^2.6.12"
+  }
+}
