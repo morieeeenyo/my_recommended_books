@@ -66,7 +66,6 @@
 ### Associations
 - has_many :books
 - has_many  :likes
-- has_many  :action_plans
 
 ## booksテーブル
 |Column|Type|Options|
@@ -83,7 +82,6 @@
 ### Associations
 - belongs_to :user
 - has_many :likes
-- has_many :action_plans
 
 ## likesテーブル
 |Column|Type|Options|
@@ -96,11 +94,14 @@
 ### Associations
 - belongs_to :book
 - belongs_to :user
+- has_one :action_plan
 
 ## action_plansテーブル
 |Column|Type|Options|
 |------|----|-------|
 |like|references|null: false, foreign_key: true|
+|realizations|text|null: false|
+|action_plans|text|null: false|
 
 ### Associations
 - belongs_to :like
