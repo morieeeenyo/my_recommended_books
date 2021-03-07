@@ -1,11 +1,12 @@
 class App extends React.Component {
   render () {
     return (
-      <header>
-
-      </header>
       <div className="container">
-        Hello! React
+        <header>
+
+        </header>
+
+        <h1>Hello! React</h1>
       </div>
     )
   } 
