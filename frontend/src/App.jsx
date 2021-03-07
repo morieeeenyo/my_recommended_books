@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-const Header = styled.header`
-    display: flex;
-`;
 
 class App extends React.Component {
   render () {
@@ -20,5 +17,11 @@ class App extends React.Component {
     )
   } 
 }
+
+const Header = styled.header`
+display: flex;
+justify-content: space-around;
+background-color: gray;
+`;
 
 export default App;
