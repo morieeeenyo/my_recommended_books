@@ -55,6 +55,7 @@ class App extends React.Component {
   } 
 }
 
+// ヘッダーのスタイル
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
@@ -90,6 +91,7 @@ const HeaderLink = styled.a`
   }
 `
 
+// モーダルのスタイル
 const ModalOverlay = styled.div `
   /*　画面全体を覆う設定　*/
   position:fixed;
