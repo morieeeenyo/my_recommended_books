@@ -18,7 +18,7 @@ function UserModal(props) {
 }
 
 
-class App extends React.Component {
+class Header extends React.Component {
   constructor(){
     super();
     this.state = {
@@ -36,9 +36,8 @@ class App extends React.Component {
 
   render () {
     return (
-      <div className="container">
-        <Header>
-          <HeaderTitle>俺の推薦図書</HeaderTitle>
+      <HeaderContainer>
+        <HeaderTitle>俺の推薦図書</HeaderTitle>
           <HeaderRight>
             <HeaderLink onClick={this.openModal}>
               新規登録
@@ -48,15 +47,14 @@ class App extends React.Component {
               ログイン
               <UserModal show={this.state.showModal}/>
             </HeaderLink>
-          </HeaderRight>
-        </Header>
-      </div>
+        </HeaderRight>
+      </HeaderContainer>
     )
   } 
 }
 
 // ヘッダーのスタイル
-const Header = styled.header`
+const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   background-color: lightgray;
@@ -116,4 +114,4 @@ const ModalContent = styled.div `
 
 
 
-export default App;
+export default Header;
