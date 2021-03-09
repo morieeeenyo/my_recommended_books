@@ -5,10 +5,10 @@ import styled from 'styled-components';
 function UserModal(props) {
   if (props.show) {
   return (
-      <ModalOverlay>
+      <ModalOverlay onClick={() => props.closeModal()}>
         <ModalContent>
           <p>これがモーダルウィンドウです。</p>
-          <p><button>close</button></p>
+          <p><button onClick={() => props.closeModal()}>close</button></p>
         </ModalContent>
       </ModalOverlay>
    )
@@ -17,20 +17,40 @@ function UserModal(props) {
   }
 }
 
-
 class Header extends React.Component {
   constructor(){
     super();
     this.state = {
-      showModal: false,
+      showSignUpModal: false,
+      showLoginModal: false,
     }
-    this.openModal = this.openModal.bind(this)
+    this.openSignUpModal = this.openSignUpModal.bind(this)
+    this.openLoginModal = this.openLoginModal.bind(this)
+    this.closeSignUpModal = this.closeSignUpModal.bind(this)
+    this.closeLoginModal = this.closeLoginModal.bind(this)
   }
 
-
-  openModal() {
+  openSignUpModal() {
     this.setState ({
-      showModal: true
+      showSignUpModal: true
+    })
+  }
+
+  openLoginModal() {
+    this.setState ({
+      showLoginModal: true
+    })
+  }
+
+  closeSignUpModal() {
+    this.setState ({
+      showSignUpModal: false
+    })
+  }
+
+  closeLoginModal() {
+    this.setState ({
+      showLoginModal: false
     })
   }
 
@@ -39,13 +59,16 @@ class Header extends React.Component {
       <HeaderContainer>
         <HeaderTitle>俺の推薦図書</HeaderTitle>
           <HeaderRight>
-            <HeaderLink onClick={this.openModal}>
+            <HeaderLink onClick={this.openSignUpModal}>
               新規登録
-              <UserModal show={this.state.showModal}/>
+              <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/>
+            </HeaderLink>
+            <HeaderLink onClick={this.openLoginModal}>
+              ログイン
+              <UserModal show={this.state.showLoginModal} closeModal={this.closeLoginModal}/>
             </HeaderLink>
             <HeaderLink onClick={this.openModal}>
-              ログイン
-              <UserModal show={this.state.showModal}/>
+              ゲストユーザーとしてログイン
             </HeaderLink>
         </HeaderRight>
       </HeaderContainer>
@@ -73,7 +96,7 @@ const HeaderRight = styled.div`
   display: flex;
   justify-content: space-between;
   height: 65px;
-  width: 200px;
+  width: 500px;
   margin-right: 16%;
 `
 
