@@ -5,10 +5,10 @@ import styled from 'styled-components';
 function UserModal(props) {
   if (props.show) {
   return (
-      <ModalOverlay onClick={() => props.closeModal()}>
+      <ModalOverlay onClick={props.closeModal}>
         <ModalContent>
           <p>これがモーダルウィンドウです。</p>
-          <p><button onClick={() => props.closeModal()}>close</button></p>
+          <p><button onClick={props.closeModal}>close</button></p>
         </ModalContent>
       </ModalOverlay>
    )
@@ -61,12 +61,12 @@ class Header extends React.Component {
           <HeaderRight>
             <HeaderLink onClick={this.openSignUpModal}>
               新規登録
-              <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/>
             </HeaderLink>
+              <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/>
             <HeaderLink onClick={this.openLoginModal}>
               ログイン
-              <UserModal show={this.state.showLoginModal} closeModal={this.closeLoginModal}/>
             </HeaderLink>
+              <UserModal show={this.state.showLoginModal} closeModal={this.closeLoginModal}/>
             <HeaderLink onClick={this.openModal}>
               ゲストユーザーとしてログイン
             </HeaderLink>
