@@ -61,8 +61,10 @@ class Header extends React.Component {
           <HeaderRight>
             <HeaderLink onClick={this.openSignUpModal}>
               新規登録
+              {/* <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/> これだとモーダルが閉じない */}
             </HeaderLink>
-              <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/>
+              {/* モーダルを開くにはHeaderLinkの外に出す(onClickイベントが重複するため発火しなくなる) */}
+              <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/> 
             <HeaderLink onClick={this.openLoginModal}>
               ログイン
             </HeaderLink>
