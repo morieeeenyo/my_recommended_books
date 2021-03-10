@@ -51,8 +51,8 @@ function UserModal(props) {
   return (
       <ModalOverlay onClick={props.closeModal}>
         <ModalContent onClick={(e) => e.stopPropagation()}>
-          <p>{props.content}</p>
-          <p><button onClick={props.closeModal}>close</button></p>
+            <p>{props.content}</p>
+            <button onClick={props.closeModal}>x</button>
           <UserFrom content={props.content}/>
         </ModalContent>
       </ModalOverlay>
@@ -171,11 +171,42 @@ const ModalOverlay = styled.div `
   justify-content: center;
 `
 
+
+
 const ModalContent = styled.div `
   z-index:2;
   width:50%;
   padding: 1em;
   background:#fff;
+  position: relative;
+
+  & p {
+    text-align: center;
+    font-family: Verdana, sans-serif;
+    margin: 0 auto;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  & button {
+    background-color: red;
+    color: #FFF;
+    height: 20px;
+    border-radius: 50%;
+    border-style: none;
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    top: 2%;
+    left: 2%;
+  }
+
+  & button:hover {
+    color: red;
+    background-color: #fff;
+    border: 1px solid #000;
+    cursor: pointer;
+  }
 `
 
 const UserFromContent = styled.form `
