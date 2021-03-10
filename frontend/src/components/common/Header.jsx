@@ -6,8 +6,8 @@ function UserModal(props) {
   if (props.show) {
   return (
       <ModalOverlay onClick={props.closeModal}>
-        <ModalContent>
-          <p>これがモーダルウィンドウです。</p>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
+          <p>{props.content}</p>
           <p><button onClick={props.closeModal}>close</button></p>
         </ModalContent>
       </ModalOverlay>
@@ -21,36 +21,34 @@ class Header extends React.Component {
   constructor(){
     super();
     this.state = {
-      showSignUpModal: false,
-      showLoginModal: false,
+      showModal: false,
+      content: '',
+      // showLoginModal: false,
     }
     this.openSignUpModal = this.openSignUpModal.bind(this)
     this.openLoginModal = this.openLoginModal.bind(this)
-    this.closeSignUpModal = this.closeSignUpModal.bind(this)
-    this.closeLoginModal = this.closeLoginModal.bind(this)
+    this.closeModal = this.closeModal.bind(this)
   }
 
   openSignUpModal() {
     this.setState ({
-      showSignUpModal: true
+      showModal: true,
+      content: 'SignUp'
     })
   }
 
   openLoginModal() {
     this.setState ({
-      showLoginModal: true
+      showModal: true,
+      content: 'Login'
+      // showLoginModal: true
     })
   }
 
-  closeSignUpModal() {
+  closeModal() {
     this.setState ({
-      showSignUpModal: false
-    })
-  }
-
-  closeLoginModal() {
-    this.setState ({
-      showLoginModal: false
+      showModal: false,
+      content: ''
     })
   }
 
@@ -61,14 +59,12 @@ class Header extends React.Component {
           <HeaderRight>
             <HeaderLink onClick={this.openSignUpModal}>
               新規登録
-              {/* <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/> これだとモーダルが閉じない */}
             </HeaderLink>
-              {/* モーダルを開くにはHeaderLinkの外に出す(onClickイベントが重複するため発火しなくなる) */}
-              <UserModal show={this.state.showSignUpModal} closeModal={this.closeSignUpModal}/> 
             <HeaderLink onClick={this.openLoginModal}>
               ログイン
             </HeaderLink>
-              <UserModal show={this.state.showLoginModal} closeModal={this.closeLoginModal}/>
+            {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content}/>
             <HeaderLink onClick={this.openModal}>
               ゲストユーザーとしてログイン
             </HeaderLink>
