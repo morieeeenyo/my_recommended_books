@@ -1,6 +1,50 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+function UserFrom(props) {
+  if (props.content === 'SignUp') {
+    return (
+    <UserFromContent onSubmit={(e) => e.preventDefault()}>
+      <FormBlock>
+        <label htmlFor="nickname">ニックネーム</label>
+        <input type="text" name="nickname" id="nickname"/>
+      </FormBlock>
+      <FormBlock>
+        <label htmlFor="email">メールアドレス</label>
+        <input type="email" name="email" id="email"/>
+      </FormBlock>
+      <FormBlock>
+        <label htmlFor="password">パスワード</label>
+        <input type="password" name="password" id="password"/>
+      </FormBlock>
+      <FormBlock>
+        <label htmlFor="password_confirmation">パスワード(確認)</label>
+        <input type="password" name="password_confirmation" id="password_confirmation"/>
+      </FormBlock>
+      <FormBlock>
+        <label htmlFor="avatar">アバター画像</label>
+        <input type="file" name="avatar" id="avatar"/>
+      </FormBlock>
+    </UserFromContent>
+    )
+  } 
+  
+  if (props.content === 'Login') {
+    return (
+    <UserFromContent onSubmit={(e) => e.preventDefault()}>
+      <FormBlock>
+        <label htmlFor="email">メールアドレス</label>
+        <input type="email" name="email" id="email"/>
+      </FormBlock>
+      <FormBlock>
+        <label htmlFor="password">パスワード</label>
+        <input type="password" name="password" id="pasaword"/>
+      </FormBlock>
+    </UserFromContent>
+    )
+  } 
+}
+
 
 function UserModal(props) {
   if (props.show) {
@@ -9,6 +53,7 @@ function UserModal(props) {
         <ModalContent onClick={(e) => e.stopPropagation()}>
           <p>{props.content}</p>
           <p><button onClick={props.closeModal}>close</button></p>
+          <UserFrom content={props.content}/>
         </ModalContent>
       </ModalOverlay>
    )
@@ -131,6 +176,19 @@ const ModalContent = styled.div `
   width:50%;
   padding: 1em;
   background:#fff;
+`
+
+const UserFromContent = styled.form `
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+` 
+
+const FormBlock = styled.div `
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
 `
 
 
