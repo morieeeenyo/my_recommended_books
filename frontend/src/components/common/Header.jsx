@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import UserModal from './UserModal.jsx';
+import Logo from '../../../images/logo.jpg'
 
 class Header extends React.Component {
   constructor(){
@@ -40,7 +41,9 @@ class Header extends React.Component {
   render () {
     return (
       <HeaderContainer>
-        <HeaderTitle>俺の推薦図書</HeaderTitle>
+        <HeaderTitle>
+          <img src={Logo} alt="俺の推薦図書" width="200" height="60"/>
+        </HeaderTitle>
           <HeaderRight>
             <HeaderLink onClick={this.openSignUpModal}>
               新規登録
@@ -63,13 +66,12 @@ class Header extends React.Component {
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
-  background-color: lightgray;
+  background-color: #fffaeb;
   height: 65px;
 `;
 
 const HeaderTitle = styled.h1`
   color: #000;
-  font-family: Verdana, sans-serif;
   margin: 0;
   line-height: 65px;
   margin-left: 16%;
@@ -84,14 +86,13 @@ const HeaderRight = styled.div`
 `
 
 const HeaderLink = styled.a`
-  color: #fff;
+  color: #000;
   line-height: 65px;
   display: inline-block;
   font-size: 18px;
   &:hover {
     cursor: pointer;
-    background-color: #fff;
-    color: lightgray; 
+    font-weight: bold;
   }
 `
 
