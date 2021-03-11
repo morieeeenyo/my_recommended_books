@@ -115,7 +115,7 @@ const ModalContent = styled.div `
     left: 2%;
 
   & button:focus {
-    outline: none;
+    outline: 0;
   } 
 }
 
