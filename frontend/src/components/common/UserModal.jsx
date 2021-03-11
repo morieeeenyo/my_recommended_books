@@ -82,10 +82,11 @@ const ModalOverlay = styled.div `
 
 const ModalContent = styled.div `
   z-index:2;
-  width:50%;
+  width: 24%;
   padding: 1em;
   background:#fff;
   position: relative;
+  height: fit-content;
 
   & p {
     text-align: center;
@@ -120,13 +121,23 @@ const UserFromContent = styled.form `
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: fit-content;
 ` 
 
 const FormBlock = styled.div `
-  margin: 5px 0;
+  margin: 10px auto;
+  width: 40%;
   display: flex;
-  justify-content: space-between;
-  width: 60%;
+  flex-direction: column;
+
+  & label {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  & input {
+    width: 100%;
+  }
 `
 
 export default UserModal;
