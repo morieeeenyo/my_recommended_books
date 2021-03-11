@@ -25,6 +25,9 @@ function UserFrom(props) {
         <label htmlFor="avatar">アバター画像</label>
         <input type="file" name="avatar" id="avatar"/>
       </FormBlock>
+      <FormBlock>
+        <input type="submit" value="SignUp" id="submit-btn"/>
+      </FormBlock>
     </UserFromContent>
     )
   } 
@@ -39,6 +42,9 @@ function UserFrom(props) {
       <FormBlock>
         <label htmlFor="password">パスワード</label>
         <input type="password" name="password" id="pasaword"/>
+      </FormBlock>
+      <FormBlock>
+        <input type="submit" value="Login" id="submit-btn"/>
       </FormBlock>
     </UserFromContent>
     )
@@ -100,19 +106,23 @@ const ModalContent = styled.div `
     background-color: red;
     color: #FFF;
     height: 20px;
-    border-radius: 50%;
     border-style: none;
+    border-radius: 2px;
     font-size: 12px;
     text-align: center;
     position: absolute;
     top: 2%;
     left: 2%;
-  }
+
+  & button:focus {
+    outline: none;
+  } 
+}
 
   & button:hover {
     color: red;
     background-color: #fff;
-    border: 1px solid #000;
+    border: 1px #000 solid;
     cursor: pointer;
   }
 `
@@ -137,6 +147,20 @@ const FormBlock = styled.div `
 
   & input {
     width: 100%;
+  }
+
+  & #submit-btn {
+    background-color: lightgray;
+    color: #FFF;
+    height: 24px;
+    font-size: 18px;
+    border-style: none;
+    border-radius: 2px;
+  }
+
+  & #submit-btn:hover {
+    background-color: #000;
+    cursor: pointer;
   }
 `
 
