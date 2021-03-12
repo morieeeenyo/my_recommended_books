@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 function UserFrom(props) {
   // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
+  // 実際の送信処理はフロント実装のブランチで行う
   if (props.content === 'SignUp') {
     return (
     <UserFromContent onSubmit={(e) => e.preventDefault()}>
@@ -56,10 +57,8 @@ function UserFrom(props) {
 function UserModal(props) {
   if (props.show) {
   return (
-    // closeModalはみたらわかるけどモーダルを閉じる処理
-      <ModalOverlay onClick={props.closeModal}>
-        {/* モーダル内部をクリックしたときは閉じない */}
-        <ModalContent onClick={(e) => e.stopPropagation()}>
+      <ModalOverlay onClick={props.closeModal}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
+        <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
             <p>{props.content}</p>
             <button onClick={props.closeModal}>x</button>
           <UserFrom content={props.content}/>
