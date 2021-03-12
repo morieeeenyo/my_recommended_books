@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import App from './App.vue';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom'
+import App from './components/books/App.jsx';
 
-// App.vueをエントリとしてレンダリング
-new Vue({
-  el: '#app',
-  render: h => h(App)
-}) 
+ReactDOM.render(
+  <App/>,
+  document.getElementById('app')
+)

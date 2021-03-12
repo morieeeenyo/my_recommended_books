@@ -1,4 +1,3 @@
-const { VueLoaderPlugin } = require("vue-loader");
 const path = require('path');
 module.exports = {
   mode: "development",
@@ -10,9 +9,23 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.vue$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'vue-loader'
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env', '@babel/preset-react']
+        }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[path][name].[ext]',//
+              },
+            },
+          ],
       }
     ]
   },
@@ -22,10 +35,4 @@ module.exports = {
     publicPath: '/public/javascripts',
     openPage: 'index.html'
   },
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
-    }
-  },
-  plugins: [new VueLoaderPlugin()]
 } 
