@@ -9,12 +9,23 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-env', '@babel/preset-react']
-      }
+        }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[path][name].[ext]',//
+              },
+            },
+          ],
       }
     ]
   },
