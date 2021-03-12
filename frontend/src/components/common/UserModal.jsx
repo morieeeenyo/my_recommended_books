@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 function UserFrom(props) {
+  // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
   if (props.content === 'SignUp') {
     return (
     <UserFromContent onSubmit={(e) => e.preventDefault()}>
@@ -55,7 +56,9 @@ function UserFrom(props) {
 function UserModal(props) {
   if (props.show) {
   return (
+    // closeModalはみたらわかるけどモーダルを閉じる処理
       <ModalOverlay onClick={props.closeModal}>
+        {/* モーダル内部をクリックしたときは閉じない */}
         <ModalContent onClick={(e) => e.stopPropagation()}>
             <p>{props.content}</p>
             <button onClick={props.closeModal}>x</button>
@@ -64,7 +67,7 @@ function UserModal(props) {
       </ModalOverlay>
    )
   } else {
-    return null;
+    return null; //closeModalメソッドが動くとHeader.jsx内のstateが変更され、propsのshowがfalseになる
   }
 }
 
@@ -102,6 +105,7 @@ const ModalContent = styled.div `
     font-weight: bold;
   }
 
+  /* Xボタンのスタイル */
   & button {
     background-color: red;
     color: #FFF;
@@ -114,17 +118,20 @@ const ModalContent = styled.div `
     top: 2%;
     left: 2%;
 
+  }
+    /* 青い枠が出ないようにする */
   & button:focus {
     outline: 0;
   } 
-}
 
+  /* ホバー時にクリックできることがわかりやすくなるようにする */
   & button:hover {
     color: red;
     background-color: #fff;
     border: 1px #000 solid;
     cursor: pointer;
   }
+
 `
 
 const UserFromContent = styled.form `
@@ -158,6 +165,7 @@ const FormBlock = styled.div `
     border-radius: 2px;
   }
 
+  /* ホバー時にクリックできることがわかりやすくなるようにする */
   & #submit-btn:hover {
     background-color: #000;
     cursor: pointer;
