@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   
   with_options presence: { message: 'は必須です'} do 
     validates :nickname
-    validates :image
+    # validates :image
   end
 
   PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]+\z/.freeze #半角で英小文字・大文字・数字全て含む
