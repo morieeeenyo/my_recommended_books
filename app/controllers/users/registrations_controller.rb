@@ -10,9 +10,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+    if request.format.json?
+      render :json => {
+        'status' => 'ok',
+        'csrf_token' => form_authenticity_token,
+        'result' => {
+          'user' => {
+            'id' => @user.id,
+            'email' => @user.email
+          }
+        }
+      } and return
+    end
+  end
 
   # GET /resource/edit
   # def edit
