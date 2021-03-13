@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do 
-      mount_devise_token_auth_for 'User', at: 'users'
+      mount_devise_token_auth_for 'User', at: 'users' , controllers: {
+        registrations: 'api/auth/registrations'
+      }
     end
   end
   root 'homes#index'
