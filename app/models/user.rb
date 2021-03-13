@@ -9,11 +9,9 @@ class User < ActiveRecord::Base
 
   has_one_attached :avatar
   
-  with_options presence: { message: 'は必須です'} do 
-    validates :nickname
-  end
+  validates :nickname, presence: true, uniqueness: { case_sensitive: true }
 
   PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]+\z/.freeze #半角で英小文字・大文字・数字全て含む
-  validates :password, format: { with: PASSWORD_REGEX, message: 'は英語大文字・小文字・数字を全て含む形式にしてください'}
-  validates :password, length: { in: 6..20, message: 'は6文字以上20文字以下で設定してください' }
+  validates :password, format: { with: PASSWORD_REGEX, message: 'must include half-width number, lowercase alphabet, and uppercase alphabet'}
+  validates :password, length: { maximum: 20 }
 end
