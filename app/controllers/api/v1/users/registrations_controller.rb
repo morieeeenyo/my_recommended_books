@@ -5,9 +5,9 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
     @user = User.new(sign_up_params)
     if @user.valid?
       @user.save 
-      render json: {user: @user}
+      render json: { user: @user }
     else
-      render json: {errors: @user.errors.full_messages}
+      render status: 422, json: { errors: @user.errors.full_messages } #手動でステータス入れないと200になるぽい
     end
   end
 
