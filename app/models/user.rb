@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_one_attached :avatar
   
   with_options presence: { message: 'は必須です'} do 
-    validates :nickname
+    # validates :nickname
     # validates :image
   end
 
