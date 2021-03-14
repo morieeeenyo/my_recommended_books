@@ -1,8 +1,12 @@
 class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
 
-  private 
+  private
 
-  def sign_in_params 
-    params.require(:session).permit(:email, :password)
+  def respond_with(resource, _opts = {})
+    render_jsonapi_response(resource)
+  end
+
+  def respond_to_on_destroy
+    head :no_content
   end
 end

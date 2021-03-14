@@ -53,4 +53,27 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+
+  describe "ログイン" do
+    context "パラメータが正しい時" do
+      it "リクエストに成功する" do
+        post api_v1_user_session_path, xhr: true, params: { email: user.email, password: user.password }
+        expect(response).to have_http_status(200) 
+      end
+      
+      it "正しくレスポンスが返却される" do
+        post api_v1_user_session_path, xhr: true, params:{ email: user.email, password: user.password }
+        json = JSON.parse(response.body) 
+        expect(json['data']['email']).to  eq user.email #コントローラーでrender json: { user: @user }としている
+      end
+    end
+
+    context "パラメータが不正な時" do
+      it "リクエストに失敗する" do
+        post api_v1_user_session_path, xhr: true, params: { session: { email: nil, password: nil } }
+        expect(response).to have_http_status(401) 
+      end
+    end
+  end
+  
 end
