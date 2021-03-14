@@ -64,14 +64,20 @@ RSpec.describe "Users", type: :request do
       it "正しくレスポンスが返却される" do
         post api_v1_user_session_path, xhr: true, params:{ email: user.email, password: user.password }
         json = JSON.parse(response.body) 
-        expect(json['data']['email']).to  eq user.email #コントローラーでrender json: { user: @user }としている
+        expect(json['data']['email']).to  eq user.email 
       end
     end
 
     context "パラメータが不正な時" do
       it "リクエストに失敗する" do
-        post api_v1_user_session_path, xhr: true, params: { session: { email: nil, password: nil } }
+        post api_v1_user_session_path, xhr: true, params: { email: '', password: '' } 
         expect(response).to have_http_status(401) 
+      end
+
+      it "エラーメッセージが返却される" do
+        post api_v1_user_session_path, xhr: true, params: { email: '', password: '' } 
+        json = JSON.parse(response.body) 
+        expect(json['errors']).to include "Invalid login credentials. Please try again."
       end
     end
   end
