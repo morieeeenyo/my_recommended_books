@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 function UserFrom(props) {
   // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
