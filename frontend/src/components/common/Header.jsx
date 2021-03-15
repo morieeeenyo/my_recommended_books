@@ -7,6 +7,9 @@ import UserModal from './UserModal.jsx';
 // ロゴ画像の読み込み
 import Logo from '../../../images/logo.jpg'
 
+//axiosの読み込み
+import axios from 'axios';
+
 class Header extends React.Component {
   constructor(){
     super();
@@ -17,6 +20,7 @@ class Header extends React.Component {
     this.openSignUpModal = this.openSignUpModal.bind(this)
     this.openLoginModal = this.openLoginModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
+    this.submitUserForm = this.submitUserForm.bind(this)
   }
 
   // 新規登録とログインでモーダルの表示を分けるために別メソッドとして定義
@@ -42,6 +46,12 @@ class Header extends React.Component {
     })
   }
 
+  submitUserForm(e) {
+    e.preventDefault()
+    console.log(e.target)
+
+  }
+
   render () {
     return (
       <HeaderContainer>
@@ -55,7 +65,7 @@ class Header extends React.Component {
           <HeaderLink onClick={this.openLoginModal}>
             ログイン
           </HeaderLink>
-            <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
+            <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm}/> {/* stateのcontentでログインと新規登録を分岐 */}
           <HeaderLink onClick={this.openModal}>
             ゲストユーザーとしてログイン {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定 */}
           </HeaderLink>

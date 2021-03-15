@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 function UserFrom(props) {
   // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
   // 実際の送信処理はフロント実装のブランチで行う
   if (props.content === 'SignUp') {
     return (
-    <UserFromContent onSubmit={(e) => e.preventDefault()}>
+    <UserFromContent onSubmit={props.submit}>
       <FormBlock>
         <label htmlFor="nickname">ニックネーム</label>
         <input type="text" name="nickname" id="nickname"/>
@@ -37,7 +36,7 @@ function UserFrom(props) {
   
   if (props.content === 'Login') {
     return (
-    <UserFromContent onSubmit={(e) => e.preventDefault()}>
+    <UserFromContent onSubmit={props.submit}>
       <FormBlock>
         <label htmlFor="email">メールアドレス</label>
         <input type="email" name="email" id="email"/>
@@ -62,7 +61,7 @@ function UserModal(props) {
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
             <p>{props.content}</p>
             <button onClick={props.closeModal}>x</button>
-          <UserFrom content={props.content}/>
+          <UserFrom content={props.content} submit={props.submit}/>
         </ModalContent>
       </ModalOverlay>
    )
