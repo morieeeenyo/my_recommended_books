@@ -3,7 +3,7 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
   private
 
   def respond_with(resource, _opts = {})
-    render_jsonapi_response(resource)
+    render json: { user: resource }
   end
 
   def respond_to_on_destroy

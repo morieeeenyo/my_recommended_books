@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Users", type: :request do
   let(:user) { create(:user) }
   let(:user_params) { attributes_for(:user) } #paramsとして送るためにattributes_forを使用。.attributesだとpasswordが整形されてしまう。
-  let(:invalid_user_params) { attributes_for(:user, nickname: '') } #不正なパラメータのパターンの1つとしてnicknameが空の場合を検証
+  let(:invalid_user_params) { attributes_for(:user, email: user.email) } #不正なパラメータのパターンの1つとしてemailが重複している場合を検証する(deviseのデフォルトの設定が動くことを確かめたい)
 
   describe "新規登録" do
     context "パラメータが正しい時" do
@@ -40,6 +40,7 @@ RSpec.describe "Users", type: :request do
       end
       
       it "ユーザーのカウントが増えていない" do 
+        user #1回userを呼び出しておくことでemailの重複を発生させる
         expect {
           post api_v1_user_registration_path, xhr: true, params: { registration: invalid_user_params }
         }.not_to change(User, :count) 
@@ -49,7 +50,7 @@ RSpec.describe "Users", type: :request do
         post api_v1_user_registration_path, xhr: true, params: { registration: invalid_user_params }
         #レスポンスの中身を検証
         json = JSON.parse(response.body) 
-        expect(json['errors']).to include "Nickname can't be blank"
+        expect(json['errors']).to include "Email has already been taken"
       end
     end
   end
