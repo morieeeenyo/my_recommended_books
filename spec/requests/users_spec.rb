@@ -8,24 +8,24 @@ RSpec.describe "Users", type: :request do
   describe "新規登録" do
     context "パラメータが正しい時" do
       it "リクエストに成功する(画像なし)" do #念の為ありなし検証してます
-        post api_v1_user_registration_path, xhr: true, params: { registration: user_params }
+        post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         expect(response).to have_http_status(200) #成功時ステータスは200
       end
 
       it "リクエストに成功する(画像あり)" do
         user_params[:avatar] = fixture_file_upload('spec/fixtures/test_image.jpg', filename: 'test_image.jpg', content_type: 'image/jpg') 
-        post api_v1_user_registration_path, xhr: true, params: { registration: user_params }
+        post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         expect(response).to have_http_status(200) 
       end
       
       it "ユーザーのカウントが1増える" do 
         expect {
-          post api_v1_user_registration_path, xhr: true, params: { registration: user_params }
+          post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         }.to change(User, :count).by(1) 
       end
       
       it "正しくレスポンスが返却される" do
-        post api_v1_user_registration_path, xhr: true, params: { registration: user_params }
+        post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         #レスポンスの中身を検証
         json = JSON.parse(response.body) 
         expect(json['user']['nickname']).to eq user_params[:nickname] #念の為一意性のカラムで検証  
@@ -35,19 +35,19 @@ RSpec.describe "Users", type: :request do
     
     context "パラメータが不正な時" do
       it "リクエストに失敗する" do
-        post api_v1_user_registration_path, xhr: true, params: { registration: invalid_user_params }
+        post api_v1_user_registration_path, xhr: true, params: { user: invalid_user_params }
         expect(response).to have_http_status(422) #コントローラーで422を返すよう設定
       end
       
       it "ユーザーのカウントが増えていない" do 
         user #1回userを呼び出しておくことでemailの重複を発生させる
         expect {
-          post api_v1_user_registration_path, xhr: true, params: { registration: invalid_user_params }
+          post api_v1_user_registration_path, xhr: true, params: { user: invalid_user_params }
         }.not_to change(User, :count) 
       end
 
       it "レスポンスに正しいエラーメッセージが含まれている" do
-        post api_v1_user_registration_path, xhr: true, params: { registration: invalid_user_params }
+        post api_v1_user_registration_path, xhr: true, params: { user: invalid_user_params }
         #レスポンスの中身を検証
         json = JSON.parse(response.body) 
         expect(json['errors']).to include "Email has already been taken"
