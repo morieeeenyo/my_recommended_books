@@ -16,6 +16,7 @@ module MyRecommendedBooks
       g.helper false
       g.test_framework false 
      end
+     
      config.assets.paths << Rails.root.join("public/javascripts")
 
     # Settings in config/environments/* take precedence over those specified here.
