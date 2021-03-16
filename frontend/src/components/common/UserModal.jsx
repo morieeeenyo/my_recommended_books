@@ -9,23 +9,23 @@ function UserFrom(props) {
     <UserFromContent onSubmit={props.submit}>
       <FormBlock>
         <label htmlFor="nickname">ニックネーム</label>
-        <input type="text" name="nickname" id="nickname"/>
+        <input type="text" name="nickname" id="nickname" value={props.user.nickname} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="email">メールアドレス</label>
-        <input type="email" name="email" id="email"/>
+        <input type="email" name="email" id="email" value={props.user.email} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="password">パスワード</label>
-        <input type="password" name="password" id="password"/>
+        <input type="password" name="password" id="password" value={props.user.password} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="password_confirmation">パスワード(確認)</label>
-        <input type="password" name="password_confirmation" id="password_confirmation"/>
+        <input type="password" name="password_confirmation" id="password_confirmation" value={props.user.password_confirmation} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="avatar">アバター画像</label>
-        <input type="file" name="avatar" id="avatar"/>
+        <input type="file" name="avatar" id="avatar" value={props.user.avatar} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <input type="submit" value="SignUp" id="submit-btn"/>
@@ -39,11 +39,11 @@ function UserFrom(props) {
     <UserFromContent onSubmit={props.submit}>
       <FormBlock>
         <label htmlFor="email">メールアドレス</label>
-        <input type="email" name="email" id="email"/>
+        <input type="email" name="email" id="email" value={props.user.email} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="password">パスワード</label>
-        <input type="password" name="password" id="pasaword"/>
+        <input type="password" name="password" id="pasaword" value={props.user.password} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <input type="submit" value="Login" id="submit-btn"/>
@@ -58,9 +58,54 @@ class UserModal extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      
+      user: {
+        nickname: '',        
+        email: '',        
+        password: '',        
+        password_confirmation: '',        
+        avatar: '',        
+      }
     }
+    this.formSubmit = this.formSubmit.bind(this)
+    this.updateForm = this.updateForm.bind(this)
   }
+
+  formSubmit(e) {
+    e.preventDefault()
+    console.log(e.target)
+    console.log(this.state.user)
+  }
+
+  updateForm(e) {
+    // ネストされたオブジェクトのdataまでアクセスしておく
+    const user = this.state.user;
+    console.log(user)
+    console.log(e.target.name)
+    console.log(e.target.value)
+
+    // eventが発火したname属性名ごとに値を処理
+    switch (e.target.name) {
+        case 'nickname':
+            user.nickname = e.target.value;
+            break;
+        case 'email':
+            user.email = e.target.value;
+            break;
+        case 'password':
+            user.password = e.target.value;
+            break;
+        case 'password_confirmation':
+            user.password_confirmation = e.target.value;
+            break;
+        case 'avatar':
+            user.avatar = e.target.value;
+            break;
+    }
+    this.setState({
+      user: user
+    })
+  }
+
   render () {
     if (this.props.show) {
       return (
@@ -68,7 +113,7 @@ class UserModal extends React.Component {
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
             <p>{this.props.content}</p>
             <button onClick={this.props.closeModal}>x</button>
-          <UserFrom content={this.props.content} submit={this.props.submit}/>
+          <UserFrom content={this.props.content} submit={this.formSubtmi} user={this.state.user} change={this.updateForm}/>
         </ModalContent>
       </ModalOverlay>
    )
