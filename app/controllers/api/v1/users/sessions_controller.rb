@@ -1,4 +1,5 @@
 class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
+  after_action :set_csrf_token_header
   respond_to :json
 
   def create
@@ -23,5 +24,9 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
   def invalid_password
     warden.custom_failure!
     render status: 401, json: { errors: 'Authorization failed. Invalid password' }
+  end
+
+  def set_csrf_token_header
+    response.set_header("X-CSRF-Token", form_authenticity_token)
   end
 end
