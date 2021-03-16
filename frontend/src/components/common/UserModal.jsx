@@ -37,7 +37,7 @@ function UserFrom(props) {
     )
   } 
   
-  if (props.content === 'Login') {
+  if (props.content === 'SignIn') {
     return (
     <UserFromContent onSubmit={props.submit}>
       <FormBlock>
@@ -76,7 +76,8 @@ class UserModal extends React.Component {
   formSubmit(e) {
     e.preventDefault()
     console.log(this.state.user)
-    axios
+    if (this.props.content == 'SignUp') {
+      axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
         console.log(response)
@@ -88,6 +89,21 @@ class UserModal extends React.Component {
           this.errors = error.response.data.errors; 
         }
       })
+    }
+    if (this.props.content == 'SignIn') {
+      axios
+      .post('/api/v1/users/sign_in', {user: this.state.user} )
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
+        console.error(error); 
+        console.log(error.response.data.errors)
+        if (error.response.data && error.response.data.errors) {
+          this.errors = error.response.data.errors; 
+        }
+      })
+    }
   }
 
   updateForm(e) {

@@ -33,7 +33,7 @@ class Header extends React.Component {
   openLoginModal() {
     this.setState ({
       showModal: true,
-      content: 'Login'
+      content: 'SignIn'
       // showLoginModal: true
     })
   }
@@ -70,11 +70,11 @@ class Header extends React.Component {
               <HeaderLink onClick={this.openLoginModal}>
                 ログイン
               </HeaderLink>
-              <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm} sign_in={this.signIn}/> /* stateのcontentでログインと新規登録を分岐 */
+              <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm} sign_in={this.signIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
               <HeaderLink onClick={this.openModal}>
                 ゲストユーザーとしてログイン 
               </HeaderLink>
-                // ゲストユーザーログインは別途フロント実装のブランチで実装予定 
+                {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
         </HeaderContainer>
       )  } else {
