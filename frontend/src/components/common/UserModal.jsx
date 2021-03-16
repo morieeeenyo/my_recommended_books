@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+//axiosの読み込み
+import axios from 'axios';
+
 function UserFrom(props) {
   // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
   // 実際の送信処理はフロント実装のブランチで行う
@@ -63,7 +66,7 @@ class UserModal extends React.Component {
         email: '',        
         password: '',        
         password_confirmation: '',        
-        avatar: '',        
+        avatar: undefined,        
       }
     }
     this.formSubmit = this.formSubmit.bind(this)
@@ -72,16 +75,24 @@ class UserModal extends React.Component {
 
   formSubmit(e) {
     e.preventDefault()
-    console.log(e.target)
     console.log(this.state.user)
+    axios
+      .post('/api/v1/users', {user: this.state.user} )
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
+        console.error(error); 
+        console.log(error.response.data.errors)
+        if (error.response.data && error.response.data.errors) {
+          this.errors = error.response.data.errors; 
+        }
+      })
   }
 
   updateForm(e) {
     // ネストされたオブジェクトのdataまでアクセスしておく
     const user = this.state.user;
-    console.log(user)
-    console.log(e.target.name)
-    console.log(e.target.value)
 
     // eventが発火したname属性名ごとに値を処理
     switch (e.target.name) {
@@ -113,7 +124,7 @@ class UserModal extends React.Component {
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
             <p>{this.props.content}</p>
             <button onClick={this.props.closeModal}>x</button>
-          <UserFrom content={this.props.content} submit={this.formSubtmi} user={this.state.user} change={this.updateForm}/>
+          <UserFrom content={this.props.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm}/>
         </ModalContent>
       </ModalOverlay>
    )

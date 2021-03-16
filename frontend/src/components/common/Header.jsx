@@ -7,9 +7,6 @@ import UserModal from './UserModal.jsx';
 // ロゴ画像の読み込み
 import Logo from '../../../images/logo.jpg'
 
-//axiosの読み込み
-import axios from 'axios';
-
 class Header extends React.Component {
   constructor(){
     super();
