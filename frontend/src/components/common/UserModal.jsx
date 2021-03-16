@@ -54,20 +54,28 @@ function UserFrom(props) {
 }
 
 
-function UserModal(props) {
-  if (props.show) {
-  return (
-      <ModalOverlay onClick={props.closeModal}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
+class UserModal extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      
+    }
+  }
+  render () {
+    if (this.props.show) {
+      return (
+        <ModalOverlay onClick={this.props.closeModal}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
-            <p>{props.content}</p>
-            <button onClick={props.closeModal}>x</button>
-          <UserFrom content={props.content} submit={props.submit}/>
+            <p>{this.props.content}</p>
+            <button onClick={this.props.closeModal}>x</button>
+          <UserFrom content={this.props.content} submit={this.props.submit}/>
         </ModalContent>
       </ModalOverlay>
    )
   } else {
     return null; //closeModalメソッドが動くとHeader.jsx内のstateが変更され、propsのshowがfalseになる
   }
+ }
 }
 
 // モーダルのスタイル
