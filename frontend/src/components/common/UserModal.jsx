@@ -67,7 +67,7 @@ class UserModal extends React.Component {
         password: '',        
         password_confirmation: '',        
         avatar: undefined,        
-      }
+      },
     }
     this.formSubmit = this.formSubmit.bind(this)
     this.updateForm = this.updateForm.bind(this)

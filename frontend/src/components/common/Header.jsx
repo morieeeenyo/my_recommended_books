@@ -13,11 +13,13 @@ class Header extends React.Component {
     this.state = {
       showModal: false,
       content: '',
+      isSignedIn: false
     }
     this.openSignUpModal = this.openSignUpModal.bind(this)
     this.openLoginModal = this.openLoginModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.submitUserForm = this.submitUserForm.bind(this)
+    this.signIn = this.signIn.bind(this)
   }
 
   // 新規登録とログインでモーダルの表示を分けるために別メソッドとして定義
@@ -46,29 +48,54 @@ class Header extends React.Component {
   submitUserForm(e) {
     e.preventDefault()
     console.log(e.target)
+  }
 
+  signIn() {
+    this.setState({
+      isSignedIn: true
+    })
   }
 
   render () {
+    if (!this.state.isSignedIn) {
     return (
+          <HeaderContainer>
+            <HeaderTitle>
+              <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+            </HeaderTitle>
+            <HeaderRight>
+              <HeaderLink onClick={this.openSignUpModal}>
+                新規登録
+              </HeaderLink>
+              <HeaderLink onClick={this.openLoginModal}>
+                ログイン
+              </HeaderLink>
+              <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm} sign_in={this.signIn}/> /* stateのcontentでログインと新規登録を分岐 */
+              <HeaderLink onClick={this.openModal}>
+                ゲストユーザーとしてログイン 
+              </HeaderLink>
+                // ゲストユーザーログインは別途フロント実装のブランチで実装予定 
+            </HeaderRight>
+        </HeaderContainer>
+      )  } else {
+    return (
+         // 以下はログインしているときのみ表示
       <HeaderContainer>
         <HeaderTitle>
           <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
         </HeaderTitle>
         <HeaderRight>
-          <HeaderLink onClick={this.openSignUpModal}>
-            新規登録
+          <HeaderLink>
+            ログアウト
           </HeaderLink>
-          <HeaderLink onClick={this.openLoginModal}>
-            ログイン
-          </HeaderLink>
-            <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm}/> {/* stateのcontentでログインと新規登録を分岐 */}
-          <HeaderLink onClick={this.openModal}>
-            ゲストユーザーとしてログイン {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定 */}
+            <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm}/> {/* モーダルは仮おき */}
+          <HeaderLink>
+            マイページ
           </HeaderLink>
         </HeaderRight>
       </HeaderContainer>
-    )
+      )
+    }
   } 
 }
 
