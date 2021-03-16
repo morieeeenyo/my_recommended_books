@@ -1,12 +1,13 @@
 class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
+  skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
   after_action :set_csrf_token_header
   respond_to :json
 
   def create
-    @user = User.find_for_database_authentication(email: params[:email])
+    @user = User.find_for_database_authentication(email: params[:user][:email])
     return invalid_email unless @user
 
-    if @user.valid_password?(params[:password])
+    if @user.valid_password?(params[:user][:password])
       sign_in :user, @user
       render json: {user: @user}
     else
