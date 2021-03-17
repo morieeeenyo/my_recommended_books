@@ -68,10 +68,35 @@ class UserModal extends React.Component {
         password_confirmation: '',        
         avatar: undefined,        
       },
+      errors: undefined
     }
     this.formSubmit = this.formSubmit.bind(this)
     this.updateForm = this.updateForm.bind(this)
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.updateCsrfToken = this.updateCsrfToken.bind(this)
   }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content')
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token']
+      )
+    }
+  };
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+    axios.defaults.headers.common['Accept'] = 'application/json';
+  };
+
+  updateCsrfToken(csrf_token){
+    axios.defaults.headers.common['X-CSRF-Token'] = csrf_token;
+  };
 
   formSubmit(e) {
     e.preventDefault()
@@ -80,13 +105,16 @@ class UserModal extends React.Component {
       axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
-        console.log(response)
+        console.log(response.headers)
+        // レスポンスで返ってきた、認証に必要な情報をlocalStorageに保存
+        this.updateCsrfToken(response.headers['x-csrf-token'])
+        return response
       })
       .catch(error => {
         console.error(error); 
         console.log(error.response.data.errors)
         if (error.response.data && error.response.data.errors) {
-          this.errors = error.response.data.errors; 
+          this.state.errors = error.response.data.errors; 
         }
       })
     }
@@ -94,13 +122,11 @@ class UserModal extends React.Component {
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
-        console.log(response)
+        return response
       })
       .catch(error => {
-        console.error(error); 
-        console.log(error.response.data.errors)
         if (error.response.data && error.response.data.errors) {
-          this.errors = error.response.data.errors; 
+          this.state.errors = error.response.data.errors; 
         }
       })
     }
