@@ -4,12 +4,29 @@ import styled from 'styled-components';
 //axiosの読み込み
 import axios from 'axios';
 
+function ErrorMessage(props) {
+  if (props.errors.length !== 0) {
+    const errorMessages = props.errors.map(error => {
+      <li key={error}>{error}</li>
+    }) 
+    console.log(errorMessages) //Todo: エラーメッセージが出てきません
+    return (
+      <ul>
+        {errorMessages}
+      </ul>
+    )
+  } else {
+    return null
+  }
+}
+
 function UserFrom(props) {
   // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
   // 実際の送信処理はフロント実装のブランチで行う
   if (props.content === 'SignUp') {
     return (
     <UserFromContent onSubmit={props.submit}>
+      <ErrorMessage errors={props.errors}></ErrorMessage>
       <FormBlock>
         <label htmlFor="nickname">ニックネーム</label>
         <input type="text" name="nickname" id="nickname" value={props.user.nickname} onChange={props.change}/>
@@ -40,6 +57,7 @@ function UserFrom(props) {
   if (props.content === 'SignIn') {
     return (
     <UserFromContent onSubmit={props.submit}>
+      <ErrorMessage errors={props.errors}></ErrorMessage>
       <FormBlock>
         <label htmlFor="email">メールアドレス</label>
         <input type="email" name="email" id="email" value={props.user.email} onChange={props.change}/>
@@ -68,7 +86,7 @@ class UserModal extends React.Component {
         password_confirmation: '',        
         avatar: undefined,        
       },
-      errors: undefined
+      errors: []
     }
     this.formSubmit = this.formSubmit.bind(this)
     this.updateForm = this.updateForm.bind(this)
@@ -114,7 +132,9 @@ class UserModal extends React.Component {
         console.error(error); 
         console.log(error.response.data.errors)
         if (error.response.data && error.response.data.errors) {
-          this.state.errors = error.response.data.errors; 
+          this.setState({
+            errors: error.response.data.errors
+          })
         }
       })
     }
@@ -127,7 +147,9 @@ class UserModal extends React.Component {
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
-          this.state.errors = error.response.data.errors; 
+          this.setState({
+            errors: error.response.data.errors
+          })
         }
       })
     }
@@ -167,7 +189,7 @@ class UserModal extends React.Component {
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
             <p>{this.props.content}</p>
             <button onClick={this.props.closeModal}>x</button>
-          <UserFrom content={this.props.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm}/>
+          <UserFrom content={this.props.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
         </ModalContent>
       </ModalOverlay>
    )
