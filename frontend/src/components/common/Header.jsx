@@ -18,7 +18,6 @@ class Header extends React.Component {
     this.openSignUpModal = this.openSignUpModal.bind(this)
     this.openLoginModal = this.openLoginModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
-    this.submitUserForm = this.submitUserForm.bind(this)
     this.signIn = this.signIn.bind(this)
   }
 
@@ -45,11 +44,6 @@ class Header extends React.Component {
     })
   }
 
-  submitUserForm(e) {
-    e.preventDefault()
-    console.log(e.target)
-  }
-
   signIn() {
     this.setState({
       isSignedIn: true
@@ -70,7 +64,7 @@ class Header extends React.Component {
               <HeaderLink onClick={this.openLoginModal}>
                 ログイン
               </HeaderLink>
-              <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm} sign_in={this.signIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.closeModal} sign_in={this.signIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
               <HeaderLink onClick={this.openModal}>
                 ゲストユーザーとしてログイン 
               </HeaderLink>

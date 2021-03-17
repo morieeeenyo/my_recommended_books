@@ -106,8 +106,8 @@ class UserModal extends React.Component {
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
         console.log(response.headers)
-        // レスポンスで返ってきた、認証に必要な情報をlocalStorageに保存
-        this.updateCsrfToken(response.headers['x-csrf-token'])
+        this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.props.submit() //モーダルを閉じる
         return response
       })
       .catch(error => {
