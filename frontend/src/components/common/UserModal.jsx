@@ -122,6 +122,7 @@ class UserModal extends React.Component {
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
+        this.props.submit()
         return response
       })
       .catch(error => {
