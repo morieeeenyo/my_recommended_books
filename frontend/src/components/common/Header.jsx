@@ -18,7 +18,7 @@ class Header extends React.Component {
     this.openSignUpModal = this.openSignUpModal.bind(this)
     this.openLoginModal = this.openLoginModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
-    this.signIn = this.signIn.bind(this)
+    this.changeSignInStatus = this.changeSignInStatus.bind(this)
   }
 
   // 新規登録とログインでモーダルの表示を分けるために別メソッドとして定義
@@ -44,7 +44,7 @@ class Header extends React.Component {
     })
   }
 
-  signIn() {
+  changeSignInStatus() {
     this.setState({
       isSignedIn: true
     })
@@ -64,14 +64,15 @@ class Header extends React.Component {
               <HeaderLink onClick={this.openLoginModal}>
                 ログイン
               </HeaderLink>
-              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} submit={this.closeModal} sign_in={this.signIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} submit={this.closeModal} signIn={this.changeSignInStatus}/> {/* stateのcontentでログインと新規登録を分岐 */}
+                {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
               <HeaderLink onClick={this.openModal}>
                 ゲストユーザーとしてログイン 
               </HeaderLink>
-                {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
         </HeaderContainer>
-      )  } else {
+      )  
+    } else {
     return (
          // 以下はログインしているときのみ表示
       <HeaderContainer>
@@ -110,17 +111,22 @@ const HeaderTitle = styled.h1`
 
 const HeaderRight = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   height: 65px;
   width: 500px;
-  margin-right: 16%;
 `
 
 const HeaderLink = styled.a`
   color: #000;
-  line-height: 65px;
+  line-height: 40px;
   display: inline-block;
-  font-size: 18px;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 2px;
+  height: 40px;
+  padding: 5px 10px;
+  margin: 5px 5px 5px 10px;
+
   &:hover {
     cursor: pointer;
     font-weight: bold;

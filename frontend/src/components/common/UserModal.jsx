@@ -129,6 +129,7 @@ class UserModal extends React.Component {
           user: {},
           errors: []
         })
+        this.props.signIn()
         return response
       })
       .catch(error => {
@@ -150,6 +151,7 @@ class UserModal extends React.Component {
           user: {},
           errors: []
         })
+        this.props.signIn()
         return response
       })
       .catch(error => {
