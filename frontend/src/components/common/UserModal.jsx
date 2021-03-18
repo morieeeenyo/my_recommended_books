@@ -6,13 +6,12 @@ import axios from 'axios';
 
 function ErrorMessage(props) {
   if (props.errors.length !== 0) {
-    const errorMessages = props.errors.map(error => {
-      <li key={error}>{error}</li>
-    }) 
-    console.log(errorMessages) //Todo: エラーメッセージが出てきません
+    const errors = props.errors //レンダリンクするために一度変数化
     return (
       <ul>
-        {errorMessages}
+          {errors.map(error => {
+            return <li key={error}>{error}</li>
+          })} 
       </ul>
     )
   } else {
@@ -267,6 +266,12 @@ const UserFromContent = styled.form `
   flex-direction: column;
   align-items: center;
   height: fit-content;
+
+  & li {
+    list-style: none;
+    color: red;
+    font-size: 12px;
+  }
 ` 
 
 const FormBlock = styled.div `
