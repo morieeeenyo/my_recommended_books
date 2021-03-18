@@ -6,10 +6,9 @@ import axios from 'axios';
 
 function ErrorMessage(props) {
   if (props.errors.length !== 0) {
-    const errors = props.errors //レンダリンクするために一度変数化
     return (
       <ul>
-          {errors.map(error => {
+          {props.errors.map(error => {
             return <li key={error}>{error}</li>
           })} 
       </ul>
@@ -92,6 +91,7 @@ class UserModal extends React.Component {
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.updateCsrfToken = this.updateCsrfToken.bind(this)
+    this.resetErrorMessages = this.resetErrorMessages.bind(this)
   }
 
   getCsrfToken() {
@@ -125,6 +125,10 @@ class UserModal extends React.Component {
         console.log(response.headers)
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.props.submit() //モーダルを閉じる
+        this.setState({
+          user: {},
+          errors: []
+        })
         return response
       })
       .catch(error => {
@@ -142,6 +146,10 @@ class UserModal extends React.Component {
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
         this.props.submit()
+        this.setState({
+          user: {},
+          errors: []
+        })
         return response
       })
       .catch(error => {
@@ -181,13 +189,20 @@ class UserModal extends React.Component {
     })
   }
 
+  resetErrorMessages(){
+    this.setState({
+      errors: []
+    })
+    this.props.close()
+  }
+
   render () {
     if (this.props.show) {
       return (
-        <ModalOverlay onClick={this.props.closeModal}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
+        <ModalOverlay onClick={this.resetErrorMessages}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
             <p>{this.props.content}</p>
-            <button onClick={this.props.closeModal}>x</button>
+            <button onClick={this.resetErrorMessages}>x</button>
           <UserFrom content={this.props.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
         </ModalContent>
       </ModalOverlay>
