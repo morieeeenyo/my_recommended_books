@@ -156,8 +156,10 @@ class UserModal extends React.Component {
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
+          const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
+          errors.push(error.response.data.errors) 
           this.setState({
-            errors: error.response.data.errors
+            errors: errors
           })
         }
       })
