@@ -82,7 +82,7 @@ class UserModal extends React.Component {
         email: '',        
         password: '',        
         password_confirmation: '',        
-        avatar: undefined,        
+        avatar: '',  // TODO: ActiveSupport::MessageVerifier::InvalidSignature (ActiveSupport::MessageVerifier::InvalidSignature):を解決したい
       },
       errors: []
     }
