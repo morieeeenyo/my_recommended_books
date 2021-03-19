@@ -43,7 +43,7 @@ function UserFrom(props) {
       </FormBlock>
       <FormBlock>
         <label htmlFor="avatar">アバター画像</label>
-        <input type="file" name="avatar" id="avatar" value={props.user.avatar} onChange={props.change}/>
+        <input type="file" name="avatar" id="avatar" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <input type="submit" value="SignUp" id="submit-btn"/>
@@ -82,7 +82,10 @@ class UserModal extends React.Component {
         email: '',        
         password: '',        
         password_confirmation: '',        
-        avatar: '',  // TODO: ActiveSupport::MessageVerifier::InvalidSignature (ActiveSupport::MessageVerifier::InvalidSignature):を解決したい
+        avatar: {
+          data: '',
+          filename: ''
+        }  // TODO: ActiveSupport::MessageVerifier::InvalidSignature (ActiveSupport::MessageVerifier::InvalidSignature):を解決したい
       },
       errors: []
     }
@@ -185,7 +188,13 @@ class UserModal extends React.Component {
             user.password_confirmation = e.target.value;
             break;
         case 'avatar':
-            user.avatar = e.target.value;
+            const file = e.target.files[0];
+            const reader = new FileReader()
+            reader.onload = () => { 
+              user.avatar.data = event.target.result
+              user.avatar.filename = file.name
+            }
+            reader.readAsDataURL(file)
             break;
     }
     this.setState({

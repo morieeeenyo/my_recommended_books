@@ -7,6 +7,13 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
   def create 
     @user = User.new(sign_up_params)
     if @user.valid?
+      if params[:user][:avatar]
+        blob = ActiveStorage::Blob.create_after_upload!(
+          io: StringIO.new(decode(params[:user][:avatar][:data]) + "\n"),
+          filename: params[:user][:avatar][:filename]
+        )
+        @user.avatar.attach(blob)
+      end
       @user.save 
       render json: { user: @user }
     else
@@ -22,6 +29,10 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
 
   def set_csrf_token_header
     response.set_header("X-CSRF-Token", form_authenticity_token)
+  end
+
+  def decode(str)
+    Base64.decode64(str.split(',').last)
   end
 
 end
