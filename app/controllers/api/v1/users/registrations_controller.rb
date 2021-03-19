@@ -7,12 +7,16 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
   def create 
     @user = User.new(sign_up_params)
     if @user.valid?
-      if params[:user][:avatar]
+      if params[:user][:avatar][:data] != "" && params[:user][:avatar][:filename] != "" #画像データ自体は送られてくるので中身の判定をする
         blob = ActiveStorage::Blob.create_after_upload!(
           io: StringIO.new(decode(params[:user][:avatar][:data]) + "\n"),
           filename: params[:user][:avatar][:filename]
         )
         @user.avatar.attach(blob)
+      end
+      if active_for_authentication?
+        @token = @user.create_token
+        update_auth_header
       end
       @user.save 
       render json: { user: @user }
