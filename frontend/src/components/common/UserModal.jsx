@@ -85,7 +85,7 @@ class UserModal extends React.Component {
         avatar: {
           data: '',
           filename: ''
-        }  // TODO: ActiveSupport::MessageVerifier::InvalidSignature (ActiveSupport::MessageVerifier::InvalidSignature):を解決したい
+        }  
       },
       errors: []
     }
@@ -191,7 +191,7 @@ class UserModal extends React.Component {
             const file = e.target.files[0];
             const reader = new FileReader()
             reader.onload = () => { 
-              user.avatar.data = event.target.result
+              user.avatar.data = reader.result
               user.avatar.filename = file.name
             }
             reader.readAsDataURL(file)
