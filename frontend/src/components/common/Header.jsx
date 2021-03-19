@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import UserModal from './UserModal.jsx';
 
 // ロゴ画像の読み込み
-import Logo from '../../../images/logo.jpg'
+import Logo from '../../../images/header_logo.png'
 
 class Header extends React.Component {
   constructor(){
@@ -55,7 +55,7 @@ class Header extends React.Component {
     return (
           <HeaderContainer>
             <HeaderTitle>
-              <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+              <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
             </HeaderTitle>
             <HeaderRight>
               <HeaderLink onClick={this.openSignUpModal}>
@@ -98,12 +98,12 @@ class Header extends React.Component {
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
-  background-color: #fffaeb;
+  background-color: #cb4d00;
   height: 65px;
 `;
 
 const HeaderTitle = styled.h1`
-  color: #000;
+  color: #FFF;
   margin: 0;
   line-height: 65px;
   margin-left: 16%;
@@ -117,11 +117,11 @@ const HeaderRight = styled.div`
 `
 
 const HeaderLink = styled.a`
-  color: #000;
+  color: #FFF;
   line-height: 40px;
   display: inline-block;
   font-size: 16px;
-  border: 1px solid black;
+  border: 1px solid #FFF;
   border-radius: 2px;
   height: 40px;
   padding: 5px 10px;
