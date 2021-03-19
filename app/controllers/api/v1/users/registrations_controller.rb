@@ -14,11 +14,9 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
         )
         @user.avatar.attach(blob)
       end
-      if active_for_authentication?
-        @token = @user.create_token
-        update_auth_header
-      end
       @user.save 
+      @token = @user.create_token
+      update_auth_header
       render json: { user: @user }
     else
       render status: 422, json: { errors: @user.errors.full_messages } #手動でステータス入れないと200になるぽい
@@ -37,6 +35,27 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
 
   def decode(str)
     Base64.decode64(str.split(',').last)
+  end
+
+  def update_auth_header 
+    # cannot save object if model has invalid params
+    return unless @user && @token.client
+    # Generate new client with existing authentication
+    @token.client = nil unless @used_auth_by_token
+    if @used_auth_by_token && !DeviseTokenAuth.change_headers_on_each_request
+      auth_header = @user.build_auth_header(@token.token, @token.client)
+      # update the response header
+      response.headers.merge!(auth_header)  
+    else
+      unless @user.reload.valid?
+        @user = @user.class.find(@user.to_param) # errors remain after reload
+        # if we left the model in a bad state, something is wrong in our app
+        unless @user.valid?
+          raise DeviseTokenAuth::Errors::InvalidModel, "Cannot set auth token in invalid model. Errors: #{@resource.errors.full_messages}"
+        end
+      end
+      refresh_headers
+    end
   end
 
 end
