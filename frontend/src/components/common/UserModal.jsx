@@ -286,8 +286,11 @@ const UserFromContent = styled.form `
   align-items: center;
   height: fit-content;
 
+  & ul {
+    padding: 0 30px;
+  }
+
   & li {
-    list-style: none;
     color: red;
     font-size: 12px;
   }
