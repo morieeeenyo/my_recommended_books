@@ -15,6 +15,10 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
     end
   end
 
+  def destroy 
+    super
+  end
+
   private
   # パスワードで引っかかったのかメールアドレスで引っかかったのかわかるようにする
   def invalid_email
