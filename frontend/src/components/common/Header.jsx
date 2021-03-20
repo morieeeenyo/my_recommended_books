@@ -16,9 +16,11 @@ class Header extends React.Component {
       isSignedIn: false
     }
     this.openSignUpModal = this.openSignUpModal.bind(this)
-    this.openLoginModal = this.openLoginModal.bind(this)
+    this.openSignInModal = this.openSignInModal.bind(this)
+    this.openSignOutModal = this.openSignOutModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
-    this.changeSignInStatus = this.changeSignInStatus.bind(this)
+    this.successToSignIn = this.successToSignIn.bind(this)
+    this.successToSignOut = this.successToSignOut.bind(this)
   }
 
   // 新規登録とログインでモーダルの表示を分けるために別メソッドとして定義
@@ -29,11 +31,19 @@ class Header extends React.Component {
     })
   }
 
-  openLoginModal() {
+  openSignInModal() {
     this.setState ({
       showModal: true,
       content: 'SignIn'
-      // showLoginModal: true
+      // showSignInModal: true
+    })
+  }
+
+  openSignOutModal() {
+    this.setState ({
+      showModal: true,
+      content: 'SignOut'
+      // showSignInModal: true
     })
   }
 
@@ -44,9 +54,15 @@ class Header extends React.Component {
     })
   }
 
-  changeSignInStatus() {
+  successToSignIn() {
     this.setState({
       isSignedIn: true
+    })
+  }
+
+  successToSignOut(){
+    this.setState({
+      isSignedIn: false
     })
   }
 
@@ -61,10 +77,10 @@ class Header extends React.Component {
               <HeaderLink onClick={this.openSignUpModal}>
                 新規登録
               </HeaderLink>
-              <HeaderLink onClick={this.openLoginModal}>
+              <HeaderLink onClick={this.openSignInModal}>
                 ログイン
               </HeaderLink>
-              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} submit={this.closeModal} signIn={this.changeSignInStatus}/> {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} submit={this.closeModal} signIn={this.successToSignIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
               <HeaderLink onClick={this.openModal}>
                 ゲストユーザーとしてログイン 
@@ -80,10 +96,10 @@ class Header extends React.Component {
           <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
         </HeaderTitle>
         <HeaderRight>
-          <HeaderLink>
+          <HeaderLink onClick={this.openSignOutModal}>
             ログアウト
           </HeaderLink>
-            <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.submitUserForm}/> {/* モーダルは仮おき */}
+            <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.closeModal} signOut={this.succedToSignOut}/> {/* モーダルは仮おき */}
           <HeaderLink>
             マイページ
           </HeaderLink>
