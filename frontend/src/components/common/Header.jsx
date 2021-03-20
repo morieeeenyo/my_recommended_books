@@ -80,7 +80,7 @@ class Header extends React.Component {
               <HeaderLink onClick={this.openSignInModal}>
                 ログイン
               </HeaderLink>
-              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} submit={this.closeModal} signIn={this.successToSignIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} signIn={this.successToSignIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
               <HeaderLink onClick={this.openModal}>
                 ゲストユーザーとしてログイン 
@@ -99,7 +99,7 @@ class Header extends React.Component {
           <HeaderLink onClick={this.openSignOutModal}>
             ログアウト
           </HeaderLink>
-            <UserModal show={this.state.showModal} closeModal={this.closeModal} content={this.state.content} submit={this.closeModal} signOut={this.succedToSignOut}/> {/* モーダルは仮おき */}
+            <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} signOut={this.successToSignOut}/> {/* モーダルは仮おき */}
           <HeaderLink>
             マイページ
           </HeaderLink>

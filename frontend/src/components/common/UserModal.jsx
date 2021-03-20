@@ -156,12 +156,12 @@ class UserModal extends React.Component {
         console.log(response.headers)
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
-        this.props.submit() //モーダルを閉じる
         this.setState({
           user: {},
           errors: []
         })
         this.props.signIn()
+        this.props.close() //モーダルを閉じる
         return response
       })
       .catch(error => {
@@ -179,12 +179,12 @@ class UserModal extends React.Component {
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
-        this.props.submit()
         this.setState({
           user: {},
           errors: []
         })
         this.props.signIn()
+        this.props.close()
         return response
       })
       .catch(error => {
@@ -202,24 +202,25 @@ class UserModal extends React.Component {
       this.setAxiosDefaults();
       this.userAuthentification()
       axios
-      .delete('/api/v1/users/sign_out', {uid: this.state.user.email})
+      .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
       .then(response => {
-        this.props.submit()
         this.setState({
           user: {},
           errors: []
         })
         this.props.signOut()
+        this.props.close()
         return response
       })
       .catch(error => {
-        if (error.response.data && error.response.data.errors) {
-          const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
-          errors.push(error.response.data.errors) 
-          this.setState({
-            errors: errors
-          })
-        }
+        console.log(error)
+        // if (error.response.data && error.response.data.errors) {
+        //   const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
+        //   errors.push(error.response.data.errors) 
+        //   this.setState({
+        //     errors: errors
+        //   })
+        // }
       })
     }
   }
