@@ -15,7 +15,6 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
         @user.avatar.attach(blob)
       end
       @user.save 
-      @token = @user.create_token
       update_auth_header
       render json: { user: @user }
     else
@@ -38,6 +37,7 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
   end
 
   def update_auth_header 
+    @token = @user.create_token
     # cannot save object if model has invalid params
     return unless @user && @token.client
     # Generate new client with existing authentication

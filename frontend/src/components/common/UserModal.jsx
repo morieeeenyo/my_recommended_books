@@ -179,6 +179,8 @@ class UserModal extends React.Component {
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
+        this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
         this.setState({
           user: {},
           errors: []
@@ -213,14 +215,13 @@ class UserModal extends React.Component {
         return response
       })
       .catch(error => {
-        console.log(error)
-        // if (error.response.data && error.response.data.errors) {
-        //   const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
-        //   errors.push(error.response.data.errors) 
-        //   this.setState({
-        //     errors: errors
-        //   })
-        // }
+        if (error.response.data && error.response.data.errors) {
+          const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
+          errors.push(error.response.data.errors) 
+          this.setState({
+            errors: errors
+          })
+        }
       })
     }
   }
