@@ -1,6 +1,8 @@
 class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
   skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
+  before_action :set_user_by_token, only: [:destroy]
   after_action :set_csrf_token_header
+  after_action :reset_session, only: [:destroy]
   respond_to :json
 
   def create
@@ -15,8 +17,16 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
     end
   end
 
-  def destroy 
-    super
+  def destroy  
+    user = User.find_for_database_authentication(uid: request.headers['uid'])
+    token = request.headers['access-token']
+    client = request.headers['client']
+    if user && client && token
+      token.clear # todo: client削除の記述を入れる
+      render_destroy_success
+    else
+      render_destroy_error
+    end
   end
 
   private

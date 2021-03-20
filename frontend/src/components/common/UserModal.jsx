@@ -65,7 +65,18 @@ function UserFrom(props) {
         <input type="password" name="password" id="pasaword" value={props.user.password} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
-        <input type="submit" value="Login" id="submit-btn"/>
+        <input type="submit" value="SignIn" id="submit-btn"/>
+      </FormBlock>
+    </UserFromContent>
+    )
+  } 
+
+  if (props.content === 'SignOut') {
+    return (
+    <UserFromContent onSubmit={props.submit}>
+      <ErrorMessage errors={props.errors}></ErrorMessage>
+      <FormBlock>
+        <input type="submit" value="SignOut" id="submit-btn"/>
       </FormBlock>
     </UserFromContent>
     )
@@ -95,6 +106,8 @@ class UserModal extends React.Component {
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.updateCsrfToken = this.updateCsrfToken.bind(this)
     this.resetErrorMessages = this.resetErrorMessages.bind(this)
+    this.authenticatedUser = this.authenticatedUser.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   getCsrfToken() {
@@ -111,12 +124,27 @@ class UserModal extends React.Component {
 
   setAxiosDefaults() {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
-    axios.defaults.headers.common['Accept'] = 'application/json';
   };
 
   updateCsrfToken(csrf_token){
     axios.defaults.headers.common['X-CSRF-Token'] = csrf_token;
   };
+
+  authenticatedUser(uid, client, accessToken) {
+    axios.defaults.headers.common['uid'] = uid;
+    axios.defaults.headers.common['client'] = client;
+    axios.defaults.headers.common['access-token'] = accessToken;
+  }
+
+  userAuthentification() {
+    if (axios.defaults.headers.common['uid'] && axios.defaults.headers.common['client'] && axios.defaults.headers.common['access-token']) {
+      axios.defaults.headers.common['uid']
+      axios.defaults.headers.common['client']
+      axios.defaults.headers.common['access-token']
+    } else {
+      return null
+    }
+  }
 
   formSubmit(e) {
     e.preventDefault()
@@ -127,6 +155,7 @@ class UserModal extends React.Component {
       .then(response => {
         console.log(response.headers)
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
         this.props.submit() //モーダルを閉じる
         this.setState({
           user: {},
@@ -145,6 +174,7 @@ class UserModal extends React.Component {
         }
       })
     }
+
     if (this.props.content == 'SignIn') {
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
@@ -155,6 +185,31 @@ class UserModal extends React.Component {
           errors: []
         })
         this.props.signIn()
+        return response
+      })
+      .catch(error => {
+        if (error.response.data && error.response.data.errors) {
+          const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
+          errors.push(error.response.data.errors) 
+          this.setState({
+            errors: errors
+          })
+        }
+      })
+    }
+
+    if (this.props.content == 'SignOut') {
+      this.setAxiosDefaults();
+      this.userAuthentification()
+      axios
+      .delete('/api/v1/users/sign_out', {uid: this.state.user.email})
+      .then(response => {
+        this.props.submit()
+        this.setState({
+          user: {},
+          errors: []
+        })
+        this.props.signOut()
         return response
       })
       .catch(error => {
