@@ -7,6 +7,10 @@ import UserModal from './UserModal.jsx';
 // ロゴ画像の読み込み
 import Logo from '../../../images/header_logo.png'
 
+// react-router用のlinkを使えるようにする
+import { withRouter } from 'react-router-dom'
+
+
 class Header extends React.Component {
   constructor(){
     super();
@@ -29,22 +33,23 @@ class Header extends React.Component {
       showModal: true,
       content: 'SignUp'
     })
+    this.props.history.push("/users/sign_up");
   }
 
   openSignInModal() {
     this.setState ({
       showModal: true,
       content: 'SignIn'
-      // showSignInModal: true
     })
+    this.props.history.push("/users/sign_in");
   }
 
   openSignOutModal() {
     this.setState ({
       showModal: true,
       content: 'SignOut'
-      // showSignInModal: true
     })
+    this.props.history.push("/users/sign_out");
   }
 
   // モーダルを閉じる。contentは空文字列にリセット
@@ -53,6 +58,7 @@ class Header extends React.Component {
       showModal: false,
       content: ''
     })
+    this.props.history.push("/");
   }
 
   // ヘッダーの表示の切り替え
@@ -72,6 +78,7 @@ class Header extends React.Component {
     if (!this.state.isSignedIn) {
     return (
           <HeaderContainer>
+            {this.props.children}
             <HeaderTitle>
               <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
             </HeaderTitle>
@@ -94,6 +101,7 @@ class Header extends React.Component {
     return (
          // 以下はログインしているときのみ表示
       <HeaderContainer>
+        {this.props.children}
         <HeaderTitle>
           <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
         </HeaderTitle>
@@ -152,4 +160,5 @@ const HeaderLink = styled.a`
 `
 
 
-export default Header;
+// export default Header;
+export default withRouter(Header);
