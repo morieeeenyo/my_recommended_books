@@ -23,7 +23,7 @@ class Header extends React.Component {
     this.successToSignOut = this.successToSignOut.bind(this)
   }
 
-  // 新規登録とログインでモーダルの表示を分けるために別メソッドとして定義
+  // 新規登録・ログイン・ログアウトでモーダルの表示を分けるために別メソッドとして定義
   openSignUpModal() {
     this.setState ({
       showModal: true,
@@ -47,6 +47,7 @@ class Header extends React.Component {
     })
   }
 
+  // モーダルを閉じる。contentは空文字列にリセット
   closeModal() {
     this.setState ({
       showModal: false,
@@ -54,6 +55,7 @@ class Header extends React.Component {
     })
   }
 
+  // ヘッダーの表示の切り替え
   successToSignIn() {
     this.setState({
       isSignedIn: true
