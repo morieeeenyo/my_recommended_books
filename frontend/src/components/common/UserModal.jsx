@@ -9,7 +9,7 @@ function ErrorMessage(props) {
     return (
       <ul>
           {props.errors.map(error => {
-            return <li key={error}>{error}</li>
+            return <li key={error}>{error}</li> //returnがないと表示できない
           })} 
       </ul>
     )
@@ -21,6 +21,7 @@ function ErrorMessage(props) {
 function UserFrom(props) {
   // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
   // 実際の送信処理はフロント実装のブランチで行う
+  //  file_fieldはvalueをscriptから変更できないので関数内でsetStateを用いて変更 
   if (props.content === 'SignUp') {
     return (
     <UserFromContent onSubmit={props.submit}>
@@ -72,6 +73,7 @@ function UserFrom(props) {
   } 
 
   if (props.content === 'SignOut') {
+    // 他のモーダルと併用しやすいのでform送信でサインアウトする 
     return (
     <UserFromContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
@@ -113,11 +115,11 @@ class UserModal extends React.Component {
   getCsrfToken() {
     if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
       return (
-        document.getElementsByName('csrf-token')[0].getAttribute('content')
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
       )
     } else {
       return (
-        axios.defaults.headers.common['X-CSRF-Token']
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
       )
     }
   };
@@ -131,13 +133,15 @@ class UserModal extends React.Component {
   };
 
   authenticatedUser(uid, client, accessToken) {
+    // サーバーから返ってきた値をaxios.defaults.headersにセットして非同期処理で使えるようにする
     axios.defaults.headers.common['uid'] = uid;
     axios.defaults.headers.common['client'] = client;
     axios.defaults.headers.common['access-token'] = accessToken;
   }
 
   userAuthentification() {
-    if (axios.defaults.headers.common['uid'] && axios.defaults.headers.common['client'] && axios.defaults.headers.common['access-token']) {
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (axios.defaults.headers.common['uid'] && axios.defaults.headers.common['client'] && axios.defaults.headers.common['access-token']) { 
       axios.defaults.headers.common['uid']
       axios.defaults.headers.common['client']
       axios.defaults.headers.common['access-token']
@@ -148,28 +152,28 @@ class UserModal extends React.Component {
 
   formSubmit(e) {
     e.preventDefault()
-    console.log(this.state.user)
+    // props.content,つまりモーダルの種類ごとに処理を分ける
     if (this.props.content == 'SignUp') {
       axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
         console.log(response.headers)
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
-        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //uid, client, access-tokenの3つをログアウトで使えるようにする
+        console.log(axios.defaults.headers)
+        // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
         this.setState({
           user: {},
           errors: []
         })
-        this.props.signIn()
+        this.props.signIn() //ヘッダーの表示の切り替え
         this.props.close() //モーダルを閉じる
         return response
       })
       .catch(error => {
-        console.error(error); 
-        console.log(error.response.data.errors)
         if (error.response.data && error.response.data.errors) {
           this.setState({
-            errors: error.response.data.errors
+            errors: error.response.data.errors //エラーメッセージの表示
           })
         }
       })
@@ -181,6 +185,7 @@ class UserModal extends React.Component {
       .then(response => {
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
+        console.log(axios.defaults.headers)
         this.setState({
           user: {},
           errors: []
@@ -191,7 +196,7 @@ class UserModal extends React.Component {
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
-          const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
+          const errors = [] //ログインではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
           errors.push(error.response.data.errors) 
           this.setState({
             errors: errors
@@ -206,6 +211,9 @@ class UserModal extends React.Component {
       axios
       .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
       .then(response => {
+        this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
+        console.log(axios.defaults.headers)
         this.setState({
           user: {},
           errors: []
@@ -216,7 +224,8 @@ class UserModal extends React.Component {
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
-          const errors = [] //新規登録の時のレンダリングと合わせるために配列を作成
+          // ログアウトに失敗するケースはあまり想定していないが一応設定
+          const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
           errors.push(error.response.data.errors) 
           this.setState({
             errors: errors
@@ -245,13 +254,15 @@ class UserModal extends React.Component {
             user.password_confirmation = e.target.value;
             break;
         case 'avatar':
+            //画像は事前にvalueを取得できないのでFileReaderを使ってデータを読み取る
             const file = e.target.files[0];
             const reader = new FileReader()
             reader.onload = () => { 
+              //以下2つはactivestorageの保存に必要
               user.avatar.data = reader.result
-              user.avatar.filename = file.name
+              user.avatar.filename = file.name 
             }
-            reader.readAsDataURL(file)
+            reader.readAsDataURL(file) //戻り値はata:image/jpeg;base64,/9j/4AA…のようになる。これをサーバーサイドで複合する
             break;
     }
     this.setState({
@@ -260,6 +271,7 @@ class UserModal extends React.Component {
   }
 
   resetErrorMessages(){
+    // モーダルを閉じるときにエラーメッセージが残ったままにならないようにする
     this.setState({
       errors: []
     })
