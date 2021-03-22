@@ -109,7 +109,7 @@ class Header extends React.Component {
           <HeaderLink onClick={this.openSignOutModal}>
             ログアウト
           </HeaderLink>
-            <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} signOut={this.successToSignOut}/> {/* モーダルは仮おき */}
+            <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} signOut={this.successToSignOut}/> 
           <HeaderLink>
             マイページ
           </HeaderLink>
