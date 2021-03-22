@@ -6,6 +6,10 @@ RSpec.describe "Users", type: :request do
   let(:invalid_user_params) { attributes_for(:user, email: user.email) } #不正なパラメータのパターンの1つとしてemailが重複している場合を検証する(deviseのデフォルトの設定が動くことを確かめたい)
 
   describe "新規登録" do
+    before do
+      user_params[:avatar] = { data: "", filename: "" } #実行環境でも画像未選択の場合空文字列が送られる
+    end
+    
     context "パラメータが正しい時" do
       it "リクエストに成功する(画像なし)" do #念の為画像ありなし検証してます
         post api_v1_user_registration_path, xhr: true, params: { user: user_params }
@@ -13,7 +17,8 @@ RSpec.describe "Users", type: :request do
       end
 
       it "リクエストに成功する(画像あり)" do
-        user_params[:avatar] = fixture_file_upload('spec/fixtures/test_image.jpg', filename: 'test_image.jpg', content_type: 'image/jpg') 
+        user_params[:avatar][:data] = File.read('spec/fixtures/test_image.jpg.bin')
+        user_params[:avatar][:filename] = 'test_image.jpg'
         post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         expect(response).to have_http_status(200) 
       end
