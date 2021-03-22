@@ -17,7 +17,7 @@ RSpec.describe "Users", type: :request do
       end
 
       it "リクエストに成功する(画像あり)" do
-        user_params[:avatar][:data] = File.read('spec/fixtures/test_image.jpg.bin')
+        user_params[:avatar][:data] = File.read('spec/fixtures/test_image.jpg.bin') #base64形式でコントローラーで扱うため、encode舌文字列をパラメータにセット
         user_params[:avatar][:filename] = 'test_image.jpg'
         post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         expect(response).to have_http_status(200) 
