@@ -63,12 +63,12 @@ RSpec.describe "Users", type: :request do
   describe "ログイン" do
     context "パラメータが正しい時" do
       it "リクエストに成功する" do
-        post api_v1_user_session_path, xhr: true, params: { email: user.email, password: user.password }
+        post api_v1_user_session_path, xhr: true, params: { user: {email: user.email, password: user.password} }
         expect(response).to have_http_status(200) 
       end
       
       it "正しくレスポンスが返却される" do
-        post api_v1_user_session_path, xhr: true, params:{ email: user.email, password: user.password }
+        post api_v1_user_session_path, xhr: true, params:{ user: {email: user.email, password: user.password} }
         json = JSON.parse(response.body) 
         expect(json['user']['email']).to  eq user.email 
       end
@@ -78,12 +78,12 @@ RSpec.describe "Users", type: :request do
 
     context "パラメータが不正な時(メールアドレス)" do
       it "リクエストに失敗する" do
-        post api_v1_user_session_path, xhr: true, params: { email: '', password: user.password } 
+        post api_v1_user_session_path, xhr: true, params: { user: {email: '', password: user.password} } 
         expect(response).to have_http_status(401) 
       end
 
       it "エラーメッセージが返却される" do
-        post api_v1_user_session_path, xhr: true, params: { email: '', password: user.password } 
+        post api_v1_user_session_path, xhr: true, params: { user: {email: '', password: user.password} } 
         json = JSON.parse(response.body) 
         expect(json['errors']).to include "Authorization failed. Invalid email"
       end
@@ -91,12 +91,12 @@ RSpec.describe "Users", type: :request do
 
     context "パラメータが不正な時(パスワード)" do
       it "リクエストに失敗する" do
-        post api_v1_user_session_path, xhr: true, params: { email: user.email, password: '' } 
+        post api_v1_user_session_path, xhr: true, params: { user: {email: user.email, password: ''} } 
         expect(response).to have_http_status(401) 
       end
 
       it "エラーメッセージが返却される" do
-        post api_v1_user_session_path, xhr: true, params: { email: user.email, password: '' } 
+        post api_v1_user_session_path, xhr: true, params: { user: {email: user.email, password: ''} } 
         json = JSON.parse(response.body) 
         expect(json['errors']).to include "Authorization failed. Invalid password"
       end
