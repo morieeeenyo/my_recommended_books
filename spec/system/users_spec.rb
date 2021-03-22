@@ -42,6 +42,8 @@ RSpec.describe "Users", type: :system do
     end
 
     context "新規登録できない時" do
+      #バリデーションの詳細なテストはmoodels/user_spec.rbにて
+      # 今回はuniqueness, presence, formatの3つに分けて検証
       it "同じnickname, emailのユーザーが既に登録されている場合登録できない" do
         user.save
         fill_in "nickname",	with: user.nickname
@@ -105,7 +107,7 @@ RSpec.describe "Users", type: :system do
       end
     end
 
-    context "ログアウトできない時" do
+    context "ログインできない時" do
       it "emailだけではログインできない" do
         fill_in "email",	with: user.email
         click_button "SignIn"
