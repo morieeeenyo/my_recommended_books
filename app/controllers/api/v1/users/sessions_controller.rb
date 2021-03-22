@@ -47,6 +47,7 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def update_auth_header 
+    return unless @user #nilClassエラーを防ぐ
     @token = @user.create_token
     return unless @user && @token.client
     @token.client = nil unless @used_auth_by_token
