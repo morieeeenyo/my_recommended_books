@@ -43,16 +43,44 @@ RSpec.describe "Users", type: :system do
 
     context "新規登録できない時" do
       it "同じnickname, emailのユーザーが既に登録されている場合登録できない" do
-        # user.save
-        # fill_in "nickname",	with: user.nickname
-        # fill_in "email",	with: user.email
-        # fill_in "password",	with: user.password
-        # fill_in "password_confirmation",	with: user.password_confirmation
-        # expect{
-        #   click_button "SignUp"
-        #   sleep 2 #sleepしないと間に合わない
-        # }.to  change(User, :count).by(0) #Userのデータが1つ増える
-        # expect(page).to have_content 
+        user.save
+        fill_in "nickname",	with: user.nickname
+        fill_in "email",	with: user.email
+        fill_in "password",	with: user.password
+        fill_in "password_confirmation",	with: user.password_confirmation
+        expect{
+          click_button "SignUp"
+          sleep 2 #sleepしないと間に合わない
+        }.to  change(User, :count).by(0) #Userのデータが増えていない
+        #正しいエラーメッセージが出てくる
+        expect(page).to have_content 'Nickname has already been taken'
+        expect(page).to have_content 'Email has already been taken'
+      end
+
+      it "空のデータを送った場合登録できない" do
+        fill_in "nickname",	with: ""
+        fill_in "email",	with: ""
+        fill_in "password",	with: ""
+        fill_in "password_confirmation",	with: ""
+        expect{
+          click_button "SignUp"
+          sleep 2 #sleepしないと間に合わない
+        }.to  change(User, :count).by(0) #Userのデータが増えていない
+        expect(page).to have_content "Nickname can't be blank"
+        expect(page).to have_content "Email can't be blank"
+        expect(page).to have_content "Password can't be blank"
+      end
+
+      it "パスワードが半角英大文字・小文字・数字を全て含まない形式の場合登録できない" do
+        fill_in "nickname",	with: user.nickname
+        fill_in "email",	with: user.email
+        fill_in "password",	with: 'test1234'
+        fill_in "password_confirmation",	with: 'test1234'
+        expect{
+          click_button "SignUp"
+          sleep 2 #sleepしないと間に合わない
+        }.to  change(User, :count).by(0) #Userのデータが増えていない
+        expect(page).to have_content "Password must include half-width number, lowercase alphabet, and uppercase alphabet"
       end
     end
   end
