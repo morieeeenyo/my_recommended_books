@@ -91,9 +91,6 @@ class Header extends React.Component {
               </HeaderLink>
               <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} signIn={this.successToSignIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
-              <HeaderLink onClick={this.openModal}>
-                ゲストユーザーとしてログイン 
-              </HeaderLink>
             </HeaderRight>
         </HeaderContainer>
       )  
