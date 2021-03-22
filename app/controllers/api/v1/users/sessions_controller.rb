@@ -5,10 +5,9 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
   respond_to :json
 
   def create
-    @user = User.find_for_database_authentication(email: params[:user][:email])
+    @user = User.find_by(email: params[:user][:email])
     # 厳密にemailとpassword同時に判定しているわけではない
     return invalid_email unless @user 
-
     if @user.valid_password?(params[:user][:password])
       sign_in :user, @user
       update_auth_header #responseにuid, client, access-tokenを含ませて今後の処理で使えるようにする

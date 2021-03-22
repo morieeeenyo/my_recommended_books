@@ -88,25 +88,46 @@ RSpec.describe "Users", type: :system do
   describe "ログイン" do
     before do
       user.save    
+      visit root_path
+      find('a', text: 'ログイン').click #reactで作ったaタグはhref属性がつかないのでfindで検出する
+      expect(page).to have_content 'SignIn' 
     end
 
     context "ログインできる時" do
       it "emailとpasswordを入力すればログインできる" do
-        
+        fill_in "email",	with: user.email
+        fill_in "password",	with: user.password
+        click_button "SignIn"
+        sleep 2 #sleepしないと間に合わない
+        # ログインすると表示が切り替わる
+        expect(page).to  have_content 'ログアウト'
+        expect(page).to  have_content 'マイページ'
       end
     end
 
     context "ログアウトできない時" do
       it "emailだけではログインできない" do
-        
+        fill_in "email",	with: user.email
+        click_button "SignIn"
+        sleep 2 #sleepしないと間に合わない
+        #正しいエラーメッセージが出てくる
+        expect(page).to  have_content 'Authorization failed. Invalid password'
       end
 
       it "パスワードだけではログインできない" do
-        
+        fill_in "password",	with: user.password
+        click_button "SignIn"
+        sleep 2 #sleepしないと間に合わない
+        #正しいエラーメッセージが出てくる
+        expect(page).to  have_content 'Authorization failed. Invalid email' #todo:なぜかエラーメッセージ出てこない
       end
 
       it "emailとパスワード両方空の場合ログインできない" do
-        
+        click_button "SignIn"
+        sleep 2 #sleepしないと間に合わない
+        #正しいエラーメッセージが出てくる
+        expect(page).to  have_content 'Authorization failed. Invalid email'
+        expect(page).to  have_content 'Authorization failed. Invalid password'
       end
       
       
