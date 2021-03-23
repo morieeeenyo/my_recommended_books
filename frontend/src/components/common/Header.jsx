@@ -10,6 +10,9 @@ import Logo from '../../../images/header_logo.png'
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
+//axiosの読み込み
+import axios from 'axios';
+
 
 class Header extends React.Component {
   constructor(){
@@ -17,14 +20,11 @@ class Header extends React.Component {
     this.state = {
       showModal: false,
       content: '',
-      isSignedIn: false
     }
     this.openSignUpModal = this.openSignUpModal.bind(this)
     this.openSignInModal = this.openSignInModal.bind(this)
     this.openSignOutModal = this.openSignOutModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
-    this.successToSignIn = this.successToSignIn.bind(this)
-    this.successToSignOut = this.successToSignOut.bind(this)
   }
 
   // 新規登録・ログイン・ログアウトでモーダルの表示を分けるために別メソッドとして定義
@@ -61,19 +61,6 @@ class Header extends React.Component {
     this.props.history.push("/");
   }
 
-  // ヘッダーの表示の切り替え
-  successToSignIn() {
-    this.setState({
-      isSignedIn: true
-    })
-  }
-
-  successToSignOut(){
-    this.setState({
-      isSignedIn: false
-    })
-  }
-
   componentDidMount(){
     //ブラウザバックしたときにURLに応じてモーダルの表示を切り替える
     this.props.history.listen((location) => {
@@ -84,7 +71,7 @@ class Header extends React.Component {
           content: ''
         })
       }
-      if (this.state.isSignedIn == false) {
+      if (!JSON.parse(localStorage.getItem("auth_token"))['uid']) {
         if (location.pathname == '/users/sign_up') {
           // ブラウザバックしたときもパスがあっていれば新規登録モーダルを開く
           this.setState ({
@@ -104,8 +91,7 @@ class Header extends React.Component {
           alert('ユーザーがログインしていません')
           this.closeModal()
         }
-      }
-      if (this.state.isSignedIn == true) {
+      } else {
         if (location.pathname == '/users/sign_out') {
           // ブラウザバックしたときもパスがあっていればログアウトモーダルを開く
           this.setState ({
@@ -122,7 +108,7 @@ class Header extends React.Component {
   }
 
   render () {
-    if (!this.state.isSignedIn) {
+    if (!JSON.parse(localStorage.getItem("auth_token"))['uid']) {
     return (
           <HeaderContainer>
             {this.props.children}
@@ -136,7 +122,7 @@ class Header extends React.Component {
               <HeaderLink onClick={this.openSignInModal}>
                 ログイン
               </HeaderLink>
-              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} signIn={this.successToSignIn}/> {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
         </HeaderContainer>
@@ -153,7 +139,7 @@ class Header extends React.Component {
           <HeaderLink onClick={this.openSignOutModal}>
             ログアウト
           </HeaderLink>
-            <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content} signOut={this.successToSignOut}/> 
+            <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
           <HeaderLink>
             マイページ
           </HeaderLink>

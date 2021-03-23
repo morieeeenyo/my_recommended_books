@@ -25,7 +25,7 @@ class Api::V1::Users::RegistrationsController < DeviseTokenAuth::RegistrationsCo
   private
 
   def sign_up_params
-    params.require(:user).permit(:nickname, :email, :avatar, :password, :password_confirmation)
+    params.require(:user).permit(:nickname, :email, :password, :password_confirmation)
   end
 
   def set_csrf_token_header

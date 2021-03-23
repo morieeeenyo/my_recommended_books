@@ -137,14 +137,16 @@ class UserModal extends React.Component {
     axios.defaults.headers.common['uid'] = uid;
     axios.defaults.headers.common['client'] = client;
     axios.defaults.headers.common['access-token'] = accessToken;
+    localStorage.setItem('auth_token', JSON.stringify(axios.defaults.headers.common))
   }
 
   userAuthentification() {
+    const authToken = JSON.parse(localStorage.getItem("auth_token"));
     // uid, client, access-tokenの3つが揃っているか検証
-    if (axios.defaults.headers.common['uid'] && axios.defaults.headers.common['client'] && axios.defaults.headers.common['access-token']) { 
-      axios.defaults.headers.common['uid']
-      axios.defaults.headers.common['client']
-      axios.defaults.headers.common['access-token']
+    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
     } else {
       return null
     }
@@ -167,10 +169,10 @@ class UserModal extends React.Component {
           errors: []
         })
         this.props.close() //モーダルを閉じる
-        this.props.signIn() //ヘッダーの表示の切り替え
         return response
       })
       .catch(error => {
+        console.log(error)
         if (error.response.data && error.response.data.errors) {
           this.setState({
             errors: error.response.data.errors //エラーメッセージの表示
@@ -191,7 +193,6 @@ class UserModal extends React.Component {
           errors: []
         })
         this.props.close()
-        this.props.signIn()
         return response
       })
       .catch(error => {
@@ -212,14 +213,14 @@ class UserModal extends React.Component {
       .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
       .then(response => {
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
-        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //ログアウト時はこれらはundefinedになる
+        localStorage.setItem('uid', JSON.stringify(response.headers['uid']))
         console.log(axios.defaults.headers)
         this.setState({
           user: {},
           errors: []
         })
         this.props.close()
-        this.props.signOut()
         return response
       })
       .catch(error => {
