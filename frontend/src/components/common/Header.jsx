@@ -109,7 +109,7 @@ class Header extends React.Component {
 
   render () {
     const authToken = localStorage.getItem("auth_token")
-    if (authToken == undefined || !JSON.parse(authToken)['uid']) {
+    if (authToken == undefined || !JSON.parse(authToken)['uid']) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
     return (
           <HeaderContainer>
             {this.props.children}
