@@ -1,31 +1,50 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+//axiosの読み込み
+import axios from 'axios';
+
+function ErrorMessage(props) {
+  if (props.errors.length !== 0) {
+    return (
+      <ul>
+          {props.errors.map(error => {
+            return <li key={error}>{error}</li> //returnがないと表示できない
+          })} 
+      </ul>
+    )
+  } else {
+    return null
+  }
+}
+
 function UserFrom(props) {
   // Header.jsxで定義したstateのcontentによって新規登録とログインのフォームを分ける
   // 実際の送信処理はフロント実装のブランチで行う
+  //  file_fieldはvalueをscriptから変更できないので関数内でsetStateを用いて変更 
   if (props.content === 'SignUp') {
     return (
-    <UserFromContent onSubmit={(e) => e.preventDefault()}>
+    <UserFromContent onSubmit={props.submit}>
+      <ErrorMessage errors={props.errors}></ErrorMessage>
       <FormBlock>
         <label htmlFor="nickname">ニックネーム</label>
-        <input type="text" name="nickname" id="nickname"/>
+        <input type="text" name="nickname" id="nickname" value={props.user.nickname} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="email">メールアドレス</label>
-        <input type="email" name="email" id="email"/>
+        <input type="email" name="email" id="email" value={props.user.email} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="password">パスワード</label>
-        <input type="password" name="password" id="password"/>
+        <input type="password" name="password" id="password" value={props.user.password} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="password_confirmation">パスワード(確認)</label>
-        <input type="password" name="password_confirmation" id="password_confirmation"/>
+        <input type="password" name="password_confirmation" id="password_confirmation" value={props.user.password_confirmation} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="avatar">アバター画像</label>
-        <input type="file" name="avatar" id="avatar"/>
+        <input type="file" name="avatar" id="avatar" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <input type="submit" value="SignUp" id="submit-btn"/>
@@ -34,19 +53,32 @@ function UserFrom(props) {
     )
   } 
   
-  if (props.content === 'Login') {
+  if (props.content === 'SignIn') {
     return (
-    <UserFromContent onSubmit={(e) => e.preventDefault()}>
+    <UserFromContent onSubmit={props.submit}>
+      <ErrorMessage errors={props.errors}></ErrorMessage>
       <FormBlock>
         <label htmlFor="email">メールアドレス</label>
-        <input type="email" name="email" id="email"/>
+        <input type="email" name="email" id="email" value={props.user.email} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
         <label htmlFor="password">パスワード</label>
-        <input type="password" name="password" id="pasaword"/>
+        <input type="password" name="password" id="pasaword" value={props.user.password} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
-        <input type="submit" value="Login" id="submit-btn"/>
+        <input type="submit" value="SignIn" id="submit-btn"/>
+      </FormBlock>
+    </UserFromContent>
+    )
+  } 
+
+  if (props.content === 'SignOut') {
+    // 他のモーダルと併用しやすいのでform送信でサインアウトする 
+    return (
+    <UserFromContent onSubmit={props.submit}>
+      <ErrorMessage errors={props.errors}></ErrorMessage>
+      <FormBlock>
+        <input type="submit" value="SignOut" id="submit-btn"/>
       </FormBlock>
     </UserFromContent>
     )
@@ -54,20 +86,214 @@ function UserFrom(props) {
 }
 
 
-function UserModal(props) {
-  if (props.show) {
-  return (
-      <ModalOverlay onClick={props.closeModal}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
+class UserModal extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      user: {
+        nickname: '',        
+        email: '',        
+        password: '',        
+        password_confirmation: '',        
+        avatar: {
+          data: '',
+          filename: ''
+        }  
+      },
+      errors: []
+    }
+    this.formSubmit = this.formSubmit.bind(this)
+    this.updateForm = this.updateForm.bind(this)
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.updateCsrfToken = this.updateCsrfToken.bind(this)
+    this.resetErrorMessages = this.resetErrorMessages.bind(this)
+    this.authenticatedUser = this.authenticatedUser.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
+  }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+  };
+
+  updateCsrfToken(csrf_token){
+    axios.defaults.headers.common['X-CSRF-Token'] = csrf_token;
+  };
+
+  authenticatedUser(uid, client, accessToken) {
+    // サーバーから返ってきた値をaxios.defaults.headersにセットして非同期処理で使えるようにする
+    axios.defaults.headers.common['uid'] = uid;
+    axios.defaults.headers.common['client'] = client;
+    axios.defaults.headers.common['access-token'] = accessToken;
+    localStorage.setItem('auth_token', JSON.stringify(axios.defaults.headers.common))
+  }
+
+  userAuthentification() {
+    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+    } else {
+      return null
+    }
+  }
+
+  formSubmit(e) {
+    e.preventDefault()
+    // props.content,つまりモーダルの種類ごとに処理を分ける
+    if (this.props.content == 'SignUp') {
+      axios
+      .post('/api/v1/users', {user: this.state.user} )
+      .then(response => {
+        console.log(response.headers)
+        this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //uid, client, access-tokenの3つをログアウトで使えるようにする
+        console.log(axios.defaults.headers)
+        // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
+        this.setState({
+          user: {},
+          errors: []
+        })
+        this.props.close() //モーダルを閉じる
+        return response
+      })
+      .catch(error => {
+        console.log(error)
+        if (error.response.data && error.response.data.errors) {
+          this.setState({
+            errors: error.response.data.errors //エラーメッセージの表示
+          })
+        }
+      })
+    }
+
+    if (this.props.content == 'SignIn') {
+      axios
+      .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
+      .then(response => {
+        this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
+        console.log(axios.defaults.headers)
+        this.setState({
+          user: {},
+          errors: []
+        })
+        this.props.close()
+        return response
+      })
+      .catch(error => {
+        if (error.response.data && error.response.data.errors) {
+          const errors = [] //ログインではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
+          errors.push(error.response.data.errors) 
+          this.setState({
+            errors: errors
+          })
+        }
+      })
+    }
+
+    if (this.props.content == 'SignOut') {
+      this.setAxiosDefaults();
+      this.userAuthentification()
+      axios
+      .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
+      .then(response => {
+        this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //ログアウト時はこれらはundefinedになる
+        localStorage.setItem('uid', JSON.stringify(response.headers['uid']))
+        console.log(axios.defaults.headers)
+        this.setState({
+          user: {},
+          errors: []
+        })
+        this.props.close()
+        return response
+      })
+      .catch(error => {
+        if (error.response.data && error.response.data.errors) {
+          // ログアウトに失敗するケースはあまり想定していないが一応設定
+          const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
+          errors.push(error.response.data.errors) 
+          this.setState({
+            errors: errors
+          })
+        }
+      })
+    }
+  }
+
+  updateForm(e) {
+    // ネストされたオブジェクトのdataまでアクセスしておく
+    const user = this.state.user;
+
+    // eventが発火したname属性名ごとに値を処理
+    switch (e.target.name) {
+        case 'nickname':
+            user.nickname = e.target.value;
+            break;
+        case 'email':
+            user.email = e.target.value;
+            break;
+        case 'password':
+            user.password = e.target.value;
+            break;
+        case 'password_confirmation':
+            user.password_confirmation = e.target.value;
+            break;
+        case 'avatar':
+            //画像は事前にvalueを取得できないのでFileReaderを使ってデータを読み取る
+            const file = e.target.files[0];
+            const reader = new FileReader()
+            reader.onload = () => { 
+              //以下2つはactivestorageの保存に必要
+              user.avatar.data = reader.result
+              user.avatar.filename = file.name 
+            }
+            reader.readAsDataURL(file) //戻り値はata:image/jpeg;base64,/9j/4AA…のようになる。これをサーバーサイドで複合する
+            break;
+    }
+    this.setState({
+      user: user
+    })
+  }
+
+  resetErrorMessages(){
+    // モーダルを閉じるときにエラーメッセージが残ったままにならないようにする
+    this.setState({
+      errors: []
+    })
+    this.props.close()
+  }
+
+  render () {
+    if (this.props.show) {
+      return (
+        <ModalOverlay onClick={this.resetErrorMessages}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
-            <p>{props.content}</p>
-            <button onClick={props.closeModal}>x</button>
-          <UserFrom content={props.content}/>
+            <p>{this.props.content}</p>
+            <button onClick={this.resetErrorMessages}>x</button>
+          <UserFrom content={this.props.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
         </ModalContent>
       </ModalOverlay>
    )
   } else {
     return null; //closeModalメソッドが動くとHeader.jsx内のstateが変更され、propsのshowがfalseになる
   }
+ }
 }
 
 // モーダルのスタイル
@@ -138,6 +364,15 @@ const UserFromContent = styled.form `
   flex-direction: column;
   align-items: center;
   height: fit-content;
+
+  & ul {
+    padding: 0 30px;
+  }
+
+  & li {
+    color: red;
+    font-size: 12px;
+  }
 ` 
 
 const FormBlock = styled.div `

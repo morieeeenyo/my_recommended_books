@@ -18,6 +18,9 @@ module MyRecommendedBooks
      end
      
      config.assets.paths << Rails.root.join("public/javascripts")
+     config.session_store :cookie_store, key: '_interslice_session'
+     config.middleware.use ActionDispatch::Cookies
+     config.middleware.use ActionDispatch::Session::CookieStore, {:key=>"_csrf_protection_example_session"}
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
