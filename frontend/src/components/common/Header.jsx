@@ -108,7 +108,8 @@ class Header extends React.Component {
   }
 
   render () {
-    if (!JSON.parse(localStorage.getItem("auth_token"))['uid']) {
+    const authToken = localStorage.getItem("auth_token")
+    if (authToken == undefined || !JSON.parse(authToken)['uid']) {
     return (
           <HeaderContainer>
             {this.props.children}
