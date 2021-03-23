@@ -166,8 +166,8 @@ class UserModal extends React.Component {
           user: {},
           errors: []
         })
-        this.props.signIn() //ヘッダーの表示の切り替え
         this.props.close() //モーダルを閉じる
+        this.props.signIn() //ヘッダーの表示の切り替え
         return response
       })
       .catch(error => {
@@ -190,8 +190,8 @@ class UserModal extends React.Component {
           user: {},
           errors: []
         })
-        this.props.signIn()
         this.props.close()
+        this.props.signIn()
         return response
       })
       .catch(error => {
@@ -218,8 +218,8 @@ class UserModal extends React.Component {
           user: {},
           errors: []
         })
-        this.props.signOut()
         this.props.close()
+        this.props.signOut()
         return response
       })
       .catch(error => {

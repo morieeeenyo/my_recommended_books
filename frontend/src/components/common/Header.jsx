@@ -66,12 +66,61 @@ class Header extends React.Component {
     this.setState({
       isSignedIn: true
     })
+    localStorage.setItem(JSON.stringify(this.state.isSignedIn))
   }
 
   successToSignOut(){
     this.setState({
       isSignedIn: false
     })
+    localStorage.setItem(JSON.stringify(this.state.isSignedIn))
+  }
+
+  componentDidMount(){
+    //ブラウザバックしたときにURLに応じてモーダルの表示を切り替える
+    this.props.history.listen((location) => {
+      if (location.pathname == '/') {
+        // ブラウザバックしたときrootパスにいればモーダルを閉じる
+        this.setState ({
+          showModal: false,
+          content: ''
+        })
+      }
+      if (this.state.isSignedIn == false) {
+        if (location.pathname == '/users/sign_up') {
+          // ブラウザバックしたときもパスがあっていれば新規登録モーダルを開く
+          this.setState ({
+            showModal: true,
+            content: 'SignUp'
+          })
+        }
+        if (location.pathname == '/users/sign_in') {
+          // ブラウザバックしたときもパスがあっていればログインモーダルを開く
+          this.setState ({
+            showModal: true,
+            content: 'SignIn'
+          })
+        }
+        if (location.pathname == '/users/sign_out') {
+          // ログアウト時にログアウトのモーダルは開けないようにする
+          alert('ユーザーがログインしていません')
+          this.closeModal()
+        }
+      }
+      if (this.state.isSignedIn == true) {
+        if (location.pathname == '/users/sign_out') {
+          // ブラウザバックしたときもパスがあっていればログアウトモーダルを開く
+          this.setState ({
+            showModal: true,
+            content: 'SignOut'
+          })
+        } else if (location.pathname == '/users/sign_up' || location.pathname == '/users/sign_in')  {
+          // ログイン時にログイン・新規登録のモーダルは開けないようにする
+          alert('ログイン・新規登録するにはログアウトしてください')
+          this.closeModal()
+        }
+      }
+    });
   }
 
   render () {
