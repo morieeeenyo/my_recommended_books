@@ -10,7 +10,6 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
     return invalid_email unless @user 
     if @user.valid_password?(params[:user][:password])
       sign_in :user, @user
-      update_auth_header #responseにuid, client, access-tokenを含ませて今後の処理で使えるようにする
       render json: {user: @user}
     else
       invalid_password
@@ -24,6 +23,7 @@ class Api::V1::Users::SessionsController < DeviseTokenAuth::SessionsController
     if @user && @client && @token #uid, client, access-tokenの3つが揃ったときだけログアウトできる。これはdevise-auth-tokenのデフォルトの処理でもある
       @token.clear 
       @client = nil
+      @user = nil
       render_destroy_success
     else
       render_destroy_error

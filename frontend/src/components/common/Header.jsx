@@ -66,14 +66,12 @@ class Header extends React.Component {
     this.setState({
       isSignedIn: true
     })
-    localStorage.setItem(JSON.stringify(this.state.isSignedIn))
   }
 
   successToSignOut(){
     this.setState({
       isSignedIn: false
     })
-    localStorage.setItem(JSON.stringify(this.state.isSignedIn))
   }
 
   componentDidMount(){
