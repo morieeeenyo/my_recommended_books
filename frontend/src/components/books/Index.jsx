@@ -12,7 +12,7 @@ class Index extends React.Component {
       <div className="container">
         <NewBooksLink>
           <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
-            <i class="fas fa-book-open"></i>
+            <i className="fas fa-book-open"></i>
             <span>投稿する</span>
           </Link>
         </NewBooksLink>

@@ -375,7 +375,7 @@ const UserFromContent = styled.form `
   }
 ` 
 
-const FormBlock = styled.div `
+export const FormBlock = styled.div `
   margin: 10px auto;
   width: 40%;
   display: flex;
