@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
 // react-routerの読み込み
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -11,15 +12,21 @@ import NewBook from '../books/New.jsx'
 class Container extends React.Component {
   render () {
     return (
-      <div className="container">
+      <Wrapper>
         <Router>
           <Route exact path='/' component={Index}/>
           <Route path="/books/new" component={NewBook}/>
         </Router>
-      </div>
+      </Wrapper>
     )
   } 
 }
+
+const Wrapper  = styled.div `
+  width: 80%;
+  margin: 0 auto;
+`
+
 
 
 export default Container;
