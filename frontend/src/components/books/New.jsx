@@ -13,10 +13,10 @@ class NewBook extends React.Component {
 
   render () {
     return (
-      <ModalOverlay onClick={this.resetErrorMessages}>
+      <ModalOverlay>
         <ModalContent>
         <p>推薦図書を投稿する</p>
-        <button onClick={this.resetErrorMessages}>x</button>
+        <button>x</button>
           <NewBooksWrapper>
             <form>
               <BooksFormBlock>
