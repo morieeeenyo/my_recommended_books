@@ -297,7 +297,7 @@ class UserModal extends React.Component {
 }
 
 // モーダルのスタイル
-const ModalOverlay = styled.div `
+export const ModalOverlay = styled.div `
   /*　画面全体を覆う設定　*/
   position:fixed;
   top:0;
@@ -314,7 +314,7 @@ const ModalOverlay = styled.div `
 
 
 
-const ModalContent = styled.div `
+export const ModalContent = styled.div `
   z-index:2;
   width: 24%;
   padding: 1em;

@@ -6,49 +6,58 @@ import { Link } from "react-router-dom";
 
 //コンポーネントの読み込み
 import {FormBlock} from "../common/UserModal.jsx"
+import {ModalOverlay} from "../common/UserModal.jsx"
+import {ModalContent} from "../common/UserModal.jsx"
 
 class NewBook extends React.Component {
+
   render () {
     return (
-      <NewBooksWrapper>
-        <h1>推薦図書を投稿する</h1>
-        <div className="new-books-link">
-          <form>
-            <BooksFormBlock>
-              <label htmlFor="nickname">タイトル</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-            <BooksFormBlock>
-              <label htmlFor="nickname">こんな人におすすめ！</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-            <BooksFormBlock>
-              <label htmlFor="nickname">内容要約</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-            <BooksFormBlock>
-              <label htmlFor="nickname">著者</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-            <BooksFormBlock>
-              <label htmlFor="nickname">出版社</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-            <BooksFormBlock>
-              <label htmlFor="nickname">ジャンル</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-            <BooksFormBlock>
-              <label htmlFor="nickname">価格</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-            <BooksFormBlock>
-              <label htmlFor="nickname">画像</label>
-              <input type="text" name="nickname" id="nickname" />  
-            </BooksFormBlock>
-          </form>
-        </div>
-      </NewBooksWrapper>
+      <ModalOverlay onClick={this.resetErrorMessages}>
+        <ModalContent>
+        <p>推薦図書を投稿する</p>
+        <button onClick={this.resetErrorMessages}>x</button>
+          <NewBooksWrapper>
+            <form>
+              <BooksFormBlock>
+                <label htmlFor="nickname">タイトル</label>
+                <input type="text" name="nickname" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="nickname">こんな人におすすめ！</label>
+                <input type="text" name="nickname" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="nickname">内容要約</label>
+                <textarea type="text" name="nickname" id="nickname"></textarea> 
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="nickname">著者</label>
+                <input type="text" name="nickname" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="nickname">出版社</label>
+                <input type="text" name="nickname" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="nickname">ジャンル</label>
+                <input type="text" name="nickname" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="nickname">価格</label>
+                <input type="text" name="nickname" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="nickname">画像</label>
+                <input type="text" name="nickname" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <input type="submit" value="推薦図書に追加" id="submit-btn"/>
+              </BooksFormBlock>
+            </form>
+          </NewBooksWrapper>
+        </ModalContent>
+      </ModalOverlay>
     )
   } 
 }
@@ -65,10 +74,16 @@ const NewBooksWrapper = styled.div `
 const BooksFormBlock = styled(FormBlock)`
   width: 80%;
   & label {
-    font-size: 24px;
+    font-size: 16px;
   }
   & input {
-    height: 30px;
+    height: 24px;
+    line-height: 24px;
+  }
+  
+  & textarea {
+    height: 100px;
+    resize: none;
   }
 
 `
