@@ -1,7 +1,18 @@
 class Api::V1::BooksController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
+  def create 
+    @book = Book.new(book_params)
+    if @book.valid?
+      @book.save
+      render json: {book: @book}
+    else
+      render json: {errors: @book.errors.full_messages}
+    end
+  end
+
   def search
     @books = RakutenWebService::Books::Book.search(booksGenreId: "001005")
-     render json: { status: 'success', data: @books }  
+    render json: { status: 'success', data: @books }  
     #  検索で使うデータ(候補)
     #   authorKana→author
     #   title
