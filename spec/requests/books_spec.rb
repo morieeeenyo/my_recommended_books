@@ -5,7 +5,7 @@ RSpec.describe "Books", type: :request do
   let(:book_search_params) { {keyword: '７つの習慣'} }
   describe "書籍の検索" do
     context "検索に成功" do
-      it "タイトルが存在すれば検索に成功する" do
+      it "パラメータが存在すればリクエストに成功する" do
         get search_api_v1_books_path, xhr: true, params: book_search_params 
         expect(response).to have_http_status(200)
       end
@@ -23,6 +23,11 @@ RSpec.describe "Books", type: :request do
       it "パラメータが空文字列の時ステータス204が返却される" do
         get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
         expect(response).to have_http_status(204)
+      end
+
+      it "パラメータが空文字列の時レスポンスは空文字列である" do
+        get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
+        expect(response.body).to eq ""
       end
     end
   end
