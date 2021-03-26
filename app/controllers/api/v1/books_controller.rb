@@ -11,8 +11,10 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def search
-    @books = RakutenWebService::Books::Book.search(booksGenreId: "001005")
-    render json: { status: 'success', data: @books }  
+    return nil if params[:keyword] == ""
+    @books = RakutenWebService::Books::Book.search(title: params[:keyword])    
+    # return render status: 404, json: {errors: 'Failed. No Book found.'} if @books.length == 0
+    render json: { books: @books }  
     #  検索で使うデータ(候補)
     #   authorKana→author
     #   title
