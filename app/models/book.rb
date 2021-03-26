@@ -2,13 +2,17 @@ class Book < ApplicationRecord
   has_one_attached :image
 
   with_options presence: true do 
+    # 以下は楽天ブックスAPIから取得
     validates :title
-    validates :recommends
     validates :author
-    validates :publisher
+    validates :author_kana
+    validates :publisher_name
+    validates :sales_date
+    validates :item_price
     validates :genre_id
-    validates :price
+    validates :item_url
+    # 以下はユーザーが入力
     validates :description
-    validates :amazon_link
+    validates :recommends
   end
 end
