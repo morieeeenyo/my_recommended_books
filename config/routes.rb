@@ -5,6 +5,11 @@ Rails.application.routes.draw do
         registrations: 'api/v1/users/registrations',
         sessions: 'api/v1/users/sessions',
       }
+      resources :books do 
+        collection do
+          get "search"
+        end
+      end
     end
   end
   root 'homes#index'
