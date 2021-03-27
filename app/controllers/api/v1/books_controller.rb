@@ -14,16 +14,5 @@ class Api::V1::BooksController < ApplicationController
     return nil if params[:keyword] == ""
     @books = RakutenWebService::Books::Book.search(title: params[:keyword])    
     render json: { books: @books }  
-    #  検索で使うデータ(候補)
-    #   authorKana→author
-    #   title
-    #   publisherName
-    #   mediumImageUrl
-    #   smallImageUrl
-    #   itemPrice
-    #   affiliateUrl
-    #   itemUrl
-    #   genreId
-    #   salesDate
   end
 end
