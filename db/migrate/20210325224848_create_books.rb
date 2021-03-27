@@ -2,6 +2,7 @@ class CreateBooks < ActiveRecord::Migration[6.0]
   def change
     create_table :books do |t|
       # 以下は楽天ブックスAPIから取得
+      t.string :isbn, null: false, uniquue: true #isbnは書籍の識別子
       t.string :title, null: false
       t.string :author, null: false
       t.string :author_kana, null: false

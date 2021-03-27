@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :book do
+    isbn {'12345667890123'}
     title {'test'}
     author {'testさん'}
     author_kana {'テストさん'}
