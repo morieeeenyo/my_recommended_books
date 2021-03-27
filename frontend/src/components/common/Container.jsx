@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 // コンポーネントの読み込み
 import Index from '../books/Index.jsx'
-import NewBook from '../books/New.jsx'
+import NewBookModal from '../books/NewBookModal.jsx'
 
 
 class Container extends React.Component {
@@ -15,7 +15,7 @@ class Container extends React.Component {
       <Wrapper>
         <Router>
           <Route exact path='/' component={Index}/>
-          <Route path="/books/new" component={NewBook}/>
+          <Route path="/books/new" component={NewBookModal}/>
         </Router>
       </Wrapper>
     )

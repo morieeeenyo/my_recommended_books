@@ -60,3 +60,4 @@ gem 'image_processing', '~> 1.2'
 gem 'devise_token_auth'
 gem "rack-cors"
 gem 'pry-rails'
+gem 'rakuten_web_service'

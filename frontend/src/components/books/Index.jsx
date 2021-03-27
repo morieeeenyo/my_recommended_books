@@ -4,8 +4,6 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-
-
 class Index extends React.Component {
   render () {
     return (

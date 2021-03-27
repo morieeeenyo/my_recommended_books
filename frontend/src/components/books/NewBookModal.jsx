@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-// react-routerの読み込み
-import { Link } from "react-router-dom";
-
 //コンポーネントの読み込み
 import {FormBlock} from "../common/UserModal.jsx"
 import {ModalOverlay} from "../common/UserModal.jsx"
 import {ModalContent} from "../common/UserModal.jsx"
 
-class NewBook extends React.Component {
+class NewBookModal extends React.Component {
 
   render () {
     return (
@@ -19,6 +16,7 @@ class NewBook extends React.Component {
         <button>x</button>
           <NewBooksWrapper>
             <form>
+              {/* name属性とかは変更していない状態 */}
               <BooksFormBlock>
                 <label htmlFor="nickname">タイトル</label>
                 <input type="text" name="nickname" id="nickname" />  
@@ -62,6 +60,7 @@ class NewBook extends React.Component {
   } 
 }
 
+// 基本的なスタイルはUserModal.jsxを継承しているためそちらを参照
 const NewBooksWrapper = styled.div `
   width: 70%;
   margin: 0 auto;
@@ -89,4 +88,4 @@ const BooksFormBlock = styled(FormBlock)`
 `
 
 
-export default NewBook;
+export default NewBookModal;
