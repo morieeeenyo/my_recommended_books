@@ -9,6 +9,7 @@ RSpec.describe Book, type: :model do
     end
   end
 
+  # modelに定義したバリデーションはpresence: trueのみ
   context "本が登録できない時" do
     it "titleが空の場合登録できない" do
       book.title = ""
