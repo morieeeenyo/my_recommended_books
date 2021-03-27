@@ -1,7 +1,7 @@
 class Api::V1::BooksController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
   def create 
-    @book = Book.new(book_params)
+    @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) #同じデータを保存しないためにisbnで識別
     if @book.valid?
       @book.save
       render status: 201, json: {book: @book} #ステータスは手動で入れないと反映されない
@@ -20,6 +20,7 @@ class Api::V1::BooksController < ApplicationController
 
   def book_params 
     params.require(:book).permit(
+       :isbn, 
        :title, 
        :author, 
        :author_kana, 
