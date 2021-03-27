@@ -9,7 +9,7 @@ import {FormBlock} from "../common/UserModal.jsx"
 import {ModalOverlay} from "../common/UserModal.jsx"
 import {ModalContent} from "../common/UserModal.jsx"
 
-class NewBook extends React.Component {
+class NewBookModal extends React.Component {
 
   render () {
     return (
@@ -89,4 +89,4 @@ const BooksFormBlock = styled(FormBlock)`
 `
 
 
-export default NewBook;
+export default NewBookModal;
