@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe "Books", type: :request do
   let(:book) { build(:book) }
-  let(:book_params) { attributes_for(:book) }
-  let(:invalid_book_params) { attributes_for(:book, title: "") }
-  let(:book_search_params) { {keyword: '７つの習慣'} }
+  let(:book_params) { attributes_for(:book) } #paramsとして送るためにattributes_forを使用
+  let(:invalid_book_params) { attributes_for(:book, title: "") } #コントローラーで空のキーワードに対してnilを返すようにしている
+  let(:book_search_params) { {keyword: '７つの習慣'} } #検索したらヒットしそうな本にしてます
   describe "書籍の検索" do
     context "検索に成功" do
       it "パラメータが存在すればリクエストに成功する" do
@@ -16,9 +16,14 @@ RSpec.describe "Books", type: :request do
       it "レスポンスがJSON形式で返却される" do
         get search_api_v1_books_path, xhr: true, params: book_search_params 
         json = JSON.parse(response.body) 
-        expect(json['books']).not_to eq nil
+        expect(json['books'].length).not_to eq 0 #検索結果が0のときはlengthが0になる
       end
 
+      it "検索結果がない時レスポンスが0件になる" do
+        get search_api_v1_books_path, xhr: true, params: {keyword: "hogefugahogefugahoge"} 
+        json = JSON.parse(response.body) 
+        expect(json['books'].length).to eq 0
+      end
     end
 
     context "検索に失敗" do
@@ -31,6 +36,7 @@ RSpec.describe "Books", type: :request do
         get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
         expect(response.body).to eq ""
       end
+
     end
   end
 
@@ -38,7 +44,7 @@ RSpec.describe "Books", type: :request do
     context "書籍が投稿できる時" do
       it "パラメータが正しければリクエストに成功する" do
         post api_v1_books_path, xhr: true, params: {book: book_params}
-        expect(response).to have_http_status(201)
+        expect(response).to have_http_status(201) #ステータスはコントローラーで設定している
       end
 
       it "パラメータが正しければリクエストに成功する" do
@@ -51,7 +57,7 @@ RSpec.describe "Books", type: :request do
     context "書籍が投稿できない時" do
       it "パラメータの中に空の値が含まれる場合リクエストに失敗する" do
         post api_v1_books_path, xhr: true, params: {book: invalid_book_params}
-        expect(response).to have_http_status(404)
+        expect(response).to have_http_status(404) #ステータスはコントローラーで設定している
       end
 
       it "パラメータの中に空の値が含まれる場合エラーメッセージが返却される" do
