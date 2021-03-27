@@ -1,6 +1,4 @@
 class Book < ApplicationRecord
-  has_one_attached :image
-
   with_options presence: true do 
     # 以下は楽天ブックスAPIから取得
     validates :title

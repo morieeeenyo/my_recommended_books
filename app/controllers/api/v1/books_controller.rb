@@ -4,15 +4,15 @@ class Api::V1::BooksController < ApplicationController
     @book = Book.new(book_params)
     if @book.valid?
       @book.save
-      render status: 201, json: {book: @book}
+      render status: 201, json: {book: @book} #ステータスは手動で入れないと反映されない
     else
       render status: 404, json: {errors: @book.errors.full_messages}
     end
   end
 
   def search
-    return nil if params[:keyword] == ""
-    @books = RakutenWebService::Books::Book.search(title: params[:keyword])    
+    return nil if params[:keyword] == "" #何も入力しなくても空文字列が送られる想定
+    @books = RakutenWebService::Books::Book.search(title: params[:keyword])  #Todo: 複数のパラメータで同時に検索できないか検証
     render json: { books: @books }  
   end
 
