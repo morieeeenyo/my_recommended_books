@@ -13,4 +13,7 @@ class Book < ApplicationRecord
     validates :description
     validates :recommends
   end
+
+  has_many :users, through: :user_books
+  has_many :user_books
 end

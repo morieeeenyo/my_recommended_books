@@ -6,8 +6,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
-
   has_one_attached :avatar
+  has_many :books, through: :user_books
+  has_many :user_books
+
   
   validates :nickname, presence: true, uniqueness: { case_sensitive: true }
 
