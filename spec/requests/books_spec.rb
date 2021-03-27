@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Books", type: :request do
   let(:book) { build(:book) }
+  let(:book_params) { attributes_for(:book) }
   let(:book_search_params) { {keyword: '７つの習慣'} }
   describe "書籍の検索" do
     context "検索に成功" do
@@ -31,4 +32,12 @@ RSpec.describe "Books", type: :request do
       end
     end
   end
+
+  describe "書籍の投稿" do
+    context "書籍が投稿できる時" do
+      post api_v1_books_path, xhr: true, params: {} 
+    end
+    
+  end
+  
 end

@@ -15,4 +15,21 @@ class Api::V1::BooksController < ApplicationController
     @books = RakutenWebService::Books::Book.search(title: params[:keyword])    
     render json: { books: @books }  
   end
+
+  private 
+
+  def book_params 
+    params.require(:book).permit(
+       :title, 
+       :author, 
+       :author_kana, 
+       :publisher_name, 
+       :sales_date, 
+       :item_price, 
+       :genre_id, 
+       :item_url, 
+       :description, 
+       :recommends, 
+    )
+  end
 end
