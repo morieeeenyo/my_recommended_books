@@ -4,9 +4,9 @@ class Api::V1::BooksController < ApplicationController
     @book = Book.new(book_params)
     if @book.valid?
       @book.save
-      render json: {book: @book}
+      render status: 201, json: {book: @book}
     else
-      render json: {errors: @book.errors.full_messages}
+      render status: 404, json: {errors: @book.errors.full_messages}
     end
   end
 

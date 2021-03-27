@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe "Books", type: :request do
   let(:book) { build(:book) }
   let(:book_params) { attributes_for(:book) }
+  let(:invalid_book_params) { attributes_for(:book, title: "") }
   let(:book_search_params) { {keyword: '７つの習慣'} }
   describe "書籍の検索" do
     context "検索に成功" do
@@ -35,7 +36,29 @@ RSpec.describe "Books", type: :request do
 
   describe "書籍の投稿" do
     context "書籍が投稿できる時" do
-      post api_v1_books_path, xhr: true, params: {} 
+      it "パラメータが正しければリクエストに成功する" do
+        post api_v1_books_path, xhr: true, params: {book: book_params}
+        expect(response).to have_http_status(201)
+      end
+
+      it "パラメータが正しければリクエストに成功する" do
+        post api_v1_books_path, xhr: true, params: {book: book_params}
+        json = JSON.parse(response.body) 
+        expect(json['book']['title']).to eq book_params[:title]
+      end
+    end
+
+    context "書籍が投稿できない時" do
+      it "パラメータの中に空の値が含まれる場合リクエストに失敗する" do
+        post api_v1_books_path, xhr: true, params: {book: invalid_book_params}
+        expect(response).to have_http_status(404)
+      end
+
+      it "パラメータの中に空の値が含まれる場合エラーメッセージが返却される" do
+        post api_v1_books_path, xhr: true, params: {book: invalid_book_params}
+        json = JSON.parse(response.body) 
+        expect(json['errors']).to include "Title can't be blank"
+      end
     end
     
   end
