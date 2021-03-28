@@ -67,7 +67,10 @@ function SearchBookForm(props) {
     <form>
       <BooksFormBlock>
         <label htmlFor="title">タイトル</label>
-        <input type="text" name="title" id="nickname" onChange={props.change}/>  
+        <div className="search-form-field">
+          <input type="text" name="title" id="nickname" onChange={props.change}/>  
+          <span onClick={props.search}>検索</span>  
+        </div>
       </BooksFormBlock>
       <div id="search_result">
 
@@ -133,7 +136,17 @@ class NewBookModal extends React.Component {
       response.data.books.forEach(book => {
         const resultItem = document.createElement('div')
         const resultImage = document.createElement('img')
-        resultImage.setAttribute('src', book.params.smallImageUrl)
+        const resultInfoWrapper = document.createElement('div')
+        const resultInfoContent = `
+        <p>タイトル：${book.params.title}</p>
+        <p>タイトル(カナ)：${book.params.titleKana}</p>
+        <p>著者名：${book.params.author}</p>
+        <p>著者名(カナ)：${book.params.authorKana}</p>
+        <p>出版社名：${book.params.publisherName}</p>
+        `
+        resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
+        resultItem.appendChild(resultInfoWrapper)
+        resultImage.setAttribute('src', book.params.mediumImageUrl)
         resultList.appendChild(resultItem)
         resultItem.appendChild(resultImage)
       })
@@ -158,7 +171,7 @@ class NewBookModal extends React.Component {
         <p>推薦図書を投稿する</p>
         <button onClick={this.closeBookModal}>x</button>
           <NewBooksWrapper>
-            <SearchBookForm search={this.searchBook}/>
+            <SearchBookForm search={this.searchBook} change={this.updateForm}/>
           </NewBooksWrapper>
         </ModalContent>
       </ModalOverlay>
@@ -168,7 +181,7 @@ class NewBookModal extends React.Component {
 
 // 基本的なスタイルはUserModal.jsxを継承しているためそちらを参照
 const NewBooksWrapper = styled.div `
-  width: 70%;
+  width: 100%;
   margin: 0 auto;
   font-family: Verdana, sans-serif;
   & h1 {
@@ -177,8 +190,21 @@ const NewBooksWrapper = styled.div `
 
   & #search_result {
     overflow: scroll;
-    display: flex;
-    justify-content: space-evenly;
+    height: 300px;
+
+    & > div {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border: 1px solid black;
+      border-radius: 5px;
+      margin-bottom: 10px;
+
+      & p {
+        text-align: start;
+        font-size: 12px;
+      }
+    }
   }
 ` 
 
@@ -195,6 +221,15 @@ const BooksFormBlock = styled(FormBlock)`
   & textarea {
     height: 100px;
     resize: none;
+  }
+
+  .search-form-field {
+    display: flex;
+    justify-content: space-between;
+
+    & input {
+      width: 80%;
+    }
   }
 
 `
