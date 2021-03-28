@@ -9,7 +9,7 @@ import {FormBlock} from "../common/UserModal.jsx"
 import {ModalOverlay} from "../common/UserModal.jsx"
 import {ModalContent} from "../common/UserModal.jsx"
 
-function manualBookForm() {
+function ManualBookPostForm() {
     return(
       <form>
         <BooksFormBlock>
@@ -69,6 +69,10 @@ function SearchBookForm(props) {
         <label htmlFor="title">タイトル</label>
         <input type="text" name="title" id="nickname" onChange={props.search}/>  
       </BooksFormBlock>
+      <div id="search_result">
+
+
+      </div>
       <BooksFormBlock>
         <input type="submit" value="推薦図書に追加" id="submit-btn"/>
       </BooksFormBlock>
@@ -113,6 +117,15 @@ class NewBookModal extends React.Component {
     .get(`/api/v1/books/search/?keyword=${keyword}`)
     .then(response => {
       console.log(response)
+      const resultList = document.getElementById('search_result')
+      resultList.textContent = "" //検索するたびに中身を空にして重複を防ぐ
+      response.data.books.forEach(book => {
+        const resultItem = document.createElement('div')
+        const resultImage = document.createElement('img')
+        resultImage.setAttribute('src', book.params.smallImageUrl)
+        resultList.appendChild(resultItem)
+        resultItem.appendChild(resultImage)
+      })
       return response //todo:予測候補を出力する
     })
     .catch(error => {
@@ -149,6 +162,12 @@ const NewBooksWrapper = styled.div `
   font-family: Verdana, sans-serif;
   & h1 {
     text-align: center;
+  }
+
+  & #search_result {
+    overflow: scroll;
+    display: flex;
+    justify-content: space-evenly;
   }
 ` 
 
