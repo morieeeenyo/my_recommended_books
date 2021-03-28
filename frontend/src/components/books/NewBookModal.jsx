@@ -10,6 +10,19 @@ class NewBookModal extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      book: {
+        isbn: '',
+        title: '',
+        author: '',
+        author_kana: '',
+        publisher_name: '',
+        sales_date: '',
+        item_price: '',
+        genre_id: '',
+        item_url: '',
+        description: '',
+        recommends: '',
+      },
       errors: []
     }
     this.closeBookModal = this.closeBookModal.bind(this)
@@ -43,6 +56,10 @@ class NewBookModal extends React.Component {
               <BooksFormBlock>
                 <label htmlFor="author">著者</label>
                 <input type="text" name="author" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="author_kana">著者(カナ)</label>
+                <input type="text" name="author_kana" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
                 <label htmlFor="publisher_name">出版社</label>
