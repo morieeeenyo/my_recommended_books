@@ -141,9 +141,8 @@ class NewBookModal extends React.Component {
         resultImage.setAttribute('src', book.params.mediumImageUrl) 
         const resultInfoWrapper = document.createElement('div') //書籍の詳細
         const resultInfoContent = `
-        <p>タイトル：${book.params.title}</p>
-        <p>著者名：${book.params.author}</p>
-        <p>出版社名：${book.params.publisherName}</p>
+        <h3>${book.params.title}</h3>
+        <p>著者名</p><p>${book.params.author}</p>
         `
         resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
         resultItem.appendChild(resultImage)
