@@ -142,9 +142,7 @@ class NewBookModal extends React.Component {
         const resultInfoWrapper = document.createElement('div') //書籍の詳細
         const resultInfoContent = `
         <p>タイトル：${book.params.title}</p>
-        <p>タイトル(カナ)：${book.params.titleKana}</p>
         <p>著者名：${book.params.author}</p>
-        <p>著者名(カナ)：${book.params.authorKana}</p>
         <p>出版社名：${book.params.publisherName}</p>
         `
         resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
@@ -201,6 +199,14 @@ const NewBooksWrapper = styled.div `
       border: 1px solid black;
       border-radius: 5px;
       margin-bottom: 10px;
+
+      & img {
+        width: 30%;
+      }
+
+      & > div {
+        width: 60%;
+      }
 
       & p {
         text-align: start;
