@@ -69,7 +69,7 @@ function SearchBookForm(props) {
         <label htmlFor="title">タイトルで検索</label>
         <div className="search-form-field">
           <input type="text" name="title" id="nickname" onChange={props.change}/>  
-          <span onClick={props.search}>検索</span>  
+          <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
         </div>
       </BooksFormBlock>
       <div id="search_result">
@@ -123,6 +123,7 @@ class NewBookModal extends React.Component {
 
   searchBook(e) {
     //todo: インクリメンタルサーチだと速すぎて間に合わないのでクリックイベントとかで検索したほうが良さそう
+    e.preventDefault()
     const keyword = this.state.book.title
     console.log(keyword)
     //todo:ユーザー認証周りは一通り動くようになってから
@@ -227,9 +228,29 @@ const BooksFormBlock = styled(FormBlock)`
   .search-form-field {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     & input {
       width: 80%;
+    }
+
+    & .search-button {
+      vertical-align: center;
+      position: static;
+      background-color: #cb4d00;
+      color: #FFF;
+      height: 30px;
+      padding: 0 10px;
+
+      & i {
+        font-size: 16px;
+      }
+    }
+
+    & .search-button:hover {
+      cursor: pointer;
+      color: #cb4d00;
+      background-color: #FFF;
     }
   }
 
