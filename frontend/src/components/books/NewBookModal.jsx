@@ -108,6 +108,7 @@ class NewBookModal extends React.Component {
   }
 
   searchBook(e) {
+    //todo: インクリメンタルサーチだと速すぎて間に合わないのでクリックイベントとかで検索したほうが良さそう
     const keyword = e.target.value
     console.log(keyword)
     //todo:ユーザー認証周りは一通り動くようになってから
