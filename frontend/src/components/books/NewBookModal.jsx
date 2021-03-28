@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+//axiosの読み込み
+import axios from 'axios';
+
 //コンポーネントの読み込み
 import {FormBlock} from "../common/UserModal.jsx"
 import {ModalOverlay} from "../common/UserModal.jsx"
@@ -26,10 +29,35 @@ class NewBookModal extends React.Component {
       errors: []
     }
     this.closeBookModal = this.closeBookModal.bind(this)
+    this.searchBook = this.searchBook.bind(this)
   }
 
   closeBookModal() {
     this.props.history.push("/");
+  }
+
+  searchBook(e) {
+    const keyword = e.target.value
+    console.log(keyword)
+    //todo:ユーザー認証周りは一通り動くようになってから
+    // this.setAxiosDefaults();
+    // this.userAuthentification()
+    axios
+    .get(`/api/v1/books/search/?keyword=${keyword}`)
+    .then(response => {
+      console.log(response)
+      return response //todo:予測候補を出力する
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        // ログアウトに失敗するケースはあまり想定していないが一応設定
+        const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
+        errors.push(error.response.data.errors) 
+        this.setState({
+          errors: errors
+        })
+      }
+    })
   }
 
   render () {
@@ -43,7 +71,7 @@ class NewBookModal extends React.Component {
               {/* name属性とかは変更していない状態 */}
               <BooksFormBlock>
                 <label htmlFor="title">タイトル</label>
-                <input type="text" name="title" id="nickname" />  
+                <input type="text" name="title" id="nickname" onChange={this.searchBook}/>  
               </BooksFormBlock>
               <BooksFormBlock>
                 <label htmlFor="recommends">こんな人におすすめ！</label>
