@@ -67,7 +67,7 @@ function SearchBookForm(props) {
     <form>
       <BooksFormBlock>
         <label htmlFor="title">タイトル</label>
-        <input type="text" name="title" id="nickname" onChange={props.search}/>  
+        <input type="text" name="title" id="nickname" onChange={props.change}/>  
       </BooksFormBlock>
       <div id="search_result">
 
@@ -101,15 +101,25 @@ class NewBookModal extends React.Component {
     }
     this.closeBookModal = this.closeBookModal.bind(this)
     this.searchBook = this.searchBook.bind(this)
+    this.updateForm = this.updateForm.bind(this)
   }
 
   closeBookModal() {
     this.props.history.push("/");
   }
 
+  updateForm(e) {
+    // ネストされたオブジェクトのdataまでアクセスしておく
+    const book = this.state.book;
+    book.title = e.target.value            
+    this.setState({
+      book: book
+    })
+  }
+
   searchBook(e) {
     //todo: インクリメンタルサーチだと速すぎて間に合わないのでクリックイベントとかで検索したほうが良さそう
-    const keyword = e.target.value
+    const keyword = this.state.book.title
     console.log(keyword)
     //todo:ユーザー認証周りは一通り動くようになってから
     // this.setAxiosDefaults();
