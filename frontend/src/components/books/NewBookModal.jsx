@@ -7,13 +7,24 @@ import {ModalOverlay} from "../common/UserModal.jsx"
 import {ModalContent} from "../common/UserModal.jsx"
 
 class NewBookModal extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      errors: []
+    }
+    this.closeBookModal = this.closeBookModal.bind(this)
+  }
+
+  closeBookModal() {
+    this.props.history.push("/");
+  }
 
   render () {
     return (
-      <ModalOverlay>
-        <ModalContent>
+      <ModalOverlay onClick={this.closeBookModal}>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
         <p>推薦図書を投稿する</p>
-        <button>x</button>
+        <button onClick={this.closeBookModal}>x</button>
           <NewBooksWrapper>
             <form>
               {/* name属性とかは変更していない状態 */}
