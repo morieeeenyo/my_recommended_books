@@ -29,36 +29,43 @@ class NewBookModal extends React.Component {
             <form>
               {/* name属性とかは変更していない状態 */}
               <BooksFormBlock>
-                <label htmlFor="nickname">タイトル</label>
-                <input type="text" name="nickname" id="nickname" />  
+                <label htmlFor="title">タイトル</label>
+                <input type="text" name="title" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
-                <label htmlFor="nickname">こんな人におすすめ！</label>
-                <input type="text" name="nickname" id="nickname" />  
+                <label htmlFor="recommends">こんな人におすすめ！</label>
+                <input type="text" name="recommends" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
-                <label htmlFor="nickname">内容要約</label>
-                <textarea type="text" name="nickname" id="nickname"></textarea> 
+                <label htmlFor="description">内容要約</label>
+                <textarea type="text" name="description" id="nickname"></textarea> 
               </BooksFormBlock>
               <BooksFormBlock>
-                <label htmlFor="nickname">著者</label>
-                <input type="text" name="nickname" id="nickname" />  
+                <label htmlFor="author">著者</label>
+                <input type="text" name="author" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
-                <label htmlFor="nickname">出版社</label>
-                <input type="text" name="nickname" id="nickname" />  
+                <label htmlFor="publisher_name">出版社</label>
+                <input type="text" name="publisher_name" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
-                <label htmlFor="nickname">ジャンル</label>
-                <input type="text" name="nickname" id="nickname" />  
+                <label htmlFor="genre_id">ジャンル</label>
+                <input type="text" name="genre_id" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
-                <label htmlFor="nickname">価格</label>
-                <input type="text" name="nickname" id="nickname" />  
+                <label htmlFor="sales_date">発売日</label>
+                <input type="text" name="sales_date" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
-                <label htmlFor="nickname">画像</label>
-                <input type="text" name="nickname" id="nickname" />  
+                <label htmlFor="item_price">価格</label>
+                <input type="text" name="item_price" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <label htmlFor="image_url">画像</label>
+                <input type="hidden" name="image_url" id="nickname" />  
+              </BooksFormBlock>
+              <BooksFormBlock>
+                <input type="hidden" name="isbn" id="nickname" />  
               </BooksFormBlock>
               <BooksFormBlock>
                 <input type="submit" value="推薦図書に追加" id="submit-btn"/>
