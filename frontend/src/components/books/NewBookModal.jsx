@@ -73,6 +73,7 @@ function SearchBookForm(props) {
         </div>
       </BooksFormBlock>
       <div id="search_result">
+        {/* 検索結果が個々に入る */}
 
 
       </div>
@@ -112,7 +113,7 @@ class NewBookModal extends React.Component {
   }
 
   updateForm(e) {
-    // ネストされたオブジェクトのdataまでアクセスしておく
+    //入力欄の変化を検知してstateを変える
     const book = this.state.book;
     book.title = e.target.value            
     this.setState({
@@ -134,9 +135,10 @@ class NewBookModal extends React.Component {
       const resultList = document.getElementById('search_result')
       resultList.textContent = "" //検索するたびに中身を空にして重複を防ぐ
       response.data.books.forEach(book => {
-        const resultItem = document.createElement('div')
-        const resultImage = document.createElement('img')
-        const resultInfoWrapper = document.createElement('div')
+        const resultItem = document.createElement('div') //全体の親
+        const resultImage = document.createElement('img') //画像
+        resultImage.setAttribute('src', book.params.mediumImageUrl) 
+        const resultInfoWrapper = document.createElement('div') //書籍の詳細
         const resultInfoContent = `
         <p>タイトル：${book.params.title}</p>
         <p>タイトル(カナ)：${book.params.titleKana}</p>
@@ -145,10 +147,9 @@ class NewBookModal extends React.Component {
         <p>出版社名：${book.params.publisherName}</p>
         `
         resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
-        resultItem.appendChild(resultInfoWrapper)
-        resultImage.setAttribute('src', book.params.mediumImageUrl)
-        resultList.appendChild(resultItem)
         resultItem.appendChild(resultImage)
+        resultItem.appendChild(resultInfoWrapper)
+        resultList.appendChild(resultItem)
       })
       return response //todo:予測候補を出力する
     })
