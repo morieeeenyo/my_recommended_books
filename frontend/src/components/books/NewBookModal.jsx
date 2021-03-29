@@ -64,7 +64,7 @@ function ManualBookPostForm() {
 
 function SearchBookForm(props) {
   return(
-    <form>
+    <form onSubmit={props.submit}>
       <BooksFormBlock>
         <label htmlFor="title">タイトルで検索</label>
         <div className="search-form-field">
@@ -106,6 +106,7 @@ class NewBookModal extends React.Component {
     this.closeBookModal = this.closeBookModal.bind(this)
     this.searchBook = this.searchBook.bind(this)
     this.updateForm = this.updateForm.bind(this)
+    this.postBook = this.postBook.bind(this)
   }
 
   closeBookModal() {
@@ -135,7 +136,6 @@ class NewBookModal extends React.Component {
       console.log(response)
       const resultList = document.getElementById('search_result')
       resultList.textContent = "" //検索するたびに中身を空にして重複を防ぐ
-      const book = this.state.book
       response.data.books.forEach(book => {
         const resultItem = document.createElement('div') //全体の親
         const resultImage = document.createElement('img') //画像
@@ -148,9 +148,6 @@ class NewBookModal extends React.Component {
         resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
         resultItem.appendChild(resultImage)
         resultItem.appendChild(resultInfoWrapper)
-        var index = 0
-        resultItem.setAttribute('data-index',index)
-        index += 1
         resultList.appendChild(resultItem)
         resultItem.addEventListener('click', (e) => {
           const selectedItems = document.getElementsByClassName('selected')
@@ -160,16 +157,17 @@ class NewBookModal extends React.Component {
             })
           }
           resultItem.setAttribute('class', 'selected') //選択状態にする
-          book.title = book.params.title
-          book.isbn = book.params.isbn
-          book.author = book.params.author
-          book.author_kana = book.params.authorKana
-          book.publisher_name = book.params.publisherName
-          book.sales_date = book.params.salesDate
-          book.item_price = book.params.itemPrice
-          book.item_url = book.params.itemUrl
-          this.setState({
-            book: book
+          this.setState(prevState => {
+            const bookParams = prevState.book
+            bookParams.title = book.params.title
+            bookParams.isbn = book.params.isbn
+            bookParams.author = book.params.author
+            bookParams.author_kana = book.params.authorKana
+            bookParams.publisher_name = book.params.publisherName
+            bookParams.sales_date = book.params.salesDate
+            bookParams.item_price = book.params.itemPrice
+            bookParams.item_url = book.params.itemUrl
+            return { book: bookParams }
           })
           console.log(this.state.book)
         })
@@ -189,6 +187,27 @@ class NewBookModal extends React.Component {
     })
   }
 
+  postBook(e) {
+    e.preventDefault()
+    axios
+    .post('/api/v1/books', {book: this.state.book})
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        // ログアウトに失敗するケースはあまり想定していないが一応設定
+        const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
+        errors.push(error.response.data.errors) 
+        this.setState({
+          errors: errors
+        })
+      }
+    })
+
+
+  }
+
   render () {
     return (
       <ModalOverlay onClick={this.closeBookModal}>
@@ -196,7 +215,7 @@ class NewBookModal extends React.Component {
         <p>推薦図書を投稿する</p>
         <button onClick={this.closeBookModal}>x</button>
           <NewBooksWrapper>
-            <SearchBookForm search={this.searchBook} change={this.updateForm}/>
+            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook}/>
           </NewBooksWrapper>
         </ModalContent>
       </ModalOverlay>
