@@ -135,6 +135,7 @@ class NewBookModal extends React.Component {
       console.log(response)
       const resultList = document.getElementById('search_result')
       resultList.textContent = "" //検索するたびに中身を空にして重複を防ぐ
+      const book = this.state.book
       response.data.books.forEach(book => {
         const resultItem = document.createElement('div') //全体の親
         const resultImage = document.createElement('img') //画像
@@ -148,7 +149,23 @@ class NewBookModal extends React.Component {
         resultItem.appendChild(resultImage)
         resultItem.appendChild(resultInfoWrapper)
         resultList.appendChild(resultItem)
+        resultItem.addEventListener('click', (e) => {
+          book.title = book.params.title
+          book.isbn = book.params.isbn
+          book.author = book.params.author
+          book.author_kana = book.params.authorKana
+          book.publisher_name = book.params.publisherName
+          book.sales_date = book.params.salesDate
+          book.item_price = book.params.itemPrice
+          book.item_url = book.params.itemUrl
+          this.setState({
+            book: book
+          })
+          console.log(this.state.book)
+          resultList.innerHTML = e.target //todo: 選択オブジェクトのみ残す
+        })
       })
+
       return response //todo:予測候補を出力する
     })
     .catch(error => {
