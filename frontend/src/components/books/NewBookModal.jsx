@@ -148,8 +148,19 @@ class NewBookModal extends React.Component {
         resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
         resultItem.appendChild(resultImage)
         resultItem.appendChild(resultInfoWrapper)
+        var index = 0
+        resultItem.setAttribute('data-index',index)
+        index += 1
         resultList.appendChild(resultItem)
         resultItem.addEventListener('click', (e) => {
+          const selectedItem = document.getElementsByClassName('selected')
+          if (selectedItem) {
+            Array.prototype.slice.call(selectedItem).forEach(el => {
+              el.removeAttribute('class')
+            })
+          }
+          const targetIndex = e.target.getAttribute('data-index')
+          resultItem.classList.toggle('selected')
           book.title = book.params.title
           book.isbn = book.params.isbn
           book.author = book.params.author
@@ -162,7 +173,6 @@ class NewBookModal extends React.Component {
             book: book
           })
           console.log(this.state.book)
-          resultList.innerHTML = e.target //todo: 選択オブジェクトのみ残す
         })
       })
 
@@ -228,6 +238,10 @@ const NewBooksWrapper = styled.div `
         text-align: start;
         font-size: 12px;
       }
+    }
+
+    & .selected {
+      border: 5px solid blue;
     }
   }
 ` 
