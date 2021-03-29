@@ -176,12 +176,11 @@ class NewBookModal extends React.Component {
       return response //todo:予測候補を出力する
     })
     .catch(error => {
+      console.log(error)
+      console.log(error.response.data.errors)
       if (error.response.data && error.response.data.errors) {
-        // ログアウトに失敗するケースはあまり想定していないが一応設定
-        const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
-        errors.push(error.response.data.errors) 
         this.setState({
-          errors: errors
+          errors: error
         })
       }
     })
