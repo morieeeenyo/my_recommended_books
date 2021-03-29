@@ -153,14 +153,13 @@ class NewBookModal extends React.Component {
         index += 1
         resultList.appendChild(resultItem)
         resultItem.addEventListener('click', (e) => {
-          const selectedItem = document.getElementsByClassName('selected')
-          if (selectedItem) {
-            Array.prototype.slice.call(selectedItem).forEach(el => {
-              el.removeAttribute('class')
+          const selectedItems = document.getElementsByClassName('selected')
+          if (selectedItems) { //初回は選択状態の要素がないので条件分岐しないとエラーが発生しそう
+            Array.prototype.slice.call(selectedItems).forEach(item => {
+              item.removeAttribute('class') //一度クラスが付与されたdiv要素を全て外し1つだけ選択されている状態にする
             })
           }
-          const targetIndex = e.target.getAttribute('data-index')
-          resultItem.classList.toggle('selected')
+          resultItem.setAttribute('class', 'selected') //選択状態にする
           book.title = book.params.title
           book.isbn = book.params.isbn
           book.author = book.params.author
