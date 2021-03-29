@@ -9,9 +9,9 @@ class CreateBooks < ActiveRecord::Migration[6.0]
       t.string :publisher_name, null: false
       t.string :sales_date, null: false
       t.integer :item_price, null: false
-      t.integer :genre_id, null: false
+      t.integer :genre_id, null: false #null: false外す？
       t.text :item_url, null: false
-      # 以下はユーザーが入力
+      # 以下はユーザーが入力、別テーブルにする
       t.text :description, null: false
       t.string :recommends, null: false
       t.timestamps
