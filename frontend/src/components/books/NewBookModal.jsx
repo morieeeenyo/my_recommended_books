@@ -219,7 +219,7 @@ class NewBookModal extends React.Component {
 
   componentDidMount(){
     const authToken = JSON.parse(localStorage.getItem("auth_token"));
-    if (!authToken['uid']) {
+    if (!authToken['uid']) { //ログインしていない場合モーダルが開かないようにする
       alert('推薦図書の投稿にはログインが必要です')
       this.props.history.push("/");
     }
