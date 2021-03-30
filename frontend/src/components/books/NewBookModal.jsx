@@ -104,6 +104,7 @@ class NewBookModal extends React.Component {
     this.searchBook = this.searchBook.bind(this)
     this.updateForm = this.updateForm.bind(this)
     this.postBook = this.postBook.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   closeBookModal() {
@@ -125,7 +126,7 @@ class NewBookModal extends React.Component {
     const keyword = this.state.book.title
     //todo:ユーザー認証周りは一通り動くようになってから
     // this.setAxiosDefaults();
-    // this.userAuthentification()
+    this.userAuthentification()
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}`)
     .then(response => {
@@ -183,6 +184,7 @@ class NewBookModal extends React.Component {
 
   postBook(e) {
     e.preventDefault()
+    this.userAuthentification()
     axios
     .post('/api/v1/books', {book: this.state.book})
     .then(response => {
@@ -200,6 +202,19 @@ class NewBookModal extends React.Component {
     })
 
 
+  }
+
+
+  userAuthentification() {
+    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+    } else {
+      return null
+    }
   }
 
   render () {

@@ -1,9 +1,11 @@
 class Api::V1::BooksController < ApplicationController
+  before_action :user_authentification
   skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
   def create 
     @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) #同じデータを保存しないためにisbnで識別
     if @book.valid?
       @book.save
+      @user.books << @book
       render status: 201, json: {book: @book} #ステータスは手動で入れないと反映されない
     else
       render status: 404, json: {errors: @book.errors.full_messages}
@@ -29,5 +31,9 @@ class Api::V1::BooksController < ApplicationController
        :item_price, 
        :item_url, 
     )
+  end
+
+  def user_authentification
+    @user = User.find_for_database_authentication(uid: request.headers['uid'])
   end
 end
