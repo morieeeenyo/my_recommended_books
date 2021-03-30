@@ -172,11 +172,9 @@ class NewBookModal extends React.Component {
       return response //todo:予測候補を出力する
     })
     .catch(error => {
-      console.log(error)
-      console.log(error.response.data.errors)
       if (error.response.data && error.response.data.errors) {
         this.setState({
-          errors: error
+          errors: error.response.data.errors
         })
       }
     })
@@ -188,20 +186,19 @@ class NewBookModal extends React.Component {
     axios
     .post('/api/v1/books', {book: this.state.book})
     .then(response => {
-      console.log(response)
+      this.setState({
+        books: {}
+      })
+      this.closeBookModal()
     })
     .catch(error => {
+      console.log(error)
       if (error.response.data && error.response.data.errors) {
-        // ログアウトに失敗するケースはあまり想定していないが一応設定
-        const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
-        errors.push(error.response.data.errors) 
         this.setState({
-          errors: errors
+          errors: error.response.data.errors //エラーメッセージの表示
         })
       }
     })
-
-
   }
 
 
