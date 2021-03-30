@@ -5,10 +5,11 @@ RSpec.describe "Books", type: :request do
   let(:book_params) { attributes_for(:book) } #paramsとして送るためにattributes_forを使用
   let(:invalid_book_params) { attributes_for(:book, title: "") } #コントローラーで空のキーワードに対してnilを返すようにしている
   let(:book_search_params) { {keyword: '７つの習慣'} } #検索したらヒットしそうな本にしてます
+  # ユーザー認証についてはrequest.headersの中身で検証するため、systemテストで実装
   describe "書籍の検索" do
     context "検索に成功" do
       it "パラメータが存在すればリクエストに成功する" do
-        get search_api_v1_books_path, xhr: true, params: book_search_params 
+        get search_api_v1_books_path, xhr: true, params: book_search_params
         expect(response).to have_http_status(200)
       end
 
