@@ -71,7 +71,7 @@ function SearchBookForm(props) {
       <BooksFormBlock>
         <label htmlFor="title">タイトルで検索</label>
         <div className="search-form-field">
-          <input type="text" name="title" id="nickname" onChange={props.change}/>  
+          <input type="text" name="title" id="title" onChange={props.change}/>  
           <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
         </div>
       </BooksFormBlock>
