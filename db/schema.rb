@@ -41,10 +41,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_062451) do
     t.string "publisher_name", null: false
     t.string "sales_date", null: false
     t.integer "item_price", null: false
-    t.integer "genre_id", null: false
     t.text "item_url", null: false
-    t.text "description", null: false
-    t.string "recommends", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

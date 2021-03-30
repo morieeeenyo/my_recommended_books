@@ -27,10 +27,7 @@ class Api::V1::BooksController < ApplicationController
        :publisher_name, 
        :sales_date, 
        :item_price, 
-       :genre_id, 
        :item_url, 
-       :description, 
-       :recommends, 
     )
   end
 end

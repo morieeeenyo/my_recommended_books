@@ -96,10 +96,7 @@ class NewBookModal extends React.Component {
         publisher_name: '',
         sales_date: '',
         item_price: '',
-        genre_id: '',
         item_url: '',
-        description: '',
-        recommends: '',
       },
       errors: []
     }
@@ -126,7 +123,6 @@ class NewBookModal extends React.Component {
     //todo: インクリメンタルサーチだと速すぎて間に合わないのでクリックイベントとかで検索したほうが良さそう
     e.preventDefault()
     const keyword = this.state.book.title
-    console.log(keyword)
     //todo:ユーザー認証周りは一通り動くようになってから
     // this.setAxiosDefaults();
     // this.userAuthentification()
@@ -169,7 +165,6 @@ class NewBookModal extends React.Component {
             bookParams.item_url = book.params.itemUrl
             return { book: bookParams }
           })
-          console.log(this.state.book)
         })
       })
 
