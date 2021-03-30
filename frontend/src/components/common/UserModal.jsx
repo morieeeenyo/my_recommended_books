@@ -4,7 +4,7 @@ import styled from 'styled-components';
 //axiosの読み込み
 import axios from 'axios';
 
-function ErrorMessage(props) {
+export function ErrorMessage(props) {
   if (props.errors.length !== 0) {
     return (
       <ul>

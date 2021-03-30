@@ -8,6 +8,7 @@ import axios from 'axios';
 import {FormBlock} from "../common/UserModal.jsx"
 import {ModalOverlay} from "../common/UserModal.jsx"
 import {ModalContent} from "../common/UserModal.jsx"
+import {ErrorMessage} from "../common/UserModal.jsx"
 
 // function ManualBookPostForm() {
 //   // もしかしたら使うかも
@@ -66,6 +67,7 @@ import {ModalContent} from "../common/UserModal.jsx"
 function SearchBookForm(props) {
   return(
     <form onSubmit={props.submit}>
+      <ErrorMessage errors={props.errors}></ErrorMessage>
       <BooksFormBlock>
         <label htmlFor="title">タイトルで検索</label>
         <div className="search-form-field">
@@ -222,7 +224,7 @@ class NewBookModal extends React.Component {
         <p>推薦図書を投稿する</p>
         <button onClick={this.closeBookModal}>x</button>
           <NewBooksWrapper>
-            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook}/>
+            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors}/>
           </NewBooksWrapper>
         </ModalContent>
       </ModalOverlay>
