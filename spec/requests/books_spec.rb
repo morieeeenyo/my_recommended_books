@@ -34,7 +34,7 @@ RSpec.describe "Books", type: :request do
         expect(response).to have_http_status(500)
       end
 
-      it "パラメータが空文字列の時レスポンスは空文字列である" do
+      it "パラメータが空文字列の時レスポンスでエラーメッセージが返却される" do
         get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
         json = JSON.parse(response.body) 
         expect(json['errors']).to include "Title must be set"
@@ -47,7 +47,7 @@ RSpec.describe "Books", type: :request do
     context "書籍が投稿できる時" do
       before do
         user.save
-        @headers = {uid: user.uid}
+        @headers = {uid: user.uid} #ユーザーと書籍を紐付ける処理ではrequest.headersからuidを抜き出しているため
       end
       
       it "パラメータが正しければリクエストに成功する" do
