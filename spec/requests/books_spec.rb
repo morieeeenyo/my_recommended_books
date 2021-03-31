@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Books", type: :request do
+  let(:user) { build(:user) }
   let(:book) { build(:book) }
   let(:book_params) { attributes_for(:book) } #paramsとして送るためにattributes_forを使用
   let(:invalid_book_params) { attributes_for(:book, title: "") } #コントローラーで空のキーワードに対してnilを返すようにしている
@@ -30,12 +31,13 @@ RSpec.describe "Books", type: :request do
     context "検索に失敗" do
       it "パラメータが空文字列の時ステータス204が返却される" do
         get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
-        expect(response).to have_http_status(204)
+        expect(response).to have_http_status(500)
       end
 
       it "パラメータが空文字列の時レスポンスは空文字列である" do
         get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
-        expect(response.body).to eq ""
+        json = JSON.parse(response.body) 
+        expect(json['errors']).to include "Title must be set"
       end
 
     end
@@ -43,13 +45,18 @@ RSpec.describe "Books", type: :request do
 
   describe "書籍の投稿" do
     context "書籍が投稿できる時" do
+      before do
+        user.save
+        @headers = {uid: user.uid}
+      end
+      
       it "パラメータが正しければリクエストに成功する" do
-        post api_v1_books_path, xhr: true, params: {book: book_params}
+        post api_v1_books_path, xhr: true, params: {book: book_params}, headers: @headers
         expect(response).to have_http_status(201) #ステータスはコントローラーで設定している
       end
 
       it "パラメータが正しければリクエストに成功する" do
-        post api_v1_books_path, xhr: true, params: {book: book_params}
+        post api_v1_books_path, xhr: true, params: {book: book_params}, headers: @headers
         json = JSON.parse(response.body) 
         expect(json['book']['title']).to eq book_params[:title]
       end

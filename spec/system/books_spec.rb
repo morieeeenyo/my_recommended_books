@@ -35,7 +35,7 @@ RSpec.describe "Books", type: :system do
         find('.search-button').click
         expect(all('#search_result > div').length).not_to eq 0 #検索結果が0件ではないことを検証
         expect {
-          find('input[type="submit"]').click
+          find('input[type="submit"]').click #書籍を選択せずに送信
           sleep 2
         }.to change(Book, :count).by(0) 
         expect(page).to  have_content "Author can't be blank"

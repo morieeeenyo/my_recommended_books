@@ -41,25 +41,10 @@ RSpec.describe Book, type: :model do
       book.valid?
       expect(book.errors.full_messages).to  include "Item price can't be blank"
     end
-    it "genre_idが空の場合登録できない" do
-      book.genre_id = ""
-      book.valid?
-      expect(book.errors.full_messages).to  include "Genre can't be blank"
-    end
     it "item_urlが空の場合登録できない" do
       book.item_url = ""
       book.valid?
       expect(book.errors.full_messages).to  include "Item url can't be blank"
-    end
-    it "descriptionが空の場合登録できない" do
-      book.description = ""
-      book.valid?
-      expect(book.errors.full_messages).to  include "Description can't be blank"
-    end
-    it "recommendsが空の場合登録できない" do
-      book.recommends = ""
-      book.valid?
-      expect(book.errors.full_messages).to  include "Recommends can't be blank"
     end
     
   end
