@@ -159,10 +159,8 @@ class UserModal extends React.Component {
       axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
-        console.log(response.headers)
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //uid, client, access-tokenの3つをログアウトで使えるようにする
-        console.log(axios.defaults.headers)
         // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
         this.setState({
           user: {},
@@ -172,7 +170,6 @@ class UserModal extends React.Component {
         return response
       })
       .catch(error => {
-        console.log(error)
         if (error.response.data && error.response.data.errors) {
           this.setState({
             errors: error.response.data.errors //エラーメッセージの表示

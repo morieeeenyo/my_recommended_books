@@ -134,9 +134,8 @@ class NewBookModal extends React.Component {
     .get(`/api/v1/books/search/?keyword=${keyword}`)
     .then(response => {
       if (response.data.books.length === 0) {
-        return alert('検索結果が見つかりませんでした') //サーバー側で検索結果が0件であるかどうかを判定できない
+        return alert('検索結果が見つかりませんでした') //memo: サーバー側で検索結果が0件であるかどうかを判定できない
       }
-      console.log(response)
       const resultList = document.getElementById('search_result')
       resultList.textContent = "" //検索するたびに中身を空にして重複を防ぐ
       response.data.books.forEach(book => {
@@ -193,7 +192,6 @@ class NewBookModal extends React.Component {
       this.closeBookModal()
     })
     .catch(error => {
-      console.log(error)
       if (error.response.data && error.response.data.errors) {
         this.setState({
           errors: error.response.data.errors //エラーメッセージの表示
