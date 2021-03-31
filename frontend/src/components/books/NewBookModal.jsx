@@ -159,6 +159,9 @@ class NewBookModal extends React.Component {
       if (response.data.books.length === 0) {
         return alert('検索結果が見つかりませんでした') //memo: サーバー側で検索結果が0件であるかどうかを判定できない
       }
+      this.setState({
+        errors: []
+      })
       const resultList = document.getElementById('search_result')
       resultList.textContent = "" //検索するたびに中身を空にして重複を防ぐ
       response.data.books.forEach(book => {
