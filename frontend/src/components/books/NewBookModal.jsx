@@ -129,6 +129,10 @@ class NewBookModal extends React.Component {
   };
 
   closeBookModal() {
+    this.setState({
+      books: {},
+      errors: []
+    })
     this.props.history.push("/");
   }
 
@@ -148,6 +152,7 @@ class NewBookModal extends React.Component {
     //todo:ユーザー認証周りは一通り動くようになってから
     // this.setAxiosDefaults();
     this.userAuthentification()
+    this.setAxiosDefaults();
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}`)
     .then(response => {
@@ -201,6 +206,7 @@ class NewBookModal extends React.Component {
   postBook(e) {
     e.preventDefault()
     this.userAuthentification()
+    this.setAxiosDefaults();
     axios
     .post('/api/v1/books', {book: this.state.book})
     .then(response => {
