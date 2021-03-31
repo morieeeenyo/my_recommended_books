@@ -172,14 +172,10 @@ class NewBookModal extends React.Component {
         })
       })
 
-      return response //todo:予測候補を出力する
+      return response 
     })
     .catch(error => {
-      if (error.response.data && error.response.data.errors) {
-        this.setState({
-          errors: error.response.data.errors
-        })
-      }
+      alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
     })
   }
 

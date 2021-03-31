@@ -13,7 +13,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def search
-    return nil if params[:keyword] == "" #何も入力しなくても空文字列が送られる想定
+    return render status: 500, json: { errors: "Title must be set" } if params[:keyword] == "" #何も入力しなくても空文字列が送られる想定
     @books = RakutenWebService::Books::Book.search(title: params[:keyword])  #Todo: 複数のパラメータで同時に検索できないか検証
     render json: { books: @books }  
   end
