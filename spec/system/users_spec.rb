@@ -135,13 +135,7 @@ RSpec.describe "Users", type: :system do
 
   describe "ログアウト" do
     before do
-      user.save    
-      visit root_path
-      find('a', text: 'ログイン').click 
-      expect(page).to have_content 'SignIn' 
-      fill_in "email",	with: user.email
-      fill_in "password",	with: user.password
-      click_button "SignIn"
+      sign_in(user)
     end
     
     context "ログアウトできる時" do
@@ -154,13 +148,6 @@ RSpec.describe "Users", type: :system do
         expect(page).to  have_content 'ログイン'
       end
     end
-
-    context "ログアウトできない時" do
-      
-    end
     
   end
-  
-  
-  
 end
