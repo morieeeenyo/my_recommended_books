@@ -29,15 +29,15 @@ RSpec.describe "Books", type: :request do
     end
 
     context "検索に失敗" do
-      it "パラメータが空文字列の時ステータス204が返却される" do
+      it "パラメータが空文字列の時ステータス400が返却される" do
         get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
-        expect(response).to have_http_status(500)
+        expect(response).to have_http_status(400)
       end
 
       it "パラメータが空文字列の時レスポンスでエラーメッセージが返却される" do
         get search_api_v1_books_path, xhr: true, params: {keyword: ""} 
         json = JSON.parse(response.body) 
-        expect(json['errors']).to include "Title must be set"
+        expect(json['errors']).to include "タイトルを入力してください"
       end
 
     end
