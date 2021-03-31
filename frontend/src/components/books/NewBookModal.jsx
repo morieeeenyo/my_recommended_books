@@ -108,7 +108,25 @@ class NewBookModal extends React.Component {
     this.updateForm = this.updateForm.bind(this)
     this.postBook = this.postBook.bind(this)
     this.userAuthentification = this.userAuthentification.bind(this)
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
   }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+  };
 
   closeBookModal() {
     this.props.history.push("/");
