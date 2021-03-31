@@ -15,6 +15,7 @@ RSpec.describe "Books", type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in "title",	with: book.title
         find('.search-button').click
+        sleep 2
         expect(all('#search_result > div').length).not_to eq 0 #検索結果が0件ではないことを検証
         all('#search_result > div')[0].click
         expect {
@@ -58,8 +59,12 @@ RSpec.describe "Books", type: :system do
         sign_in(user) 
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in "title",	with: ''
+        fill_in "title",	with: '' 
         find('.search-button').click
+        sleep 5
+        expect(page.driver.browser.switch_to.alert.text).to eq "Title must be set"
+        sleep 2
+        page.driver.browser.switch_to.alert.accept 
         expect(find('#search_result').text).to eq '' #検索結果が0件になることを検証
         expect(page).to  have_content '推薦図書を投稿する' #モーダルにとどまっていることを検証
       end
