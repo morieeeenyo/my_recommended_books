@@ -135,7 +135,7 @@ RSpec.describe "Users", type: :system do
 
   describe "ログアウト" do
     before do
-      sign_in(user)
+      sign_in(user) #ログインする
     end
     
     context "ログアウトできる時" do
@@ -148,6 +148,6 @@ RSpec.describe "Users", type: :system do
         expect(page).to  have_content 'ログイン'
       end
     end
-    
+
   end
 end

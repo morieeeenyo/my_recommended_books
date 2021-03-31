@@ -10,7 +10,7 @@ RSpec.describe "Books", type: :system do
   describe "書籍の投稿" do
     context "投稿に成功" do
       before do
-        sign_in(user)
+        sign_in(user) #ログインする
       end
 
       it "検索結果から書籍を選択すると書籍の投稿ができる" do
