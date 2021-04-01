@@ -81,7 +81,7 @@ function SearchBookForm(props) {
 
       </div>
       <BooksFormBlock>
-        <input type="submit" value="推薦図書に追加" id="submit-btn"/>
+        <input type="submit" value="推薦図書に追加" id="submit_btn"/>
       </BooksFormBlock>
     </form>
   )
@@ -146,11 +146,9 @@ class NewBookModal extends React.Component {
   }
 
   searchBook(e) {
-    //todo: インクリメンタルサーチだと速すぎて間に合わないのでクリックイベントとかで検索したほうが良さそう
     e.preventDefault()
     const keyword = this.state.book.title
-    //todo:ユーザー認証周りは一通り動くようになってから
-    // this.setAxiosDefaults();
+    // ユーザー認証とcsrf-tokenの準備
     this.userAuthentification()
     this.setAxiosDefaults();
     axios
@@ -213,6 +211,7 @@ class NewBookModal extends React.Component {
     axios
     .post('/api/v1/books', {book: this.state.book})
     .then(response => {
+      // todo:次のブランチでマイページに書籍情報を渡す
       this.setState({
         books: {}
       })
@@ -221,7 +220,7 @@ class NewBookModal extends React.Component {
     .catch(error => {
       if (error.response.data && error.response.data.errors) {
         this.setState({
-          errors: error.response.data.errors //エラーメッセージの表示
+          errors: error.response.data.errors //モデルのバリデーションエラーメッセージの表示
         })
       }
     })
@@ -242,7 +241,7 @@ class NewBookModal extends React.Component {
 
   componentDidMount(){
     const authToken = JSON.parse(localStorage.getItem("auth_token"));
-    if (!authToken || !authToken['uid']) { //ログインしていない場合モーダルが開かないようにする
+    if (!authToken || !authToken['uid']) { //ログインしていない場合モーダルが開かないようにする。初回起動時はそもそもauthTokenが存在しないのでそれも判定
       alert('推薦図書の投稿にはログインが必要です')
       this.props.history.push("/");
     }
@@ -275,8 +274,10 @@ const NewBooksWrapper = styled.div `
   & #search_result {
     overflow: scroll;
     height: 300px;
+    /* 以下クラスやidを付与していないのはsearchBookメソッドが長くなるため */
 
-    & > div {
+    & > div { 
+      /* 個々の検索結果 */
       display: flex;
       justify-content: space-between;
       padding: 10px;
@@ -285,39 +286,37 @@ const NewBooksWrapper = styled.div `
       margin-bottom: 10px;
 
       & img {
+        /* 書籍の画像 */
         width: 30%;
       }
 
       & > div {
+        /* 書籍の情報の箱 */
         width: 60%;
       }
 
       & p {
+        /* 書籍情報のテキスト */
         text-align: start;
         font-size: 12px;
       }
     }
 
     & .selected {
+      /* 書籍を選択するとborderが青くなる */
       border: 5px solid blue;
     }
   }
 ` 
 
 const BooksFormBlock = styled(FormBlock)`
+  /* formBlock全体の幅を少し広げている */
   width: 80%;
-  & label {
+
+  label {
     font-size: 16px;
   }
-  & input {
-    height: 24px;
-    line-height: 24px;
-  }
-  
-  & textarea {
-    height: 100px;
-    resize: none;
-  }
+
 
   .search-form-field {
     display: flex;
@@ -325,10 +324,14 @@ const BooksFormBlock = styled(FormBlock)`
     align-items: center;
 
     & input {
+      /* 検索入力欄のスタイル */
+      height: 24px;
+      line-height: 24px;
       width: 80%;
     }
 
     & .search-button {
+      /* 検索ボタン */
       vertical-align: center;
       position: static;
       background-color: #cb4d00;

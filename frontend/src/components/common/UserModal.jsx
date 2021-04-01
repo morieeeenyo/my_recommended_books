@@ -47,7 +47,7 @@ function UserFrom(props) {
         <input type="file" name="avatar" id="avatar" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={props.change}/>
       </FormBlock>
       <FormBlock>
-        <input type="submit" value="SignUp" id="submit-btn"/>
+        <input type="submit" value="SignUp" id="submit_btn"/>
       </FormBlock>
     </UserFromContent>
     )
@@ -66,7 +66,7 @@ function UserFrom(props) {
         <input type="password" name="password" id="pasaword" value={props.user.password} onChange={props.change}/>
       </FormBlock>
       <FormBlock>
-        <input type="submit" value="SignIn" id="submit-btn"/>
+        <input type="submit" value="SignIn" id="submit_btn"/>
       </FormBlock>
     </UserFromContent>
     )
@@ -78,7 +78,7 @@ function UserFrom(props) {
     <UserFromContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <FormBlock>
-        <input type="submit" value="SignOut" id="submit-btn"/>
+        <input type="submit" value="SignOut" id="submit_btn"/>
       </FormBlock>
     </UserFromContent>
     )
@@ -387,17 +387,18 @@ export const FormBlock = styled.div `
     width: 100%;
   }
 
-  & #submit-btn {
+  & #submit_btn {
     background-color: lightgray;
     color: #FFF;
     height: 24px;
+    line-height: 24px;
     font-size: 18px;
     border-style: none;
     border-radius: 2px;
   }
 
   /* ホバー時にクリックできることがわかりやすくなるようにする */
-  & #submit-btn:hover {
+  & #submit_btn:hover {
     background-color: #000;
     cursor: pointer;
   }
