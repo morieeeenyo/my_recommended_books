@@ -7,13 +7,9 @@ class Book < ApplicationRecord
     validates :publisher_name
     validates :sales_date
     validates :item_price
-    validates :genre_id
-    validates :item_url #image_urlから画像データ取得して表示できるはず…
-    # 以下はユーザーが入力
-    validates :description
-    validates :recommends
+    validates :item_url 
   end
 
-  has_many :users, through: :user_books
   has_many :user_books
+  has_many :users, through: :user_books
 end

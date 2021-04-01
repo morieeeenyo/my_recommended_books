@@ -15,7 +15,8 @@ class Index extends React.Component {
           </Link>
         </NewBooksLink>
       </div>
-    )
+     )
+   
   } 
 }
 
