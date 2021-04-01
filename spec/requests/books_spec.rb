@@ -15,13 +15,14 @@ RSpec.describe "Books", type: :request do
       end
 
       
-      it "レスポンスがJSON形式で返却される" do
+      it "検索結果が存在する時JSON形式で検索結果が返却される" do
         get search_api_v1_books_path, xhr: true, params: book_search_params 
         json = JSON.parse(response.body) 
         expect(json['books'].length).not_to eq 0 #検索結果が0のときはlengthが0になる
       end
 
       it "検索結果がない時レスポンスが0件になる" do
+        # 検索処理そのものは正しく行われている、という意味で正常形に分類
         get search_api_v1_books_path, xhr: true, params: {keyword: "hogefugahogefugahoge"} 
         json = JSON.parse(response.body) 
         expect(json['books'].length).to eq 0
@@ -46,7 +47,7 @@ RSpec.describe "Books", type: :request do
   describe "書籍の投稿" do
     context "書籍が投稿できる時" do
       before do
-        user.save
+        user.save #uidを取り出すために保存
         @headers = {uid: user.uid} #ユーザーと書籍を紐付ける処理ではrequest.headersからuidを抜き出しているため
       end
       
