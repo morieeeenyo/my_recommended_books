@@ -4,8 +4,8 @@ class Api::V1::BooksController < ApplicationController
     @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) #同じデータを保存しないためにisbnで識別
     if @book.valid?
       @book.save
-      @user.books << @book
-      render status: 201, json: {book: @book} #ステータスは手動で入れないと反映されない
+      @user.books << @book #ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
+      render status: 201, json: {book: @book} #ステータスは手動で入れないと反映されない？
     else
       render status: 404, json: {errors: @book.errors.full_messages}
     end
@@ -33,6 +33,6 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def user_authentification
-    @user = User.find_for_database_authentication(uid: request.headers['uid'])
+    @user = User.find_for_database_authentication(uid: request.headers['uid']) #NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
   end
 end
