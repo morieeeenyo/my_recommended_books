@@ -14,11 +14,6 @@ class Container extends React.Component {
   render () {
     return (
       <Wrapper>
-        <Router>
-          <Route exact path='/' component={Index}/>
-          <Route path="/books/new" component={NewBookModal}/>
-          <Route path="/users/mypage" component={MyPage}/>
-        </Router>
       </Wrapper>
     )
   } 

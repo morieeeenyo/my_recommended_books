@@ -18,6 +18,9 @@ class App extends React.Component {
             <Route path="/users/:content" component={UserModal}/>
           </Header>
           <Container>
+            <Route exact path='/' component={Index}/>
+            <Route path="/books/new" component={NewBookModal}/>
+            <Route path="/users/mypage" component={MyPage}/>
           </Container>
         </Router>
       </div>
