@@ -22,8 +22,8 @@ class Container extends React.Component {
   } 
 }
 
-const Wrapper  = styled.div `
-  width: 80%;
+export const Wrapper  = styled.div `
+  width: 65%;
   margin: 0 auto;
 `
 
