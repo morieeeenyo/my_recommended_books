@@ -15,10 +15,10 @@ class App extends React.Component {
       <div className="container">
         <Router>
           <Header>
+            <Route path="/users/:content" component={UserModal}/>
           </Header>
           <Container>
           </Container>
-          <Route path="/users/:content" component={UserModal}/>
         </Router>
       </div>
     )
