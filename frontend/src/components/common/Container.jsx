@@ -23,8 +23,10 @@ class Container extends React.Component {
 }
 
 export const Wrapper  = styled.div `
-  width: 65%;
   margin: 0 auto;
+  background-color: #F5F6F2;
+  /* ヘッダーを抜いた高さ */
+  height: calc(100vh - 65px); 
 `
 
 

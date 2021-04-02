@@ -17,16 +17,16 @@ class MyPage extends React.Component {
         </MyPageHeader>
         <MyPageMain>
           <MyPageSideBar>
-            <Link>
+            <Link to="/users/:id/books">
               推薦図書一覧
             </Link>
-            <Link>
+            <Link to="/users/:id/books">
               推薦図書一覧
             </Link>
-            <Link>
+            <Link to="/users/:id/books">
               推薦図書一覧
             </Link>
-            <Link>
+            <Link to="/users/:id/books">
               推薦図書一覧
             </Link>
           </MyPageSideBar>
