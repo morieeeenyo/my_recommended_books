@@ -10,9 +10,6 @@ import Logo from '../../../images/header_logo.png'
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
-// react-routerの読み込み
-import { Link } from "react-router-dom";
-
 //axiosの読み込み
 import axios from 'axios';
 
@@ -28,6 +25,7 @@ class Header extends React.Component {
     this.openSignInModal = this.openSignInModal.bind(this)
     this.openSignOutModal = this.openSignOutModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
+    this.switchToMyPage = this.switchToMyPage.bind(this)
   }
 
   // 新規登録・ログイン・ログアウトでモーダルの表示を分けるために別メソッドとして定義
@@ -62,6 +60,14 @@ class Header extends React.Component {
       content: ''
     })
     this.props.history.push("/");
+  }
+
+  switchToMyPage() {
+    this.setState ({
+      showModal: false,
+      content: ''
+    })
+    this.props.history.push("/users/:id");
   }
 
   componentDidMount(){
@@ -144,10 +150,9 @@ class Header extends React.Component {
             ログアウト
           </HeaderLink>
             <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
-          <HeaderLink>
-            <Link to="/user/:id">
-              マイページ
-            </Link>
+          <HeaderLink onClick={this.switchToMyPage}>
+            {/* router-domを使うとリンクが重複してうまく遷移できない */}
+            マイページ
           </HeaderLink>
         </HeaderRight>
       </HeaderContainer>

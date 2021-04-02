@@ -20,7 +20,7 @@ class App extends React.Component {
           <Container>
           </Container>
           <Route path="/users/:content" component={UserModal}/>
-          <Route path="/user/:id" component={MyPage}/>
+          <Route path="/users/:id" component={MyPage}/>
         </Router>
       </div>
     )

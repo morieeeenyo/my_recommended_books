@@ -48,19 +48,18 @@ const MyPageMain = styled.div`
   display: flex;
 `
 const MyPageSideBar = styled.div`
-  width: 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid black;
 
   & a {
     display: inline-block;
-    padding: 5px;
-    border: 1px solid black;
+    padding: 10px;
+    border-bottom: 1px solid black;
     border-radius: 2px;
     text-decoration: none;
     color: #000;
-    margin: 5px;
   }
 `
 
