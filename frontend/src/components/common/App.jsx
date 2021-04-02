@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Header from './Header.jsx'
 import UserModal from './UserModal.jsx'
 import Container from './Container.jsx'
+import MyPage from '../users/MyPage.jsx'
 
 
 class App extends React.Component {
@@ -18,8 +19,8 @@ class App extends React.Component {
           </Header>
           <Container>
           </Container>
-          <Route path="/users/:content" component={UserModal}>
-          </Route>
+          <Route path="/users/:content" component={UserModal}/>
+          <Route path="/user/:id" component={MyPage}/>
         </Router>
       </div>
     )
