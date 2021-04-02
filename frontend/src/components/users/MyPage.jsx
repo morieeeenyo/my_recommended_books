@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 // コンポーネントの読み込み
-import {Wrapper} from "../common/Container.jsx"
+// import {Wrapper} from "../common/Container.jsx"
 
 // react-routerの読み込み
 import { Link } from "react-router-dom";
@@ -38,11 +38,12 @@ class MyPage extends React.Component {
   } 
 }
 
-const MyPageWrapper = styled(Wrapper) `
+const MyPageWrapper = styled.div`
 
 `
 
 const MyPageHeader = styled.h2`
+  margin: 0;
 `
 const MyPageMain = styled.div`
   display: flex;
