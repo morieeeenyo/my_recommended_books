@@ -9,11 +9,15 @@ class MyPage extends React.Component {
   render () {
     return (
       <MyPageWrapper>
-        <MyPageSideBar>
+        <MyPageHeader>
           テストさんのマイページ
-        </MyPageSideBar>
-        <MyPageMainContent>
-        </MyPageMainContent>
+        </MyPageHeader>
+        <MyPageMain>
+          <MyPageSideBar>
+          </MyPageSideBar>
+          <MyPageMainContent>
+          </MyPageMainContent>
+        </MyPageMain>
       </MyPageWrapper>
     )
   } 
@@ -23,6 +27,10 @@ const MyPageWrapper = styled(Wrapper) `
 
 `
 
+const MyPageHeader = styled.h2`
+`
+const MyPageMain = styled.div`
+`
 const MyPageSideBar = styled.div`
 `
 
