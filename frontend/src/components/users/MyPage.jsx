@@ -27,6 +27,7 @@ class MyPage extends React.Component {
   render () {
     return (
       <MyPageWrapper>
+      {this.props.children}
         <MyPageHeader>
           テストさんのマイページ
         </MyPageHeader>
@@ -34,12 +35,12 @@ class MyPage extends React.Component {
           <MyPageSideBar>
             <ul>
               <li>
-                <Link to="/users/:id/books">
+                <Link to="/users/mypage/recommends">
                   推薦図書一覧
                 </Link>
               </li>
               <li>
-                <Link to="/users/:id/books">
+                <Link to="/users/mypage/profile">
                   プロフィール編集
                 </Link>
               </li>
