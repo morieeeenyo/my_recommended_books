@@ -10,11 +10,14 @@ import MyPage from '../users/MyPage.jsx'
 
 
 class Container extends React.Component {
+  constructor(){
+    super();
+  }
+
   render () {
     return (
       <Wrapper>
-        <Index></Index>
-        <MyPage></MyPage>
+        {this.props.children}
       </Wrapper>
     )
   } 
