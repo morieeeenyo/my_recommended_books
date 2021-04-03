@@ -7,6 +7,21 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+export function MyRecommendedBooks() {
+  return (
+    <div>
+      これは推薦図書一覧です
+    </div>
+  )
+}
+
+export function Profile() {
+  return (
+    <div>
+      これはプロフィールです
+    </div>
+  )
+}
 
 class MyPage extends React.Component {
   render () {
@@ -17,20 +32,27 @@ class MyPage extends React.Component {
         </MyPageHeader>
         <MyPageMain>
           <MyPageSideBar>
-            <Link to="/users/:id/books">
-              推薦図書一覧
-            </Link>
-            <Link to="/users/:id/books">
-              推薦図書一覧
-            </Link>
-            <Link to="/users/:id/books">
-              推薦図書一覧
-            </Link>
-            <Link to="/users/:id/books">
-              推薦図書一覧
-            </Link>
+            <ul>
+              <li>
+                <Link to="/users/:id/books">
+                  推薦図書一覧
+                </Link>
+              </li>
+              <li>
+                <Link to="/users/:id/books">
+                  プロフィール編集
+                </Link>
+              </li>
+              <li>
+                <Link to="/users/:id/books">
+                  ログアウト
+                </Link>
+              </li>
+            </ul>
           </MyPageSideBar>
           <MyPageMainContent>
+            <MyRecommendedBooks></MyRecommendedBooks>
+            <Profile></Profile>
           </MyPageMainContent>
         </MyPageMain>
       </MyPageWrapper>
@@ -39,11 +61,16 @@ class MyPage extends React.Component {
 }
 
 const MyPageWrapper = styled.div`
+  width: 65%; 
+  margin: 0 auto;
+  padding: 3%; 
 
 `
 
-const MyPageHeader = styled.h2`
+const MyPageHeader = styled.h4`
   margin: 0;
+  font-size: 16px;
+  margin-bottom: 10px;
 `
 const MyPageMain = styled.div`
   display: flex;
@@ -53,14 +80,34 @@ const MyPageSideBar = styled.div`
   flex-direction: column;
   align-items: center;
   border: 1px solid black;
+  width: 15%;
+
+  & ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #FFF;
+    width: 100%;
+  }
 
   & a {
     display: inline-block;
     padding: 10px;
-    border-bottom: 1px solid black;
     border-radius: 2px;
     text-decoration: none;
     color: #000;
+  }
+
+  & li {
+  }
+
+  & li:hover {
+    background-color: #cb4d00;
+    cursor: pointer;
+
+    & a {
+      color: #FFF;
+    }
   }
 `
 
