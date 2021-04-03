@@ -5,12 +5,16 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 // コンポーネントの読み込み
+import Index from '../books/Index.jsx'
+import MyPage from '../users/MyPage.jsx'
 
 
 class Container extends React.Component {
   render () {
     return (
       <Wrapper>
+        <Index></Index>
+        <MyPage></MyPage>
       </Wrapper>
     )
   } 
