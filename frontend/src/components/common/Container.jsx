@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Index from '../books/Index.jsx'
 import MyPage from '../users/MyPage.jsx'
 
+// react-routerの読み込み
+import { Link } from "react-router-dom";
 
 class Container extends React.Component {
   constructor(){
@@ -18,6 +20,12 @@ class Container extends React.Component {
     return (
       <Wrapper>
         {this.props.children}
+        <NewBooksLink>
+          <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
+            <i className="fas fa-book-open"></i>
+            <span>投稿する</span>
+          </Link>
+        </NewBooksLink>
       </Wrapper>
     )
   } 
@@ -28,6 +36,29 @@ export const Wrapper  = styled.div `
   background-color: #F5F6F2;
   /* ヘッダーを抜いた高さ */
   height: calc(100vh - 65px); 
+`
+
+const NewBooksLink = styled.div `
+  background-color: #cb4d00;
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  border-radius: 5px;
+
+  & .fa-book-open {
+    font-size: 48px;
+    color: #FFF;
+  }
+
+  & a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+  }
 `
 
 

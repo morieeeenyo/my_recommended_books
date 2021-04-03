@@ -24,15 +24,15 @@ class App extends React.Component {
             <Switch>
               <Route exact path='/'>
                 <Index>
-                  <Route path="/books/new">
-                    <NewBookModal></NewBookModal>
-                  </Route>
                 </Index>
               </Route>
               <Route path="/users/mypage">
                 <MyPage></MyPage>
               </Route>
             </Switch>
+            <Route path="/books/new">
+              <NewBookModal></NewBookModal>
+            </Route>
           </Container>
         </Router>
       </div>
