@@ -13,6 +13,21 @@ import MyPage from '../users/MyPage.jsx'
 
 
 class App extends React.Component {
+  // constructor(){
+  //   super();
+  //   this.state = {
+  //     showBookModal: false,
+  //   }
+  //   this.closeBookModal = this.closeBookModal.bind(this)
+  // }
+
+  // closeBookModal() {
+  //   this.setState({
+  //     showBookModal: false
+  //   })
+  //   this.history.push("/")
+  // }
+
   render () {
     return (
       <div className="container">
