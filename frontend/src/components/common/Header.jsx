@@ -122,7 +122,9 @@ class Header extends React.Component {
           <HeaderContainer>
             {this.props.children}
             <HeaderTitle>
-              <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+              <Link to="/">
+                <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+              </Link>
             </HeaderTitle>
             <HeaderRight>
               <Link to="/users/sign_up" onClick={this.openSignUpModal}>
@@ -142,7 +144,9 @@ class Header extends React.Component {
       <HeaderContainer>
         {this.props.children}
         <HeaderTitle>
-          <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+          <Link to="/">
+            <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+          </Link>
         </HeaderTitle>
         <HeaderRight>
           <Link to="/users/sign_out" onClick={this.openSignOutModal}>
