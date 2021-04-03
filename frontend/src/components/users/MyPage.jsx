@@ -15,10 +15,18 @@ export function MyRecommendedBooks() {
   )
 }
 
-export function Profile() {
+export function EditUserInfo() {
   return (
     <div>
-      これはプロフィールです
+      これはユーザー情報の編集フォームです
+    </div>
+  )
+}
+
+export function UserInfo() {
+  return (
+    <div>
+      これはユーザー情報
     </div>
   )
 }
@@ -30,7 +38,7 @@ class MyPage extends React.Component {
         <MyPageHeader>
           テストさんのマイページ
         </MyPageHeader>
-        <MyPageMain>
+        <MyPageBody>
           <MyPageSideBar>
             <ul>
               <li>
@@ -39,7 +47,7 @@ class MyPage extends React.Component {
                 </Link>
               </li>
               <li>
-                <Link to="/users/mypage/profile">
+                <Link to="/users/mypage/edit">
                   プロフィール編集
                 </Link>
               </li>
@@ -53,7 +61,7 @@ class MyPage extends React.Component {
           <MyPageMainContent>
             {this.props.children}
           </MyPageMainContent>
-        </MyPageMain>
+        </MyPageBody>
       </MyPageWrapper>
     )
   } 
@@ -71,8 +79,9 @@ const MyPageHeader = styled.h4`
   font-size: 16px;
   margin-bottom: 10px;
 `
-const MyPageMain = styled.div`
+const MyPageBody = styled.div`
   display: flex;
+  justify-content: space-between;
 `
 const MyPageSideBar = styled.div`
   display: flex;
@@ -111,6 +120,10 @@ const MyPageSideBar = styled.div`
 `
 
 const MyPageMainContent = styled.div`
+  width: 80%;
+  border: 1px solid black;
+  background-color: #FFF;
+
 `
 
 export default MyPage
