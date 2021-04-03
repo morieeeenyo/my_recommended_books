@@ -193,7 +193,7 @@ const HeaderRight = styled.div`
   text-decoration: none;
   }
 
-  &:hover {
+  & a:hover {
     cursor: pointer;
     font-weight: bold;
   }

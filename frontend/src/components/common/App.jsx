@@ -7,6 +7,9 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Header from './Header.jsx'
 import UserModal from './UserModal.jsx'
 import Container from './Container.jsx'
+import Index from '../books/Index.jsx'
+import NewBookModal from '../books/NewBookModal.jsx'
+import MyPage from '../users/MyPage.jsx'
 
 
 class App extends React.Component {
@@ -18,9 +21,16 @@ class App extends React.Component {
             <Route path="/users/:content" component={UserModal}/>
           </Header>
           <Container>
-            <Route exact path='/' component={Index}/>
-            <Route path="/books/new" component={NewBookModal}/>
-            <Route path="/users/mypage" component={MyPage}/>
+            <Route exact path='/'>
+              <Index>
+                <Route path="/books/new">
+                  <NewBookModal></NewBookModal>
+                </Route>
+              </Index>
+            </Route>
+            <Route path="/users/mypage">
+              <MyPage></MyPage>
+            </Route>
           </Container>
         </Router>
       </div>
