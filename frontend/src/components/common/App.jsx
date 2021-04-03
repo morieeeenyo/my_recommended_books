@@ -18,17 +18,17 @@ class App extends React.Component {
       <div className="container">
         <Router>
           <Header>
-            <Route path="/users/:content" component={UserModal}/>
+            <Route path="users/:content" component={UserModal}/>
           </Header>
           <Container>
             <Route exact path='/'>
               <Index>
-                <Route path="/books/new">
+                <Route path="books/new">
                   <NewBookModal></NewBookModal>
                 </Route>
               </Index>
             </Route>
-            <Route path="/users/mypage">
+            <Route path="users/mypage">
               <MyPage></MyPage>
             </Route>
           </Container>
