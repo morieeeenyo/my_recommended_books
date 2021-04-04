@@ -59,7 +59,7 @@ class Header extends React.Component {
       showModal: false,
       content: ''
     })
-    this.props.history.push("/");
+    this.props.history.goBack()
   }
 
   switchToMyPage() {

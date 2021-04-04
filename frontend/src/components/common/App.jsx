@@ -58,11 +58,11 @@ class App extends React.Component {
                 </MyPage>
               </Route>
             </Switch>
-            <Route path="/books/new">
-              <NewBookModal>
-              </NewBookModal>
-            </Route>
           </Container>
+          <Route path="/books/new">
+            <NewBookModal>
+            </NewBookModal>
+          </Route>
         </Router>
       </div>
     )

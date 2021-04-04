@@ -136,7 +136,7 @@ class NewBookModal extends React.Component {
       books: {},
       errors: []
     })
-    this.props.history.push("/")
+    this.props.history.goBack()
   }
 
   updateForm(e) {
