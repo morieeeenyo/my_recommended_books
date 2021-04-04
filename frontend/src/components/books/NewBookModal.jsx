@@ -136,7 +136,7 @@ class NewBookModal extends React.Component {
       books: {},
       errors: []
     })
-    this.props.history.goBack()
+    this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正
   }
 
   updateForm(e) {

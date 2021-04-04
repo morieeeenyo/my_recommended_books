@@ -36,6 +36,7 @@ class App extends React.Component {
       <div className="container">
         <Router>
           <Header>
+            {/* Todo：ここのパスにparamsを渡せるようにする */}
             <Route path="/users/:content" component={UserModal}/>
           </Header>
           <Container>

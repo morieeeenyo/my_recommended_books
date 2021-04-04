@@ -24,6 +24,7 @@ export function EditUserInfo() {
 }
 
 export function UserInfo() {
+  // ユーザー情報が初期表示
   return (
     <div>
       これはユーザー情報
@@ -41,6 +42,7 @@ class MyPage extends React.Component {
         <MyPageBody>
           <MyPageSideBar>
             <ul>
+              {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
                 <Link to="/users/mypage/recommends">
                   推薦図書一覧
@@ -59,6 +61,7 @@ class MyPage extends React.Component {
             </ul>
           </MyPageSideBar>
           <MyPageMainContent>
+            {/* ここにサイドバーのパスに対応したコンテンツが表示される */}
             {this.props.children}
           </MyPageMainContent>
         </MyPageBody>
@@ -68,10 +71,10 @@ class MyPage extends React.Component {
 }
 
 const MyPageWrapper = styled.div`
+  /* ちょうどヘッダーのロゴと端がそろうようにしている */
   width: 65%; 
   margin: 0 auto;
   padding: 3%; 
-
 `
 
 const MyPageHeader = styled.h4`
@@ -79,10 +82,12 @@ const MyPageHeader = styled.h4`
   font-size: 16px;
   margin-bottom: 10px;
 `
+
 const MyPageBody = styled.div`
   display: flex;
   justify-content: space-between;
 `
+
 const MyPageSideBar = styled.div`
   display: flex;
   flex-direction: column;
@@ -104,9 +109,6 @@ const MyPageSideBar = styled.div`
     border-radius: 2px;
     text-decoration: none;
     color: #000;
-  }
-
-  & li {
   }
 
   & li:hover {

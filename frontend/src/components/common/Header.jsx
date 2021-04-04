@@ -59,7 +59,7 @@ class Header extends React.Component {
       showModal: false,
       content: ''
     })
-    this.props.history.goBack()
+    this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
   }
 
   switchToMyPage() {
