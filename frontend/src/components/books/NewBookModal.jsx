@@ -10,6 +10,9 @@ import {ModalOverlay} from "../common/UserModal.jsx"
 import {ModalContent} from "../common/UserModal.jsx"
 import {ErrorMessage} from "../common/UserModal.jsx"
 
+// react-router用のlinkを使えるようにする
+import { withRouter } from 'react-router-dom'
+
 // function ManualBookPostForm() {
 //   // もしかしたら使うかも
 //     return(
@@ -133,7 +136,7 @@ class NewBookModal extends React.Component {
       books: {},
       errors: []
     })
-    this.props.history.push("/");
+    this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正
   }
 
   updateForm(e) {
@@ -250,6 +253,7 @@ class NewBookModal extends React.Component {
   render () {
     return (
       <ModalOverlay onClick={this.closeBookModal}>
+        {this.props.children}
         <ModalContent onClick={(e) => e.stopPropagation()}>
         <p>推薦図書を投稿する</p>
         <button onClick={this.closeBookModal}>x</button>
@@ -354,4 +358,4 @@ const BooksFormBlock = styled(FormBlock)`
 `
 
 
-export default NewBookModal;
+export default withRouter(NewBookModal);

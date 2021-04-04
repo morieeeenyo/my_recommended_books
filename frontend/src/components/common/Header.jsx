@@ -13,6 +13,9 @@ import { withRouter } from 'react-router-dom'
 //axiosの読み込み
 import axios from 'axios';
 
+// react-routerの読み込み
+import { Link } from "react-router-dom";
+
 
 class Header extends React.Component {
   constructor(){
@@ -25,6 +28,7 @@ class Header extends React.Component {
     this.openSignInModal = this.openSignInModal.bind(this)
     this.openSignOutModal = this.openSignOutModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
+    this.switchToMyPage = this.switchToMyPage.bind(this)
   }
 
   // 新規登録・ログイン・ログアウトでモーダルの表示を分けるために別メソッドとして定義
@@ -33,7 +37,6 @@ class Header extends React.Component {
       showModal: true,
       content: 'SignUp'
     })
-    this.props.history.push("/users/sign_up");
   }
 
   openSignInModal() {
@@ -41,7 +44,6 @@ class Header extends React.Component {
       showModal: true,
       content: 'SignIn'
     })
-    this.props.history.push("/users/sign_in");
   }
 
   openSignOutModal() {
@@ -49,7 +51,6 @@ class Header extends React.Component {
       showModal: true,
       content: 'SignOut'
     })
-    this.props.history.push("/users/sign_out");
   }
 
   // モーダルを閉じる。contentは空文字列にリセット
@@ -58,7 +59,14 @@ class Header extends React.Component {
       showModal: false,
       content: ''
     })
-    this.props.history.push("/");
+    this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
+  }
+
+  switchToMyPage() {
+    this.setState ({
+      showModal: false,
+      content: ''
+    })
   }
 
   componentDidMount(){
@@ -114,15 +122,17 @@ class Header extends React.Component {
           <HeaderContainer>
             {this.props.children}
             <HeaderTitle>
-              <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+              <Link to="/">
+                <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+              </Link>
             </HeaderTitle>
             <HeaderRight>
-              <HeaderLink onClick={this.openSignUpModal}>
+              <Link to="/users/sign_up" onClick={this.openSignUpModal}>
                 新規登録
-              </HeaderLink>
-              <HeaderLink onClick={this.openSignInModal}>
+              </Link>
+              <Link to="/users/sign_in" onClick={this.openSignInModal}>
                 ログイン
-              </HeaderLink>
+              </Link>
               <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
@@ -134,16 +144,18 @@ class Header extends React.Component {
       <HeaderContainer>
         {this.props.children}
         <HeaderTitle>
-          <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+          <Link to="/">
+            <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+          </Link>
         </HeaderTitle>
         <HeaderRight>
-          <HeaderLink onClick={this.openSignOutModal}>
+          <Link to="/users/sign_out" onClick={this.openSignOutModal}>
             ログアウト
-          </HeaderLink>
+          </Link>
             <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
-          <HeaderLink>
+          <Link to="/users/mypage" onClick={this.switchToMyPage}>
             マイページ
-          </HeaderLink>
+          </Link>
         </HeaderRight>
       </HeaderContainer>
       )
@@ -171,9 +183,8 @@ const HeaderRight = styled.div`
   justify-content: end;
   height: 65px;
   width: 500px;
-`
 
-const HeaderLink = styled.a`
+  & a {
   color: #FFF;
   line-height: 40px;
   display: inline-block;
@@ -183,8 +194,10 @@ const HeaderLink = styled.a`
   height: 40px;
   padding: 5px 10px;
   margin: 5px 5px 5px 10px;
+  text-decoration: none;
+  }
 
-  &:hover {
+  & a:hover {
     cursor: pointer;
     font-weight: bold;
   }
