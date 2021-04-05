@@ -7,6 +7,9 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+//axiosの読み込み
+import axios from 'axios';
+
 export function MyRecommendedBooks() {
   return (
     <div>
@@ -33,11 +36,68 @@ export function UserInfo() {
 }
 
 class MyPage extends React.Component {
+  constructor(props){
+    this.state = {
+      user: {},
+      books: []
+    }
+    super(props);
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
+  }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+  };
+
+  userAuthentification() {
+    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+    } else {
+      return null
+    }
+  }
+
+  componentDidMount() {
+    this.setAxiosDefaults();
+    this.userAuthentification()
+    axios 
+    .get('/api/v1/users/mypage')
+    .then(response => {
+      this.setState({
+        user: response.data.user,
+        books: response.data.books
+      })
+      return response
+    })
+    .catch(error =>{
+      console.log(error)
+
+    })
+
+  }
   render () {
     return (
       <MyPageWrapper>
         <MyPageHeader>
-          テストさんのマイページ
+          {this.state.user.nickname}さんのマイページ
         </MyPageHeader>
         <MyPageBody>
           <MyPageSideBar>

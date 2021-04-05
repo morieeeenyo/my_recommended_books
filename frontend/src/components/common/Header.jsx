@@ -10,9 +10,6 @@ import Logo from '../../../images/header_logo.png'
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
-//axiosの読み込み
-import axios from 'axios';
-
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
