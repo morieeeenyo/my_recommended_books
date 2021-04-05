@@ -35,10 +35,9 @@ class Api::V1::BooksController < ApplicationController
 
   def user_authentification
     @user = User.find_for_database_authentication(uid: request.headers['uid']) #NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
-    @token = request.headers['access-token']
+    #同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
+    @token = request.headers['access-token'] 
     @client = request.headers['client']
-    
-    
-    return nil unless @user && @token && @client
+    return nil unless @user && @token && @client #どれか一つでもなかったらreturn nil
   end
 end

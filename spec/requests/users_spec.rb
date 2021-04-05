@@ -105,6 +105,35 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "ログアウト" do
+    context "ヘッダーの情報が正しい時" do
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path, xhr: true, headers: headers #headersは認証用のヘッダー
+        expect(response).to have_http_status(200) 
+      end
+
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path, xhr: true, headers: headers #headersは認証用のヘッダー
+        json = JSON.parse(response.body) 
+        expect(json['success']).to  eq true
+      end      
+    end
+
+    context "ヘッダーの情報が不正な時" do
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path, xhr: true
+        expect(response).to have_http_status(404) 
+      end
+
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path
+        json = JSON.parse(response.body) 
+        expect(json['success']).to  eq false
+      end      
+    end
+  end
+  
+
   describe "マイページの表示" do
 
     context "書籍情報が投稿済みではない場合" do
