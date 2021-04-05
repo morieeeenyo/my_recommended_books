@@ -5,17 +5,24 @@ import styled from 'styled-components';
 // import {Wrapper} from "../common/Container.jsx"
 
 // react-routerの読み込み
-import { Link } from "react-router-dom";
+import { Link, withRouter, useLocation } from "react-router-dom";
 
 //axiosの読み込み
 import axios from 'axios';
 
 export function MyRecommendedBooks() {
-  return (
-    <div>
-      これは推薦図書一覧です
-    </div>
-  )
+  const location = useLocation();
+  if (location.state.books.length !== 0) {
+    return (
+      <ul>
+          {location.state.books.map(book => {
+            return <li key={book.isbn}>{book.title}</li> //returnがないと表示できない
+          })} 
+      </ul>
+    )
+    } else {
+      return null
+  }
 }
 
 export function EditUserInfo() {
@@ -104,7 +111,7 @@ class MyPage extends React.Component {
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to="/users/mypage/recommends">
+                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
                   推薦図書一覧
                 </Link>
               </li>
@@ -188,4 +195,4 @@ const MyPageMainContent = styled.div`
 
 `
 
-export default MyPage
+export default withRouter(MyPage)
