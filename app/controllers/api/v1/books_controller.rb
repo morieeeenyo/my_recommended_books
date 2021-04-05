@@ -1,5 +1,6 @@
 class Api::V1::BooksController < ApplicationController
   before_action :user_authentification
+  
   def create 
     @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) #同じデータを保存しないためにisbnで識別
     if @book.valid?
@@ -34,5 +35,9 @@ class Api::V1::BooksController < ApplicationController
 
   def user_authentification
     @user = User.find_for_database_authentication(uid: request.headers['uid']) #NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
+    #同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
+    @token = request.headers['access-token'] 
+    @client = request.headers['client']
+    return nil unless @user && @token && @client #どれか一つでもなかったらreturn nil
   end
 end

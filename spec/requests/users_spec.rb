@@ -4,6 +4,8 @@ RSpec.describe "Users", type: :request do
   let(:user) { create(:user) }
   let(:user_params) { attributes_for(:user) } #paramsとして送るためにattributes_forを使用。.attributesだとpasswordが整形されてしまう。
   let(:invalid_user_params) { attributes_for(:user, email: user.email) } #不正なパラメータのパターンの1つとしてemailが重複している場合を検証する(deviseのデフォルトの設定が動くことを確かめたい)
+  let(:user_book) { build(:user_book) }
+  let(:headers) { {'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678'} } #認証用ヘッダー。access-tokenが2単語にまたがるのでハッシュロケットで書いた
 
   describe "新規登録" do
     before do
@@ -100,6 +102,85 @@ RSpec.describe "Users", type: :request do
         json = JSON.parse(response.body) 
         expect(json['errors']).to include "Authorization failed. Invalid password"
       end
+    end
+  end
+
+  describe "ログアウト" do
+    context "ヘッダーの情報が正しい時" do
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path, xhr: true, headers: headers #headersは認証用のヘッダー
+        expect(response).to have_http_status(200) 
+      end
+
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path, xhr: true, headers: headers #headersは認証用のヘッダー
+        json = JSON.parse(response.body) 
+        expect(json['success']).to  eq true #headersのuid, access-token, clientが全て揃っているときのみtrueを返す
+      end      
+    end
+
+    context "ヘッダーの情報が不正な時" do
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path, xhr: true
+        expect(response).to have_http_status(404) 
+      end
+
+      it "リクエストに成功する" do
+        delete destroy_api_v1_user_session_path
+        json = JSON.parse(response.body) 
+        expect(json['success']).to  eq false #headersのuid, access-token, clientが全て揃っているときのみtrueを返す
+      end      
+    end
+  end
+  
+
+  describe "マイページの表示" do
+
+    context "書籍情報が投稿済みではない場合" do
+      it "ヘッダーにuidがあればリクエストに成功する" do
+        get api_v1_user_mypage_path, headers: headers #headersは認証用のヘッダー
+        expect(response).to have_http_status(200)
+      end
+
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['user']['uid']).to eq user.uid
+      end
+
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['books'].length).to eq 0 
+      end
+
+      
+    end
+    
+    context "書籍が投稿済みの場合" do
+      before do
+        user_book.save
+        headers['uid'] = user_book.user.uid #中間テーブルを介して取り出す形式に変更
+      end
+      
+      it "ヘッダーにuidがあればリクエストに成功する" do
+        #中間テーブル起点のアソシエーションでuserを取り出す
+        get api_v1_user_mypage_path, headers: headers
+        expect(response).to have_http_status(200)
+      end
+
+      it "ヘッダーにuidがあれば正しく書籍情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['books'][0]['title']).to eq user_book.book.title #booksは配列なので添字を使う
+      end
+
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['user']['uid']).to eq user_book.user.uid
+      end
+      
     end
   end
   

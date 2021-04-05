@@ -10,6 +10,7 @@ Rails.application.routes.draw do
           get "search"
         end
       end
+      get '/users/mypage', to: "users#show", as: :user_mypage #RESTではないがdevise_auth_tokenを用いる設計でidを使用せずuidを使用する関係でパスを独自に設定
     end
   end
   root 'homes#index'
