@@ -37,11 +37,11 @@ export function UserInfo() {
 
 class MyPage extends React.Component {
   constructor(props){
+    super(props);
     this.state = {
       user: {},
       books: []
     }
-    super(props);
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.userAuthentification = this.userAuthentification.bind(this)
