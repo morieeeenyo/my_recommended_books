@@ -1,4 +1,4 @@
-class Api::V1::MypagesController < ApplicationController
+class Api::V1::UsersController < ApplicationController
 
   def show 
     @user = User.find_by(uid: request.headers['uid'])
