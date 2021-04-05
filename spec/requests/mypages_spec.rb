@@ -11,18 +11,18 @@ RSpec.describe "Mypages", type: :request do
       end
       
       it "ヘッダーにuidがあればリクエストに成功する" do
-        get api_v1_mypage_path(user.id), headers: { uid: user.uid }
+        get api_v1_user_mypage_path, headers: { uid: user.uid }
         expect(response).to have_http_status(200)
       end
 
       it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
-        get api_v1_mypage_path(user.id), headers: { uid: user.uid }
+        get api_v1_user_mypage_path, headers: { uid: user.uid }
         json = JSON.parse(response.body) 
         expect(json['user']['uid']).to eq user.uid
       end
 
       it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
-        get api_v1_mypage_path(user.id), headers: { uid: user.uid }
+        get api_v1_user_mypage_path, headers: { uid: user.uid }
         json = JSON.parse(response.body) 
         expect(json['books'].length).to eq 0 
       end
@@ -36,18 +36,18 @@ RSpec.describe "Mypages", type: :request do
       end
       
       it "ヘッダーにuidがあればリクエストに成功する" do
-        get api_v1_mypage_path(user_book.user.id), headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
+        get api_v1_user_mypage_path, headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
         expect(response).to have_http_status(200)
       end
 
       it "ヘッダーにuidがあれば正しく書籍情報がレスポンスとして返却される" do
-        get api_v1_mypage_path(user_book.user.id), headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
+        get api_v1_user_mypage_path, headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
         json = JSON.parse(response.body) 
         expect(json['books'][0]['title']).to eq user_book.book.title #booksは配列なので添字を使う
       end
 
       it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
-        get api_v1_mypage_path(user_book.user.id), headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
+        get api_v1_user_mypage_path, headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
         json = JSON.parse(response.body) 
         expect(json['user']['uid']).to eq user_book.user.uid
       end
