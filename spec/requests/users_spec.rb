@@ -115,7 +115,7 @@ RSpec.describe "Users", type: :request do
       it "リクエストに成功する" do
         delete destroy_api_v1_user_session_path, xhr: true, headers: headers #headersは認証用のヘッダー
         json = JSON.parse(response.body) 
-        expect(json['success']).to  eq true
+        expect(json['success']).to  eq true #headersのuid, access-token, clientが全て揃っているときのみtrueを返す
       end      
     end
 
@@ -128,7 +128,7 @@ RSpec.describe "Users", type: :request do
       it "リクエストに成功する" do
         delete destroy_api_v1_user_session_path
         json = JSON.parse(response.body) 
-        expect(json['success']).to  eq false
+        expect(json['success']).to  eq false #headersのuid, access-token, clientが全て揃っているときのみtrueを返す
       end      
     end
   end
