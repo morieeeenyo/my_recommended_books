@@ -4,6 +4,7 @@ RSpec.describe "Users", type: :request do
   let(:user) { create(:user) }
   let(:user_params) { attributes_for(:user) } #paramsとして送るためにattributes_forを使用。.attributesだとpasswordが整形されてしまう。
   let(:invalid_user_params) { attributes_for(:user, email: user.email) } #不正なパラメータのパターンの1つとしてemailが重複している場合を検証する(deviseのデフォルトの設定が動くことを確かめたい)
+  let(:user_book) { build(:user_book) }
 
   describe "新規登録" do
     before do
@@ -100,6 +101,53 @@ RSpec.describe "Users", type: :request do
         json = JSON.parse(response.body) 
         expect(json['errors']).to include "Authorization failed. Invalid password"
       end
+    end
+  end
+
+  describe "マイページの表示" do
+    context "書籍情報が投稿済みではない場合" do
+      it "ヘッダーにuidがあればリクエストに成功する" do
+        get api_v1_user_mypage_path, headers: { uid: user.uid }
+        expect(response).to have_http_status(200)
+      end
+
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: { uid: user.uid }
+        json = JSON.parse(response.body) 
+        expect(json['user']['uid']).to eq user.uid
+      end
+
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: { uid: user.uid }
+        json = JSON.parse(response.body) 
+        expect(json['books'].length).to eq 0 
+      end
+
+      
+    end
+    
+    context "書籍が投稿済みの場合" do
+      before do
+        user_book.save
+      end
+      
+      it "ヘッダーにuidがあればリクエストに成功する" do
+        get api_v1_user_mypage_path, headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
+        expect(response).to have_http_status(200)
+      end
+
+      it "ヘッダーにuidがあれば正しく書籍情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
+        json = JSON.parse(response.body) 
+        expect(json['books'][0]['title']).to eq user_book.book.title #booksは配列なので添字を使う
+      end
+
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: { uid: user_book.user.uid } #紐付けた中からuserを取り出す
+        json = JSON.parse(response.body) 
+        expect(json['user']['uid']).to eq user_book.user.uid
+      end
+      
     end
   end
   
