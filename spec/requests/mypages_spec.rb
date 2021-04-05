@@ -5,7 +5,7 @@ RSpec.describe "Mypages", type: :request do
   let(:user_book) { build(:user_book) }
 
   describe "マイページの表示" do
-    context "書籍情報が紐付いていない場合" do
+    context "書籍情報が投稿済みではない場合" do
       before do
         user.save
       end
