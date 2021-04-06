@@ -119,7 +119,7 @@ class MyPage extends React.Component {
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
                 <Link to="/users/mypage/edit">
-                  プロフィール編集
+                  プロフィール
                 </Link>
               </li>
               <li>
@@ -128,7 +128,7 @@ class MyPage extends React.Component {
                 </Link>
               </li>
               <li>
-                <Link to="/users/:id/books">
+                <Link to="/users/sign_out">
                   ログアウト
                 </Link>
               </li>
