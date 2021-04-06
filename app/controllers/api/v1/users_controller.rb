@@ -2,6 +2,7 @@ class Api::V1::UsersController < ApplicationController
   before_action :user_authentification
 
   def show 
+    return render status: 404, json: {errors: 'ユーザーが見つかりませんでした'} unless @user && @token && @client #どれか一つでもなかったらreturn nil。ステータスは入力しないと204になる
     if @user.avatar.attached? #添付されていないときにエラーが出るのを防ぐ
       avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}), only_path: true) 
     end
@@ -13,6 +14,5 @@ class Api::V1::UsersController < ApplicationController
     #同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
     @token = request.headers['access-token'] 
     @client = request.headers['client']
-    return nil unless @user && @token && @client #どれか一つでもなかったらreturn nil
   end
 end
