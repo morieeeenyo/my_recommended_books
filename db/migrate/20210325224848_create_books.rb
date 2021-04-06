@@ -10,6 +10,7 @@ class CreateBooks < ActiveRecord::Migration[6.0]
       t.string :sales_date, null: false
       t.integer :item_price, null: false
       t.text :item_url, null: false
+      t.text :image_url, null: false
       t.timestamps
     end
   end

@@ -14,11 +14,16 @@ export function MyRecommendedBooks() {
   const location = useLocation();
   if (location.state.books.length !== 0) {
     return (
-      <ul>
+      <BookList>
           {location.state.books.map(book => {
-            return <li key={book.isbn}>{book.title}</li> //returnがないと表示できない
+            return (
+            <li key={book.isbn}>
+              <img src={book.image_url}/>
+              {book.title}
+            </li> //returnがないと表示できない
+            ) 
           })} 
-      </ul>
+      </BookList>
     )
     } else {
       return null
@@ -192,7 +197,13 @@ const MyPageMainContent = styled.div`
   width: 80%;
   border: 1px solid black;
   background-color: #FFF;
-
 `
+
+const BookList = styled.ul`
+  display: flex;
+  list-style: none;
+  justify-content: space-between;
+`
+
 
 export default withRouter(MyPage)
