@@ -205,7 +205,8 @@ const MyPageMainContent = styled.div`
 const BookList = styled.ul`
   display: flex;
   list-style: none;
-  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap;
 
   & li {
     display: flex;
@@ -213,6 +214,7 @@ const BookList = styled.ul`
     align-items: center;
     width: 20%;
     overflow: wrap;
+    margin: 0 5% 5% 0;
 
     & p {
       font-size: 12px;
