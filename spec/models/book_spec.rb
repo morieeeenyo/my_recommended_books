@@ -46,6 +46,11 @@ RSpec.describe Book, type: :model do
       book.valid?
       expect(book.errors.full_messages).to  include "Item url can't be blank"
     end
+    it "image_urlが空の場合登録できない" do
+      book.image_url = ""
+      book.valid?
+      expect(book.errors.full_messages).to  include "Image url can't be blank"
+    end
     
   end
   
