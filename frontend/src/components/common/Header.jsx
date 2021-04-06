@@ -57,6 +57,7 @@ class Header extends React.Component {
       content: ''
     })
     this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
+    // ※マイページからサインアウトした時の挙動はMypage.jsxに記載
   }
 
   switchToMyPage() {

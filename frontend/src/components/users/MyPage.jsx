@@ -84,6 +84,7 @@ class MyPage extends React.Component {
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
     } else {
       return null
     }
@@ -91,7 +92,11 @@ class MyPage extends React.Component {
 
   componentDidMount() {
     this.setAxiosDefaults();
-    this.userAuthentification()
+    const authToken = this.userAuthentification()
+    if (!authToken) {
+      alert('ユーザーがサインアウトしました。')
+      this.props.history.push("/")
+    }
     axios 
     .get('/api/v1/users/mypage')
     .then(response => {
@@ -125,11 +130,6 @@ class MyPage extends React.Component {
               <li>
                 <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
                   推薦図書一覧
-                </Link>
-              </li>
-              <li>
-                <Link to="/users/sign_out">
-                  ログアウト
                 </Link>
               </li>
             </ul>
