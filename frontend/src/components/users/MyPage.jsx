@@ -160,6 +160,7 @@ const MyPageHeader = styled.h4`
 const MyPageBody = styled.div`
   display: flex;
   justify-content: space-between;
+  height: 60vh;
 `
 
 const MyPageSideBar = styled.div`
