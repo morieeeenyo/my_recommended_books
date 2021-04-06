@@ -118,13 +118,13 @@ class MyPage extends React.Component {
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
-                  推薦図書一覧
+                <Link to="/users/mypage/edit">
+                  プロフィール編集
                 </Link>
               </li>
               <li>
-                <Link to="/users/mypage/edit">
-                  プロフィール編集
+                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
+                  推薦図書一覧
                 </Link>
               </li>
               <li>
