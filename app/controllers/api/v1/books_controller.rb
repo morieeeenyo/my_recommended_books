@@ -30,6 +30,7 @@ class Api::V1::BooksController < ApplicationController
        :sales_date, 
        :item_price, 
        :item_url, 
+       :image_url, 
     )
   end
 
