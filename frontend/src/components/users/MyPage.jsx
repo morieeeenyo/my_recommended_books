@@ -40,21 +40,13 @@ export function EditUserInfo() {
   )
 }
 
-export function UserInfo() {
-  // ユーザー情報が初期表示
-  return (
-    <div>
-      これはユーザー情報
-    </div>
-  )
-}
-
 class MyPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       user: {},
-      books: []
+      books: [],
+      avatar: ""
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
@@ -102,7 +94,8 @@ class MyPage extends React.Component {
     .then(response => {
       this.setState({
         user: response.data.user,
-        books: response.data.books
+        books: response.data.books,
+        avatar: response.data.avatar
       })
       return response
     })
@@ -115,21 +108,20 @@ class MyPage extends React.Component {
   render () {
     return (
       <MyPageWrapper>
-        <MyPageHeader>
-          {this.state.user.nickname}さんのマイページ
-        </MyPageHeader>
         <MyPageBody>
           <MyPageSideBar>
+          <img src={this.state.avatar} width={"95%"}/>
+          <h4>{this.state.user.nickname}さんのマイページ</h4>
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to="/users/mypage/edit">
-                  プロフィール
+                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
+                  推薦図書一覧
                 </Link>
               </li>
               <li>
-                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
-                  推薦図書一覧
+                <Link to="/users/mypage">
+                  ユーザー情報編集
                 </Link>
               </li>
             </ul>
@@ -170,6 +162,7 @@ const MyPageSideBar = styled.div`
   border: 1px solid black;
   width: 15%;
   background-color: #FFF;
+  padding-top: 5px;
 
   & ul {
     list-style: none;
@@ -201,6 +194,10 @@ const MyPageMainContent = styled.div`
   width: 80%;
   border: 1px solid black;
   background-color: #FFF;
+`
+
+const UserInfo = styled.div `
+
 `
 
 const BookList = styled.ul`
