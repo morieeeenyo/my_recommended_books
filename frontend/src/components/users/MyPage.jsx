@@ -19,7 +19,9 @@ export function MyRecommendedBooks() {
             return (
             <li key={book.isbn}>
               <img src={book.image_url}/>
-              {book.title}
+              <p>{book.title}</p>
+              <p>{book.author}</p>
+              {/* Todo:この下にアクションプランを書くページへのリンクを貼る */}
             </li> //returnがないと表示できない
             ) 
           })} 
@@ -166,6 +168,7 @@ const MyPageSideBar = styled.div`
   align-items: center;
   border: 1px solid black;
   width: 15%;
+  background-color: #FFF;
 
   & ul {
     list-style: none;
@@ -203,6 +206,19 @@ const BookList = styled.ul`
   display: flex;
   list-style: none;
   justify-content: space-between;
+
+  & li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+    overflow: wrap;
+
+    & p {
+      font-size: 12px;
+      margin: 0;
+    }
+  }
 `
 
 
