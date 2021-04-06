@@ -103,6 +103,7 @@ class NewBookModal extends React.Component {
         sales_date: '',
         item_price: '',
         item_url: '',
+        image_url: '',
       },
       errors: []
     }
@@ -196,6 +197,7 @@ class NewBookModal extends React.Component {
             bookParams.sales_date = book.params.salesDate
             bookParams.item_price = book.params.itemPrice
             bookParams.item_url = book.params.itemUrl
+            bookParams.image_url = book.params.mediumImageUrl
             return { book: bookParams }
           })
         })
