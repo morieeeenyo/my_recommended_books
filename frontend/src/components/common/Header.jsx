@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import UserModal from './UserModal.jsx';
 
 // ロゴ画像の読み込み
-import Logo from '../../../images/header_logo.png'
+import Logo from "../../../images/header_logo.png"
 
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
