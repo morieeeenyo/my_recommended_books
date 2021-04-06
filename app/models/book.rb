@@ -8,6 +8,7 @@ class Book < ApplicationRecord
     validates :sales_date
     validates :item_price
     validates :item_url 
+    validates :image_url 
   end
 
   has_many :user_books
