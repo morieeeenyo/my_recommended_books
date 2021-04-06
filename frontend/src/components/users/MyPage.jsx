@@ -110,7 +110,7 @@ class MyPage extends React.Component {
       <MyPageWrapper>
         <MyPageBody>
           <MyPageSideBar>
-          <img src={this.state.avatar} width={"95%"}/>
+          <img src={this.state.avatar}/>
           <h4>{this.state.user.nickname}さんのマイページ</h4>
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
@@ -164,6 +164,11 @@ const MyPageSideBar = styled.div`
   background-color: #FFF;
   padding-top: 5px;
 
+  & img {
+    border-radius: 5px;
+    width: 95%;
+  }
+
   & ul {
     list-style: none;
     padding: 0;
@@ -194,10 +199,6 @@ const MyPageMainContent = styled.div`
   width: 80%;
   border: 1px solid black;
   background-color: #FFF;
-`
-
-const UserInfo = styled.div `
-
 `
 
 const BookList = styled.ul`

@@ -153,9 +153,34 @@ RSpec.describe "Users", type: :request do
         json = JSON.parse(response.body) 
         expect(json['books'].length).to eq 0 
       end
-
+      
       
     end
+    
+    context "画像あり" do
+      before do 
+        user.avatar.attach(fixture_file_upload('spec/fixtures/test_image.jpg', filename: 'test_image.jpg', content_type: 'image/jpg'))
+      end
+
+      it "ヘッダーにuidがあればリクエストに成功する" do
+        get api_v1_user_mypage_path, headers: headers #headersは認証用のヘッダー
+        expect(response).to have_http_status(200)
+      end
+  
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['user']['uid']).to eq user.uid
+      end
+  
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['books'].length).to eq 0 
+      end
+      
+    end
+    
     
     context "書籍が投稿済みの場合" do
       before do
