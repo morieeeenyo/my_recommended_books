@@ -19,8 +19,8 @@ RSpec.describe "Users", type: :request do
       end
 
       it "リクエストに成功する(画像あり)" do
-        user_params[:avatar][:data] = File.read('spec/fixtures/test_image.jpg.bin') #base64形式でコントローラーで扱うため、encode舌文字列をパラメータにセット
-        user_params[:avatar][:filename] = 'test_image.jpg'
+        user_params[:avatar][:data] = File.read('spec/fixtures/test_avatar.png.bin') #base64形式でコントローラーで扱うため、encode舌文字列をパラメータにセット
+        user_params[:avatar][:filename] = 'test_avatar.png'
         post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         expect(response).to have_http_status(200) 
       end
@@ -159,7 +159,7 @@ RSpec.describe "Users", type: :request do
     
     context "画像あり" do
       before do 
-        user.avatar.attach(fixture_file_upload('spec/fixtures/test_image.jpg', filename: 'test_image.jpg', content_type: 'image/jpg'))
+        user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png'))
       end
 
       it "ヘッダーにuidがあればリクエストに成功する" do

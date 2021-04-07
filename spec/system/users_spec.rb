@@ -16,7 +16,7 @@ RSpec.describe "Users", type: :system do
         fill_in "email",	with: user.email
         fill_in "password",	with: user.password
         fill_in "password_confirmation",	with: user.password_confirmation
-        attach_file "avatar", "spec/fixtures/test_image.jpg"
+        attach_file "avatar", "spec/fixtures/test_avatar.png"
         expect{
           click_button "SignUp"
           sleep 2 #sleepしないと間に合わない
@@ -150,4 +150,28 @@ RSpec.describe "Users", type: :system do
     end
 
   end
+
+  describe "マイページの表示" do
+    
+    context "マイページの表示に成功" do
+      it "ログイン状態のユーザーがマイページにアクセスすると正しくマイページが読み込める" do
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+      end
+      
+      it "アバターが添付されている場合アバター画像が表示されている" do
+        user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png')) #厳密にいうと新規登録で画像添付すべき
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='test_avatar.png']"
+        sleep 2
+      end
+      
+    end
+    
+    
+  end
+  
 end
