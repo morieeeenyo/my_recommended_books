@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
   context "ユーザーが登録できる時" do
     it "画像含む全ての値が存在する時ユーザーを保存できる" do
       #画像をFactoryに含めるとテストが遅くなり、MysqlConnectionErrorが発生する
-      user.avatar = fixture_file_upload('spec/fixtures/test_image.jpg', filename: 'test_image.jpg', content_type: 'image/jpg') 
+      user.avatar = fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png') 
       expect(user).to  be_valid
     end
 

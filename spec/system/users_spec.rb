@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Users", type: :system do
   let(:user) { build(:user) }
+  let(:book) { build(:book) }
   
   describe "新規登録" do
     before do
@@ -16,7 +17,7 @@ RSpec.describe "Users", type: :system do
         fill_in "email",	with: user.email
         fill_in "password",	with: user.password
         fill_in "password_confirmation",	with: user.password_confirmation
-        attach_file "avatar", "spec/fixtures/test_image.jpg"
+        attach_file "avatar", "spec/fixtures/test_avatar.png"
         expect{
           click_button "SignUp"
           sleep 2 #sleepしないと間に合わない
@@ -148,6 +149,82 @@ RSpec.describe "Users", type: :system do
         expect(page).to  have_content 'ログイン'
       end
     end
+  end
 
+  describe "マイページの表示" do
+    context "マイページの表示に成功" do
+      it "ログイン状態のユーザーがマイページにアクセスすると正しくマイページが読み込める" do
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+      end
+      
+      it "アバターが添付されている場合アバター画像が表示されている" do
+        user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png')) #厳密にいうと新規登録で画像添付すべき
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='test_avatar.png']" #実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        sleep 2
+      end
+
+      it "マイページから推薦図書一覧をクリックすると投稿した推薦図書が一覧で表示されている。新しく推薦図書を追加すると一番下に追加される" do
+        user.save
+        create_list(:user_book, 5, user_id: user.id)
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        click_link '推薦図書一覧'
+        expect(all(".book-list-item").length).to eq 5  
+        sleep 1
+        click_link href: '/books/new'
+        expect(page).to  have_content '推薦図書を投稿する'
+        fill_in "title",	with: book.title
+        sleep 1
+        find('.search-button').click
+        sleep 2
+        expect(all('#search_result > div').length).not_to eq 0 #検索結果が0件ではないことを検証
+        all('#search_result > div')[0].click
+        expect {
+          find('input[type="submit"]').click
+          sleep 2
+        }.to change(user.books, :count).by(1)  #ユーザーと紐付いているかどうかも検証
+        expect(page).not_to  have_content '推薦図書を投稿する' #トップページに戻ることを検証
+        click_link '推薦図書一覧'
+        expect(all(".book-list-item > .book-title")[-1].text).not_to eq 'test' #テストデータではない、つまり新しく追加したデータは一番うしろに追加される
+      end
+
+      it "マイページからサインアウトするとアラートが出てトップページに戻る" do
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        find('a', text: 'ログアウト').click 
+        expect(page).to have_content 'SignOut' 
+        click_button "SignOut"
+        # ログインすると表示が切り替わる
+        sleep 5
+        expect(page.driver.browser.switch_to.alert.text).to eq "ユーザーがサインアウトしました。" 
+        sleep 2
+        page.driver.browser.switch_to.alert.accept 
+        expect(page).to  have_content '新規登録'
+        expect(page).to  have_content 'ログイン'
+      end
+
+      it "マイページからサインアウトモーダル、推薦図書投稿モーダルを開き、何もせず閉じるとマイページに戻る" do
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        find('a', text: 'ログアウト').click 
+        expect(page).to have_content 'SignOut' 
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).not_to have_content 'SignOut' 
+        click_link href: '/books/new'
+        expect(page).to  have_content '推薦図書を投稿する'
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).not_to  have_content '推薦図書を投稿する'
+      end
+    end
   end
 end

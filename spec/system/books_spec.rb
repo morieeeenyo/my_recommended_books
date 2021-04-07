@@ -70,6 +70,7 @@ RSpec.describe "Books", type: :system do
       end
 
       it "検索がヒットしない場合検索結果が0件である" do
+        # 検索処理としては成功しているので正常形として記述
         sign_in(user) 
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'

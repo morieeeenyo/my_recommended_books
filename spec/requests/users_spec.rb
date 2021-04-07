@@ -19,8 +19,8 @@ RSpec.describe "Users", type: :request do
       end
 
       it "リクエストに成功する(画像あり)" do
-        user_params[:avatar][:data] = File.read('spec/fixtures/test_image.jpg.bin') #base64形式でコントローラーで扱うため、encode舌文字列をパラメータにセット
-        user_params[:avatar][:filename] = 'test_image.jpg'
+        user_params[:avatar][:data] = File.read('spec/fixtures/test_avatar.png.bin') #base64形式でコントローラーで扱うため、encode舌文字列をパラメータにセット
+        user_params[:avatar][:filename] = 'test_avatar.png'
         post api_v1_user_registration_path, xhr: true, params: { user: user_params }
         expect(response).to have_http_status(200) 
       end
@@ -153,9 +153,34 @@ RSpec.describe "Users", type: :request do
         json = JSON.parse(response.body) 
         expect(json['books'].length).to eq 0 
       end
-
+      
       
     end
+    
+    context "画像あり" do
+      before do 
+        user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png'))
+      end
+
+      it "ヘッダーにuidがあればリクエストに成功する" do
+        get api_v1_user_mypage_path, headers: headers #headersは認証用のヘッダー
+        expect(response).to have_http_status(200)
+      end
+  
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['user']['uid']).to eq user.uid
+      end
+  
+      it "ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される" do
+        get api_v1_user_mypage_path, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['books'].length).to eq 0 
+      end
+      
+    end
+    
     
     context "書籍が投稿済みの場合" do
       before do
@@ -182,6 +207,21 @@ RSpec.describe "Users", type: :request do
       end
       
     end
+
+    context "マイページの表示に失敗する" do
+      it "ヘッダーのuidが存在しない時ステータスが404" do
+        headers['uid'] = nil
+        get api_v1_user_mypage_path, xhr: true, headers: headers
+        expect(response).to have_http_status(404)      
+      end
+
+      it "ヘッダーのuidが存在しない時レスポンスとしてエラーメッセージが返却される" do
+        headers['uid'] = nil
+        get api_v1_user_mypage_path, xhr: true, headers: headers
+        json = JSON.parse(response.body) 
+        expect(json['errors']).to eq "ユーザーが見つかりませんでした"
+      end
+    end  
   end
   
 end

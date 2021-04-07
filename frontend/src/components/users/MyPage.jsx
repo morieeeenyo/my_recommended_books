@@ -5,14 +5,34 @@ import styled from 'styled-components';
 // import {Wrapper} from "../common/Container.jsx"
 
 // react-routerの読み込み
-import { Link } from "react-router-dom";
+import { Link, withRouter, useLocation } from "react-router-dom";
+
+//axiosの読み込み
+import axios from 'axios';
+
+// ロゴ画像の読み込み
+import Sample from "../../../images/sample_avatar.png"
 
 export function MyRecommendedBooks() {
-  return (
-    <div>
-      これは推薦図書一覧です
-    </div>
-  )
+  const location = useLocation();
+  if (location.state.books.length !== 0) {
+    return (
+      <BookList>
+          {location.state.books.map(book => {
+            return (
+            <li key={book.isbn} class="book-list-item">
+              <img src={book.image_url}/>
+              <p class="book-title">{book.title}</p>
+              <p class="book-author">{book.author}</p>
+              {/* Todo:この下にアクションプランを書くページへのリンクを貼る */}
+            </li> //returnがないと表示できない
+            ) 
+          })} 
+      </BookList>
+    )
+    } else {
+      return null
+  }
 }
 
 export function EditUserInfo() {
@@ -23,39 +43,96 @@ export function EditUserInfo() {
   )
 }
 
-export function UserInfo() {
-  // ユーザー情報が初期表示
-  return (
-    <div>
-      これはユーザー情報
-    </div>
-  )
-}
-
 class MyPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      user: {},
+      books: [],
+      avatar: Sample
+    }
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
+  }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+  };
+
+  userAuthentification() {
+    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
+    } else {
+      return null
+    }
+  }
+
+  componentDidMount() {
+    this.setAxiosDefaults();
+    const authToken = this.userAuthentification()
+    if (!authToken) {
+      // マイページからサインアウトした場合にはここを経由してトップページに戻る
+      alert('ユーザーがサインアウトしました。')
+      this.props.history.push("/")
+    }
+    axios 
+    .get('/api/v1/users/mypage')
+    .then(response => {
+      if (response.data.avatar) {
+        this.setState({
+          user: response.data.user,
+          books: response.data.books,
+          avatar: response.data.avatar
+        })
+      } else {
+        this.setState({
+          user: response.data.user,
+          books: response.data.books,
+        })
+      }
+      return response
+    })
+    .catch(error =>{
+      console.log(error)
+
+    })
+
+  }
   render () {
     return (
       <MyPageWrapper>
-        <MyPageHeader>
-          テストさんのマイページ
-        </MyPageHeader>
         <MyPageBody>
           <MyPageSideBar>
+          <img src={this.state.avatar}/>
+          <h4>{this.state.user.nickname}さんのマイページ</h4>
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to="/users/mypage/recommends">
+                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
                   推薦図書一覧
                 </Link>
               </li>
               <li>
-                <Link to="/users/mypage/edit">
-                  プロフィール編集
-                </Link>
-              </li>
-              <li>
-                <Link to="/users/:id/books">
-                  ログアウト
+                <Link to="/users/mypage">
+                  ユーザー情報編集
                 </Link>
               </li>
             </ul>
@@ -77,15 +154,11 @@ const MyPageWrapper = styled.div`
   padding: 3%; 
 `
 
-const MyPageHeader = styled.h4`
-  margin: 0;
-  font-size: 16px;
-  margin-bottom: 10px;
-`
-
 const MyPageBody = styled.div`
   display: flex;
   justify-content: space-between;
+  /* 高さを固定しないと推薦図書を投稿するたびに高さが変動してしまう。 */
+  height: 60vh;
 `
 
 const MyPageSideBar = styled.div`
@@ -94,7 +167,15 @@ const MyPageSideBar = styled.div`
   align-items: center;
   border: 1px solid black;
   width: 15%;
+  background-color: #FFF;
+  padding-top: 5px;
 
+  & img {
+    border-radius: 5px;
+    width: 95%;
+  }
+
+  /* 以下はサイドバーのリンクの仕様 */
   & ul {
     list-style: none;
     padding: 0;
@@ -112,6 +193,7 @@ const MyPageSideBar = styled.div`
   }
 
   & li:hover {
+    /* ホバーしたときに色を反転させる */
     background-color: #cb4d00;
     cursor: pointer;
 
@@ -125,7 +207,29 @@ const MyPageMainContent = styled.div`
   width: 80%;
   border: 1px solid black;
   background-color: #FFF;
-
 `
 
-export default MyPage
+const BookList = styled.ul`
+  display: flex;
+  list-style: none;
+  width: 100%;
+  flex-wrap: wrap;
+
+  & .book-list-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* 1行に4冊分のデータが表示されるようにしている */
+    width: 20%;
+    overflow: wrap;
+    margin: 0 5% 5% 0;
+
+    & p {
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+`
+
+
+export default withRouter(MyPage)
