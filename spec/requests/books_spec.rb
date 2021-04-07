@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Books', type: :request do
-  let(:user) { build(:user) }
+  let(:user) { create(:user) }
   let(:book) { build(:book) }
   let(:book_params) { attributes_for(:book) } # paramsとして送るためにattributes_forを使用
   let(:invalid_book_params) { attributes_for(:book, title: '') } # コントローラーで空のキーワードに対してnilを返すようにしている
