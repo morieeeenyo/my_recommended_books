@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Book < ApplicationRecord
   with_options presence: true do
     # 以下は楽天ブックスAPIから取得
