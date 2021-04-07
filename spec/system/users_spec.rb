@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Users", type: :system do
   let(:user) { build(:user) }
+  let(:book) { build(:book) }
   
   describe "新規登録" do
     before do
@@ -165,11 +166,36 @@ RSpec.describe "Users", type: :system do
         sign_in(user) #ログインする
         find('a', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
-        expect(page).to have_selector "img[src*='test_avatar.png']"
+        expect(page).to have_selector "img[src*='test_avatar.png']" #実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         sleep 2
       end
 
-      # todo: 書籍の一覧のテスト
+      it "マイページから推薦図書一覧をクリックすると投稿した推薦図書が一覧で表示されている。新しく推薦図書を追加すると一番下に追加される" do
+        user.save
+        create_list(:user_book, 5, user_id: user.id)
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        click_link '推薦図書一覧'
+        expect(all(".book-list-item").length).to eq 5  
+        sleep 1
+        click_link href: '/books/new'
+        expect(page).to  have_content '推薦図書を投稿する'
+        fill_in "title",	with: book.title
+        sleep 1
+        find('.search-button').click
+        sleep 2
+        expect(all('#search_result > div').length).not_to eq 0 #検索結果が0件ではないことを検証
+        all('#search_result > div')[0].click
+        expect {
+          find('input[type="submit"]').click
+          sleep 2
+        }.to change(user.books, :count).by(1)  #ユーザーと紐付いているかどうかも検証
+        expect(page).not_to  have_content '推薦図書を投稿する' #トップページに戻ることを検証
+        click_link '推薦図書一覧'
+        expect(all(".book-list-item > .book-title")[-1].text).not_to eq 'test' #テストデータではない、つまり新しく追加したデータは一番うしろに追加される
+      end
+      
       
     end
     

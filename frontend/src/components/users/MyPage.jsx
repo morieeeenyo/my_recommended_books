@@ -20,10 +20,10 @@ export function MyRecommendedBooks() {
       <BookList>
           {location.state.books.map(book => {
             return (
-            <li key={book.isbn}>
+            <li key={book.isbn} class="book-list-item">
               <img src={book.image_url}/>
-              <p>{book.title}</p>
-              <p>{book.author}</p>
+              <p class="book-title">{book.title}</p>
+              <p class="book-author">{book.author}</p>
               {/* Todo:この下にアクションプランを書くページへのリンクを貼る */}
             </li> //returnがないと表示できない
             ) 
@@ -217,7 +217,7 @@ const BookList = styled.ul`
   width: 100%;
   flex-wrap: wrap;
 
-  & li {
+  & .book-list-item {
     display: flex;
     flex-direction: column;
     align-items: center;
