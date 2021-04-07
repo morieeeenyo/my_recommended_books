@@ -10,6 +10,9 @@ import { Link, withRouter, useLocation } from "react-router-dom";
 //axiosの読み込み
 import axios from 'axios';
 
+// ロゴ画像の読み込み
+import Sample from "../../../images/sample_avatar.png"
+
 export function MyRecommendedBooks() {
   const location = useLocation();
   if (location.state.books.length !== 0) {
@@ -46,7 +49,7 @@ class MyPage extends React.Component {
     this.state = {
       user: {},
       books: [],
-      avatar: ""
+      avatar: Sample
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
@@ -92,11 +95,18 @@ class MyPage extends React.Component {
     axios 
     .get('/api/v1/users/mypage')
     .then(response => {
-      this.setState({
-        user: response.data.user,
-        books: response.data.books,
-        avatar: response.data.avatar
-      })
+      if (response.data.avatar) {
+        this.setState({
+          user: response.data.user,
+          books: response.data.books,
+          avatar: response.data.avatar
+        })
+      } else {
+        this.setState({
+          user: response.data.user,
+          books: response.data.books,
+        })
+      }
       return response
     })
     .catch(error =>{
