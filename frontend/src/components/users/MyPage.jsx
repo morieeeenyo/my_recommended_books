@@ -89,6 +89,7 @@ class MyPage extends React.Component {
     this.setAxiosDefaults();
     const authToken = this.userAuthentification()
     if (!authToken) {
+      // マイページからサインアウトした場合にはここを経由してトップページに戻る
       alert('ユーザーがサインアウトしました。')
       this.props.history.push("/")
     }
@@ -153,15 +154,10 @@ const MyPageWrapper = styled.div`
   padding: 3%; 
 `
 
-const MyPageHeader = styled.h4`
-  margin: 0;
-  font-size: 16px;
-  margin-bottom: 10px;
-`
-
 const MyPageBody = styled.div`
   display: flex;
   justify-content: space-between;
+  /* 高さを固定しないと推薦図書を投稿するたびに高さが変動してしまう。 */
   height: 60vh;
 `
 
@@ -179,6 +175,7 @@ const MyPageSideBar = styled.div`
     width: 95%;
   }
 
+  /* 以下はサイドバーのリンクの仕様 */
   & ul {
     list-style: none;
     padding: 0;
@@ -196,6 +193,7 @@ const MyPageSideBar = styled.div`
   }
 
   & li:hover {
+    /* ホバーしたときに色を反転させる */
     background-color: #cb4d00;
     cursor: pointer;
 
@@ -221,6 +219,7 @@ const BookList = styled.ul`
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* 1行に4冊分のデータが表示されるようにしている */
     width: 20%;
     overflow: wrap;
     margin: 0 5% 5% 0;

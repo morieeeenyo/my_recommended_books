@@ -4,7 +4,7 @@ import styled from 'styled-components';
 // コンポーネントの読み込み
 import UserModal from './UserModal.jsx';
 
-// ロゴ画像の読み込み
+// ロゴ画像の読み込み。ダブルクオートじゃないと本番環境で読み込めない
 import Logo from "../../../images/header_logo.png"
 
 // react-router用のlinkを使えるようにする
@@ -57,7 +57,7 @@ class Header extends React.Component {
       content: ''
     })
     this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
-    // ※マイページからサインアウトした時の挙動はMypage.jsxに記載
+    // ※マイページからサインアウトした時はマイページに繊維→一度アラートを出してからトップページに戻る。コードはMypage.jsxに記載
   }
 
   switchToMyPage() {

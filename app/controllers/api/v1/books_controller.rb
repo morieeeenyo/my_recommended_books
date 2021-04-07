@@ -2,7 +2,7 @@ class Api::V1::BooksController < ApplicationController
   before_action :user_authentification
   
   def create 
-    return render status: 404, json: {errors: '推薦図書の投稿にはログインが必要です'} unless @user && @token && @client #どれか一つでもなかったらreturn nil。ステータスは入力しないと204になる
+    return render status: 404, json: {errors: '推薦図書の投稿にはログインが必要です'} unless @user && @token && @client #どれか一つでもなかったらreturn nil。ステータスは手動で設定しないと204になる
     @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) #同じデータを保存しないためにisbnで識別
     if @book.valid?
       @book.save
@@ -14,7 +14,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def search
-    return render status: 404, json: {errors: '書籍の検索にはログインが必要です'} unless @user && @token && @client #どれか一つでもなかったらreturn nil。ステータスは入力しないと204になる
+    return render status: 404, json: {errors: '書籍の検索にはログインが必要です'} unless @user && @token && @client #どれか一つでもなかったらreturn nil。ステータスは手動で設定しないと204になる
     return render status: 400, json: { errors: "タイトルを入力してください" } if params[:keyword] == "" #何も入力しなくても空文字列が送られる想定
     @books = RakutenWebService::Books::Book.search(title: params[:keyword])  #Todo: 複数のパラメータで同時に検索できないか検証
     render json: { books: @books }  
