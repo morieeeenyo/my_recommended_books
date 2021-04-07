@@ -168,6 +168,8 @@ RSpec.describe "Users", type: :system do
         expect(page).to have_selector "img[src*='test_avatar.png']"
         sleep 2
       end
+
+      # todo: 書籍の一覧のテスト
       
     end
     
