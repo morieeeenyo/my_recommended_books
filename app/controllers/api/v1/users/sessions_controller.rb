@@ -27,6 +27,7 @@ module Api
           @token = request.headers['access-token']
           @client = request.headers['client']
           if @user && @client && @token # uid, client, access-tokenの3つが揃ったときだけログアウトできる。これはdevise-auth-tokenのデフォルトの処理でもある
+            @token = +@token #凍結しているので解凍する
             @token.clear
             @client = nil
             @user = nil
