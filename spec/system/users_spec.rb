@@ -149,11 +149,9 @@ RSpec.describe "Users", type: :system do
         expect(page).to  have_content 'ログイン'
       end
     end
-
   end
 
   describe "マイページの表示" do
-    
     context "マイページの表示に成功" do
       it "ログイン状態のユーザーがマイページにアクセスすると正しくマイページが読み込める" do
         sign_in(user) #ログインする
@@ -195,11 +193,38 @@ RSpec.describe "Users", type: :system do
         click_link '推薦図書一覧'
         expect(all(".book-list-item > .book-title")[-1].text).not_to eq 'test' #テストデータではない、つまり新しく追加したデータは一番うしろに追加される
       end
-      
-      
+
+      it "マイページからサインアウトするとアラートが出てトップページに戻る" do
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        find('a', text: 'ログアウト').click 
+        expect(page).to have_content 'SignOut' 
+        click_button "SignOut"
+        # ログインすると表示が切り替わる
+        sleep 5
+        expect(page.driver.browser.switch_to.alert.text).to eq "ユーザーがサインアウトしました。" 
+        sleep 2
+        page.driver.browser.switch_to.alert.accept 
+        expect(page).to  have_content '新規登録'
+        expect(page).to  have_content 'ログイン'
+      end
+
+      it "マイページからサインアウトモーダル、推薦図書投稿モーダルを開き、何もせず閉じるとマイページに戻る" do
+        sign_in(user) #ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        find('a', text: 'ログアウト').click 
+        expect(page).to have_content 'SignOut' 
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).not_to have_content 'SignOut' 
+        click_link href: '/books/new'
+        expect(page).to  have_content '推薦図書を投稿する'
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).not_to  have_content '推薦図書を投稿する'
+      end
     end
-    
-    
   end
-  
 end
