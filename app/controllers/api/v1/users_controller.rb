@@ -1,20 +1,22 @@
 class Api::V1::UsersController < ApplicationController
   before_action :user_authentification
 
-  def show 
-    return render status: 404, json: {errors: 'ユーザーが見つかりませんでした'} unless @user && @token && @client #どれか一つでもなかったらreturn nil。ステータスは手動で設定しないと204になる
-    if @user.avatar.attached? #添付されていないときにエラーが出るのを防ぐ
-      avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}), only_path: true) 
-      render json: {user: @user, books: @user.books, avatar: avatar_path}
-    else 
-      render json: {user: @user, books: @user.books}
+  def show
+    return render status: 404, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
+
+    if @user.avatar.attached? # 添付されていないときにエラーが出るのを防ぐ
+      avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}),
+                                                                                  only_path: true)
+      render json: { user: @user, books: @user.books, avatar: avatar_path }
+    else
+      render json: { user: @user, books: @user.books }
     end
   end
 
   def user_authentification
-    @user = User.find_for_database_authentication(uid: request.headers['uid']) #NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
-    #同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
-    @token = request.headers['access-token'] 
+    @user = User.find_for_database_authentication(uid: request.headers['uid']) # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
+    # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
+    @token = request.headers['access-token']
     @client = request.headers['client']
   end
 end
