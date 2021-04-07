@@ -49,7 +49,7 @@ class MyPage extends React.Component {
     this.state = {
       user: {},
       books: [],
-      avatar: Sample
+      avatar: ''
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
@@ -106,6 +106,7 @@ class MyPage extends React.Component {
         this.setState({
           user: response.data.user,
           books: response.data.books,
+          avatar: Sample
         })
       }
       return response
