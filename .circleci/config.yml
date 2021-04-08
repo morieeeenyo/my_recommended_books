@@ -49,8 +49,6 @@ jobs:
 
     # database setup
     - run: mv ./config/database.yml.ci ./config/database.yml
-        post-steps:
-            - notify_failure
 
     # database setup
     - run:
