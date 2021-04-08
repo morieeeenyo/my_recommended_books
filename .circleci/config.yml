@@ -46,10 +46,10 @@ jobs:
     - run:
         name: install yarn
         command: yarn install
-        
+
     - run:
         name: Rubocop
-        command: bundle exec rubocop
+        command: bundle exec rubocop -a
 
     # run tests
     - run:
