@@ -47,6 +47,7 @@ jobs:
         name: install yarn
         command: yarn install
 
+    #run rubocop
     - run:
         name: Rubocop
         command: bundle exec rubocop
