@@ -7,6 +7,10 @@ RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs ya
 
 RUN mkdir /myapp
 
+ARG RAKUTEN_APP_ID 
+ENV RAKUTEN_APP_ID ${RAKUTEN_APP_ID} 
+ARG RAKUTEN_APP_AFFILIATE_ID 
+ENV RAKUTEN_APP_AFFILIATE_ID ${RAKUTEN_APP_AFFILIATE_ID} 
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
