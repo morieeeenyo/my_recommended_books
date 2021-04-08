@@ -18,7 +18,8 @@ module Api
       end
 
       def user_authentification
-        @user = User.find_for_database_authentication(uid: request.headers['uid']) # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
+        # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
+        @user = User.find_for_database_authentication(uid: request.headers['uid']) 
         # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
         @token = request.headers['access-token']
         @client = request.headers['client']
