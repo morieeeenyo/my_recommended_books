@@ -52,7 +52,7 @@ jobs:
         name: run rspec
         command: bundle exec rspec 
     # run rubocop
-    - rub:
+    - run:
         name: run rubocop
         command:
             bundle exec rubocop -a 
