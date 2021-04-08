@@ -19,9 +19,6 @@ services:
       - gem_data:/usr/local/bundle
     ports:
       - "3000:3000"
-    environment: 
-      RAKUTEN_APP_ID: ${RAKUTEN_APP_ID}
-      RAKUTEN_APP_AFFILIATE_ID: ${RAKUTEN_APP_AFFILIATE_ID}
     depends_on:
       - db
 volumes:
