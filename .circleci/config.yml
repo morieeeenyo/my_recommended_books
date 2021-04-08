@@ -46,17 +46,19 @@ jobs:
     - run:
         name: install yarn
         command: yarn install
-
-    # run tests
-    - run:
-        name: run rspec
-        command: bundle exec rspec 
+        
     # run rubocop
     - run:
         name: run rubocop
         command:
             bundle exec rubocop -a 
             bundle exec rubocop -A 
+
+    # run tests
+    - run:
+        name: run rspec
+        command: bundle exec rspec 
+
     # collect reports
     - store_test_results:
         path: /tmp/test-results
