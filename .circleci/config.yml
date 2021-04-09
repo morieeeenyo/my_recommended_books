@@ -77,19 +77,10 @@ jobs:
         destination: test-results
 
     - slack/notify:
-        event: always
-        custom: |
-            {
-            "blocks": [
-                {
-                "type": "section",
-                "fields": [
-                    {
-                    "type": "plain_text",
-                    "text": "*This is a text notification*",
-                    "emoji": true
-                    }
-                ]
-                }
-            ]
-            }
+        event: fail
+        mentions: '@もうりとうご'
+        template: basic_fail_1
+    - slack/notify:
+        event: pass
+        mentions: '@もうりとうご'
+        template: success_tagged_deploy_1
