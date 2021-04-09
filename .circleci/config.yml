@@ -77,6 +77,7 @@ jobs:
         destination: test-results
 
     - slack/notify:
+        channel: 'https://offdevworkspace.slack.com/archives/C01TNT6PL2H'
         custom: |
             {
             "blocks": [
