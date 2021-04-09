@@ -75,11 +75,5 @@ jobs:
     - store_artifacts:
         path: /tmp/test-results
         destination: test-results
-
-    # slack notification
-    - run:
-        name: Build
-        command: make build
-    - slack/status
     
     
