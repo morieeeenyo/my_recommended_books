@@ -1,9 +1,3 @@
-commands:
-    notify_failure:
-      steps:
-        - slack/status:
-            fail_only: true
-
 version: 2.1
 orbs:
     slack: circleci/slack@4.3.0
@@ -30,22 +24,18 @@ jobs:
         keys:
         - v1-dependencies-{{ checksum "Gemfile.lock" }}
         - v1-dependencies-
-        post-steps:
-            - notify_failure
+
 
     - run:
         name: install dependencies
         command: |
           gem install bundler -v 2.1.4
           bundle install --jobs=4 --retry=3 --path vendor/bundle
-        post-steps:
-        - notify_failure
     - save_cache:
         paths:
         - ./vendor/bundle
         key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-        post-steps:
-            - notify_failure
+
 
     # database setup
     - run: mv ./config/database.yml.ci ./config/database.yml
@@ -56,15 +46,12 @@ jobs:
         command: |
            bundle exec rake db:create
            bundle exec rake db:schema:load
-        post-steps:
-        - notify_failure
 
     # install yarn
     - run:
         name: install yarn
         command: yarn install
-        post-steps:
-            - notify_failure
+
 
     #run rubocop
     - run:
@@ -72,27 +59,27 @@ jobs:
         command: |
             bundle exec rubocop -a
             bundle exec rubocop -A
-        post-steps:
-            - notify_failure
+
 
     # run tests
     - run:
         name: run rspec
         command: bundle exec rspec
-        post-steps:
-            - notify_failure 
+ 
 
     # collect reports
     - store_test_results:
         path: /tmp/test-results
-        post-steps:
-            - notify_failure
+
 
     - store_artifacts:
         path: /tmp/test-results
         destination: test-results
 
     # slack notification
+    - run:
+        name: Build
+        command: make build
     - slack/status
     
     
