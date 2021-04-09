@@ -75,24 +75,3 @@ jobs:
     - store_artifacts:
         path: /tmp/test-results
         destination: test-results
-
-    - slack/notify:
-        channel: 'C01TNT6PL2H'
-        custom: |
-            {
-            "blocks": [
-                {
-                "type": "section",
-                "fields": [
-                    {
-                    "type": "plain_text",
-                    "text": "*This is a text notification*",
-                    "emoji": true
-                    }
-                ]
-                }
-            ]
-            }
-        event: always
-    
-    
