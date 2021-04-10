@@ -24,7 +24,7 @@ export function MyRecommendedBooks() {
               <img src={book.image_url}/>
               <p className="book-title">{book.title}</p>
               <p className="book-author">{book.author}</p>
-              <Link to={"books/" + book.id + "/outputs"}>アウトプット</Link>
+              <Link to={"/users/mypage/books/" + book.id + "/outputs"}>アウトプット</Link>
             </li> //returnがないと表示できない
             ) 
           })} 

@@ -47,7 +47,7 @@ class App extends React.Component {
               </Route>
               <Route path="/users/mypage">
                 <MyPage>
-                  <Route path="/users/mypage/books">
+                  <Route exact path="/users/mypage/books">
                     <MyRecommendedBooks>
                       <Route path="/users/mypage/books/:book_id/outputs">
                         <OutputIndex></OutputIndex>

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Link } from "react-router-dom";
 
 class OutputIndex extends React.Component {
+  
   render () {
     return (
       <div className="container">
