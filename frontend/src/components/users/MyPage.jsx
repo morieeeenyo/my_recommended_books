@@ -24,7 +24,7 @@ export function MyRecommendedBooks() {
               <img src={book.image_url}/>
               <p class="book-title">{book.title}</p>
               <p class="book-author">{book.author}</p>
-              {/* Todo:この下にアクションプランを書くページへのリンクを貼る */}
+              <LInkToOutput>アウトプット</LInkToOutput>
             </li> //returnがないと表示できない
             ) 
           })} 
@@ -230,6 +230,14 @@ const BookList = styled.ul`
       margin: 0;
     }
   }
+`
+
+const LInkToOutput = styled.a`
+ display: inline-block;
+ text-decoration: none;
+ 
+
+
 `
 
 
