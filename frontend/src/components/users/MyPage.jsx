@@ -24,7 +24,7 @@ export function MyRecommendedBooks() {
               <img src={book.image_url}/>
               <p class="book-title">{book.title}</p>
               <p class="book-author">{book.author}</p>
-              <LInkToOutput>アウトプット</LInkToOutput>
+              <a>アウトプット</a>
             </li> //returnがないと表示できない
             ) 
           })} 
@@ -229,15 +229,28 @@ const BookList = styled.ul`
       font-size: 12px;
       margin: 0;
     }
+
+    & a {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #0ACC64;
+      color: #FFF;
+      border-style: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+
+    & a:hover {
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 5px 10px black;
+    }
+
+    & a:active {
+      box-shadow: 0 0 5px black;
+      margin-top: 5px;
+    }
   }
-`
-
-const LInkToOutput = styled.a`
- display: inline-block;
- text-decoration: none;
- 
-
-
 `
 
 
