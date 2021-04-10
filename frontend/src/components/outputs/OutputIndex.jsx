@@ -16,12 +16,20 @@ class OutputIndex extends React.Component {
     return (
       <OutputWrapper>
         <OutputContent>
-          <Awareness></Awareness>
-          <ActionPlans></ActionPlans>
+          <Awareness>
+            <AwarenessIndex></AwarenessIndex>
+            <AwarenessForm>
+              <h4>気づき</h4>
+              <textarea name="awareness_text"></textarea>
+            </AwarenessForm>
+          </Awareness>
+          <ActionPlans>
+            <ActionPlansIndex></ActionPlansIndex>
+            <ActionPlansForm>
+              <h4>アクションプラン</h4>
+            </ActionPlansForm>
+          </ActionPlans>
         </OutputContent>
-        <OutputForm>
-
-        </OutputForm>
       </OutputWrapper>
      )
    
@@ -29,24 +37,47 @@ class OutputIndex extends React.Component {
 }
 
 const OutputWrapper = styled.div`
+  height: 100%;
   
 `
 
-const OutputForm = styled.form`
-
-`
 
 const OutputContent = styled.div`
   display: flex;
+  height: 100%;
+  justify-content: space-around;
 `
 
 const Awareness = styled.div`
+  width: 45%;
+  border-right: 1px solid black;
   
 `
 
 const ActionPlans = styled.div`
+  width: 45%;
   
 `
+
+const AwarenessForm = styled.form`
+  
+`
+
+const AwarenessIndex = styled.div`
+  height: 60%;
+
+  
+`
+
+const ActionPlansForm = styled.form`
+  
+`
+
+const ActionPlansIndex = styled.div`
+  height: 60%;
+  
+`
+
 
 
 export default OutputIndex;
