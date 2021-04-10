@@ -15,8 +15,13 @@ class OutputIndex extends React.Component {
   render () {
     return (
       <OutputWrapper>
-        <Awareness></Awareness>
-        <ActionPlans></ActionPlans>
+        <OutputContent>
+          <Awareness></Awareness>
+          <ActionPlans></ActionPlans>
+        </OutputContent>
+        <OutputForm>
+
+        </OutputForm>
       </OutputWrapper>
      )
    
@@ -24,6 +29,14 @@ class OutputIndex extends React.Component {
 }
 
 const OutputWrapper = styled.div`
+  
+`
+
+const OutputForm = styled.form`
+
+`
+
+const OutputContent = styled.div`
   display: flex;
 `
 
