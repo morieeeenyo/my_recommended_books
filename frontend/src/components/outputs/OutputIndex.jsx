@@ -14,13 +14,26 @@ class OutputIndex extends React.Component {
 
   render () {
     return (
-      <div className="container">
-    
-      </div>
+      <OutputWrapper>
+        <Awareness></Awareness>
+        <ActionPlans></ActionPlans>
+      </OutputWrapper>
      )
    
   } 
 }
+
+const OutputWrapper = styled.div`
+  display: flex;
+`
+
+const Awareness = styled.div`
+  
+`
+
+const ActionPlans = styled.div`
+  
+`
 
 
 export default OutputIndex;
