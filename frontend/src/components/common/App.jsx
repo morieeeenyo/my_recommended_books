@@ -10,6 +10,7 @@ import Container from './Container.jsx'
 import Index from '../books/Index.jsx'
 import NewBookModal from '../books/NewBookModal.jsx'
 import MyPage from '../users/MyPage.jsx'
+import OutputIndex from '../outputs/OutputIndex.jsx'
 import {MyRecommendedBooks} from '../users/MyPage.jsx'
 import {EditUserInfo} from '../users/MyPage.jsx'
 
@@ -46,8 +47,12 @@ class App extends React.Component {
               </Route>
               <Route path="/users/mypage">
                 <MyPage>
-                  <Route path="/users/mypage/recommends">
-                    <MyRecommendedBooks></MyRecommendedBooks>
+                  <Route path="/users/mypage/books">
+                    <MyRecommendedBooks>
+                      <Route path="/users/mypage/books/:book_id/outputs">
+                        <OutputIndex></OutputIndex>
+                      </Route>
+                    </MyRecommendedBooks>
                   </Route>
                   <Route path="/users/mypage/edit">
                     <EditUserInfo></EditUserInfo>

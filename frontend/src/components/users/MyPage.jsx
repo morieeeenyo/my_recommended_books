@@ -20,11 +20,11 @@ export function MyRecommendedBooks() {
       <BookList>
           {location.state.books.map(book => {
             return (
-            <li key={book.isbn} class="book-list-item">
+            <li key={book.isbn} className="book-list-item">
               <img src={book.image_url}/>
-              <p class="book-title">{book.title}</p>
-              <p class="book-author">{book.author}</p>
-              <a>アウトプット</a>
+              <p className="book-title">{book.title}</p>
+              <p className="book-author">{book.author}</p>
+              <Link to={"books/" + book.id + "/outputs"}>アウトプット</Link>
             </li> //returnがないと表示できない
             ) 
           })} 
@@ -127,7 +127,7 @@ class MyPage extends React.Component {
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
+                <Link to={{pathname: "/users/mypage/books", state: {books: this.state.books}}}>
                   推薦図書一覧
                 </Link>
               </li>
