@@ -4,6 +4,13 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+import Datetime from 'react-datetime';
+import { ja } from 'moment/locale/ja';
+
+//コンポーネントの読み込み
+import {FormBlock} from "../common/UserModal.jsx"
+
+
 class OutputIndex extends React.Component {
   constructor(props){
     super(props);
@@ -28,6 +35,19 @@ class OutputIndex extends React.Component {
             <ActionPlansIndex></ActionPlansIndex>
             <ActionPlansForm>
               <h4>アクションプラン</h4>
+              <ActionPlanFormBlock>
+                <label for="due_date">いつまでに</label>
+                <Datetime locale={ja}/>
+              </ActionPlanFormBlock>
+              <ActionPlanFormBlock>
+                <label for="what">何を</label>
+                <input type="text" name="what"></input>
+              </ActionPlanFormBlock>
+              <ActionPlanFormBlock>
+                <label for="how_much">どのくらい</label>
+                <input type="text" name="how_much"></input>
+              </ActionPlanFormBlock>
+              <input type="submit" value="追加" id="add_btn"></input>
             </ActionPlansForm>
           </ActionPlans>
         </OutputContent>
@@ -52,29 +72,34 @@ const OutputContent = styled.div`
 const Awareness = styled.div`
   width: 50%;
   border-right: 1px solid black;
+  position: relative;
+  padding: 0 2%;
   
 `
 
 const ActionPlans = styled.div`
   width: 50%;
+  position: relative;
+  padding: 0 2%;
   
 `
 
 const AwarenessForm = styled.form`
-  width: 85%;
-  margin: 0 auto;
+  width: 95%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  position: absolute;
+  bottom: 2%;
 
   & h4 {
     margin: 0 80% 0 0;
   }
 
   & textarea {
-    width: 95%;
-    height: 60px;
+    width: 80%;
+    height: 80px;
     resize: none;
   }
 
@@ -105,11 +130,49 @@ const AwarenessIndex = styled.div`
 `
 
 const ActionPlansForm = styled.form`
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 2%;
+
+  & h4 {
+    margin: 0 60% 0 0;
+  }
+
+  .form-middle-content {
+    display: flex;  
+    justify-content: space-between;
+  }
+
+  & #add_btn{
+    background-color: lightgray;
+    color: #FFF;
+    height: 24px;
+    line-height: 24px;
+    font-size: 18px;
+    border-style: none;
+    border-radius: 2px;
+    width: 60%;
+    margin-top: 5px;
+  }
+
+  /* ホバー時にクリックできることがわかりやすくなるようにする */
+  & #add_btn:hover {
+    background-color: #000;
+    cursor: pointer;
+  }
   
 `
 
+const ActionPlanFormBlock = styled(FormBlock)`
+  width: 80%;
+`
+
 const ActionPlansIndex = styled.div`
-  height: 70%;
+  height: 30%;
   
 `
 

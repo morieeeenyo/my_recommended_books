@@ -159,7 +159,7 @@ const MyPageBody = styled.div`
   display: flex;
   justify-content: space-between;
   /* 高さを固定しないと推薦図書を投稿するたびに高さが変動してしまう。 */
-  height: 60vh;
+  height: 80vh;
 `
 
 const MyPageSideBar = styled.div`
