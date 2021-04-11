@@ -4,9 +4,6 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-import Datetime from 'react-datetime';
-import { ja } from 'moment/locale/ja';
-
 //コンポーネントの読み込み
 import {FormBlock} from "../common/UserModal.jsx"
 
@@ -36,17 +33,17 @@ class OutputIndex extends React.Component {
             <ActionPlansForm>
               <h4>アクションプラン</h4>
               <ActionPlanFormBlock>
-                <label for="due_date">いつまでに</label>
-                <Datetime locale={ja}/>
-              </ActionPlanFormBlock>
-              <ActionPlanFormBlock>
-                <label for="what">何を</label>
+                <label for="due_date">いつ</label>
                 <input type="text" name="what"></input>
               </ActionPlanFormBlock>
-              <ActionPlanFormBlock>
-                <label for="how_much">どのくらい</label>
-                <input type="text" name="how_much"></input>
-              </ActionPlanFormBlock>
+                <ActionPlanFormBlock>
+                  <label for="what">何を</label>
+                  <input type="text" name="what"></input>
+                </ActionPlanFormBlock>
+                <ActionPlanFormBlock>
+                  <label for="how_much">どのように</label>
+                  <input type="text" name="how"></input>
+                </ActionPlanFormBlock>
               <input type="submit" value="追加" id="add_btn"></input>
             </ActionPlansForm>
           </ActionPlans>
@@ -142,11 +139,6 @@ const ActionPlansForm = styled.form`
     margin: 0 60% 0 0;
   }
 
-  .form-middle-content {
-    display: flex;  
-    justify-content: space-between;
-  }
-
   & #add_btn{
     background-color: lightgray;
     color: #FFF;
@@ -168,7 +160,7 @@ const ActionPlansForm = styled.form`
 `
 
 const ActionPlanFormBlock = styled(FormBlock)`
-  width: 80%;
+  width: 70%;
 `
 
 const ActionPlansIndex = styled.div`
