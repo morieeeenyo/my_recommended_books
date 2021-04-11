@@ -19,8 +19,9 @@ class OutputIndex extends React.Component {
           <Awareness>
             <AwarenessIndex></AwarenessIndex>
             <AwarenessForm>
-              <h4>気づき</h4>
-              <textarea name="awareness_text"></textarea>
+                <h4>気づき</h4>
+                <textarea name="awareness_text"></textarea>
+                <input type="submit" value="追加" id="add_btn"></input>
             </AwarenessForm>
           </Awareness>
           <ActionPlans>
@@ -49,22 +50,56 @@ const OutputContent = styled.div`
 `
 
 const Awareness = styled.div`
-  width: 45%;
+  width: 50%;
   border-right: 1px solid black;
   
 `
 
 const ActionPlans = styled.div`
-  width: 45%;
+  width: 50%;
   
 `
 
 const AwarenessForm = styled.form`
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  & h4 {
+    margin: 0 80% 0 0;
+  }
+
+  & textarea {
+    width: 95%;
+    height: 60px;
+    resize: none;
+  }
+
+  & #add_btn{
+    background-color: lightgray;
+    color: #FFF;
+    height: 24px;
+    line-height: 24px;
+    font-size: 18px;
+    border-style: none;
+    border-radius: 2px;
+    width: 60%;
+    margin-top: 5px;
+  }
+
+  /* ホバー時にクリックできることがわかりやすくなるようにする */
+  & #add_btn:hover {
+    background-color: #000;
+    cursor: pointer;
+  }
   
 `
 
 const AwarenessIndex = styled.div`
-  height: 60%;
+  height: 75%;
 
   
 `
@@ -74,7 +109,7 @@ const ActionPlansForm = styled.form`
 `
 
 const ActionPlansIndex = styled.div`
-  height: 60%;
+  height: 70%;
   
 `
 
