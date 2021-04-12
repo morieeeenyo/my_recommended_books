@@ -20,11 +20,11 @@ export function MyRecommendedBooks() {
       <BookList>
           {location.state.books.map(book => {
             return (
-            <li key={book.isbn} class="book-list-item">
+            <li key={book.isbn} className="book-list-item">
               <img src={book.image_url}/>
-              <p class="book-title">{book.title}</p>
-              <p class="book-author">{book.author}</p>
-              {/* Todo:この下にアクションプランを書くページへのリンクを貼る */}
+              <p className="book-title">{book.title}</p>
+              <p className="book-author">{book.author}</p>
+              <Link to={{pathname: "/users/mypage/books/" + book.id + "/outputs", state: {book: book}}}>アウトプット</Link>
             </li> //returnがないと表示できない
             ) 
           })} 
@@ -127,7 +127,7 @@ class MyPage extends React.Component {
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to={{pathname: "/users/mypage/recommends", state: {books: this.state.books}}}>
+                <Link to={{pathname: "/users/mypage/books", state: {books: this.state.books}}}>
                   推薦図書一覧
                 </Link>
               </li>
@@ -159,7 +159,7 @@ const MyPageBody = styled.div`
   display: flex;
   justify-content: space-between;
   /* 高さを固定しないと推薦図書を投稿するたびに高さが変動してしまう。 */
-  height: 60vh;
+  height: 80vh;
 `
 
 const MyPageSideBar = styled.div`
@@ -228,6 +228,27 @@ const BookList = styled.ul`
     & p {
       font-size: 12px;
       margin: 0;
+    }
+
+    & a {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #0ACC64;
+      color: #FFF;
+      border-style: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+
+    & a:hover {
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 5px 10px black;
+    }
+
+    & a:active {
+      box-shadow: 0 0 5px black;
+      margin-top: 5px;
     }
   }
 `

@@ -15,7 +15,7 @@ default: &default
   host: db
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
-  password: password 
+  password: <%= ENV.fetch("MYSQL_ROOT_PASSWORD", "uint2435") { 5 } %>
   socket: /tmp/mysql.sock
 
 development:

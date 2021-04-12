@@ -356,7 +356,7 @@ export const ModalContent = styled.div `
 
 `
 
-const UserFromContent = styled.form `
+export const UserFromContent = styled.form `
   display: flex;
   flex-direction: column;
   align-items: center;

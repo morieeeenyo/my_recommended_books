@@ -30,4 +30,7 @@
 yarn-debug.log*
 .yarn-integrity
 /frontend/node_modules
+/db/mysql
 db/mysql
+database.env
+web.env
