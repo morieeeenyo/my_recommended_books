@@ -12,6 +12,7 @@ import { Link,withRouter } from 'react-router-dom'
 class OutputIndex extends React.Component {
   constructor(props){
     super(props);
+    // 以下は後で実装するメソッド
     // this.getCsrfToken = this.getCsrfToken.bind(this)
     // this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     // this.userAuthentification = this.userAuthentification.bind(this)
@@ -22,12 +23,15 @@ class OutputIndex extends React.Component {
       <OutputWrapper>
         <OutputContent>
             <div className="output-header">
+            {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
               <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
+              {/* スタイルはMyPage→MyOutputsへのリンクと同じ */}
               <Link to={{pathname: "/books/" + this.props.location.state.book.id + "/outputs/new", state: {book: this.props.location.state.book}}}>
                 アウトプットを投稿する
               </Link>
             </div>
             <OutputList>
+              {/* Todo:編集ボタンをつける */}
               <li>
                 <h3>アウトプット1</h3>
                 <h4>気づき</h4>
@@ -62,7 +66,6 @@ class OutputIndex extends React.Component {
 
 const OutputWrapper = styled.div`
   height: 100%;
-  
 `
 
 const OutputContent = styled.div`
@@ -105,6 +108,7 @@ const OutputContent = styled.div`
 const OutputList = styled.ul`
   list-style: none;
   overflow: scroll;
+  /* heightがないとscrollしない */
   height: 80%;
 
   & li {

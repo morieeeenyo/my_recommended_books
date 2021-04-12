@@ -17,6 +17,7 @@ import {UserFromContent} from "../common/UserModal.jsx"
 
 
 function OutputForm() {
+  // Todo:アクションプランは3つまで同時に設定できるようにする
   return (
     <OutputFormContent>
       <ActionPlanFormBlock>
@@ -50,6 +51,7 @@ class OutputModal extends React.Component {
     this.state = {
       errors: []
     }
+    // 以下は後で実装するメソッド
     // this.getCsrfToken = this.getCsrfToken.bind(this)
     // this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     // this.userAuthentification = this.userAuthentification.bind(this)
@@ -59,6 +61,7 @@ class OutputModal extends React.Component {
 
 
   render () {
+    // Todo:諸々メソッド実装
     return (
       <ModalOverlay onClick={this.closeBookModal}>
         {this.props.children}
