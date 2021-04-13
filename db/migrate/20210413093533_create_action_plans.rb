@@ -5,6 +5,7 @@ class CreateActionPlans < ActiveRecord::Migration[6.0]
       t.string :what_to_do
       t.string :how_to_do
       t.references :awareness
+      t.references :book
       t.timestamps
     end
   end

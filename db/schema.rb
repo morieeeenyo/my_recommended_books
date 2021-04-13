@@ -17,9 +17,11 @@ ActiveRecord::Schema.define(version: 2021_04_13_093533) do
     t.string "what_to_do"
     t.string "how_to_do"
     t.bigint "awareness_id"
+    t.bigint "book_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["awareness_id"], name: "index_action_plans_on_awareness_id"
+    t.index ["book_id"], name: "index_action_plans_on_book_id"
   end
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
