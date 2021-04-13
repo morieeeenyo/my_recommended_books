@@ -1,8 +1,9 @@
 class Output
   include ActiveModel::Model
-  attr_accesor :content, :time_of_execution, :what_to_do, :how_to_do, :book_id
+  attr_accesor :content, :time_of_execution, :what_to_do, :how_to_do, :user_id, :book_id
 
   with_options presence: true do 
+    validates :user_id
     validates :book_id
     validates :content
     validates :time_of_execution
