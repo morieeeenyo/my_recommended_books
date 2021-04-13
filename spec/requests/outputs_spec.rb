@@ -1,0 +1,41 @@
+require 'rails_helper'
+
+RSpec.describe "Outputs", type: :request do
+  let(:user) {create(:user)}
+  let(:book) {create(:book)}
+  let(:output_params) {attributes_for(:output, user_id: user.id, book_id: book.id)}
+  let(:headers) do
+    { 'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678' }
+  end
+
+  describe "アウトプットの投稿" do
+    context "投稿に成功する時" do
+      it "投稿に成功するとステータスが204で返却される" do
+        post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        expect(response).to have_http_status(204)
+      end
+
+      it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
+        post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        json = JSON.parse(response.body)
+        expect(json['awareness']['content']).to eq output.content
+        expect(json['actionplan']['what_to_do']).to eq output.what_to_do
+      end
+    end
+
+    context "投稿に失敗する時" do
+      it "必須のカラムが不足している時保存に失敗しステータスが404になる" do
+        output_params[:what_to_do] = ""
+        post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        expect(response).to have_http_status(404)
+      end
+
+      it "保存に失敗した時エラーメッセージがレスポンスとして返却される" do
+        output_params[:what_to_do] = ""
+        post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        json = JSON.parse(response.body)
+        expect(json['errors']).to include "What to do can't be blank"
+      end
+    end
+  end
+end

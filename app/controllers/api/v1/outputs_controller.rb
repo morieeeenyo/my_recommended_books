@@ -8,9 +8,9 @@ module Api
         @output = Output.new(output_params)
         if @output.valid?
           result =  @output.save
-          render json {awareness: result[:awareness], action_plan: result[:action_plan]}
+          render json: {awareness: result[:awareness], action_plan: result[:action_plan]}
         else
-          render json: { errors: @output.errors.full_messages }
+          render status: 404, json: { errors: @output.errors.full_messages }
         end
       end
 
