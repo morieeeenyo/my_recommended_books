@@ -9,7 +9,6 @@ class Output
     validates :time_of_execution
     validates :what_to_do
     # how_to_doは必ずしも入力されない可能性が高いため必須としない
-    end
   end
 
   def save
