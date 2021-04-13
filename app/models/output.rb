@@ -13,8 +13,10 @@ class Output
   def save
     book = Book.find(book_id)
     awareness = book.build_awareness(content: content, book_id: book_id)
-    awareness.save
+    outout = {}
+    output[:awareness] = awareness.save
     action_plan = book.build_action_plan(time_of_execution: time_of_execution, what_to_do: what_to_do, how_to_do: how_to_do, book_id: book_id, awareness_id: awareness.id)
-    action_plan.save
+    output[:action_plan] = action_plan.save
+    return output
   end
 end
