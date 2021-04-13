@@ -7,9 +7,9 @@ module Api
         return render status: 404, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
         @output = Output.new(output_params)
         if @output.valid?
-          result =  @output.save  
+          output_save_result =  @output.save  
           # ステータスは手動で設定する
-          render status: 201, json: { awareness: result[:awareness], action_plan: result[:action_plan] }
+          render status: 201, json: { awareness: output_save_result[:awareness], action_plan: output_save_result[:action_plan] }
         else
           render status: 404, json: { errors: @output.errors.full_messages }
         end
