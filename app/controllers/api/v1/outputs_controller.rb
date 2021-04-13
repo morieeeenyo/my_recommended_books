@@ -1,21 +1,25 @@
-# frozen_string_literal: true
-
 module Api
   module V1
-    class UsersController < ApplicationController
+    class OutputsController < ApplicationController
       before_action :user_authentification
 
-      def show
+      def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
-
-        if @user.avatar.attached? # 添付されていないときにエラーが出るのを防ぐ
-          avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}),
-                                                                                      only_path: true)
-          render json: { user: @user, books: @user.books, avatar: avatar_path }
+        @output = Output.new(output_params)
+        if @output.valid?
+          output_save_result =  @output.save  
+          # ステータスは手動で設定する。リソース保存時のステータスは201
+          render status: 201, json: { awareness: output_save_result[:awareness], action_plan: output_save_result[:action_plan] } 
         else
-          render json: { user: @user, books: @user.books }
+          render status: 422, json: { errors: @output.errors.full_messages } #バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
+      end
+
+      private 
+
+      def output_params 
+        params.require(:output).permit(:content, :time_of_execution, :what_to_do, :how_to_do).merge(book_id: params[:book_id], user_id: @user.id)
       end
 
       def user_authentification

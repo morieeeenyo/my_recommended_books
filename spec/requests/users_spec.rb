@@ -211,7 +211,7 @@ RSpec.describe 'Users', type: :request do
       it 'ヘッダーのuidが存在しない時ステータスが404' do
         headers['uid'] = nil
         get api_v1_user_mypage_path, xhr: true, headers: headers
-        expect(response).to have_http_status(404)
+        expect(response).to have_http_status(401)
       end
 
       it 'ヘッダーのuidが存在しない時レスポンスとしてエラーメッセージが返却される' do
