@@ -8,6 +8,7 @@ module Api
         @output = Output.new(output_params)
         if @output.valid?
           result =  @output.save  
+          # ステータスは手動で設定する
           render status: 201, json: { awareness: result[:awareness], action_plan: result[:action_plan] }
         else
           render status: 404, json: { errors: @output.errors.full_messages }

@@ -59,7 +59,7 @@ RSpec.describe 'Books', type: :request do
         expect(response).to have_http_status(201) # ステータスはコントローラーで設定している
       end
 
-      it 'パラメータが正しければリクエストに成功する' do
+      it 'パラメータが正しければ正しくレスポンスが返却される' do
         post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
         json = JSON.parse(response.body)
         expect(json['book']['title']).to eq book_params[:title]
