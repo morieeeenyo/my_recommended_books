@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_13_093533) do
+ActiveRecord::Schema.define(version: 2021_04_13_214545) do
 
   create_table "action_plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "time_of_execution", null: false
@@ -51,6 +51,15 @@ ActiveRecord::Schema.define(version: 2021_04_13_093533) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_awarenesses_on_book_id"
+  end
+
+  create_table "book_action_plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "book_id"
+    t.bigint "action_plan_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["action_plan_id"], name: "index_book_action_plans_on_action_plan_id"
+    t.index ["book_id"], name: "index_book_action_plans_on_book_id"
   end
 
   create_table "books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

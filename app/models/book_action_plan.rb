@@ -1,0 +1,2 @@
+class BookActionPlan < ApplicationRecord
+end
