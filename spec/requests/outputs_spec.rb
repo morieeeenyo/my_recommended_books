@@ -49,7 +49,7 @@ RSpec.describe "Outputs", type: :request do
       it "必須のカラムが不足している時保存に失敗しステータスが404になる" do
         output_params[:what_to_do] = ""
         post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-        expect(response).to have_http_status(404)
+        expect(response).to have_http_status(422)
       end
 
       it "保存に失敗した時エラーメッセージがレスポンスとして返却される" do

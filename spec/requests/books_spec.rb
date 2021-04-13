@@ -36,7 +36,7 @@ RSpec.describe 'Books', type: :request do
     context '検索に失敗' do
       it 'パラメータが空文字列の時ステータス400が返却される' do
         get search_api_v1_books_path, xhr: true, params: { keyword: '' }, headers: headers # headersは認証用のヘッダー
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(406)
       end
 
       it 'パラメータが空文字列の時レスポンスでエラーメッセージが返却される' do
@@ -69,7 +69,7 @@ RSpec.describe 'Books', type: :request do
     context '書籍が投稿できない時' do
       it 'パラメータの中に空の値が含まれる場合リクエストに失敗する' do
         post api_v1_books_path, xhr: true, params: { book: invalid_book_params }, headers: headers # headersは認証用のヘッダー
-        expect(response).to have_http_status(404) # ステータスはコントローラーで設定している
+        expect(response).to have_http_status(422) # ステータスはコントローラーで設定している
       end
 
       it 'パラメータの中に空の値が含まれる場合エラーメッセージが返却される' do

@@ -6,7 +6,8 @@ module Api
       before_action :user_authentification
 
       def show
-        return render status: 404, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
+        # ユーザー認証に引っかかった際のステータスは401(Unautorized)
+        return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
 
         if @user.avatar.attached? # 添付されていないときにエラーが出るのを防ぐ
           avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}),

@@ -4,14 +4,15 @@ module Api
       before_action :user_authentification
 
       def create
-        return render status: 404, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
+        # ユーザー認証に引っかかった際のステータスは401(Unautorized)
+        return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
         @output = Output.new(output_params)
         if @output.valid?
           output_save_result =  @output.save  
-          # ステータスは手動で設定する
-          render status: 201, json: { awareness: output_save_result[:awareness], action_plan: output_save_result[:action_plan] }
+          # ステータスは手動で設定する。リソース保存時のステータスは201
+          render status: 201, json: { awareness: output_save_result[:awareness], action_plan: output_save_result[:action_plan] } 
         else
-          render status: 404, json: { errors: @output.errors.full_messages }
+          render status: 422, json: { errors: @output.errors.full_messages } #バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
       end
 
