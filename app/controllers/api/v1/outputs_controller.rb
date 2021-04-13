@@ -10,7 +10,11 @@ module Api
         end
       end
 
-      
+      private 
+
+      def output_params 
+        params.require(:output).permit(:content, :time_of_execution, :what_to_do, :how_to_do).merge(book_id: params[:book_id])
+      end
     end
   end
 end
