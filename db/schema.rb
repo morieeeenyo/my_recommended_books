@@ -13,8 +13,8 @@
 ActiveRecord::Schema.define(version: 2021_04_13_093533) do
 
   create_table "action_plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "time_of_execution"
-    t.string "what_to_do"
+    t.string "time_of_execution", null: false
+    t.string "what_to_do", null: false
     t.string "how_to_do"
     t.bigint "awareness_id"
     t.bigint "book_id"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 2021_04_13_093533) do
   end
 
   create_table "awarenesses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.text "content"
+    t.text "content", null: false
     t.bigint "book_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
