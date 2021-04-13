@@ -12,14 +12,15 @@ RSpec.describe "Outputs", type: :request do
     context "投稿に成功する時" do
       it "投稿に成功するとステータスが204で返却される" do
         post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-        expect(response).to have_http_status(204)
+        expect(response).to have_http_status(201)
       end
 
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
         post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        sleep 1
         json = JSON.parse(response.body)
-        expect(json['awareness']['content']).to eq output.content
-        expect(json['actionplan']['what_to_do']).to eq output.what_to_do
+        expect(json['awareness']['content']).to eq output_params[:content]
+        expect(json['action_plan']['what_to_do']).to eq output_params[:what_to_do]
       end
     end
 
