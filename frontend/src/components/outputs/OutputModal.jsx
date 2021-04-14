@@ -49,6 +49,18 @@ class OutputModal extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      output: {
+        awareness: {
+          content: '',
+        },
+        action_plans: [
+          {
+            time_of_execution: '',
+            what_to_do: '',
+            how_to_do: '',
+          }
+        ],
+      },
       errors: []
     }
     // 以下は後で実装するメソッド
