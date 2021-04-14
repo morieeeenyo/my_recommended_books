@@ -7,6 +7,9 @@ module Api
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
         @output = Output.new(output_params)
+        
+        binding.pry
+        
         if @output.valid?
           output_save_result =  @output.save  
           # ステータスは手動で設定する。リソース保存時のステータスは201
@@ -19,7 +22,7 @@ module Api
       private 
 
       def output_params 
-        params.require(:output).permit(awareness: {}, action_plans: []).merge(book_id: params[:book_id], user_id: @user.id)
+        params.require(:output).permit(awareness: [:content], action_plans: [:time_of_execution, :what_to_do, :how_to_do]).merge(book_id: params[:book_id], user_id: @user.id)
       end
 
       def user_authentification
