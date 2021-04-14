@@ -55,19 +55,24 @@ class OutputModal extends React.Component {
     // this.getCsrfToken = this.getCsrfToken.bind(this)
     // this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     // this.userAuthentification = this.userAuthentification.bind(this)
+    this.closeOutputModal = this.closeOutputModal.bind(this)
   }
 
-  
-
+  closeOutputModal() {
+    this.setState({
+      errors: []
+    })
+    this.props.history.goBack() //元いたページに戻る(マイページ以外からアクセスされることも想定)0
+  }
 
   render () {
     // Todo:諸々メソッド実装
     return (
-      <ModalOverlay onClick={this.closeBookModal}>
+      <ModalOverlay onClick={this.closeOutputModal}>
         {this.props.children}
         <ModalContent onClick={(e) => e.stopPropagation()}>
         <p>アウトプットを投稿する</p>
-        <button onClick={this.closeBookModal}>x</button>
+        <button onClick={this.closeOutputModal}>x</button>
           <div>
             <OutputForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors}/>
           </div>
