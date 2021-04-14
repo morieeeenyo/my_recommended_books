@@ -7,9 +7,6 @@ module Api
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
         @output = Output.new(output_params)
-        
-        binding.pry
-        
         if @output.valid?
           output_save_result =  @output.save  
           # ステータスは手動で設定する。リソース保存時のステータスは201
