@@ -16,26 +16,26 @@ import {ErrorMessage} from "../common/UserModal.jsx"
 import {UserFromContent} from "../common/UserModal.jsx"
 
 
-function OutputForm() {
+function OutputForm(props) {
   // Todo:アクションプランは3つまで同時に設定できるようにする
   return (
     <OutputFormContent>
       <ActionPlanFormBlock>
-      <label for="awareness_text">気づき</label>
-        <textarea name="awareness_text"></textarea>
+      <label htmlFor="awareness_text">気づき</label>
+        <textarea name="content" value={props.awareness.content} onChange={props.change}></textarea>
       </ActionPlanFormBlock>
       <ActionPlanFormBlock>
-        <label class="action-plan-label">アクションプラン</label>
-        <label for="due_date">いつ</label>
-        <input type="text" name="what"></input>
+        <label className="action-plan-label">アクションプラン</label>
+        <label htmlFor="due_date">いつ</label>
+        <input type="text" name="time_of_execution" value={props.action_plans[0].time_of_execution} onChange={props.change}></input>
       </ActionPlanFormBlock>
         <ActionPlanFormBlock>
-          <label for="what">何を</label>
-          <input type="text" name="what"></input>
+          <label htmlFor="what">何を</label>
+          <input type="text" name="what_to_do" value={props.action_plans[0].what_to_do} onChange={props.change}></input>
         </ActionPlanFormBlock>
         <ActionPlanFormBlock>
-          <label for="how_much">どのように</label>
-          <input type="text" name="how"></input>
+          <label htmlFor="how_much">どのように</label>
+          <input type="text" name="how_to_do" value={props.action_plans[0].how_to_do} onChange={props.change}></input>
         </ActionPlanFormBlock>
         <ActionPlanFormBlock>
           <input type="submit" value="追加" id="submit_btn"></input>  
@@ -68,6 +68,7 @@ class OutputModal extends React.Component {
     // this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     // this.userAuthentification = this.userAuthentification.bind(this)
     this.closeOutputModal = this.closeOutputModal.bind(this)
+    this.updateForm = this.updateForm.bind(this)
   }
 
   closeOutputModal() {
@@ -75,6 +76,35 @@ class OutputModal extends React.Component {
       errors: []
     })
     this.props.history.goBack() //元いたページに戻る(マイページ以外からアクセスされることも想定)0
+  }
+
+  updateForm(e) {
+    // ネストされたオブジェクトのdataまでアクセスしておく
+    const awareness = this.state.output.awareness;
+    const action_plans = this.state.output.action_plans
+
+    // eventが発火したname属性名ごとに値を処理
+    switch (e.target.name) {
+        case 'content':
+            awareness.content = e.target.value;
+            break;
+        case 'time_of_execution':
+            action_plans[0].time_of_execution = e.target.value;
+            break;
+        case 'what_to_do':
+            action_plans[0].what_to_do = e.target.value;
+            break;
+        case 'how_to_do':
+            action_plans[0].how_to_do = e.target.value;
+            break;
+            break;
+    }
+    this.setState({
+      output: {
+        awareness: awareness,
+        action_plans: action_plans
+      }
+    })
   }
 
   render () {
@@ -86,7 +116,7 @@ class OutputModal extends React.Component {
         <p>アウトプットを投稿する</p>
         <button onClick={this.closeOutputModal}>x</button>
           <div>
-            <OutputForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors}/>
+            <OutputForm awareness={this.state.output.awareness} action_plans={this.state.output.action_plans} change={this.updateForm} submit={this.postBook} errors={this.state.errors}/>
           </div>
         </ModalContent>
       </ModalOverlay>
