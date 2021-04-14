@@ -64,13 +64,41 @@ class OutputModal extends React.Component {
       errors: []
     }
     // 以下は後で実装するメソッド
-    // this.getCsrfToken = this.getCsrfToken.bind(this)
-    // this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
-    // this.userAuthentification = this.userAuthentification.bind(this)
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
     this.closeOutputModal = this.closeOutputModal.bind(this)
     this.updateForm = this.updateForm.bind(this)
     this.postOutput = this.postOutput.bind(this)
   }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
+  userAuthentification() {
+    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+    } else {
+      return null
+    }
+  }
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+  };
 
   closeOutputModal() {
     this.setState({
@@ -110,6 +138,8 @@ class OutputModal extends React.Component {
 
   postOutput(e) {
     e.preventDefault()
+    this.userAuthentification()
+    this.setAxiosDefaults();
   // props.content,つまりモーダルの種類ごとに処理を分ける
     axios
     .post('/api/v1/books/' + this.props.location.state.book.id + '/outputs', {output: this.state.output} )
