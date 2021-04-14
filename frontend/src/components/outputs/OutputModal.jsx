@@ -19,7 +19,7 @@ import {UserFromContent} from "../common/UserModal.jsx"
 function OutputForm(props) {
   // Todo:アクションプランは3つまで同時に設定できるようにする
   return (
-    <OutputFormContent>
+    <OutputFormContent onSubmit={props.submit}>
       <ActionPlanFormBlock>
       <label htmlFor="awareness_text">気づき</label>
         <textarea name="content" value={props.awareness.content} onChange={props.change}></textarea>
@@ -69,6 +69,7 @@ class OutputModal extends React.Component {
     // this.userAuthentification = this.userAuthentification.bind(this)
     this.closeOutputModal = this.closeOutputModal.bind(this)
     this.updateForm = this.updateForm.bind(this)
+    this.postOutput = this.postOutput.bind(this)
   }
 
   closeOutputModal() {
@@ -107,6 +108,25 @@ class OutputModal extends React.Component {
     })
   }
 
+  postOutput(e) {
+    e.preventDefault()
+  // props.content,つまりモーダルの種類ごとに処理を分ける
+    axios
+    .post('/api/v1/books/' + this.props.location.state.book.id + '/outputs', {output: this.state.output} )
+    .then(response => {
+      // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
+      this.props.close() //モーダルを閉じる
+      return response
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        this.setState({
+          errors: error.response.data.errors //エラーメッセージの表示
+        })
+      }
+    })
+  }
+
   render () {
     // Todo:諸々メソッド実装
     return (
@@ -116,7 +136,7 @@ class OutputModal extends React.Component {
         <p>アウトプットを投稿する</p>
         <button onClick={this.closeOutputModal}>x</button>
           <div>
-            <OutputForm awareness={this.state.output.awareness} action_plans={this.state.output.action_plans} change={this.updateForm} submit={this.postBook} errors={this.state.errors}/>
+            <OutputForm awareness={this.state.output.awareness} action_plans={this.state.output.action_plans} change={this.updateForm} submit={this.postOutput} errors={this.state.errors}/>
           </div>
         </ModalContent>
       </ModalOverlay>
@@ -126,6 +146,7 @@ class OutputModal extends React.Component {
 }
 
 const OutputFormContent = styled(UserFromContent)`
+  /* アウトプットのform要素 */
 `
 
 const ActionPlanFormBlock = styled(FormBlock)`
