@@ -27,18 +27,21 @@ function OutputForm(props) {
       </ActionPlanFormBlock>
       <div id="action_plans">
         <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
-        <ActionPlanFormBlock>
-          <label htmlFor="due_date">いつ</label>
-          <input type="text" name="time_of_execution" value={props.output.action_plans[0].time_of_execution} onChange={props.change}></input>
-        </ActionPlanFormBlock>
-        <ActionPlanFormBlock>
-          <label htmlFor="what">何を</label>
-          <input type="text" name="what_to_do" value={props.output.action_plans[0].what_to_do} onChange={props.change}></input>
-        </ActionPlanFormBlock>
-        <ActionPlanFormBlock>
-          <label htmlFor="how_much">どのように</label>
-          <input type="text" name="how_to_do" value={props.output.action_plans[0].how_to_do} onChange={props.change}></input>
-        </ActionPlanFormBlock>
+        <div class="action_plan" dataIndex={1}>
+          <h4>アクションプラン１</h4>
+          <ActionPlanFormBlock>
+            <label htmlFor="due_date">いつ</label>
+            <input type="text" name="time_of_execution" value={props.output.action_plans[0].time_of_execution} onChange={props.change}></input>
+          </ActionPlanFormBlock>
+          <ActionPlanFormBlock>
+            <label htmlFor="what">何を</label>
+            <input type="text" name="what_to_do" value={props.output.action_plans[0].what_to_do} onChange={props.change}></input>
+          </ActionPlanFormBlock>
+          <ActionPlanFormBlock>
+            <label htmlFor="how_much">どのように</label>
+            <input type="text" name="how_to_do" value={props.output.action_plans[0].how_to_do} onChange={props.change}></input>
+          </ActionPlanFormBlock>
+        </div>
       </div>
       <ActionPlanFormBlock>
         <button class="add-actionplan-button">アクションプランを追加</button>
@@ -177,6 +180,15 @@ class OutputModal extends React.Component {
 
 const OutputFormContent = styled(UserFromContent)`
   /* アウトプットのform要素 */
+  & #action_plans {
+    width: 100%;
+    & h4 {
+      margin: 0 auto;
+      width: 70%;
+    }
+
+    & 
+  }
 `
 
 const ActionPlanFormBlock = styled(FormBlock)`
