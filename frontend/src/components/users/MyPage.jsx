@@ -220,6 +220,7 @@ const BookList = styled.ul`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
     /* 1行に4冊分のデータが表示されるようにしている */
     width: 20%;
     overflow: wrap;
