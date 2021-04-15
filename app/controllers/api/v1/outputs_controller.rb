@@ -10,7 +10,7 @@ module Api
         if @output.valid?
           output_save_result =  @output.save  
           # ステータスは手動で設定する。リソース保存時のステータスは201
-          render status: 201, json: { awareness: output_save_result[:awareness], action_plan: output_save_result[:action_plan] } 
+          render status: 201, json: { awareness: output_save_result[:awareness], action_plans: output_save_result[:action_plans] } 
         else
           render status: 422, json: { errors: @output.errors.full_messages } #バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
