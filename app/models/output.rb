@@ -14,7 +14,7 @@ class Output
 
   def validate_awareness_content
     content = awareness[:content]
-    errors.add(:content, "Content can't be blank") unless content
+    errors.add(:content, "can't be blank") if content == ""
   end
 
   def validate_action_plans_size
@@ -25,12 +25,12 @@ class Output
 
   def validate_action_plan_content
     action_plans.each do |action_plan|
-      if !action_plan[:time_of_execution] 
-        errors.add(:time_of_execution, "Time of execution can't be blank")
+      if action_plan[:time_of_execution]  == ""
+        errors.add(:time_of_execution, "can't be blank")
       end
 
-      if !action_plan[:what_to_do] 
-        errors.add(:what_to_do, "What to do can't be blank")
+      if action_plan[:what_to_do] == ""
+        errors.add(:what_to_do, "can't be blank")
       end
     end
   end
