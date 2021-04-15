@@ -27,7 +27,7 @@ function OutputForm(props) {
       </OutputFormBlock>
       <div id="action_plans">
         <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
-        <ActionPlan dataIndex={1}>
+        <ActionPlan data-index={"1"}>
           <h4>アクションプラン１</h4>
           <OutputFormBlock>
             <label htmlFor="due_date">いつ</label>
@@ -44,7 +44,7 @@ function OutputForm(props) {
         </ActionPlan>
       </div>
       <OutputFormBlock>
-        <button className="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
+        <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
       </OutputFormBlock>
       <OutputFormBlock>
         <input type="submit" value="この内容で投稿する" id="submit_btn"></input>  
@@ -171,6 +171,12 @@ class OutputModal extends React.Component {
     clone.setAttribute('data-index', index)
     //「actionPlanParent」の要素の最後尾に複製した要素を追加
     actionPlanParent.appendChild(clone); 
+    if ( index >= 3 ) { 
+      const actionPlanAddButton = document.getElementById('add-actionplan-button')
+      actionPlanAddButton.remove()
+      console.log('removed')
+      return 
+    }
   }
 
   render () {
@@ -236,13 +242,13 @@ const OutputFormBlock = styled(FormBlock)`
     width: 100%
   }
 
-  & .add-actionplan-button {
+  & #add-actionplan-button {
     background-color: lightgray;
     color: #FFF;
     position: static;
   }
 
-  & .add-actionplan-button:hover {
+  & #add-actionplan-button:hover {
     background-color: #cb4d00;
     color: #FFF;
     cursor: pointer;
