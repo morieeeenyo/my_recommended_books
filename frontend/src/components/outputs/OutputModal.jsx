@@ -25,11 +25,12 @@ function OutputForm(props) {
       <label htmlFor="awareness_text">気づき</label>
       <textarea name="content" value={props.output.content} onChange={props.change}></textarea>
       </ActionPlanFormBlock>
-      <ActionPlanFormBlock>
-        <label className="action-plan-label">アクションプラン</label>
-        <label htmlFor="due_date">いつ</label>
-        <input type="text" name="time_of_execution" value={props.output.action_plans[0].time_of_execution} onChange={props.change}></input>
-      </ActionPlanFormBlock>
+      <div id="action_plans">
+        <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
+        <ActionPlanFormBlock>
+          <label htmlFor="due_date">いつ</label>
+          <input type="text" name="time_of_execution" value={props.output.action_plans[0].time_of_execution} onChange={props.change}></input>
+        </ActionPlanFormBlock>
         <ActionPlanFormBlock>
           <label htmlFor="what">何を</label>
           <input type="text" name="what_to_do" value={props.output.action_plans[0].what_to_do} onChange={props.change}></input>
@@ -38,9 +39,13 @@ function OutputForm(props) {
           <label htmlFor="how_much">どのように</label>
           <input type="text" name="how_to_do" value={props.output.action_plans[0].how_to_do} onChange={props.change}></input>
         </ActionPlanFormBlock>
-        <ActionPlanFormBlock>
-          <input type="submit" value="追加" id="submit_btn"></input>  
-        </ActionPlanFormBlock>
+      </div>
+      <ActionPlanFormBlock>
+        <button class="add-actionplan-button">アクションプランを追加</button>
+      </ActionPlanFormBlock>
+      <ActionPlanFormBlock>
+        <input type="submit" value="この内容で投稿する" id="submit_btn"></input>  
+      </ActionPlanFormBlock>
     </OutputFormContent>
   )
 }
@@ -189,6 +194,18 @@ const ActionPlanFormBlock = styled(FormBlock)`
 
   & input {
     width: 100%
+  }
+
+  & .add-actionplan-button {
+    background-color: lightgray;
+    color: #FFF;
+    position: static;
+  }
+
+  & .add-actionplan-button:hover {
+    background-color: #cb4d00;
+    color: #FFF;
+    cursor: pointer;
   }
 
   & #submit_btn{
