@@ -187,7 +187,22 @@ const OutputFormContent = styled(UserFromContent)`
       width: 70%;
     }
 
-    & 
+    & .action_plan {
+      border: 1px solid #000;
+      border-radius: 5px;
+      width: 70%;
+      margin: 0 auto;
+      padding: 1%;
+
+      & div {
+        width: 85%;
+      }
+
+      & h4 {
+        margin: 0 auto;
+        width: 100%;
+      }
+    }
   }
 `
 
