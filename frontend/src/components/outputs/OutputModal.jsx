@@ -23,7 +23,7 @@ function OutputForm(props) {
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <ActionPlanFormBlock>
       <label htmlFor="awareness_text">気づき</label>
-      <textarea name="content" value={props.output.awareness.content} onChange={props.change}></textarea>
+      <textarea name="content" value={props.output.content} onChange={props.change}></textarea>
       </ActionPlanFormBlock>
       <ActionPlanFormBlock>
         <label className="action-plan-label">アクションプラン</label>
@@ -51,9 +51,7 @@ class OutputModal extends React.Component {
     super(props);
     this.state = {
       output: {
-        awareness: {
-          content: ''
-        },
+        content: '',
         action_plans: [
           {
             time_of_execution: '',
@@ -110,30 +108,26 @@ class OutputModal extends React.Component {
 
   updateForm(e) {
     // ネストされたオブジェクトのdataまでアクセスしておく
-    const awareness = this.state.output.awareness
-    const action_plans = this.state.output.action_plans
+    const output = this.state.output
 
     // eventが発火したname属性名ごとに値を処理
     switch (e.target.name) {
         case 'content':
-            awareness.content = e.target.value;
+            output.content = e.target.value;
             break;
         case 'time_of_execution':
-            action_plans[0].time_of_execution = e.target.value;
+            output.action_plans[0].time_of_execution = e.target.value;
             break;
         case 'what_to_do':
-            action_plans[0].what_to_do = e.target.value;
+            output.action_plans[0].what_to_do = e.target.value;
             break;
         case 'how_to_do':
-            action_plans[0].how_to_do = e.target.value;
+            output.action_plans[0].how_to_do = e.target.value;
             break;
     }
 
     this.setState({
-      output: {
-        awareness: awareness,
-        action_plans: action_plans
-      }
+      output: output
     })
   }
 
@@ -146,7 +140,7 @@ class OutputModal extends React.Component {
     .post('/api/v1/books/' + this.props.location.state.book.id + '/outputs', {output: this.state.output} )
     .then(response => {
       // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
-      this.props.close() //モーダルを閉じる
+      this.closeOutputModal()
       return response
     })
     .catch(error => {
