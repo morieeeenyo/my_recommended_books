@@ -169,6 +169,7 @@ class OutputModal extends React.Component {
     let index = Number(clone.getAttribute('data-index'))
     index += 1
     clone.setAttribute('data-index', index)
+    clone.childNodes[0].textContent = `アクションプラン${index}`
     //「actionPlanParent」の要素の最後尾に複製した要素を追加
     actionPlanParent.appendChild(clone); 
     if ( index >= 3 ) { 
@@ -199,8 +200,10 @@ class OutputModal extends React.Component {
 
 const OutputFormContent = styled(UserFromContent)`
   /* アウトプットのform要素 */
+
   & #action_plans {
     width: 100%;
+
     & h4 {
       margin: 0 auto;
       width: 70%;
