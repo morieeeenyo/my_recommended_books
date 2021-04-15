@@ -21,34 +21,34 @@ function OutputForm(props) {
   return (
     <OutputFormContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
-      <ActionPlanFormBlock>
+      <OutputFormBlock>
       <label htmlFor="awareness_text">気づき</label>
       <textarea name="content" value={props.output.content} onChange={props.change}></textarea>
-      </ActionPlanFormBlock>
+      </OutputFormBlock>
       <div id="action_plans">
         <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
-        <div class="action_plan" dataIndex={1}>
+        <ActionPlan dataIndex={1}>
           <h4>アクションプラン１</h4>
-          <ActionPlanFormBlock>
+          <OutputFormBlock>
             <label htmlFor="due_date">いつ</label>
             <input type="text" name="time_of_execution" value={props.output.action_plans[0].time_of_execution} onChange={props.change}></input>
-          </ActionPlanFormBlock>
-          <ActionPlanFormBlock>
+          </OutputFormBlock>
+          <OutputFormBlock>
             <label htmlFor="what">何を</label>
             <input type="text" name="what_to_do" value={props.output.action_plans[0].what_to_do} onChange={props.change}></input>
-          </ActionPlanFormBlock>
-          <ActionPlanFormBlock>
+          </OutputFormBlock>
+          <OutputFormBlock>
             <label htmlFor="how_much">どのように</label>
             <input type="text" name="how_to_do" value={props.output.action_plans[0].how_to_do} onChange={props.change}></input>
-          </ActionPlanFormBlock>
-        </div>
+          </OutputFormBlock>
+        </ActionPlan>
       </div>
-      <ActionPlanFormBlock>
-        <button class="add-actionplan-button">アクションプランを追加</button>
-      </ActionPlanFormBlock>
-      <ActionPlanFormBlock>
+      <OutputFormBlock>
+        <button className="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
+      </OutputFormBlock>
+      <OutputFormBlock>
         <input type="submit" value="この内容で投稿する" id="submit_btn"></input>  
-      </ActionPlanFormBlock>
+      </OutputFormBlock>
     </OutputFormContent>
   )
 }
@@ -68,7 +68,8 @@ class OutputModal extends React.Component {
           }
         ],
       },
-      errors: []
+      errors: [],
+
     }
     // 以下は後で実装するメソッド
     this.getCsrfToken = this.getCsrfToken.bind(this)
@@ -77,6 +78,7 @@ class OutputModal extends React.Component {
     this.closeOutputModal = this.closeOutputModal.bind(this)
     this.updateForm = this.updateForm.bind(this)
     this.postOutput = this.postOutput.bind(this)
+    this.addActionPlan = this.addActionPlan.bind(this)
   }
 
   getCsrfToken() {
@@ -160,6 +162,17 @@ class OutputModal extends React.Component {
     })
   }
 
+  addActionPlan(e) {
+    e.preventDefault()
+    const actionPlanParent = document.getElementById('action_plans')
+    let clone = actionPlanParent.lastElementChild.cloneNode(true);
+    let index = Number(clone.getAttribute('data-index'))
+    index += 1
+    clone.setAttribute('data-index', index)
+    //「actionPlanParent」の要素の最後尾に複製した要素を追加
+    actionPlanParent.appendChild(clone); 
+  }
+
   render () {
     // Todo:諸々メソッド実装
     return (
@@ -169,7 +182,7 @@ class OutputModal extends React.Component {
         <p>アウトプットを投稿する</p>
         <button onClick={this.closeOutputModal}>x</button>
           <div>
-            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors}/>
+            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan}/>
           </div>
         </ModalContent>
       </ModalOverlay>
@@ -186,27 +199,27 @@ const OutputFormContent = styled(UserFromContent)`
       margin: 0 auto;
       width: 70%;
     }
-
-    & .action_plan {
-      border: 1px solid #000;
-      border-radius: 5px;
-      width: 70%;
-      margin: 0 auto;
-      padding: 1%;
-
-      & div {
-        width: 85%;
-      }
-
-      & h4 {
-        margin: 0 auto;
-        width: 100%;
-      }
-    }
   }
 `
 
-const ActionPlanFormBlock = styled(FormBlock)`
+const ActionPlan = styled.div`
+  border: 1px solid #000;
+  border-radius: 5px;
+  width: 70%;
+  margin: 0 auto 10px;
+  padding: 1%;
+
+  & div {
+    width: 85%;
+  }
+
+  & h4 {
+    margin: 0 auto;
+    width: 100%;
+  }
+`
+
+const OutputFormBlock = styled(FormBlock)`
   width: 70%;
 
   .action-plan-label {
