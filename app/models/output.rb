@@ -1,21 +1,16 @@
 class Output
   include ActiveModel::Model
-  attr_accessor :user_id, :book_id, :awareness, :action_plans
+  attr_accessor :content, :user_id, :book_id, :awareness, :action_plans
 
   with_options presence: true do 
     validates :user_id
     validates :book_id
+    validates :content
     # how_to_doは必ずしも入力されない可能性が高いため必須としない
   end
 
-  validate :validate_awareness_content
   validate :validate_action_plans_size
   validate :validate_action_plan_content
-
-  def validate_awareness_content
-    content = awareness[:content]
-    errors.add(:content, "can't be blank") if content == ""
-  end
 
   def validate_action_plans_size
     if action_plans.length > 3
@@ -36,7 +31,7 @@ class Output
   end
 
   def save
-    awareness = Awareness.new(content: @awareness[:content], book_id: book_id, user_id: user_id)
+    awareness = Awareness.new(content: content, book_id: book_id, user_id: user_id)
     awareness.save
     action_plans.each do |action_plan|
       action_plan = ActionPlan.new(time_of_execution: action_plan[:time_of_execution], what_to_do: action_plan[:what_to_do], how_to_do: action_plan[:how_to_do], book_id: book_id, user_id: user_id, awareness_id: awareness.id)

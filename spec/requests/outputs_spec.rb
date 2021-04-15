@@ -20,7 +20,7 @@ RSpec.describe "Outputs", type: :request do
         sleep 1 #sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         # アクションプランと気付きは別々にレスポンスとして返却される
-        expect(json['awareness']['content']).to eq output_params[:awareness][:content]
+        expect(json['awareness']['content']).to eq output_params[:content]
         expect(json['action_plans'][0]['what_to_do']).to eq output_params[:action_plans][0][:what_to_do]
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe "Outputs", type: :request do
         post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
         sleep 1 #sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
-        expect(json['awareness']['content']).to eq output_params[:awareness][:content]
+        expect(json['awareness']['content']).to eq output_params[:content]
         expect(json['action_plans'][0]['what_to_do']).to eq output_params[:action_plans][0][:what_to_do]
       end   
     end

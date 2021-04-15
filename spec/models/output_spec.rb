@@ -17,7 +17,7 @@ RSpec.describe Output, type: :model do
 
     context "保存に失敗する時" do
       it "気づきの内容が空欄のとき保存できない" do
-        output.awareness[:content] = ""
+        output.content = ""
         output.valid?
         expect(output.errors.full_messages).to include "Content can't be blank"
       end

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :output do
-    awareness {{content: 'test'}}
+    content {'test'}
     action_plans {[{time_of_execution: 'test', what_to_do: 'test', how_to_do: ''}]}
     # user_idとbook_idはテストコード上で紐付ける
   end
