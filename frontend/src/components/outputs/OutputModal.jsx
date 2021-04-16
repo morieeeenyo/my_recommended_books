@@ -193,6 +193,7 @@ class OutputModal extends React.Component {
     const removeElement = document.querySelector(`div[data-index=${targetIndex}]`)
     removeElement.remove()
     const actionPlanAddButton = document.getElementById('add-actionplan-button')
+    //todo: アクションプランの取り消し
     // if (!actionPlanAddButton) { 
       
     // }
