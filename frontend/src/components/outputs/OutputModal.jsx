@@ -183,7 +183,7 @@ class OutputModal extends React.Component {
       output.action_plans.push(newActionPlan)
       if (output.action_plans.length >= 3) { 
         const actionPlanAddButton = document.getElementById('add-actionplan-button')
-        actionPlanAddButton.remove()
+        actionPlanAddButton.setAttribute('style', 'display: none;')
       }
       return {
         output: output
@@ -201,6 +201,10 @@ class OutputModal extends React.Component {
     this.setState({
       output: output
     })
+    if (output.action_plans.length < 3) {
+      const actionPlanAddButton = document.getElementById('add-actionplan-button')
+      actionPlanAddButton.setAttribute('style', 'display: block;')
+    }
     // const actionPlanAddButton = document.getElementById('add-actionplan-button')
     // if (!actionPlanAddButton) { 
       
