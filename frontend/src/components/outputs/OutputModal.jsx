@@ -30,8 +30,11 @@ function OutputForm(props) {
       {props.output.action_plans.map((action_plan, index) => {
           return (
             <ActionPlan data-index={index} key={index}>
-              <h4>アクションプラン{index + 1}</h4>
-              <span onClick={props.remove} data-index={index}>取り消し</span>
+              <h4>
+                アクションプラン{index + 1}
+                <span onClick={props.remove} data-index={index}>取り消し</span>
+              </h4>
+              
               <OutputFormBlock>
                 <label htmlFor="due_date">いつ</label>
                 <input type="text" name="time_of_execution" value={props.output.action_plans.time_of_execution} onChange={props.change}></input>
@@ -48,7 +51,7 @@ function OutputForm(props) {
           )
       })}
       </div>
-      <OutputFormBlock>
+      <OutputFormBlock show={props.show}>
         <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
       </OutputFormBlock>
       <OutputFormBlock>
@@ -74,7 +77,7 @@ class OutputModal extends React.Component {
         ],
       },
       errors: [],
-
+      showAddButton: true
     }
     // 以下は後で実装するメソッド
     this.getCsrfToken = this.getCsrfToken.bind(this)
@@ -190,10 +193,10 @@ class OutputModal extends React.Component {
 
   removeActionPlan(e) {
     const targetIndex = e.target.getAttribute('data-index')
-    const removeElement = document.querySelector(`div[data-index=${targetIndex}]`)
+    const removeElement = e.target.closest(`div[data-index="${targetIndex}"]`)
     removeElement.remove()
-    const actionPlanAddButton = document.getElementById('add-actionplan-button')
-    //todo: アクションプランの取り消し
+    //todo: stateを更新
+    // const actionPlanAddButton = document.getElementById('add-actionplan-button')
     // if (!actionPlanAddButton) { 
       
     // }
@@ -208,7 +211,7 @@ class OutputModal extends React.Component {
         <p>アウトプットを投稿する</p>
         <button onClick={this.closeOutputModal}>x</button>
           <div>
-            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan} remove={this.removeActionPlan}/>
+            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan} remove={this.removeActionPlan} show={this.state.showAddButton}/>
           </div>
         </ModalContent>
       </ModalOverlay>
