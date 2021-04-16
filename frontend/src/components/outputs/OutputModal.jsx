@@ -192,10 +192,15 @@ class OutputModal extends React.Component {
   }
 
   removeActionPlan(e) {
+    e.preventDefault()
     const targetIndex = e.target.getAttribute('data-index')
-    const removeElement = e.target.closest(`div[data-index="${targetIndex}"]`)
-    removeElement.remove()
-    //todo: stateを更新
+    const output = this.state.output
+    // const removal = output.action_plans[targetIndex]
+    // output.action_plans.filter(action_plan => )
+    output.action_plans.splice(targetIndex, 1)
+    this.setState({
+      output: output
+    })
     // const actionPlanAddButton = document.getElementById('add-actionplan-button')
     // if (!actionPlanAddButton) { 
       
