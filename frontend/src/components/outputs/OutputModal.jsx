@@ -26,22 +26,27 @@ function OutputForm(props) {
       <textarea name="content" value={props.output.content} onChange={props.change}></textarea>
       </OutputFormBlock>
       <div id="action_plans">
-        <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
-        <ActionPlan data-index={"1"}>
-          <h4>アクションプラン１</h4>
-          <OutputFormBlock>
-            <label htmlFor="due_date">いつ</label>
-            <input type="text" name="time_of_execution" value={props.output.action_plans[0].time_of_execution} onChange={props.change}></input>
-          </OutputFormBlock>
-          <OutputFormBlock>
-            <label htmlFor="what">何を</label>
-            <input type="text" name="what_to_do" value={props.output.action_plans[0].what_to_do} onChange={props.change}></input>
-          </OutputFormBlock>
-          <OutputFormBlock>
-            <label htmlFor="how_much">どのように</label>
-            <input type="text" name="how_to_do" value={props.output.action_plans[0].how_to_do} onChange={props.change}></input>
-          </OutputFormBlock>
-        </ActionPlan>
+      <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
+      {props.output.action_plans.map((action_plan, index) => {
+          return (
+            <ActionPlan data-index={index} key={index}>
+              <h4>アクションプラン{index + 1}</h4>
+              <span onClick={props.remove} data-index={index}>取り消し</span>
+              <OutputFormBlock>
+                <label htmlFor="due_date">いつ</label>
+                <input type="text" name="time_of_execution" value={props.output.action_plans.time_of_execution} onChange={props.change}></input>
+              </OutputFormBlock>
+              <OutputFormBlock>
+                <label htmlFor="what">何を</label>
+                <input type="text" name="what_to_do" value={props.output.action_plans.what_to_do} onChange={props.change}></input>
+              </OutputFormBlock>
+              <OutputFormBlock>
+                <label htmlFor="how_much">どのように</label>
+                <input type="text" name="how_to_do" value={props.output.action_plans.how_to_do} onChange={props.change}></input>
+              </OutputFormBlock>
+            </ActionPlan>
+          )
+      })}
       </div>
       <OutputFormBlock>
         <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
@@ -79,6 +84,7 @@ class OutputModal extends React.Component {
     this.updateForm = this.updateForm.bind(this)
     this.postOutput = this.postOutput.bind(this)
     this.addActionPlan = this.addActionPlan.bind(this)
+    this.removeActionPlan = this.removeActionPlan.bind(this)
   }
 
   getCsrfToken() {
@@ -164,20 +170,32 @@ class OutputModal extends React.Component {
 
   addActionPlan(e) {
     e.preventDefault()
-    const actionPlanParent = document.getElementById('action_plans')
-    let clone = actionPlanParent.lastElementChild.cloneNode(true);
-    let index = Number(clone.getAttribute('data-index'))
-    index += 1
-    clone.setAttribute('data-index', index)
-    clone.childNodes[0].textContent = `アクションプラン${index}`
-    //「actionPlanParent」の要素の最後尾に複製した要素を追加
-    actionPlanParent.appendChild(clone); 
-    if ( index >= 3 ) { 
-      const actionPlanAddButton = document.getElementById('add-actionplan-button')
-      actionPlanAddButton.remove()
-      console.log('removed')
-      return 
-    }
+    this.setState(prevState => {
+      const output = prevState.output
+      const newActionPlan = {
+        time_of_execution: '',
+        what_to_do: '',
+        how_to_do: '',
+      }
+      output.action_plans.push(newActionPlan)
+      if (output.action_plans.length >= 3) { 
+        const actionPlanAddButton = document.getElementById('add-actionplan-button')
+        actionPlanAddButton.remove()
+      }
+      return {
+        output: output
+      }
+    })
+  }
+
+  removeActionPlan(e) {
+    const targetIndex = e.target.getAttribute('data-index')
+    const removeElement = document.querySelector(`div[data-index=${targetIndex}]`)
+    removeElement.remove()
+    const actionPlanAddButton = document.getElementById('add-actionplan-button')
+    // if (!actionPlanAddButton) { 
+      
+    // }
   }
 
   render () {
@@ -189,7 +207,7 @@ class OutputModal extends React.Component {
         <p>アウトプットを投稿する</p>
         <button onClick={this.closeOutputModal}>x</button>
           <div>
-            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan}/>
+            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan} remove={this.removeActionPlan}/>
           </div>
         </ModalContent>
       </ModalOverlay>
