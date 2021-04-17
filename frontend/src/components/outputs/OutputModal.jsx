@@ -195,8 +195,10 @@ class OutputModal extends React.Component {
     e.preventDefault()
     const targetIndex = e.target.getAttribute('data-index')
     const output = this.state.output
-    // const removal = output.action_plans[targetIndex]
-    // output.action_plans.filter(action_plan => )
+    if (output.action_plans.length === 1) {
+      alert('アクションプランは最低1つ必要です')
+      return null
+    }
     output.action_plans.splice(targetIndex, 1)
     this.setState({
       output: output
@@ -205,10 +207,6 @@ class OutputModal extends React.Component {
       const actionPlanAddButton = document.getElementById('add-actionplan-button')
       actionPlanAddButton.setAttribute('style', 'display: block;')
     }
-    // const actionPlanAddButton = document.getElementById('add-actionplan-button')
-    // if (!actionPlanAddButton) { 
-      
-    // }
   }
 
   render () {
