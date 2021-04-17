@@ -19,13 +19,13 @@ class Output
   end
 
   def validate_action_plan_content
-    action_plans.each do |action_plan|
+    action_plans.each_with_index do |action_plan, index|
       if action_plan[:time_of_execution]  == ""
-        errors.add(:time_of_execution, "can't be blank")
+        errors.add(:time_of_execution, "of action plan #{index + 1} can't be blank")
       end
 
       if action_plan[:what_to_do] == ""
-        errors.add(:what_to_do, "can't be blank")
+        errors.add(:what_to_do, "of action plan #{index + 1} can't be blank")
       end
     end
   end
