@@ -235,7 +235,7 @@ const OutputFormContent = styled(UserFromContent)`
   & #action_plans {
     width: 100%;
 
-    & h4 {
+    & .action-plan-label {
       margin: 0 auto;
       width: 70%;
     }
@@ -256,6 +256,22 @@ const ActionPlan = styled.div`
   & h4 {
     margin: 0 auto;
     width: 100%;
+    position: relative;
+
+    & span {
+      background-color: lightgray;
+      color: #FFF;
+      position: absolute;
+      right: 5%;
+      padding: 1px;
+      border-radius: 2px;
+    }
+
+    & span:hover {
+      cursor: pointer;
+      background-color: #cb4d00;
+      color: #FFF;
+    }
   }
 `
 
