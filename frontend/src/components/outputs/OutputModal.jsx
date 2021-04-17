@@ -37,15 +37,15 @@ function OutputForm(props) {
               
               <OutputFormBlock>
                 <label htmlFor="due_date">いつ</label>
-                <input type="text" name="time_of_execution" value={props.output.action_plans.time_of_execution} onChange={props.change}></input>
+                <input type="text" name="time_of_execution" value={props.output.action_plans.time_of_execution} onChange={props.change} data-index={index}></input>
               </OutputFormBlock>
               <OutputFormBlock>
                 <label htmlFor="what">何を</label>
-                <input type="text" name="what_to_do" value={props.output.action_plans.what_to_do} onChange={props.change}></input>
+                <input type="text" name="what_to_do" value={props.output.action_plans.what_to_do} onChange={props.change} data-index={index}></input>
               </OutputFormBlock>
               <OutputFormBlock>
                 <label htmlFor="how_much">どのように</label>
-                <input type="text" name="how_to_do" value={props.output.action_plans.how_to_do} onChange={props.change}></input>
+                <input type="text" name="how_to_do" value={props.output.action_plans.how_to_do} onChange={props.change} data-index={index}></input>
               </OutputFormBlock>
             </ActionPlan>
           )
@@ -135,13 +135,13 @@ class OutputModal extends React.Component {
             output.content = e.target.value;
             break;
         case 'time_of_execution':
-            output.action_plans[0].time_of_execution = e.target.value;
+            output.action_plans[e.target.getAttribute('data-index')].time_of_execution = e.target.value;
             break;
         case 'what_to_do':
-            output.action_plans[0].what_to_do = e.target.value;
+            output.action_plans[e.target.getAttribute('data-index')].what_to_do = e.target.value;
             break;
         case 'how_to_do':
-            output.action_plans[0].how_to_do = e.target.value;
+            output.action_plans[e.target.getAttribute('data-index')].how_to_do = e.target.value;
             break;
     }
 
