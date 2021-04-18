@@ -15,6 +15,18 @@ RSpec.describe "Outputs", type: :request do
         expect(response).to have_http_status(201)
       end
 
+      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(Awareness, :count).by(1)
+      end
+
+      it "投稿に成功するとActionPlanモデルのカウントが3増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(ActionPlan, :count).by(3)
+      end
+
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
         output_params[:action_plans].each_with_index do |action_plan, index|
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
@@ -27,6 +39,79 @@ RSpec.describe "Outputs", type: :request do
       end
     end
     
+    context "投稿に成功(アクションプランが1つ)" do
+      before do
+        one_action_plan = output_params[:action_plans].slice(0,1)
+        output_params[:action_plans] = one_action_plan
+      end
+      
+      it "投稿に成功するとステータスが201で返却される" do
+        post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        expect(response).to have_http_status(201)
+      end
+  
+      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(Awareness, :count).by(1)
+      end
+  
+      it "投稿に成功するとActionPlanモデルのカウントが1増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(ActionPlan, :count).by(1)
+      end
+  
+      it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
+        output_params[:action_plans].each_with_index do |action_plan, index|
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+          sleep 1 #sleepしないとレスポンスの返却が間に合わない
+          json = JSON.parse(response.body)
+          # アクションプランと気付きは別々にレスポンスとして返却される
+          expect(json['awareness']['content']).to eq output_params[:content]
+          expect(json['action_plans'][index]['what_to_do']).to eq output_params[:action_plans][index][:what_to_do]
+        end
+      end
+      
+    end
+
+    context "投稿に成功(アクションプランが2つ)" do
+      before do
+        two_action_plans = output_params[:action_plans].slice(0,2)
+        output_params[:action_plans] = two_action_plans
+      end
+      
+      it "投稿に成功するとステータスが201で返却される" do
+        post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        expect(response).to have_http_status(201)
+      end
+  
+      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(Awareness, :count).by(1)
+      end
+  
+      it "投稿に成功するとActionPlanモデルのカウントが1増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(ActionPlan, :count).by(2)
+      end
+  
+      it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
+        output_params[:action_plans].each_with_index do |action_plan, index|
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+          sleep 1 #sleepしないとレスポンスの返却が間に合わない
+          json = JSON.parse(response.body)
+          # アクションプランと気付きは別々にレスポンスとして返却される
+          expect(json['awareness']['content']).to eq output_params[:content]
+          expect(json['action_plans'][index]['what_to_do']).to eq output_params[:action_plans][index][:what_to_do]
+        end
+      end
+      
+    end
+    
+    
     context "投稿に成功する時(任意項目が空)" do
       it "投稿に成功するとステータスが201で返却される" do
         output_params[:action_plans].each_with_index do |action_plan, index|
@@ -34,6 +119,18 @@ RSpec.describe "Outputs", type: :request do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
           expect(response).to have_http_status(201) #リソース保存時のステータスは201
         end
+      end
+
+      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(Awareness, :count).by(1)
+      end
+
+      it "投稿に成功するとActionPlanモデルのカウントが3増える" do
+        expect do
+          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+        end.to change(ActionPlan, :count).by(3)
       end
   
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
@@ -55,6 +152,26 @@ RSpec.describe "Outputs", type: :request do
           output_params[:action_plans][index][:what_to_do] = ""
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
           expect(response).to have_http_status(422)
+          output_params[:action_plans][index][:what_to_do] = "test" #これがないと空にした値が引き継がれてしまう
+        end
+      end
+
+      it "投稿に成功するとAwarenessモデルのカウントが増えていない" do
+        output_params[:action_plans].each_with_index do |action_plan, index|
+          output_params[:action_plans][index][:what_to_do] = ""
+          expect do
+            post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+          end.not_to change(Awareness, :count)
+          output_params[:action_plans][index][:what_to_do] = "test" #これがないと空にした値が引き継がれてしまう
+        end
+      end
+
+      it "投稿に成功するとActionPlanモデルのカウントが増えていない" do
+        output_params[:action_plans].each_with_index do |action_plan, index|
+          output_params[:action_plans][index][:what_to_do] = ""
+          expect do
+            post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
+          end.not_to change(ActionPlan, :count)
           output_params[:action_plans][index][:what_to_do] = "test" #これがないと空にした値が引き継がれてしまう
         end
       end
