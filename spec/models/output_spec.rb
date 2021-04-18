@@ -51,9 +51,17 @@ RSpec.describe Output, type: :model do
         output.valid?
         expect(output.errors.full_messages).to include "Book can't be blank"
       end
+      it "アクションプランが0個の時保存できない" do
+        output.action_plans = []
+        output.valid?
+        expect(output.errors.full_messages).to include "At least one action plan is required"
+      end
+      it "アクションプランが0個の時保存できない" do
+        output.action_plans << output.action_plans[0]
+        output.valid?
+        expect(output.errors.full_messages).to include "Action Plans are too many(maximum 3)"
+      end
     end
     
-    
   end
-  
 end

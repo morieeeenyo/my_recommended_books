@@ -14,9 +14,9 @@ class Output
 
   def validate_action_plans_size
     if action_plans.length <= 0
-      errors.add(:action_plans, "At least one action plan is required")
+      errors.add(:base, "At least one action plan is required")
     elsif action_plans.length > 3
-      errors.add(:action_plans, "Action plan is too many(maximum 3)")
+      errors.add(:base, "Action Plans are too many(maximum 3)")
     end
   end
 
