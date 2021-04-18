@@ -51,7 +51,7 @@ function OutputForm(props) {
           )
       })}
       </div>
-      <OutputFormBlock show={props.show}>
+      <OutputFormBlock>
         <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
       </OutputFormBlock>
       <OutputFormBlock>
@@ -77,7 +77,6 @@ class OutputModal extends React.Component {
         ],
       },
       errors: [],
-      showAddButton: true
     }
     // 以下は後で実装するメソッド
     this.getCsrfToken = this.getCsrfToken.bind(this)
@@ -218,7 +217,7 @@ class OutputModal extends React.Component {
         <p>アウトプットを投稿する</p>
         <button onClick={this.closeOutputModal}>x</button>
           <div>
-            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan} remove={this.removeActionPlan} show={this.state.showAddButton}/>
+            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan} remove={this.removeActionPlan}/>
           </div>
         </ModalContent>
       </ModalOverlay>
