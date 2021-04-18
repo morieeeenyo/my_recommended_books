@@ -17,6 +17,16 @@ RSpec.describe Output, type: :model do
           output.action_plans[index][:how_to_do] = "test" #これがないと空にした値が引き継がれてしまう
         end
       end
+      it "アクションプランが1つでも保存できる" do
+        one_action_plan = output.action_plans.slice(0,1)
+        output.action_plans = one_action_plan
+        expect(output).to  be_valid
+      end
+      it "アクションプランが2つでも保存できる" do
+        two_action_plans = output.action_plans.slice(0,2)
+        output.action_plans = two_action_plans
+        expect(output).to  be_valid
+      end
     end
 
     context "保存に失敗する時" do
