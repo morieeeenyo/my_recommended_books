@@ -37,15 +37,15 @@ function OutputForm(props) {
               
               <OutputFormBlock>
                 <label htmlFor="due_date">いつ</label>
-                <input type="text" name="time_of_execution" value={props.output.action_plans.time_of_execution} onChange={props.change} data-index={index}></input>
+                <input type="text" name="time_of_execution" value={action_plan.time_of_execution} onChange={props.change} data-index={index}></input>
               </OutputFormBlock>
               <OutputFormBlock>
                 <label htmlFor="what">何を</label>
-                <input type="text" name="what_to_do" value={props.output.action_plans.what_to_do} onChange={props.change} data-index={index}></input>
+                <input type="text" name="what_to_do" value={action_plan.what_to_do} onChange={props.change} data-index={index}></input>
               </OutputFormBlock>
               <OutputFormBlock>
                 <label htmlFor="how_much">どのように</label>
-                <input type="text" name="how_to_do" value={props.output.action_plans.how_to_do} onChange={props.change} data-index={index}></input>
+                <input type="text" name="how_to_do" value={action_plan.how_to_do} onChange={props.change} data-index={index}></input>
               </OutputFormBlock>
             </ActionPlan>
           )
