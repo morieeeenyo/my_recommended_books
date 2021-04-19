@@ -11,7 +11,7 @@ RSpec.describe "Outputs", type: :request do
   describe "アウトプットの投稿" do
     context "投稿に成功する時" do
       before do
-        three_action_plans = output_params[:action_plans].slice(0,3)
+        three_action_plans = output_params[:action_plans].slice(0,3) #なんかこうしないとcircleCIに怒られる
         output_params[:action_plans] = three_action_plans
       end
 
@@ -119,10 +119,10 @@ RSpec.describe "Outputs", type: :request do
     
     context "投稿に成功する時(任意項目が空)" do
       before do
-        three_action_plans = output_params[:action_plans].slice(0,3)
+        three_action_plans = output_params[:action_plans].slice(0,3) #なんかこうしないとcircleCIに怒られる
         output_params[:action_plans] = three_action_plans
       end
-      
+
       it "投稿に成功するとステータスが201で返却される" do
         output_params[:action_plans].each_with_index do |action_plan, index|
           action_plan[:how_to_do] = "" #どのように実践するか、は空欄でOK
