@@ -22,18 +22,11 @@ RSpec.describe "Outputs", type: :request do
         expect(response).to have_http_status(201)
       end
 
-      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+      it "投稿に成功するとAwarenessモデルのカウントが1増え、ActionPlanモデルのカウントが3増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
           sleep 2
-        end.to change(Awareness, :count).by(1)
-      end
-
-      it "投稿に成功するとActionPlanモデルのカウントが3増える" do
-        expect do
-          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 2
-        end.to change(ActionPlan, :count).by(3)
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3)
       end
 
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
@@ -60,16 +53,11 @@ RSpec.describe "Outputs", type: :request do
         expect(response).to have_http_status(201)
       end
   
-      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+      it "投稿に成功するとAwarenessモデルのカウントが1増え、ActionPlanモデルのカウントが1増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-        end.to change(Awareness, :count).by(1)
-      end
-  
-      it "投稿に成功するとActionPlanモデルのカウントが1増える" do
-        expect do
-          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-        end.to change(ActionPlan, :count).by(1)
+          sleep 2
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1)
       end
   
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
@@ -96,16 +84,11 @@ RSpec.describe "Outputs", type: :request do
         expect(response).to have_http_status(201)
       end
   
-      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+      it "投稿に成功するとAwarenessモデルのカウントが1増え、ActionPlanモデルのカウントが2増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-        end.to change(Awareness, :count).by(1)
-      end
-  
-      it "投稿に成功するとActionPlanモデルのカウントが1増える" do
-        expect do
-          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-        end.to change(ActionPlan, :count).by(2)
+          sleep 2
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(2)
       end
   
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
@@ -138,18 +121,11 @@ RSpec.describe "Outputs", type: :request do
         end
       end
 
-      it "投稿に成功するとAwarenessモデルのカウントが1増える" do
+      it "投稿に成功するとAwarenessモデルのカウントが1増え、ActionPlanモデルのカウントが3増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
           sleep 2
-        end.to change(Awareness, :count).by(1)
-      end
-
-      it "投稿に成功するとActionPlanモデルのカウントが3増える" do
-        expect do
-          post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 2
-        end.to change(ActionPlan, :count).by(3)
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3)
       end
   
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
