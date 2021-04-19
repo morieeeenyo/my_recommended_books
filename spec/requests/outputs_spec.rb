@@ -10,33 +10,38 @@ RSpec.describe "Outputs", type: :request do
 
   describe "アウトプットの投稿" do
     context "投稿に成功する時" do
+      before do
+        three_action_plans = output_params[:action_plans].slice(0,3)
+        output_params[:action_plans] = three_action_plans
+      end
+
       it "投稿に成功するとステータスが201で返却される" do
         post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-        sleep 5
+        sleep 2
         expect(response).to have_http_status(201)
       end
 
       it "投稿に成功するとAwarenessモデルのカウントが1増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 5
+          sleep 2
         end.to change(Awareness, :count).by(1)
       end
 
       it "投稿に成功するとActionPlanモデルのカウントが3増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 5
+          sleep 2
         end.to change(ActionPlan, :count).by(3)
       end
 
       it "すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる" do
         output_params[:action_plans].each_with_index do |action_plan, index|
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 5 #sleepしないとレスポンスの返却が間に合わない
+          sleep 2 #sleepしないとレスポンスの返却が間に合わない
           json = JSON.parse(response.body)
           # アクションプランと気付きは別々にレスポンスとして返却される
-          sleep 5
+          sleep 2
           expect(json['awareness']['content']).to eq output_params[:content]
           expect(json['action_plans'][index]['what_to_do']).to eq output_params[:action_plans][index][:what_to_do]
         end
@@ -117,11 +122,16 @@ RSpec.describe "Outputs", type: :request do
     
     
     context "投稿に成功する時(任意項目が空)" do
+      before do
+        three_action_plans = output_params[:action_plans].slice(0,3)
+        output_params[:action_plans] = three_action_plans
+      end
+      
       it "投稿に成功するとステータスが201で返却される" do
         output_params[:action_plans].each_with_index do |action_plan, index|
           action_plan[:how_to_do] = "" #どのように実践するか、は空欄でOK
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 5
+          sleep 2
           expect(response).to have_http_status(201) #リソース保存時のステータスは201
         end
       end
@@ -129,14 +139,14 @@ RSpec.describe "Outputs", type: :request do
       it "投稿に成功するとAwarenessモデルのカウントが1増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 5
+          sleep 2
         end.to change(Awareness, :count).by(1)
       end
 
       it "投稿に成功するとActionPlanモデルのカウントが3増える" do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 5
+          sleep 2
         end.to change(ActionPlan, :count).by(3)
       end
   
@@ -144,9 +154,9 @@ RSpec.describe "Outputs", type: :request do
         output_params[:action_plans].each_with_index do |action_plan, index|
           action_plan[:how_to_do] = "" #どのように実践するか、は空欄でOK
           post api_v1_book_outputs_path(book.id), xhr: true, params: {output: output_params}, headers: headers
-          sleep 5 #sleepしないとレスポンスの返却が間に合わない
+          sleep 2 #sleepしないとレスポンスの返却が間に合わない
           json = JSON.parse(response.body)
-          sleep 5
+          sleep 2
           expect(json['awareness']['content']).to eq output_params[:content]
           expect(json['action_plans'][index]['what_to_do']).to eq output_params[:action_plans][index][:what_to_do]
         end
