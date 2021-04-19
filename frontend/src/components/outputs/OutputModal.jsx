@@ -23,7 +23,7 @@ function OutputForm(props) {
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <OutputFormBlock>
       <label htmlFor="awareness_text">気づき</label>
-      <textarea name="content" value={props.output.content} onChange={props.change}></textarea>
+      <textarea name="content" value={props.output.content} onChange={props.change} id="output_content"></textarea>
       </OutputFormBlock>
       <div id="action_plans">
       <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
@@ -37,15 +37,15 @@ function OutputForm(props) {
               
               <OutputFormBlock>
                 <label htmlFor="due_date">いつ</label>
-                <input type="text" name="time_of_execution" value={action_plan.time_of_execution} onChange={props.change} data-index={index}></input>
+                <input type="text" name="time_of_execution" value={action_plan.time_of_execution} onChange={props.change} data-index={index} id={"output_time_of_execution_" + index}></input>
               </OutputFormBlock>
               <OutputFormBlock>
                 <label htmlFor="what">何を</label>
-                <input type="text" name="what_to_do" value={action_plan.what_to_do} onChange={props.change} data-index={index}></input>
+                <input type="text" name="what_to_do" value={action_plan.what_to_do} onChange={props.change} data-index={index} id={"output_what_to_do_" + index}></input>
               </OutputFormBlock>
               <OutputFormBlock>
                 <label htmlFor="how_much">どのように</label>
-                <input type="text" name="how_to_do" value={action_plan.how_to_do} onChange={props.change} data-index={index}></input>
+                <input type="text" name="how_to_do" value={action_plan.how_to_do} onChange={props.change} data-index={index} id={"output_how_to_do_" + index}></input>
               </OutputFormBlock>
             </ActionPlan>
           )
