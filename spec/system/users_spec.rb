@@ -163,7 +163,7 @@ RSpec.describe 'Users', type: :system do
 
       it 'アバターが添付されている場合アバター画像が表示されている' do
         # 厳密にいうと新規登録で画像添付すべき
-        user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png')) 
+        user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png'))
         sign_in(user) # ログインする
         find('a', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"

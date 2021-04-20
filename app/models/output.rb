@@ -2,7 +2,7 @@ class Output
   include ActiveModel::Model
   attr_accessor :content, :user_id, :book_id, :awareness, :action_plans
 
-  with_options presence: true do 
+  with_options presence: true do
     validates :user_id
     validates :book_id
     validates :content
@@ -14,21 +14,17 @@ class Output
 
   def validate_action_plans_size
     if action_plans.length <= 0
-      errors.add(:base, "At least one action plan is required")
+      errors.add(:base, 'At least one action plan is required')
     elsif action_plans.length > 3
-      errors.add(:base, "Action Plans are too many(maximum 3)")
+      errors.add(:base, 'Action Plans are too many(maximum 3)')
     end
   end
 
   def validate_action_plan_content
     action_plans.each_with_index do |action_plan, index|
-      if action_plan[:time_of_execution]  == ""
-        errors.add(:time_of_execution, "of action plan #{index + 1} can't be blank")
-      end
+      errors.add(:time_of_execution, "of action plan #{index + 1} can't be blank") if action_plan[:time_of_execution] == ''
 
-      if action_plan[:what_to_do] == ""
-        errors.add(:what_to_do, "of action plan #{index + 1} can't be blank")
-      end
+      errors.add(:what_to_do, "of action plan #{index + 1} can't be blank") if action_plan[:what_to_do] == ''
     end
   end
 
@@ -36,7 +32,8 @@ class Output
     awareness = Awareness.new(content: content, book_id: book_id, user_id: user_id)
     awareness.save
     action_plans.each do |action_plan|
-      action_plan = ActionPlan.new(time_of_execution: action_plan[:time_of_execution], what_to_do: action_plan[:what_to_do], how_to_do: action_plan[:how_to_do], book_id: book_id, user_id: user_id, awareness_id: awareness.id)
+      action_plan = ActionPlan.new(time_of_execution: action_plan[:time_of_execution], what_to_do: action_plan[:what_to_do],
+                                   how_to_do: action_plan[:how_to_do], book_id: book_id, user_id: user_id, awareness_id: awareness.id)
       action_plan.save
       BookActionPlan.create(book_id: book_id, action_plan_id: action_plan.id)
     end
@@ -44,6 +41,6 @@ class Output
     output = {}
     output[:awareness] = awareness
     output[:action_plans] = action_plans
-    return output #生成したハッシュをコントローラーに返し、レスポンスにする
+    output # 生成したハッシュをコントローラーに返し、レスポンスにする
   end
 end

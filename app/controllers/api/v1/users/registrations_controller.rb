@@ -23,7 +23,7 @@ module Api
             update_auth_header # access-token, clientの発行
             render json: { user: @user }
           else
-            render status: 422, json: { errors: @user.errors.full_messages } #バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+            render status: 422, json: { errors: @user.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
           end
         end
 
