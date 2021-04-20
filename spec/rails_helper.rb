@@ -58,14 +58,11 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
   config.before(:each, type: :system) do
-    driven_by :rack_test
+    driven_by :selenium_chrome
   end
 
   config.before(:each, type: :system, js: true) do
-    driven_by :remote_chrome
-    Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
-    Capybara.server_port = 4444
-    Capybara.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
+    driven_by :selenium_chrome
   end
 
   # You can uncomment this line to turn off ActiveRecord support entirely.

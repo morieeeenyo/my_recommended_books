@@ -23,7 +23,7 @@ services:
     tty: true
     stdin_open: true
   chrome:    #Chromeでのテスト実行用コンテナ
-    image: selenium/standalone-chrome    #Chromeがインストールされたイメージ
+    image: selenium/standalone-chrome:3.141.59-dubnium
     ports:
       - '4444:4444'
 volumes:
