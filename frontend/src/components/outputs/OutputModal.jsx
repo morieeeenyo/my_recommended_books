@@ -228,9 +228,12 @@ class OutputModal extends React.Component {
 
 const OutputFormContent = styled(UserFromContent)`
   /* アウトプットのform要素 */
+  height: 90vh;
 
   & #action_plans {
     width: 100%;
+    height: 80%;
+    overflow: scroll;
 
     & .action-plan-label {
       margin: 0 auto;
