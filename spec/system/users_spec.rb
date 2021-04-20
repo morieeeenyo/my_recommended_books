@@ -88,6 +88,51 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content 'Password must include half-width number, lowercase alphabet, and uppercase alphabet'
       end
     end
+
+    context "新規登録モーダルの開閉" do
+      it "モーダルを閉じ再度開くとエラーメッセージは消える" do
+        fill_in 'nickname',	with: ''
+        fill_in 'email',	with: ''
+        fill_in 'password',	with: ''
+        fill_in 'password_confirmation',	with: ''
+        expect  do
+          click_button 'SignUp'
+          sleep 2 # sleepしないと間に合わない
+        end.to change(User, :count).by(0) # Userのデータが増えていない
+        expect(page).to have_content "Nickname can't be blank"
+        expect(page).to have_content "Email can't be blank"
+        expect(page).to have_content "Password can't be blank"
+        click_button 'x'
+        find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        expect(page).to have_content 'SignUp'
+        expect(page).not_to have_content "Nickname can't be blank"
+        expect(page).not_to have_content "Email can't be blank"
+        expect(page).not_to have_content "Password can't be blank"
+      end
+
+      it "モーダルを閉じ、再び開くと入力内容が保持されており、新規登録も可能である" do
+        fill_in 'nickname',	with: user.nickname
+        fill_in 'email',	with: user.email
+        fill_in 'password',	with: user.password
+        fill_in 'password_confirmation',	with: user.password_confirmation
+        attach_file 'avatar', 'spec/fixtures/test_avatar.png'
+        click_button 'x'
+        find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        sleep 2 # sleepしないと間に合わない?
+        expect(page).to have_content 'SignUp'
+        expect(page).to  have_field 'nickname', with: user.nickname
+        expect(page).to  have_field 'email', with: user.email
+        expect(page).to  have_field 'password', with: user.password
+        expect(page).to  have_field 'password_confirmation', with: user.password_confirmation
+        expect  do
+          click_button 'SignUp'
+          sleep 2 # sleepしないと間に合わない
+        end.to change(User, :count).by(1) 
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+      end
+    end
   end
 
   describe 'ログイン' do
@@ -134,6 +179,39 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content 'Authorization failed. Invalid email'
       end
     end
+
+    context "ログインのモーダルの開閉" do
+      it "モーダルを閉じ再度開くとエラーメッセージは消える" do
+        fill_in 'email',	with: ''
+        fill_in 'password',	with: ''
+        click_button 'SignIn'
+        sleep 2 # sleepしないと間に合わない
+        expect(page).to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
+        click_button 'x'
+        find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        expect(page).to have_content 'SignIn'
+        expect(page).not_to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
+      end
+
+      it "モーダルを閉じ、再び開くと入力内容が保持されており、ログインも可能である" do
+        fill_in 'email',	with: user.email
+        fill_in 'password',	with: user.password
+        click_button 'x'
+        find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        expect(page).to have_content 'SignIn'
+        sleep 2 # sleepしないと間に合わない?
+        expect(page).to  have_field 'email', with: user.email
+        expect(page).to  have_field 'password', with: user.password
+        click_button 'SignIn'
+        sleep 2 # sleepしないと間に合わない
+        # ログインすると表示が切り替わる
+        expect(page).to  have_content 'ログアウト'
+        expect(page).to  have_content 'マイページ'
+      end
+      
+      
+    end
+    
   end
 
   describe 'ログアウト' do
@@ -178,6 +256,7 @@ RSpec.describe 'Users', type: :system do
         find('a', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'
+        sleep 3
         expect(all('.book-list-item').length).to eq 5
         sleep 1
         click_link href: '/books/new'

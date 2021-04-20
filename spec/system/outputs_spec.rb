@@ -149,7 +149,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
       end
     end
 
-    it '何をやるかが、一つでも空のとき投稿に失敗し、エラーメッセージが表示される' do
+    it '何をやるかが、一つでも空のとき投稿に失敗し、エラーメッセージが表示される。また追加した入力欄は消えている' do
       # １つだけ空のとき
       2.times do
         click_button 'アクションプランを追加'
@@ -189,5 +189,55 @@ RSpec.describe 'Outputs', type: :system, js: true do
         end
       end
     end
+
+    context 'モーダルの開閉' do
+      it "入力内容はモーダルを閉じ再び開くと消える" do
+        fill_in 'output_content',	with: output.content
+        2.times do
+          click_button 'アクションプランを追加'
+        end
+        3.times do |fill_form_index|
+          fill_in "output_time_of_execution_#{fill_form_index}",	with: output.action_plans[fill_form_index][:time_of_execution]
+          fill_in "output_what_to_do_#{fill_form_index}",	with: output.action_plans[fill_form_index][:what_to_do]
+          fill_in "output_how_to_do_#{fill_form_index}",	with: output.action_plans[fill_form_index][:how_to_do]
+        end
+        click_button 'x' #モーダル外部をクリックしたときも挙動は同じ。
+        find('a', text: 'アウトプットを投稿する').click
+        expect(page).to have_field 'output_content', with: ''
+        expect(page).to have_field 'output_what_to_do_0', with: ''
+        expect(page).to have_field 'output_time_of_execution_0', with: ''
+        expect(page).to have_field 'output_how_to_do_0', with: ''
+        [1,2].each do |index|
+          expect(page).not_to have_field "output_what_to_do_#{index}"
+          expect(page).not_to have_field "output_time_of_execution_#{index}"
+          expect(page).not_to have_field "output_how_to_do_#{index}"
+        end
+      end
+
+      it "エラーメッセージはモーダルを閉じ再び開くと消える" do
+        fill_in 'output_content',	with: output.content
+        2.times do
+          click_button 'アクションプランを追加'
+        end
+        3.times do |fill_form_index|
+          fill_in "output_time_of_execution_#{fill_form_index}",	with: ""
+          fill_in "output_what_to_do_#{fill_form_index}",	with: ""
+          fill_in "output_how_to_do_#{fill_form_index}",	with: ""
+        end
+        click_button 'この内容で投稿する'
+        sleep 3
+        3.times do |error_message_index|
+          expect(page).to  have_content "Time of execution of action plan #{error_message_index + 1} can't be blank"
+          expect(page).to  have_content "What to do of action plan #{error_message_index + 1} can't be blank"
+        end
+        click_button 'x' #モーダル外部をクリックしたときも挙動は同じ
+        find('a', text: 'アウトプットを投稿する').click
+        3.times do |error_message_index|
+          expect(page).not_to  have_content "Time of execution of action plan #{error_message_index + 1} can't be blank"
+          expect(page).not_to  have_content "What to do of action plan #{error_message_index + 1} can't be blank"
+        end
+      end
+    end
+    
   end
 end

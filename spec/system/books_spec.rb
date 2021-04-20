@@ -53,6 +53,36 @@ RSpec.describe 'Books', type: :system do
         expect(page).not_to have_content '推薦図書を投稿する' # トップページにとどまることを検証
       end
     end
+
+    context "モーダルの開閉" do
+        it "エラーメッセージはモーダルを開閉すると消える" do
+          sign_in(user) # ログインする
+          click_link href: '/books/new'
+          expect(page).to  have_content '推薦図書を投稿する'
+          find('input[type="submit"]').click
+          sleep 2
+          expect(page).to have_content "Author can't be blank"
+          click_button 'x'
+          click_link href: '/books/new'
+          expect(page).to  have_content '推薦図書を投稿する'
+          expect(page).not_to have_content "Author can't be blank"
+        end
+
+        it "入力内容および検索結果はモーダルを開閉すると消える" do
+          sign_in(user) # ログインする
+          click_link href: '/books/new'
+          expect(page).to  have_content '推薦図書を投稿する'
+          fill_in 'title',	with: book.title
+          find('.search-button').click
+          sleep 2
+          expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
+          click_button 'x'
+          click_link href: '/books/new'
+          expect(page).to  have_content '推薦図書を投稿する'
+          expect(all('#search_result > div').length).to eq 0 # 検索結果が0件ではないことを検証
+          expect(page).to  have_field 'title', with: ''
+        end
+    end
   end
 
   describe '書籍の検索' do
