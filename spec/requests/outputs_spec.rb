@@ -152,7 +152,7 @@ RSpec.describe "Outputs", type: :request do
         end
       end
 
-      it "投稿に成功するとAwarenessモデルのカウントが増えていない" do
+      it "投稿に失敗するとAwarenessモデルのカウントが増えていない" do
         output_params[:action_plans].each_with_index do |action_plan, index|
           output_params[:action_plans][index][:what_to_do] = ""
           expect do
@@ -162,7 +162,7 @@ RSpec.describe "Outputs", type: :request do
         end
       end
 
-      it "投稿に成功するとActionPlanモデルのカウントが増えていない" do
+      it "投稿に失敗するとActionPlanモデルのカウントが増えていない" do
         output_params[:action_plans].each_with_index do |action_plan, index|
           output_params[:action_plans][index][:what_to_do] = ""
           expect do
