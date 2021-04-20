@@ -26,7 +26,7 @@ RSpec.describe 'Outputs', type: :request do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
-        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3)
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3) # andを使うことで複数のモデルの増減を同時に検証
       end
 
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
@@ -57,7 +57,7 @@ RSpec.describe 'Outputs', type: :request do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
-        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1)
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) # andを使うことで複数のモデルの増減を同時に検証
       end
 
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
@@ -87,7 +87,7 @@ RSpec.describe 'Outputs', type: :request do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
-        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(2)
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(2) # andを使うことで複数のモデルの増減を同時に検証
       end
 
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
@@ -122,7 +122,7 @@ RSpec.describe 'Outputs', type: :request do
         expect do
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
-        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3)
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3) # andを使うことで複数のモデルの増減を同時に検証
       end
 
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do

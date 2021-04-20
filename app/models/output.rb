@@ -14,16 +14,16 @@ class Output
 
   def validate_action_plans_size
     if action_plans.length <= 0
-      errors.add(:base, 'At least one action plan is required')
+      errors.add(:base, 'At least one action plan is required') #フロント側で0個にならないようにはしてます
     elsif action_plans.length > 3
-      errors.add(:base, 'Action Plans are too many(maximum 3)')
+      errors.add(:base, 'Action Plans are too many(maximum 3)') #フロントで3つ以上アクションプランがあればそれ以上追加できないようにしてる
     end
   end
 
   def validate_action_plan_content
+    # indexはアクションプランの番号と連動してます。+1しているのはindexが0始まりなので
     action_plans.each_with_index do |action_plan, index|
       errors.add(:time_of_execution, "of action plan #{index + 1} can't be blank") if action_plan[:time_of_execution] == ''
-
       errors.add(:what_to_do, "of action plan #{index + 1} can't be blank") if action_plan[:what_to_do] == ''
     end
   end

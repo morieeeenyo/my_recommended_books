@@ -79,6 +79,7 @@ const OutputContent = styled.div`
     align-items: center;
 
     & a {
+        /* 「アウトプットを投稿する」ボタンのスタイル(Mypage.jsxの「アウトプットボタン」と同じ) */
         display: inline-block;
         text-decoration: none;
         background-color: #0ACC64;

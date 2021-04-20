@@ -31,10 +31,11 @@ function OutputForm(props) {
           return (
             <ActionPlan data-index={index} key={index}>
               <h4>
+                {/* indexは0始まりなのでページ上見える部分は+1する */}
                 アクションプラン{index + 1}
                 <span onClick={props.remove} data-index={index}>取り消し</span>
               </h4>
-              
+              {/* idは結合テストコードでの検証用 */}
               <OutputFormBlock>
                 <label htmlFor="due_date">いつ</label>
                 <input type="text" name="time_of_execution" value={action_plan.time_of_execution} onChange={props.change} data-index={index} id={"output_time_of_execution_" + index}></input>
@@ -118,10 +119,11 @@ class OutputModal extends React.Component {
   };
 
   closeOutputModal() {
+    // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
     this.setState({
       errors: []
     })
-    this.props.history.goBack() //元いたページに戻る(マイページ以外からアクセスされることも想定)0
+    this.props.history.goBack() //元いたページに戻る(マイページ以外からアクセスされることも想定。あとあと書籍別にアクセスできるようにする)
   }
 
   updateForm(e) {
@@ -134,6 +136,7 @@ class OutputModal extends React.Component {
             output.content = e.target.value;
             break;
         case 'time_of_execution':
+            // indexがあることでアクションプランの番号とうまく対応する
             output.action_plans[e.target.getAttribute('data-index')].time_of_execution = e.target.value;
             break;
         case 'what_to_do':
@@ -153,11 +156,9 @@ class OutputModal extends React.Component {
     e.preventDefault()
     this.userAuthentification()
     this.setAxiosDefaults();
-  // props.content,つまりモーダルの種類ごとに処理を分ける
     axios
     .post('/api/v1/books/' + this.props.location.state.book.id + '/outputs', {output: this.state.output} )
     .then(response => {
-      // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
       this.closeOutputModal()
       return response
     })
@@ -181,6 +182,7 @@ class OutputModal extends React.Component {
       }
       output.action_plans.push(newActionPlan)
       if (output.action_plans.length >= 3) { 
+        // アクションプランが3つ以上のときはアクションプラン追加ボタンを非表示にする
         const actionPlanAddButton = document.getElementById('add-actionplan-button')
         actionPlanAddButton.setAttribute('style', 'display: none;')
       }
@@ -195,14 +197,16 @@ class OutputModal extends React.Component {
     const targetIndex = e.target.getAttribute('data-index')
     const output = this.state.output
     if (output.action_plans.length === 1) {
+      //アクションプランが1つのときは取り消しできない
       alert('アクションプランは最低1つ必要です')
       return null
     }
-    output.action_plans.splice(targetIndex, 1)
+    output.action_plans.splice(targetIndex, 1) //stateのaction_plansから指定したindexの要素を削除
     this.setState({
       output: output
     })
     if (output.action_plans.length < 3) {
+      // 取り消し後アクションプランが3つより少なくなるのでアクションプラン追加ボタンを再表示する
       const actionPlanAddButton = document.getElementById('add-actionplan-button')
       actionPlanAddButton.setAttribute('style', 'display: block;')
     }
@@ -228,14 +232,17 @@ class OutputModal extends React.Component {
 
 const OutputFormContent = styled(UserFromContent)`
   /* アウトプットのform要素 */
+  /* 高さ固定していないと画面サイズによりときにモーダルがはみ出る */
   height: 90vh;
 
   & #action_plans {
+    /* アクションプランのform全体のスタイル */
     width: 100%;
     height: 80%;
     overflow: scroll;
 
     & .action-plan-label {
+      /* formのラベルのスタイル */
       margin: 0 auto;
       width: 70%;
     }
@@ -243,6 +250,7 @@ const OutputFormContent = styled(UserFromContent)`
 `
 
 const ActionPlan = styled.div`
+  /* 1個1個のアクションプランのformのスタイル */
   border: 1px solid #000;
   border-radius: 5px;
   width: 70%;
@@ -250,15 +258,18 @@ const ActionPlan = styled.div`
   padding: 1%;
 
   & div {
+    /* OutputFormBlock。アクションプランのdivタグの中にあるのでスタイルを調整している */
     width: 85%;
   }
 
   & h4 {
+    /* アクションプランのタイトルのスタイル(アクションプラン1,2,3の部分) */
     margin: 0 auto;
     width: 100%;
     position: relative;
 
     & span {
+      /* 取り消しボタンのスタイル */
       background-color: lightgray;
       color: #FFF;
       position: absolute;
@@ -268,6 +279,7 @@ const ActionPlan = styled.div`
     }
 
     & span:hover {
+      /* 取り消しボタンはホバーすると色が変わる */
       cursor: pointer;
       background-color: #cb4d00;
       color: #FFF;
@@ -276,13 +288,16 @@ const ActionPlan = styled.div`
 `
 
 const OutputFormBlock = styled(FormBlock)`
+  /* 各入力欄のスタイル */
   width: 70%;
 
   .action-plan-label {
+    /* 各入力欄のラベルのスタイル */
     margin-bottom: 5px;
   }
 
   & textarea {
+    /* 気づきの入力欄のスタイル */
     width: 100%;
     height: 80px;
     resize: none;
@@ -293,6 +308,7 @@ const OutputFormBlock = styled(FormBlock)`
   }
 
   & #add-actionplan-button {
+    /* アクションプラン追加ボタンのスタイル */
     background-color: lightgray;
     color: #FFF;
     position: static;
@@ -305,6 +321,7 @@ const OutputFormBlock = styled(FormBlock)`
   }
 
   & #submit_btn{
+    /* 『この内容で投稿する』ボタンのスタイル */
     width: 65%;
     margin: 0 auto;
   }

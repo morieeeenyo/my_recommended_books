@@ -7,7 +7,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
 
   before do
     sign_in(user)
-    create_list(:user_book, 2, user_id: user.id)
+    create_list(:user_book, 2, user_id: user.id) 
     find('a', text: 'マイページ').click
     expect(page).to have_content "#{user.nickname}さんのマイページ"
     find('a', text: '推薦図書一覧').click
@@ -25,7 +25,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
       expect do
         click_button 'この内容で投稿する'
         sleep 3
-      end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1)
+      end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) #ユーザーや書籍との紐付も同時に検証する
     end
 
     it 'アクションプランが2つの時アウトプットの投稿に成功し、複数のモデルのカウントが正しく変化する' do
@@ -85,7 +85,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
         fill_in "output_what_to_do_#{fill_form_index}",	with: output.action_plans[fill_form_index][:what_to_do]
         fill_in "output_how_to_do_#{fill_form_index}",	with: output.action_plans[fill_form_index][:how_to_do]
       end
-      2.times do |_click_button_index|
+      2.times do 
         all('span', text: '取り消し')[0].click
       end
       expect do
@@ -114,26 +114,29 @@ RSpec.describe 'Outputs', type: :system, js: true do
       end
 
       3.times do |fill_form_index|
+        # まず3つとも値を入力する
         fill_in "output_time_of_execution_#{fill_form_index}",	with: output.action_plans[fill_form_index][:time_of_execution]
         fill_in "output_what_to_do_#{fill_form_index}",	with: output.action_plans[fill_form_index][:what_to_do]
         fill_in "output_how_to_do_#{fill_form_index}",	with: output.action_plans[fill_form_index][:how_to_do]
       end
 
       3.times do |fill_empty_value_index|
-        fill_in "output_time_of_execution_#{fill_empty_value_index}",	with: ''
+        fill_in "output_time_of_execution_#{fill_empty_value_index}",	with: '' #1つだけ空にする
         expect do
           click_button 'この内容で投稿する'
           sleep 3
         end.to change(Awareness, :count).by(0).and change(ActionPlan, :count).by(0)
         expect(page).to have_content "Time of execution of action plan #{fill_empty_value_index + 1} can't be blank"
       end
+
       # 2つ空のとき
       3.times do |fill_form_index_for_two_values_empty_expectation|
         3.times do |fill_empty_value_index|
+          # まず3つとも空にする
           fill_in "output_time_of_execution_#{fill_empty_value_index}",	with: ''
         end
         fill_in "output_time_of_execution_#{fill_form_index_for_two_values_empty_expectation}",
-                with: output.action_plans[fill_form_index_for_two_values_empty_expectation][:time_of_execution]
+                with: output.action_plans[fill_form_index_for_two_values_empty_expectation][:time_of_execution] # １つだけ入力する
         fill_in "output_what_to_do_#{fill_form_index_for_two_values_empty_expectation}",
                 with: output.action_plans[fill_form_index_for_two_values_empty_expectation][:time_of_execution]
         fill_in "output_how_to_do_#{fill_form_index_for_two_values_empty_expectation}",
@@ -203,10 +206,12 @@ RSpec.describe 'Outputs', type: :system, js: true do
         end
         click_button 'x' #モーダル外部をクリックしたときも挙動は同じ。
         find('a', text: 'アウトプットを投稿する').click
+        # 入力値はあるけど値は空であること検証
         expect(page).to have_field 'output_content', with: ''
         expect(page).to have_field 'output_what_to_do_0', with: ''
         expect(page).to have_field 'output_time_of_execution_0', with: ''
         expect(page).to have_field 'output_how_to_do_0', with: ''
+        # 追加した入力欄は消えていることを検証
         [1,2].each do |index|
           expect(page).not_to have_field "output_what_to_do_#{index}"
           expect(page).not_to have_field "output_time_of_execution_#{index}"
