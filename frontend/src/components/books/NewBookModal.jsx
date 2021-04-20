@@ -9,6 +9,7 @@ import {FormBlock} from "../common/UserModal.jsx"
 import {ModalOverlay} from "../common/UserModal.jsx"
 import {ModalContent} from "../common/UserModal.jsx"
 import {ErrorMessage} from "../common/UserModal.jsx"
+import {UserFromContent} from "../common/UserModal.jsx"
 
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
@@ -69,7 +70,7 @@ import { withRouter } from 'react-router-dom'
 
 function SearchBookForm(props) {
   return(
-    <form onSubmit={props.submit}>
+    <NewBookFormContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <BooksFormBlock>
         <label htmlFor="title">タイトルで検索</label>
@@ -86,7 +87,7 @@ function SearchBookForm(props) {
       <BooksFormBlock>
         <input type="submit" value="推薦図書に追加" id="submit_btn"/>
       </BooksFormBlock>
-    </form>
+    </NewBookFormContent>
   )
 }
 
@@ -314,6 +315,10 @@ const NewBooksWrapper = styled.div `
     }
   }
 ` 
+
+const NewBookFormContent = styled(UserFromContent)`
+
+`
 
 const BooksFormBlock = styled(FormBlock)`
   /* formBlock全体の幅を少し広げている */

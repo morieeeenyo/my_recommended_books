@@ -15,7 +15,7 @@ module Api
           @user.books << @book # ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
           render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
         else
-          render status: 422, json: { errors: @book.errors.full_messages } #バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+          render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
       end
 
@@ -45,7 +45,7 @@ module Api
 
       def user_authentification
         # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
-        @user = User.find_for_database_authentication(uid: request.headers['uid']) 
+        @user = User.find_for_database_authentication(uid: request.headers['uid'])
         # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
         @token = request.headers['access-token']
         @client = request.headers['client']
