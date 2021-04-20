@@ -14,6 +14,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
     all('a', text: 'アウトプット')[0].click
     find('a', text: 'アウトプットを投稿する').click
   end
+  
 
   context 'アウトプットの投稿に成功する' do
     it 'アクションプランが1つの時アウトプットの投稿に成功し、複数のモデルのカウントが正しく変化する' do
