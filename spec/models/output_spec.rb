@@ -33,7 +33,7 @@ RSpec.describe Output, type: :model do
       it '気づきの内容が空欄のとき保存できない' do
         output.content = ''
         output.valid?
-        expect(output.errors.full_messages).to include "Content can't be blank"
+        expect(output.errors.full_messages).to include "Content of awareness can't be blank"
       end
       it 'アクションプランの何をやるか、が空欄のとき保存できない' do
         output.action_plans.each_with_index do |_action_plan, index|

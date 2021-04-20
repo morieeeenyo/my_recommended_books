@@ -5,10 +5,10 @@ class Output
   with_options presence: true do
     validates :user_id
     validates :book_id
-    validates :content
     # how_to_doは必ずしも入力されない可能性が高いため必須としない
   end
-
+  
+  validates :content, presence: { message: "of awareness can't be blank" } #contentだけだとなんのこっちゃわからないのでカスタムメッセージを設定
   validate :validate_action_plans_size
   validate :validate_action_plan_content
 

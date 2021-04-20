@@ -104,7 +104,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
         click_button 'この内容で投稿する'
         sleep 3
       end.to change(Awareness, :count).by(0).and change(ActionPlan, :count).by(0)
-      expect(page).to have_content "Content can't be blank"
+      expect(page).to have_content "Content of awareness can't be blank"
     end
 
     it 'いつやるかが、一つでも空のとき投稿に失敗し、エラーメッセージが表示される' do
