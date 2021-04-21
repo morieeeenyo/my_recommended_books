@@ -18,6 +18,8 @@ module Api
         end
       end
 
+      
+
       def user_authentification
         # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
         @user = User.find_for_database_authentication(uid: request.headers['uid'])
