@@ -43,4 +43,16 @@ class Output
     output[:action_plans] = action_plans
     output # 生成したハッシュをコントローラーに返し、レスポンスにする
   end
+
+  def self.fetch_resources(book_id)
+    book = Book.find(book_id)
+    outputs = []
+    output = {}
+    book.awarenesses.each do |awareness|
+      output[:awareness] = awareness
+      output[:action_plans] = awareness.action_plans
+      outputs << output
+    end
+    return outputs
+  end
 end

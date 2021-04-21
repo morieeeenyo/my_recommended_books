@@ -18,8 +18,19 @@ module Api
         end
       end
 
-      
+      def my_outputs
+        # ユーザー認証に引っかかった際のステータスは401(Unautorized)
+        return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
 
+        user_book_relation = UserBook.find_by(user_id: @user.id, book_id: params[:book_id])
+        if user_book_relation
+          outputs = Output.fetch_resources(user_book_relation.book.id)
+          render json: { outputs: outputs }
+        else
+          render status: 422, json: { errors: '書籍が推薦図書として追加されていません' } 
+        end
+
+      end
       def user_authentification
         # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
         @user = User.find_for_database_authentication(uid: request.headers['uid'])
