@@ -210,14 +210,16 @@ RSpec.describe 'Users', type: :request do
     end
 
     context 'マイページの表示に失敗する' do
-      it 'ヘッダーのuidが存在しない時ステータスが404' do
+      before do
         headers['uid'] = nil
+      end
+      
+      it 'ヘッダーのuidが存在しない時ステータスが404' do
         get api_v1_user_mypage_path, xhr: true, headers: headers
         expect(response).to have_http_status(401)
       end
 
       it 'ヘッダーのuidが存在しない時レスポンスとしてエラーメッセージが返却される' do
-        headers['uid'] = nil
         get api_v1_user_mypage_path, xhr: true, headers: headers
         json = JSON.parse(response.body)
         expect(json['errors']).to eq 'ユーザーが見つかりませんでした'

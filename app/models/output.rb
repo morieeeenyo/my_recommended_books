@@ -33,9 +33,8 @@ class Output
     awareness.save
     action_plans.each do |action_plan|
       action_plan = ActionPlan.new(time_of_execution: action_plan[:time_of_execution], what_to_do: action_plan[:what_to_do],
-                                   how_to_do: action_plan[:how_to_do], book_id: book_id, user_id: user_id, awareness_id: awareness.id)
+                                   how_to_do: action_plan[:how_to_do], awareness_id: awareness.id)
       action_plan.save
-      BookActionPlan.create(book_id: book_id, action_plan_id: action_plan.id)
     end
     # 別々にレスポンスとして扱うためにハッシュ形式を採用(配列でもいけるが、なんのデータなのかわかりやすくしたい)
     output = {}

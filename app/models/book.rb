@@ -16,6 +16,4 @@ class Book < ApplicationRecord
   has_many :user_books
   has_many :users, through: :user_books
   has_many :awarenesses
-  has_many :book_action_plans
-  has_many :action_plans, through: :action_plans
 end
