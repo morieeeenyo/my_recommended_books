@@ -231,9 +231,10 @@ RSpec.describe 'Users', type: :request do
     context "アウトプット一覧の表示に成功する時(アウトプット投稿済み)" do
       before do
         user_book.user_id = user.id
-        user_book.save
-        output.book_id = user_book.book.id
+        user_book.save #ユーザーと書籍の紐付け
+        output.book_id = user_book.book.id #アウトプットと書籍の紐付け
         @outputs = []
+        # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do 
           output_save_result = output.save
           @outputs << output_save_result
@@ -266,6 +267,7 @@ RSpec.describe 'Users', type: :request do
       before do
         user_book.user_id = user.id
         user_book.save
+        # ユーザーと書籍は紐付いているがアウトプットは投稿されていない
       end
       
       it "アウトプットが投稿されていない時レスポンスが0件になる" do
@@ -282,6 +284,7 @@ RSpec.describe 'Users', type: :request do
         user_book.user_id = user.id
         user_book.save
         headers['uid'] = nil
+        # そもそもユーザーが存在しない
       end
       
       it "ヘッダーのユーザーが存在しないときリクエストに失敗する" do
@@ -302,6 +305,7 @@ RSpec.describe 'Users', type: :request do
         user_book.user_id = user.id
         user_book.save
         output.book_id = book.id
+        # アウトプットと書籍は紐付いているが、書籍とユーザーが紐付いていない
       end
       
       it "書籍が推薦図書として追加されていない場合、ステータスが422になる" do
