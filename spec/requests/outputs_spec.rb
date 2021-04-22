@@ -125,7 +125,7 @@ RSpec.describe 'Outputs', type: :request do
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3) # andを使うことで複数のモデルの増減を同時に検証
       end
 
-      it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
+      it 'レスポンスで気づきとアクションプランが得られる' do
         output_params[:action_plans].each_with_index do |action_plan, index|
           action_plan[:how_to_do] = '' # どのように実践するか、は空欄でOK
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
