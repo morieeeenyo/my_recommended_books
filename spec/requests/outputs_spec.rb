@@ -169,13 +169,23 @@ RSpec.describe 'Outputs', type: :request do
         end
       end
 
-      it '保存に失敗した時エラーメッセージがレスポンスとして返却される' do
+      it '保存に失敗した時エラーメッセージがレスポンスとして返却される(何をやるか、が空欄)' do
         output_params[:action_plans].each_with_index do |_action_plan, index|
           output_params[:action_plans][index][:what_to_do] = ''
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           json = JSON.parse(response.body)
           expect(json['errors']).to include "What to do of action plan #{index + 1} can't be blank"
           output_params[:action_plans][index][:what_to_do] = 'test' # これがないと空にした値が引き継がれてしまう
+        end
+      end
+
+      it '保存に失敗した時エラーメッセージがレスポンスとして返却される(いつやるか、が空欄)' do
+        output_params[:action_plans].each_with_index do |_action_plan, index|
+          output_params[:action_plans][index][:time_of_execution] = ''
+          post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
+          json = JSON.parse(response.body)
+          expect(json['errors']).to include "Time of execution of action plan #{index + 1} can't be blank"
+          output_params[:action_plans][index][:time_of_execution] = 'test' # これがないと空にした値が引き継がれてしまう
         end
       end
     end
