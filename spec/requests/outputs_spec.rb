@@ -8,6 +8,8 @@ RSpec.describe 'Outputs', type: :request do
     { 'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678' } # ユーザー認証用ヘッダ
   end
 
+  # 異常形は3つ中1つ空のときのみ検証。それ以外のパターンはsystem_specにて
+
   describe 'アウトプットの投稿' do
     context '投稿に成功する時' do
       before do
