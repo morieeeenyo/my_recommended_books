@@ -30,7 +30,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 2 # sleepしないとレスポンスの返却が間に合わない
           json = JSON.parse(response.body)
@@ -61,7 +61,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 1 # sleepしないとレスポンスの返却が間に合わない
           json = JSON.parse(response.body)
@@ -91,7 +91,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 1 # sleepしないとレスポンスの返却が間に合わない
           json = JSON.parse(response.body)
@@ -141,7 +141,7 @@ RSpec.describe 'Outputs', type: :request do
     context '投稿に失敗する時' do
       # 個別のバリデーションの検証はmodel_psecにて。バリデーションはすべてpresence: true
       it '必須のカラムが不足している時保存に失敗しステータスが404になる' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           output_params[:action_plans][index][:what_to_do] = ''
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           expect(response).to have_http_status(422)
@@ -150,7 +150,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it '投稿に失敗するとAwarenessモデルのカウントが増えていない' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           output_params[:action_plans][index][:what_to_do] = ''
           expect do
             post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
@@ -160,7 +160,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it '投稿に失敗するとActionPlanモデルのカウントが増えていない' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           output_params[:action_plans][index][:what_to_do] = ''
           expect do
             post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
@@ -170,7 +170,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it '保存に失敗した時エラーメッセージがレスポンスとして返却される(何をやるか、が空欄)' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           output_params[:action_plans][index][:what_to_do] = ''
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           json = JSON.parse(response.body)
@@ -180,7 +180,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it '保存に失敗した時エラーメッセージがレスポンスとして返却される(いつやるか、が空欄)' do
-        output_params[:action_plans].each_with_index do |_action_plan, index|
+        output_params[:action_plans].each_with_index do |action_plan, index|
           output_params[:action_plans][index][:time_of_execution] = ''
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           json = JSON.parse(response.body)
