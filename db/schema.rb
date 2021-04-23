@@ -10,20 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_13_214545) do
+ActiveRecord::Schema.define(version: 2021_04_13_093533) do
 
   create_table "action_plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "time_of_execution", null: false
     t.string "what_to_do", null: false
     t.string "how_to_do"
     t.bigint "awareness_id"
-    t.bigint "book_id"
-    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["awareness_id"], name: "index_action_plans_on_awareness_id"
-    t.index ["book_id"], name: "index_action_plans_on_book_id"
-    t.index ["user_id"], name: "index_action_plans_on_user_id"
   end
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -55,15 +51,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_214545) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_awarenesses_on_book_id"
     t.index ["user_id"], name: "index_awarenesses_on_user_id"
-  end
-
-  create_table "book_action_plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "book_id"
-    t.bigint "action_plan_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["action_plan_id"], name: "index_book_action_plans_on_action_plan_id"
-    t.index ["book_id"], name: "index_book_action_plans_on_book_id"
   end
 
   create_table "books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

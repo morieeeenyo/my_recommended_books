@@ -33,14 +33,25 @@ class Output
     awareness.save
     action_plans.each do |action_plan|
       action_plan = ActionPlan.new(time_of_execution: action_plan[:time_of_execution], what_to_do: action_plan[:what_to_do],
-                                   how_to_do: action_plan[:how_to_do], book_id: book_id, user_id: user_id, awareness_id: awareness.id)
+                                   how_to_do: action_plan[:how_to_do], awareness_id: awareness.id)
       action_plan.save
-      BookActionPlan.create(book_id: book_id, action_plan_id: action_plan.id)
     end
     # 別々にレスポンスとして扱うためにハッシュ形式を採用(配列でもいけるが、なんのデータなのかわかりやすくしたい)
     output = {}
     output[:awareness] = awareness
     output[:action_plans] = action_plans
     output # 生成したハッシュをコントローラーに返し、レスポンスにする
+  end
+
+  def self.fetch_resources(book_id)
+    book = Book.find(book_id)
+    outputs = [] #アウトプットは複数投稿できるので配列で定義
+    output = {} #1つ1つのアウトプットはハッシュ形式
+    book.awarenesses.each do |awareness|
+      output[:awareness] = awareness
+      output[:action_plans] = awareness.action_plans #AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+      outputs << output
+    end
+    return outputs #コントローラー側に戻り値として配列を返す
   end
 end

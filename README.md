@@ -46,7 +46,6 @@
 # 実装予定の機能
 
 # データベース設計
-
 ## usersテーブル
 |Column|Type|Options|
 |------|----|-------|
@@ -54,29 +53,46 @@
 |email|string|null: false, unique: true|
 |encrypted_password|string|null: false|
 |avatar||ActiveStorageで実装|
+その他devise_auth_tokenのデフォルトのカラム
 
 ### Associations
-- has_many :books
+- has_many :user_books
+- has_many :books, through: :user_books
 - has_many  :likes
 
 ## booksテーブル
 |Column|Type|Options|
 |------|----|-------|
+|isbn|string|null: false, unique: true|
 |title|string|null: false|
-|recommends|string|null: false|
-|description|text|null: false|
 |author|string|null: false|
-|publisher|string|null: false|
-|genre_id|integer|null: false ※ActiveHashを用いて実装|
-|price|integer|null: false|
-|amazon_link|text||
-|image||ActiveStorageで実装|
+|author_kana|string|null: false|
+|publisher_name|string|null: false|
+|sales_date|string|null: false|
+|item_price|integer|null: false|
+|item_url|text|null: false|
+|image_url|text|null: false|
+
+### Associations
+- has_many :user_books
+- has_many :users, through: :user_books
+- has_many :likes
+
+### 補足
+isbnは世界の書籍を識別するコード。同じ本であるかどうかを判定するのに用いる
+
+## user_booksテーブル
+|Column|Type|Options|
+|------|----|-------|
+|book|references|null: false, foreign_key: true|
+|user|references|null: false, foreign_key: true|
 
 ### Associations
 - belongs_to :user
-- has_many :likes
+- belongs_to :book
 
-## likesテーブル
+
+## likesテーブル(未実装)
 |Column|Type|Options|
 |------|----|-------|
 |book|references|null: false, foreign_key: true|
@@ -89,14 +105,27 @@
 - belongs_to :user
 - has_one :action_plan
 
+## awarenessesテーブル
+|Column|Type|Options|
+|------|----|-------|
+|content|string|null: false|
+|user|references|null: false, foreign_key: true|
+|book|references|null: false, foreign_key: true|
+
+### Associations
+- belongs_to :book
+- belongs_to :user
+- has_many :action_plans
+
 ## action_plansテーブル
 |Column|Type|Options|
 |------|----|-------|
-|like|references|null: false, foreign_key: true|
-|realizations|text|null: false|
-|action_plans|text|null: false|
+|time_of_execution|string|null: false|
+|what_to_do|string|null: false|
+|how_to_do|string||
+|awareness|references|null: false, foreign_key: true|
 
 ### Associations
-- belongs_to :like
+- belongs_to :awareness
 
 # ローカルでの動作方法
