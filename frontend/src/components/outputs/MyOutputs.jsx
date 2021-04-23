@@ -8,14 +8,72 @@ import OutputModal from '../outputs/OutputModal.jsx'
 // react-router用のlinkを使えるようにする
 import { Link,withRouter } from 'react-router-dom'
 
+//axiosの読み込み
+import axios from 'axios';
+
 
 class OutputIndex extends React.Component {
   constructor(props){
     super(props);
-    // 以下は後で実装するメソッド
-    // this.getCsrfToken = this.getCsrfToken.bind(this)
-    // this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
-    // this.userAuthentification = this.userAuthentification.bind(this)
+    this.state ={
+      outputs: []
+    }
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
+  }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+  };
+
+  userAuthentification() {
+    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
+    } else {
+      return null
+    }
+  }
+
+  componentDidMount() {
+    this.setAxiosDefaults();
+    const authToken = this.userAuthentification()
+    axios
+      .get('/api/v1/users/mypage/books/' + this.props.location.state.book.id + '/outputs')
+      .then(response => {
+        this.setState({
+          outputs: response.data.outputs, 
+        })
+        return response
+      })
+      .catch(error => {
+        if (error.response.data && error.response.data.errors) {
+          // ログアウトに失敗するケースはあまり想定していないが一応設定
+          const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
+          errors.push(error.response.data.errors) 
+          this.setState({
+            errors: errors
+          })
+        }
+      })
+
   }
 
   render () {
@@ -32,30 +90,24 @@ class OutputIndex extends React.Component {
             </div>
             <OutputList>
               {/* Todo:編集ボタンをつける */}
-              <li>
-                <h3>アウトプット1</h3>
-                <h4>気づき</h4>
-                <p>めっちゃおもろい</p>
-                <h4>アクションプラン</h4>
-                <p>寝る</p>
-                <p>投稿日時：2021-04-13</p>
-              </li>
-              <li>
-                <h3>アウトプット2</h3>
-                <h4>気づき</h4>
-                <p>抱腹絶倒</p>
-                <h4>アクションプラン</h4>
-                <p>寝る</p>
-                <p>投稿日時：2021-04-13</p>
-              </li>
-              <li>
-                <h3>アウトプット3</h3>
-                <h4>気づき</h4>
-                <p>つまらん</p>
-                <h4>アクションプラン</h4>
-                <p>寝る</p>
-                <p>投稿日時：2021-04-13</p>
-              </li>
+              {this.state.outputs.map((output, output_index) => {
+                return(
+                  <li key={output_index}>
+                  <h3>アウトプット{output_index+1}</h3>
+                  <h4>気づき</h4>
+                  <p>{output.awareness.content}</p>
+                  {output.action_plans.map((action_plan, action_plan_index) => {
+                    return(
+                      <div className="action-plan" key={action_plan.id}>
+                        <h4>アクションプラン{action_plan_index +1}</h4>
+                        <p>{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                        <p>投稿日時：{action_plan.created_at}</p>
+                      </div>
+                    )
+                  })}
+                  </li>
+                )
+              })}
             </OutputList>
         </OutputContent>
       </OutputWrapper>
