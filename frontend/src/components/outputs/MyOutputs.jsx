@@ -11,6 +11,9 @@ import { Link,withRouter } from 'react-router-dom'
 //axiosの読み込み
 import axios from 'axios';
 
+//momentの読み込み(日付の表示)
+import moment from 'moment'
+
 
 class OutputIndex extends React.Component {
   constructor(props){
@@ -101,10 +104,10 @@ class OutputIndex extends React.Component {
                       <div className="action-plan" key={action_plan.id}>
                         <h4>アクションプラン{action_plan_index +1}</h4>
                         <p>{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
-                        <p>投稿日時：{action_plan.created_at}</p>
                       </div>
                     )
                   })}
+                  <p>投稿日時：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                   </li>
                 )
               })}
