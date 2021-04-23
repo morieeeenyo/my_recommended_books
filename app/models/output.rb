@@ -52,6 +52,6 @@ class Output
       output[:action_plans] = awareness.action_plans #AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
       outputs << output
     end
-    return outputs
+    return outputs #コントローラー側に戻り値として配列を返す
   end
 end

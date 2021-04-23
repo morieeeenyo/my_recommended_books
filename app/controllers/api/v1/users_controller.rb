@@ -24,7 +24,7 @@ module Api
 
         user_book_relation = UserBook.find_by(user_id: @user.id, book_id: params[:book_id]) #ユーザーが書籍を投稿していない場合に処理を失敗させるために中間テーブルを参照
         if user_book_relation
-          outputs = Output.fetch_resources(user_book_relation.book.id)
+          outputs = Output.fetch_resources(user_book_relation.book.id) #fect_resourcesメソッドはoutput.rbにて定義
           render json: { outputs: outputs }
         else
           render status: 422, json: { errors: '書籍が推薦図書として追加されていません' } 

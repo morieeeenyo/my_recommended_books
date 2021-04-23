@@ -232,7 +232,7 @@ RSpec.describe 'Users', type: :request do
       before do
         user_book.user_id = user.id
         user_book.save #ユーザーと書籍の紐付け
-        output.book_id = user_book.book.id #アウトプットと書籍の紐付け
+        output.book_id = user_book.book.id #アウトプットとユーザーと書籍の紐付け
         @outputs = []
         # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do 
@@ -251,7 +251,7 @@ RSpec.describe 'Users', type: :request do
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         sleep 2
-        expect(json['outputs'].length).to eq 2
+        expect(json['outputs'].length).to eq 2 #beforeの部分で2個保存している
         json['outputs'].each_with_index do |output, output_index|
           expect(output['awareness']['content']).to eq @outputs[output_index][:awareness].content
           output['action_plans'].each_with_index do |action_plan, action_plan_index|
@@ -266,8 +266,7 @@ RSpec.describe 'Users', type: :request do
     context "アウトプット一覧の表示に成功する時(アウトプットが投稿されていない)" do
       before do
         user_book.user_id = user.id
-        user_book.save
-        # ユーザーと書籍は紐付いているがアウトプットは投稿されていない
+        user_book.save # ユーザーと書籍は紐付いているがアウトプットは投稿されていない
       end
       
       it "アウトプットが投稿されていない時レスポンスが0件になる" do
@@ -283,8 +282,7 @@ RSpec.describe 'Users', type: :request do
       before do
         user_book.user_id = user.id
         user_book.save
-        headers['uid'] = nil
-        # そもそもユーザーが存在しない
+        headers['uid'] = nil # そもそもユーザーが存在しない
       end
       
       it "ヘッダーのユーザーが存在しないときリクエストに失敗する" do
@@ -304,8 +302,7 @@ RSpec.describe 'Users', type: :request do
       before do
         user_book.user_id = user.id
         user_book.save
-        output.book_id = book.id
-        # アウトプットと書籍は紐付いているが、書籍とユーザーが紐付いていない
+        output.book_id = book.id  # アウトプットと書籍は紐付いているが、書籍とユーザーが紐付いていない
       end
       
       it "書籍が推薦図書として追加されていない場合、ステータスが422になる" do
