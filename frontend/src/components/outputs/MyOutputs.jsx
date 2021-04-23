@@ -107,7 +107,7 @@ class OutputIndex extends React.Component {
                       </div>
                     )
                   })}
-                  <p>投稿日時：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
+                  <p>投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                   </li>
                 )
               })}
