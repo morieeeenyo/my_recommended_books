@@ -96,7 +96,7 @@ class MyOutputs extends React.Component {
               {this.state.outputs.map((output, output_index) => {
                 return(
                   <li key={output_index}>
-                  <h3 className="output-header">
+                  <h3 className="output-header output-content-header">
                     アウトプット{output_index + 1}
                     <div class="output-edit-delete-buttons">
                       <Link>編集</Link>  

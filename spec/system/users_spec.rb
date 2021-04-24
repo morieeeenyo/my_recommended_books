@@ -248,16 +248,19 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         sleep 2
       end
-
+    end
+    
+    context "推薦図書一覧の表示に成功" do
       it 'マイページから推薦図書一覧をクリックすると投稿した推薦図書が一覧で表示されている。新しく推薦図書を追加すると一番下に追加される' do
         user.save
-        create_list(:user_book, 5, user_id: user.id)
+        create_list(:user_book, 3, user_id: user.id)
+        sleep 5
         sign_in(user) # ログインする
         find('a', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'
-        sleep 3
-        expect(all('.book-list-item').length).to eq 5
+        sleep 5
+        expect(all('.book-list-item').length).to eq 3
         sleep 1
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
@@ -275,7 +278,33 @@ RSpec.describe 'Users', type: :system do
         click_link '推薦図書一覧'
         expect(all('.book-list-item > .book-title')[-1].text).not_to eq 'test' # テストデータではない、つまり新しく追加したデータは一番うしろに追加される
       end
-
+    end
+    
+    context "アウトプットが投稿されている時" do
+      it "アウトプットが投稿されていればマイページでアウトプット一覧が参照できる" do
+        user.save
+        create_list(:user_book, 2, user_id: user.id)
+        sleep 5
+        outputs = []
+        3.times do 
+          output = build(:output, user_id: user.id, book_id: user.books[0].id)
+          output.save
+          outputs.push(output)
+        end
+        sign_in(user) # ログインする
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        click_link '推薦図書一覧'
+        sleep 7
+        expect(all('.book-list-item').length).to eq 2
+        all('a', text: 'アウトプット')[0].click
+        expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
+        sleep 5
+        expect(all('.output-content-header').length).to eq 3
+      end
+    end
+  
+    context "マイページからサインアウト" do
       it 'マイページからサインアウトするとアラートが出てトップページに戻る' do
         sign_in(user) # ログインする
         find('a', text: 'マイページ').click
@@ -291,7 +320,9 @@ RSpec.describe 'Users', type: :system do
         expect(page).to  have_content '新規登録'
         expect(page).to  have_content 'ログイン'
       end
+    end
 
+    context "マイページからモーダルを操作" do
       it 'マイページからサインアウトモーダル、推薦図書投稿モーダルを開き、何もせず閉じるとマイページに戻る' do
         sign_in(user) # ログインする
         find('a', text: 'マイページ').click
