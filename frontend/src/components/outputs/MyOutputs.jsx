@@ -98,7 +98,7 @@ class MyOutputs extends React.Component {
                   <li key={output_index}>
                   <h3 className="output-header output-content-header">
                     アウトプット{output_index + 1}
-                    <div class="output-edit-delete-buttons">
+                    <div className="output-edit-delete-buttons">
                       <Link>編集</Link>  
                       <Link>削除</Link>  
                     </div>  
@@ -106,13 +106,13 @@ class MyOutputs extends React.Component {
                   <h4>気づき</h4>
                   <p>{output.awareness.content}</p>
                   <h4>アクションプラン</h4>
-                  {output.action_plans.map((action_plan, action_plan_index) => {
+                  <div className="action-plan">
+                    {output.action_plans.map((action_plan, action_plan_index) => {
                     return(
-                      <div className="action-plan" key={action_plan.id}>
-                        <p>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
-                      </div>
-                    )
-                  })}
+                        <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                        )
+                    })}
+                  </div>
                   <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                   </li>
                 )

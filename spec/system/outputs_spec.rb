@@ -20,7 +20,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
   
 
   context 'アウトプットの投稿に成功する' do
-    it 'アクションプランが1つの時アウトプットの投稿に成功し、複数のモデルのカウントが正しく変化する' do
+    it 'アクションプランが1つの時アウトプットの投稿に成功し、マイページのアウトプット一覧にアウトプットが1つ追加される' do
       fill_in 'output_content',	with: output.content
       fill_in 'output_time_of_execution_0',	with: output.action_plans[0][:time_of_execution]
       fill_in 'output_what_to_do_0',	with: output.action_plans[0][:what_to_do]
@@ -29,9 +29,13 @@ RSpec.describe 'Outputs', type: :system, js: true do
         click_button 'この内容で投稿する'
         sleep 3
       end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) #ユーザーや書籍との紐付も同時に検証する
+      expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
+      sleep 5
+      expect(all('.output-content-header').length).to eq 1
+      expect(all('.action-plan > p').length).to eq 1
     end
 
-    it 'アクションプランが2つの時アウトプットの投稿に成功し、複数のモデルのカウントが正しく変化する' do
+    it 'アクションプランが2つの時アウトプットの投稿に成功し、マイページのアウトプット一覧にアウトプットが1つ追加される' do
       fill_in 'output_content',	with: output.content
       click_button 'アクションプランを追加'
       2.times do |fill_form_index|
@@ -43,9 +47,13 @@ RSpec.describe 'Outputs', type: :system, js: true do
         click_button 'この内容で投稿する'
         sleep 3
       end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(2)
+      expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
+      sleep 5
+      expect(all('.output-content-header').length).to eq 1
+      expect(all('.action-plan > p').length).to eq 2
     end
 
-    it 'アクションプランが3つの時アウトプットの投稿に成功し、複数のモデルのカウントが正しく変化する' do
+    it 'アクションプランが3つの時アウトプットの投稿に成功し、マイページのアウトプット一覧にアウトプットが1つ追加される' do
       fill_in 'output_content',	with: output.content
       2.times do
         click_button 'アクションプランを追加'
@@ -59,6 +67,10 @@ RSpec.describe 'Outputs', type: :system, js: true do
         click_button 'この内容で投稿する'
         sleep 3
       end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3)
+      expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
+      sleep 5
+      expect(all('.output-content-header').length).to eq 1
+      expect(all('.action-plan > p').length).to eq 3
     end
 
     it 'アクションプランを3つ記入した後、取り消しボタンを1回押すと保存されるアクションプランの数が2になる' do
