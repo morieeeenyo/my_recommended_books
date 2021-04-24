@@ -96,7 +96,13 @@ class MyOutputs extends React.Component {
               {this.state.outputs.map((output, output_index) => {
                 return(
                   <li key={output_index}>
-                  <h3>アウトプット{output_index + 1}</h3>
+                  <h3 className="output-header">
+                    アウトプット{output_index + 1}
+                    <div class="output-edit-delete-buttons">
+                      <Link>編集</Link>  
+                      <Link>削除</Link>  
+                    </div>  
+                  </h3>
                   <h4>気づき</h4>
                   <p>{output.awareness.content}</p>
                   <h4>アクションプラン</h4>
@@ -166,6 +172,29 @@ const OutputList = styled.ul`
   overflow: scroll;
   /* heightがないとscrollしない */
   height: 80%;
+
+  .output-header {
+    display: flex;
+    justify-content: space-between
+
+  }
+
+  & .output-edit-delete-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 15%;
+
+    & a {
+      background-color: #FFF;
+      color: #000;
+      border: 1px solid #000;
+      font-size: 14px;
+      font-weight: normal;
+      padding: 5px 10px;
+    }
+
+
+  }
 
   & li {
     border: 1px solid #000;
