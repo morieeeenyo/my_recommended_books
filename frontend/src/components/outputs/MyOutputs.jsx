@@ -15,7 +15,7 @@ import axios from 'axios';
 import moment from 'moment'
 
 
-class OutputIndex extends React.Component {
+class MyOutputs extends React.Component {
   constructor(props){
     super(props);
     this.state ={
@@ -62,9 +62,9 @@ class OutputIndex extends React.Component {
       .get('/api/v1/users/mypage/books/' + this.props.location.state.book.id + '/outputs')
       .then(response => {
         this.setState({
-          outputs: response.data.outputs, 
-        })
-        return response
+            outputs: response.data.outputs
+          }
+        )
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
@@ -96,18 +96,18 @@ class OutputIndex extends React.Component {
               {this.state.outputs.map((output, output_index) => {
                 return(
                   <li key={output_index}>
-                  <h3>アウトプット{output_index+1}</h3>
+                  <h3>アウトプット{output_index + 1}</h3>
                   <h4>気づき</h4>
                   <p>{output.awareness.content}</p>
+                  <h4>アクションプラン</h4>
                   {output.action_plans.map((action_plan, action_plan_index) => {
                     return(
                       <div className="action-plan" key={action_plan.id}>
-                        <h4>アクションプラン{action_plan_index +1}</h4>
-                        <p>{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                        <p>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
                       </div>
                     )
                   })}
-                  <p>投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
+                  <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                   </li>
                 )
               })}
@@ -170,10 +170,24 @@ const OutputList = styled.ul`
   & li {
     border: 1px solid #000;
     border-radius: 5px;
-    padding: 10px;
+    padding: 10px 15px;
     margin-bottom: 5px;
+  }
+
+  & h4 {
+    margin-bottom: 2px;
+  }
+
+  & p {
+    margin: 2px 0;
+  }
+
+  .posted-date {
+    text-align: right;
+    font-size: 12px;
+    margin-bottom: 2px;
   }
 `
 
 
-export default withRouter(OutputIndex);
+export default withRouter(MyOutputs);

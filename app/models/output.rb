@@ -46,11 +46,11 @@ class Output
   def self.fetch_resources(book_id)
     book = Book.find(book_id)
     outputs = [] #アウトプットは複数投稿できるので配列で定義
-    output = {} #1つ1つのアウトプットはハッシュ形式
     book.awarenesses.each do |awareness|
+      output = {} #1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
       output[:awareness] = awareness
       output[:action_plans] = awareness.action_plans #AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
-      outputs << output
+      outputs.push(output)
     end
     return outputs #コントローラー側に戻り値として配列を返す
   end
