@@ -112,7 +112,8 @@ class MyPage extends React.Component {
       return response
     })
     .catch(error =>{
-      alert(error)
+      //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+      console.log(error) 
     })
 
   }

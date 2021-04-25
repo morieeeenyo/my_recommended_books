@@ -70,8 +70,8 @@ class MyOutputs extends React.Component {
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
           // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
-          // 発生するケースもほとんどないし画面上に表示する場所もないのでとりあえずalertで
-          alert(error)
+          //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+          console.log(error) 
         }
       })
 
