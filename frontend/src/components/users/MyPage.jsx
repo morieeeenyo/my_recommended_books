@@ -112,8 +112,7 @@ class MyPage extends React.Component {
       return response
     })
     .catch(error =>{
-      console.log(error)
-
+      alert(error)
     })
 
   }

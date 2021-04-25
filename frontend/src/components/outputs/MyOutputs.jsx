@@ -57,7 +57,8 @@ class MyOutputs extends React.Component {
 
   componentDidMount() {
     this.setAxiosDefaults();
-    const authToken = this.userAuthentification()
+    this.userAuthentification()
+    //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
     axios
       .get('/api/v1/users/mypage/books/' + this.props.location.state.book.id + '/outputs')
       .then(response => {
@@ -68,12 +69,9 @@ class MyOutputs extends React.Component {
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
-          // ログアウトに失敗するケースはあまり想定していないが一応設定
-          const errors = [] //ログアウトではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
-          errors.push(error.response.data.errors) 
-          this.setState({
-            errors: errors
-          })
+          // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
+          // 発生するケースもほとんどないし画面上に表示する場所もないのでとりあえずalertで
+          alert(error)
         }
       })
 
@@ -96,9 +94,10 @@ class MyOutputs extends React.Component {
               {this.state.outputs.map((output, output_index) => {
                 return(
                   <li key={output_index}>
-                  <h3 className="output-header output-content-header">
+                  <h3 className="output-header output-list-header">
                     アウトプット{output_index + 1}
                     <div className="output-edit-delete-buttons">
+                      {/* ここのリンクは後で実装 */}
                       <Link>編集</Link>  
                       <Link>削除</Link>  
                     </div>  
@@ -107,12 +106,13 @@ class MyOutputs extends React.Component {
                   <p>{output.awareness.content}</p>
                   <h4>アクションプラン</h4>
                   <div className="action-plan">
-                    {output.action_plans.map((action_plan, action_plan_index) => {
+                    {output.action_plans.map(action_plan => {
                     return(
                         <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
                         )
                     })}
                   </div>
+                  {/* Railsのcreated_atが汚いので整形 */}
                   <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                   </li>
                 )
@@ -135,6 +135,7 @@ const OutputContent = styled.div`
   margin: 0 auto;
 
   .output-header {
+    /* 「〜のアウトプット」・「アウトプット1,2,3..」の部分 */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -153,12 +154,14 @@ const OutputContent = styled.div`
       }
 
       & a:hover {
+        /* 「アウトプットを投稿する」ボタンにホバーしたときの挙動 */
         cursor: pointer;
         font-weight: bold;
         box-shadow: 0 5px 10px black;
       }
 
       & a:active {
+        /* 「アウトプットを投稿する」ボタンにクリックしたときの挙動 */
         box-shadow: 0 0 5px black;
         margin-top: 5px;
       }
@@ -173,18 +176,14 @@ const OutputList = styled.ul`
   /* heightがないとscrollしない */
   height: 80%;
 
-  .output-header {
-    display: flex;
-    justify-content: space-between
-
-  }
-
   & .output-edit-delete-buttons {
+    /* 編集・削除ボタン */
     display: flex;
     justify-content: space-between;
     width: 15%;
 
     & a {
+      /* 「アウトプットを投稿する」ボタンより目立たなくする */
       background-color: #FFF;
       color: #000;
       border: 1px solid #000;
@@ -192,8 +191,6 @@ const OutputList = styled.ul`
       font-weight: normal;
       padding: 5px 10px;
     }
-
-
   }
 
   & li {
@@ -204,14 +201,17 @@ const OutputList = styled.ul`
   }
 
   & h4 {
+    /* 「気づき」「アクションプラン」というタイトルと実際の内容との幅 */
     margin-bottom: 2px;
   }
 
   & p {
+    /* テキストの幅 */
     margin: 2px 0;
   }
 
   .posted-date {
+    /* 投稿日時 */
     text-align: right;
     font-size: 12px;
     margin-bottom: 2px;

@@ -31,8 +31,8 @@ RSpec.describe 'Outputs', type: :system, js: true do
       end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) #ユーザーや書籍との紐付も同時に検証する
       expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
       sleep 5
-      expect(all('.output-content-header').length).to eq 1
-      expect(all('.action-plan > p').length).to eq 1
+      expect(all('.output-list-header').length).to eq 1 #アウトプットは1件
+      expect(all('.action-plan > p').length).to eq 1 #アクションプランは1件
     end
 
     it 'アクションプランが2つの時アウトプットの投稿に成功し、マイページのアウトプット一覧にアウトプットが1つ追加される' do
@@ -49,8 +49,8 @@ RSpec.describe 'Outputs', type: :system, js: true do
       end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(2)
       expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
       sleep 5
-      expect(all('.output-content-header').length).to eq 1
-      expect(all('.action-plan > p').length).to eq 2
+      expect(all('.output-list-header').length).to eq 1 #アウトプットは1件
+      expect(all('.action-plan > p').length).to eq 2 #アクションプランは2件
     end
 
     it 'アクションプランが3つの時アウトプットの投稿に成功し、マイページのアウトプット一覧にアウトプットが1つ追加される' do
@@ -69,8 +69,8 @@ RSpec.describe 'Outputs', type: :system, js: true do
       end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3)
       expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
       sleep 5
-      expect(all('.output-content-header').length).to eq 1
-      expect(all('.action-plan > p').length).to eq 3
+      expect(all('.output-list-header').length).to eq 1 #アウトプットは1件
+      expect(all('.action-plan > p').length).to eq 3 #アクションプランは3件
     end
 
     it 'アクションプランを3つ記入した後、取り消しボタンを1回押すと保存されるアクションプランの数が2になる' do

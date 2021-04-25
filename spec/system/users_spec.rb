@@ -285,6 +285,7 @@ RSpec.describe 'Users', type: :system do
         user.save
         create_list(:user_book, 2, user_id: user.id)
         sleep 5
+        # formオブジェクトではcreate_listが使えないのでちょっと回りくどく同じデータを複数個生成している
         outputs = []
         3.times do 
           output = build(:output, user_id: user.id, book_id: user.books[0].id)
@@ -300,7 +301,8 @@ RSpec.describe 'Users', type: :system do
         all('a', text: 'アウトプット')[0].click
         expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
         sleep 5
-        expect(all('.output-content-header').length).to eq 3
+        # アウトプットのリストに1個しかない要素
+        expect(all('.output-list-header').length).to eq 3
       end
     end
   
