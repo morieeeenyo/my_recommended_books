@@ -4,6 +4,7 @@ module Api
   module V1
     class BooksController < ApplicationController
       before_action :user_authentification
+      before_action :set_twitter_client, only: :create
 
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
@@ -14,6 +15,7 @@ module Api
           @book.save
           @user.books << @book # ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
           render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
+          @twitter_client.update!("テスト1\nブログのためテストしています。\n『#{@book.title}』を推薦図書に追加しました！")
         else
           render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
@@ -49,6 +51,15 @@ module Api
         # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
         @token = request.headers['access-token']
         @client = request.headers['client']
+      end
+
+      def set_twitter_client
+        @twitter_client = Twitter::REST::Client.new do |config|
+          config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
+          config.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']
+          config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
+          config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+        end
       end
     end
   end
