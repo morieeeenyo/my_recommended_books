@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'OmniauthUsers', type: :request do
   before do
+    # これがないと実際にツイッターと通信してしまう
+    OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:twitter] = nil
     Rails.application.env_config['omniauth.auth'] = twitter_mock
     Rails.application.env_config['omniauth.params'] = { 'resource_class' => 'User', 'namespace_name' => 'api_v1' } # No resource_class foundというエラーを避ける
