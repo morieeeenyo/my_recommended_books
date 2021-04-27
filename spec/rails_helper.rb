@@ -46,12 +46,16 @@ end
 
 Capybara.javascript_driver = :chrome_headless
 
+# これがないと実際にツイッターと通信してしまう
+OmniAuth.config.test_mode = true
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include SignInSupport
+  config.include OmniauthMocks
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
