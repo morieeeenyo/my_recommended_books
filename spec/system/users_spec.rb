@@ -89,8 +89,8 @@ RSpec.describe 'Users', type: :system do
       end
     end
 
-    context "新規登録モーダルの開閉" do
-      it "モーダルを閉じ再度開くとエラーメッセージは消える" do
+    context '新規登録モーダルの開閉' do
+      it 'モーダルを閉じ再度開くとエラーメッセージは消える' do
         fill_in 'nickname',	with: ''
         fill_in 'email',	with: ''
         fill_in 'password',	with: ''
@@ -110,7 +110,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).not_to have_content "Password can't be blank"
       end
 
-      it "モーダルを閉じ、再び開くと入力内容が保持されており、新規登録も可能である" do
+      it 'モーダルを閉じ、再び開くと入力内容が保持されており、新規登録も可能である' do
         fill_in 'nickname',	with: user.nickname
         fill_in 'email',	with: user.email
         fill_in 'password',	with: user.password
@@ -124,10 +124,10 @@ RSpec.describe 'Users', type: :system do
         expect(page).to  have_field 'email', with: user.email
         expect(page).to  have_field 'password', with: user.password
         expect(page).to  have_field 'password_confirmation', with: user.password_confirmation
-        expect  do
+        expect do
           click_button 'SignUp'
           sleep 2 # sleepしないと間に合わない
-        end.to change(User, :count).by(1) 
+        end.to change(User, :count).by(1)
         find('a', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
@@ -180,8 +180,8 @@ RSpec.describe 'Users', type: :system do
       end
     end
 
-    context "ログインのモーダルの開閉" do
-      it "モーダルを閉じ再度開くとエラーメッセージは消える" do
+    context 'ログインのモーダルの開閉' do
+      it 'モーダルを閉じ再度開くとエラーメッセージは消える' do
         fill_in 'email',	with: ''
         fill_in 'password',	with: ''
         click_button 'SignIn'
@@ -193,7 +193,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).not_to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
       end
 
-      it "モーダルを閉じ、再び開くと入力内容が保持されており、ログインも可能である" do
+      it 'モーダルを閉じ、再び開くと入力内容が保持されており、ログインも可能である' do
         fill_in 'email',	with: user.email
         fill_in 'password',	with: user.password
         click_button 'x'
@@ -208,10 +208,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to  have_content 'ログアウト'
         expect(page).to  have_content 'マイページ'
       end
-      
-      
     end
-    
   end
 
   describe 'ログアウト' do
@@ -249,8 +246,8 @@ RSpec.describe 'Users', type: :system do
         sleep 2
       end
     end
-    
-    context "推薦図書一覧の表示に成功" do
+
+    context '推薦図書一覧の表示に成功' do
       it 'マイページから推薦図書一覧をクリックすると投稿した推薦図書が一覧で表示されている。新しく推薦図書を追加すると一番下に追加される' do
         user.save
         create_list(:user_book, 3, user_id: user.id)
@@ -279,15 +276,15 @@ RSpec.describe 'Users', type: :system do
         expect(all('.book-list-item > .book-title')[-1].text).not_to eq 'test' # テストデータではない、つまり新しく追加したデータは一番うしろに追加される
       end
     end
-    
-    context "アウトプットが投稿されている時" do
-      it "アウトプットが投稿されていればマイページでアウトプット一覧が参照できる" do
+
+    context 'アウトプットが投稿されている時' do
+      it 'アウトプットが投稿されていればマイページでアウトプット一覧が参照できる' do
         user.save
         create_list(:user_book, 2, user_id: user.id)
         sleep 5
         # formオブジェクトではcreate_listが使えないのでちょっと回りくどく同じデータを複数個生成している
         outputs = []
-        3.times do 
+        3.times do
           output = build(:output, user_id: user.id, book_id: user.books[0].id)
           output.save
           outputs.push(output)
@@ -299,14 +296,14 @@ RSpec.describe 'Users', type: :system do
         sleep 7
         expect(all('.book-list-item').length).to eq 2
         all('a', text: 'アウトプット')[0].click
-        expect(page).to  have_content "『#{user.books[0].title}』のアウトプット"
+        expect(page).to have_content "『#{user.books[0].title}』のアウトプット"
         sleep 5
         # アウトプットのリストに1個しかない要素
         expect(all('.output-list-header').length).to eq 3
       end
     end
-  
-    context "マイページからサインアウト" do
+
+    context 'マイページからサインアウト' do
       it 'マイページからサインアウトするとアラートが出てトップページに戻る' do
         sign_in(user) # ログインする
         find('a', text: 'マイページ').click
@@ -324,7 +321,7 @@ RSpec.describe 'Users', type: :system do
       end
     end
 
-    context "マイページからモーダルを操作" do
+    context 'マイページからモーダルを操作' do
       it 'マイページからサインアウトモーダル、推薦図書投稿モーダルを開き、何もせず閉じるとマイページに戻る' do
         sign_in(user) # ログインする
         find('a', text: 'マイページ').click

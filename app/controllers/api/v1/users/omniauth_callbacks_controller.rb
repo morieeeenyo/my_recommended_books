@@ -2,31 +2,23 @@ module Api
   module V1
     module Users
       class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
-
-        def redirect_callbacks
-          super
-        end
-
         def omniauth_success
           super
           update_auth_header
         end
 
-        def omniauth_failure
-          super
-        end
-
         protected
-            # // ②credentialを保存。いるのかわからないから一旦保留
-          # def get_resource_from_auth_hash
-          #   super
-          #   @resource.credentials = auth_hash["credentials"]
-          #   clean_resource
-          # end
+
+        # // ②credentialを保存。いるのかわからないから一旦保留
+        # def get_resource_from_auth_hash
+        #   super
+        #   @resource.credentials = auth_hash["credentials"]
+        #   clean_resource
+        # end
 
         def render_data_or_redirect(message, data, user_data = {})
           if Rails.env.production?
-            if ['inAppBrowser', 'newWindow'].include?(omniauth_window_type)
+            if %w[inAppBrowser newWindow].include?(omniauth_window_type)
               render_data(message, user_data.merge(data))
             elsif auth_origin_url
               redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
@@ -46,7 +38,7 @@ module Api
           @resource.name = strip_emoji(@resource.name)
           @resource.nickname = strip_emoji(@resource.nickname)
         end
-        
+
         def strip_emoji(str)
           str.encode('SJIS', 'UTF-8', invalid: :replace, undef: :replace, replace: '').encode('UTF-8')
         end
@@ -61,38 +53,33 @@ module Api
         def get_resource_from_auth_hash
           # テスト通過のためにオーバーライド
           if Rails.env.test?
-            if !auth_hash
-              auth_hash = request.env['omniauth.auth'] 
-              #テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
+            unless auth_hash
+              auth_hash = request.env['omniauth.auth']
+              # テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
             end
-          else
-            if !auth_hash
-              auth_hash = session['dta.omniauth.auth']
-              #開発環境・本番環境ではauth_hashはsessionから取り出す
-            end
+          elsif !auth_hash
+            auth_hash = session['dta.omniauth.auth']
+            # 開発環境・本番環境ではauth_hashはsessionから取り出す
           end
 
           @resource = resource_class.where(
             uid: auth_hash['uid'],
             provider: auth_hash['provider']
           ).first_or_initialize
-    
-          if @resource.new_record?
-            handle_new_resource
-          end
-    
+
+          handle_new_resource if @resource.new_record?
+
           # sync user info with provider, update/generate auth token
           assign_provider_attrs(@resource, auth_hash)
-    
+
           # assign any additional (whitelisted) attributes
           if assign_whitelisted_params?
             extra_params = whitelisted_params
             @resource.assign_attributes(extra_params) if extra_params
           end
-    
+
           @resource
         end
-  
       end
     end
   end
