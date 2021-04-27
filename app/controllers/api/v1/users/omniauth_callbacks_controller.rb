@@ -17,7 +17,7 @@ module Api
         end
 
         protected
-            # // ②credentialを保存
+            # // ②credentialを保存。いるのかわからないから一旦保留
           # def get_resource_from_auth_hash
           #   super
           #   @resource.credentials = auth_hash["credentials"]
@@ -41,6 +41,7 @@ module Api
 
         # // twitterから取得する絵文字を取り払うメソッドたちDBエラーが起きるときにコメントイン
         # // mysqlだと起きやすい
+        # この辺もいるかわからんから一旦保留
         def clean_resource
           @resource.name = strip_emoji(@resource.name)
           @resource.nickname = strip_emoji(@resource.nickname)
@@ -51,14 +52,14 @@ module Api
         end
 
         def set_random_password
-          # set crazy password for new oauth users. this is only used to prevent
-          # access via email sign-in.
+          # パスワードのバリデーション突破のためにオーバーライド
           random_password = SecureRandom.alphanumeric(10) + [*'a'..'z'].sample(1).join + [*'0'..'9'].sample(1).join
           @resource.password = random_password
           @resource.password_confirmation = random_password
         end
 
         def get_resource_from_auth_hash
+          # テスト通過のためにオーバーライド
           unless auth_hash
             auth_hash = request.env['omniauth.auth'] #主にテストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
           end

@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "OmniauthUsers", type: :request do
-  # before { request.env["omniauth.auth"] = twitter_mock }
-
   before do
     OmniAuth.config.mock_auth[:twitter] = nil
     Rails.application.env_config['omniauth.auth'] = twitter_mock
-    Rails.application.env_config['omniauth.params'] = { 'resource_class' => 'User', 'namespace_name' => 'api/v1' }
+    Rails.application.env_config['omniauth.params'] = { 'resource_class' => 'User', 'namespace_name' => 'api/v1' } #No resource_class foundというエラーを避ける
   end
 
   describe "omniauthを用いたTwitterでのログイン" do
