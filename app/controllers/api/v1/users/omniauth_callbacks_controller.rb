@@ -60,10 +60,18 @@ module Api
 
         def get_resource_from_auth_hash
           # テスト通過のためにオーバーライド
-          unless auth_hash
-            auth_hash = request.env['omniauth.auth'] #主にテストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
+          if Rails.env.test?
+            if !auth_hash
+              auth_hash = request.env['omniauth.auth'] 
+              #テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
+            end
+          else
+            if !auth_hash
+              auth_hash = session['dta.omniauth.auth']
+              #開発環境・本番環境ではauth_hashはsessionから取り出す
+            end
           end
-          
+
           @resource = resource_class.where(
             uid: auth_hash['uid'],
             provider: auth_hash['provider']
