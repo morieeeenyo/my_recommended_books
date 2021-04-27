@@ -63,3 +63,5 @@ gem "rack-cors"
 gem 'pry-rails'
 gem 'rakuten_web_service'
 gem 'twitter'
+gem 'omniauth'
+gem 'omniauth-twitter'
