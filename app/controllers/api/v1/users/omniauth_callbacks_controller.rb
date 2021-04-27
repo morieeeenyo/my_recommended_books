@@ -50,7 +50,7 @@ module Api
           @resource.password_confirmation = random_password
         end
 
-        def get_resource_from_auth_hash
+        def get_resource_from_auth_hash # rubocop:disable Naming/AccessorMethodName
           # テスト通過のためにオーバーライド
           if Rails.env.test?
             unless auth_hash
