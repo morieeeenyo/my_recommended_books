@@ -16,6 +16,11 @@ module MyRecommendedBooks
       g.helper false
       g.test_framework false 
      end
+
+     config.api_only = true # アプリはAPI専用となる
+
+    config.middleware.use Rack::MethodOverride
+    config.middleware.use ActionDispatch::Flash
      
      config.assets.paths << Rails.root.join("public/javascripts")
      config.session_store :cookie_store, key: '_interslice_session'
