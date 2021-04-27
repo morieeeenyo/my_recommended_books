@@ -4,9 +4,10 @@ module OmniauthMocks
       "provider" => "twitter",
       "uid" => "123456",
       "info" => {
-        "name" => "Mock User",
+        "nickname" => "mock_user",
         "image" => "http://mock_image_url.com",
         "location" => "",
+        "description" => "This is a mock user.",
         "email" => "mock@example.com",
         "urls" => {
           "Twitter" => "https://twitter.com/MockUser1234",
