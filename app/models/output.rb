@@ -7,16 +7,16 @@ class Output
     validates :book_id
     # how_to_doは必ずしも入力されない可能性が高いため必須としない
   end
-  
-  validates :content, presence: { message: "of awareness can't be blank" } #contentだけだとなんのこっちゃわからないのでカスタムメッセージを設定
+
+  validates :content, presence: { message: "of awareness can't be blank" } # contentだけだとなんのこっちゃわからないのでカスタムメッセージを設定
   validate :validate_action_plans_size
   validate :validate_action_plan_content
 
   def validate_action_plans_size
     if action_plans.length <= 0
-      errors.add(:base, 'At least one action plan is required') #フロント側で0個にならないようにはしてます
+      errors.add(:base, 'At least one action plan is required') # フロント側で0個にならないようにはしてます
     elsif action_plans.length > 3
-      errors.add(:base, 'Action Plans are too many(maximum 3)') #フロントで3つ以上アクションプランがあればそれ以上追加できないようにしてる
+      errors.add(:base, 'Action Plans are too many(maximum 3)') # フロントで3つ以上アクションプランがあればそれ以上追加できないようにしてる
     end
   end
 
@@ -45,13 +45,13 @@ class Output
 
   def self.fetch_resources(book_id)
     book = Book.find(book_id)
-    outputs = [] #アウトプットは複数投稿できるので配列で定義
-    book.awarenesses.reverse_each do |awareness| #新しいものから上に表示できるようにreverse_eachを使用
-      output = {} #1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+    outputs = [] # アウトプットは複数投稿できるので配列で定義
+    book.awarenesses.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+      output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
       output[:awareness] = awareness
-      output[:action_plans] = awareness.action_plans #AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+      output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
       outputs.push(output)
     end
-    return outputs #コントローラー側に戻り値として配列を返す
+    outputs # コントローラー側に戻り値として配列を返す
   end
 end

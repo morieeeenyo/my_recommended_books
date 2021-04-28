@@ -39,6 +39,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
     end
 
     add_index :users, :email,                unique: true
+    # おそらくuidとproviderのセットが一意であることが必要(個別では一意でなくてもOK)
     add_index :users, [:uid, :provider],     unique: true
     add_index :users, :reset_password_token, unique: true
     add_index :users, :confirmation_token,   unique: true

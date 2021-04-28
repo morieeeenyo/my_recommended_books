@@ -46,16 +46,16 @@ class App extends React.Component {
                 <Index>
                 </Index>
               </Route>
-              <Route path="/users/mypage">
+              <Route path="/mypage">
                 <MyPage>
-                  <Route exact path="/users/mypage/books">
+                  <Route exact path="/mypage/books">
                     <MyRecommendedBooks>
                     </MyRecommendedBooks>
                   </Route>
-                  <Route path="/users/mypage/edit">
+                  <Route path="/mypage/edit">
                     <EditUserInfo></EditUserInfo>
                   </Route>
-                  <Route path="/users/mypage/books/:book_id/outputs">
+                  <Route path="/mypage/books/:book_id/outputs">
                     <MyOutputs></MyOutputs>
                   </Route>
                 </MyPage>

@@ -213,7 +213,7 @@ RSpec.describe 'Users', type: :request do
       before do
         headers['uid'] = nil
       end
-      
+
       it 'ヘッダーのuidが存在しない時ステータスが404' do
         get api_v1_user_mypage_path, xhr: true, headers: headers
         expect(response).to have_http_status(401)
@@ -227,31 +227,31 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
-  describe "自分が投稿したアウトプット一覧の表示" do
-    context "アウトプット一覧の表示に成功する時(アウトプット投稿済み)" do
+  describe '自分が投稿したアウトプット一覧の表示' do
+    context 'アウトプット一覧の表示に成功する時(アウトプット投稿済み)' do
       before do
         user_book.user_id = user.id
-        user_book.save #ユーザーと書籍の紐付け
-        output.book_id = user_book.book.id #アウトプットとユーザーと書籍の紐付け
+        user_book.save # ユーザーと書籍の紐付け
+        output.book_id = user_book.book.id # アウトプットとユーザーと書籍の紐付け
         @outputs = []
         # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
-        2.times do 
+        2.times do
           output_save_result = output.save
           @outputs << output_save_result
         end
       end
-      
-      it "リクエストに成功する" do
+
+      it 'リクエストに成功する' do
         get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
         expect(response).to have_http_status(200)
       end
 
-      it "レスポンスが正しく返却される" do
+      it 'レスポンスが正しく返却される' do
         get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         sleep 2
-        expect(json['outputs'].length).to eq 2 #beforeの部分で2個保存している
+        expect(json['outputs'].length).to eq 2 # beforeの部分で2個保存している
         json['outputs'].each_with_index do |output, output_index|
           expect(output['awareness']['content']).to eq @outputs[output_index][:awareness].content
           output['action_plans'].each_with_index do |action_plan, action_plan_index|
@@ -263,13 +263,13 @@ RSpec.describe 'Users', type: :request do
       end
     end
 
-    context "アウトプット一覧の表示に成功する時(アウトプットが投稿されていない)" do
+    context 'アウトプット一覧の表示に成功する時(アウトプットが投稿されていない)' do
       before do
         user_book.user_id = user.id
         user_book.save # ユーザーと書籍は紐付いているがアウトプットは投稿されていない
       end
-      
-      it "アウトプットが投稿されていない時レスポンスが0件になる" do
+
+      it 'アウトプットが投稿されていない時レスポンスが0件になる' do
         get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
@@ -278,19 +278,19 @@ RSpec.describe 'Users', type: :request do
       end
     end
 
-    context "アウトプット一覧の表示に失敗する時(ユーザーが存在しない)" do      
+    context 'アウトプット一覧の表示に失敗する時(ユーザーが存在しない)' do
       before do
         user_book.user_id = user.id
         user_book.save
         headers['uid'] = nil # そもそもユーザーが存在しない
       end
-      
-      it "ヘッダーのユーザーが存在しないときリクエストに失敗する" do
+
+      it 'ヘッダーのユーザーが存在しないときリクエストに失敗する' do
         get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         expect(response).to have_http_status(401)
       end
-      it "ヘッダーのユーザーが存在しないときエラーメッセージが返却される" do
+      it 'ヘッダーのユーザーが存在しないときエラーメッセージが返却される' do
         get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
@@ -298,20 +298,20 @@ RSpec.describe 'Users', type: :request do
       end
     end
 
-    context "アウトプット一覧の表示に失敗する時(ユーザーの推薦図書に存在しないページにアクセスした場合)" do
+    context 'アウトプット一覧の表示に失敗する時(ユーザーの推薦図書に存在しないページにアクセスした場合)' do
       before do
         user_book.user_id = user.id
         user_book.save
-        output.book_id = book.id  # アウトプットと書籍は紐付いているが、書籍とユーザーが紐付いていない
+        output.book_id = book.id # アウトプットと書籍は紐付いているが、書籍とユーザーが紐付いていない
       end
-      
-      it "書籍が推薦図書として追加されていない場合、ステータスが422になる" do
+
+      it '書籍が推薦図書として追加されていない場合、ステータスが422になる' do
         get api_v1_user_outputs_path(book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         expect(response).to have_http_status(422)
       end
 
-      it "書籍が推薦図書として追加されていない場合、エラーメッセージが返却される" do
+      it '書籍が推薦図書として追加されていない場合、エラーメッセージが返却される' do
         get api_v1_user_outputs_path(book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)

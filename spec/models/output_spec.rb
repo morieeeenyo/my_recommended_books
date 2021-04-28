@@ -13,10 +13,10 @@ RSpec.describe Output, type: :model do
         expect(output).to be_valid
       end
       it 'どのように実践するか、は空でも保存できる' do
-        output.action_plans.each_with_index  do |action_plan, index|
-          output.action_plans[index][:how_to_do] = ''
+        output.action_plans.length.times  do |action_plan_index|
+          output.action_plans[action_plan_index][:how_to_do] = ''
           expect(output).to be_valid
-          output.action_plans[index][:how_to_do] = 'test' # これがないと空にした値が引き継がれてしまう
+          output.action_plans[action_plan_index][:how_to_do] = 'test' # これがないと空にした値が引き継がれてしまう
         end
       end
       it 'アクションプランが1つでも保存できる' do
@@ -38,19 +38,19 @@ RSpec.describe Output, type: :model do
         expect(output.errors.full_messages).to include "Content of awareness can't be blank"
       end
       it 'アクションプランの何をやるか、が空欄のとき保存できない' do
-        output.action_plans.each_with_index do |action_plan, index|
-          output.action_plans[index][:what_to_do] = ''
+        output.action_plans.length.times do |action_plan_index|
+          output.action_plans[action_plan_index][:what_to_do] = ''
           output.valid?
-          expect(output.errors.full_messages).to include "What to do of action plan #{index + 1} can't be blank"
-          output.action_plans[index][:what_to_do] = 'test' # これがないと空にした値が引き継がれてしまう
+          expect(output.errors.full_messages).to include "What to do of action plan #{action_plan_index + 1} can't be blank"
+          output.action_plans[action_plan_index][:what_to_do] = 'test' # これがないと空にした値が引き継がれてしまう
         end
       end
       it 'アクションプランのいつやるか、が空欄のとき保存できない' do
-        output.action_plans.each_with_index do |action_plan, index|
-          output.action_plans[index][:time_of_execution] = ''
+        output.action_plans.length.times do |action_plan_index|
+          output.action_plans[action_plan_index][:time_of_execution] = ''
           output.valid?
-          expect(output.errors.full_messages).to include "Time of execution of action plan #{index + 1} can't be blank"
-          output.action_plans[index][:time_of_execution] = 'test' # これがないと空にした値が引き継がれてしまう
+          expect(output.errors.full_messages).to include "Time of execution of action plan #{action_plan_index + 1} can't be blank"
+          output.action_plans[action_plan_index][:time_of_execution] = 'test' # これがないと空にした値が引き継がれてしまう
         end
       end
       it 'ユーザーが存在しないとき保存できない' do

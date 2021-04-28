@@ -57,8 +57,9 @@ jobs:
     - run:
         name: Rubocop
         command: |
-            bundle exec rubocop -a
             bundle exec rubocop -A
+            bundle exec rubocop -a
+            bundle exec rubocop 
 
     - run:
         name: Chrome Driver Install

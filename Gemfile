@@ -62,3 +62,7 @@ gem 'devise_token_auth'
 gem "rack-cors"
 gem 'pry-rails'
 gem 'rakuten_web_service'
+gem 'twitter'
+gem 'omniauth', '1.9.1'
+gem 'omniauth-twitter'
+gem "omniauth-rails_csrf_protection"

@@ -24,7 +24,7 @@ export function MyRecommendedBooks() {
               <img src={book.image_url}/>
               <p className="book-title">{book.title}</p>
               <p className="book-author">{book.author}</p>
-              <Link to={{pathname: "/users/mypage/books/" + book.id + "/outputs", state: {book: book}}}>アウトプット</Link>
+              <Link to={{pathname: "/mypage/books/" + book.id + "/outputs", state: {book: book}}}>アウトプット</Link>
             </li> //returnがないと表示できない
             ) 
           })} 
@@ -94,7 +94,7 @@ class MyPage extends React.Component {
       this.props.history.push("/")
     }
     axios 
-    .get('/api/v1/users/mypage')
+    .get('/api/v1/mypage')
     .then(response => {
       if (response.data.avatar) {
         this.setState({
@@ -127,12 +127,12 @@ class MyPage extends React.Component {
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to={{pathname: "/users/mypage/books", state: {books: this.state.books}}}>
+                <Link to={{pathname: "/mypage/books", state: {books: this.state.books}}}>
                   推薦図書一覧
                 </Link>
               </li>
               <li>
-                <Link to="/users/mypage">
+                <Link to="/mypage">
                   ユーザー情報編集
                 </Link>
               </li>

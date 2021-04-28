@@ -151,7 +151,7 @@ class Header extends React.Component {
             ログアウト
           </Link>
             <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
-          <Link to="/users/mypage" onClick={this.switchToMyPage}>
+          <Link to="/mypage" onClick={this.switchToMyPage}>
             マイページ
           </Link>
         </HeaderRight>
