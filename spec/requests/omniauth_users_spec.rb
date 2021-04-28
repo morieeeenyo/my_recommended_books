@@ -2,9 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'OmniauthUsers', type: :request do
   before do
-    # これがないと実際にツイッターと通信してしまう
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:twitter] = nil
+    OmniAuth.config.test_mode = true # これがないと実際にツイッターと通信してしまう
+    OmniAuth.config.mock_auth[:twitter] = nil # テストごとに認証情報を初期化する
     Rails.application.env_config['omniauth.auth'] = twitter_mock
     Rails.application.env_config['omniauth.params'] = { 'resource_class' => 'User', 'namespace_name' => 'api_v1' } # No resource_class foundというエラーを避ける
   end
@@ -16,7 +15,13 @@ RSpec.describe 'OmniauthUsers', type: :request do
         expect(response).to have_http_status(200)
       end
 
-      it 'oauthのデータが存在する場合mockのデータに応じたレスポンスが返却される' do
+      it 'oauthのデータが存在する場合ユーザーモデルのカウントが1増える' do
+        expect do
+          get '/api/v1/users/twitter/callback'
+        end.to change(User, :count).by(1)
+      end
+
+      it 'oauthのデータが存在する場合リクエストのmockのデータに応じたレスポンスが返却される' do
         get '/api/v1/users/twitter/callback'
         json = JSON.parse(response.body)
         expect(json['uid']).to eq request.env['omniauth.auth']['uid'] # 念の為一意性のカラムで検証
@@ -30,7 +35,7 @@ RSpec.describe 'OmniauthUsers', type: :request do
         Rails.application.env_config['omniauth.auth'] = nil
         expect do
           get '/api/v1/users/twitter/callback'
-        end.to raise_error NoMethodError
+        end.to raise_error NoMethodError #undefined method [] for nil:NilClassと出る。auth_hashがnilのためにユーザー情報の取得に失敗している状態
       end
     end
   end
