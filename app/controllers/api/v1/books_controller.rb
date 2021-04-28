@@ -15,7 +15,7 @@ module Api
           @book.save
           @user.books << @book # ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
           render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
-          if !Rails.env.test? #一旦テスト時は読み込まない設定にする。次のブランチで詳細実装詰める
+          unless Rails.env.test? # 一旦テスト時は読み込まない設定にする。次のブランチで詳細実装詰める
             @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る
           end
         else

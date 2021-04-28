@@ -35,7 +35,7 @@ RSpec.describe 'OmniauthUsers', type: :request do
         Rails.application.env_config['omniauth.auth'] = nil
         expect do
           get '/api/v1/users/twitter/callback'
-        end.to raise_error NoMethodError #undefined method [] for nil:NilClassと出る。auth_hashがnilのためにユーザー情報の取得に失敗している状態
+        end.to raise_error NoMethodError # undefined method [] for nil:NilClassと出る。auth_hashがnilのためにユーザー情報の取得に失敗している状態
       end
     end
   end
