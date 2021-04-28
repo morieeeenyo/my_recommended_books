@@ -3,6 +3,7 @@ module Api
     module Users
       class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
         def omniauth_success
+          # 認証に成功した時の処理
           super
           update_auth_header
         end
@@ -62,11 +63,13 @@ module Api
             # 開発環境・本番環境ではauth_hashはsessionから取り出す
           end
 
+          # 認証情報を元に保存するユーザーのインスタンスを決める
           @resource = resource_class.where(
             uid: auth_hash['uid'],
             provider: auth_hash['provider']
           ).first_or_initialize
 
+          # ここから下はよくわからないので一旦保留
           handle_new_resource if @resource.new_record?
 
           # sync user info with provider, update/generate auth token

@@ -3,6 +3,7 @@ module OmniauthMocks
     OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new({
                                                                    'provider' => 'twitter',
                                                                    'uid' => '123456',
+                                                                  #  infoはTwitterのプロフィールと対応
                                                                    'info' => {
                                                                      'nickname' => 'mock_user',
                                                                      'image' => 'http://mock_image_url.com',
