@@ -54,7 +54,7 @@ module Api
         def get_resource_from_auth_hash # rubocop:disable Naming/AccessorMethodName
           # テスト通過のためにオーバーライド
           if Rails.env.test?
-            unless auth_hash
+            if !auth_hash # rubocop:disable Style/NegatedIf
               auth_hash = request.env['omniauth.auth']
               # テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
             end
