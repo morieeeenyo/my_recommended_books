@@ -112,7 +112,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it '投稿に成功するとステータスが201で返却される' do
-        output_params[:action_plans].length.times do |_action_plan_index|
+        output_params[:action_plans].each do |action_plan|
           action_plan[:how_to_do] = '' # どのように実践するか、は空欄でOK
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
@@ -128,7 +128,7 @@ RSpec.describe 'Outputs', type: :request do
       end
 
       it 'レスポンスで気づきとアクションプランが得られる' do
-        output_params[:action_plans].length.times do |action_plan_index|
+        output_params[:action_plans].each_with_index do |action_plan, action_plan_index|
           action_plan[:how_to_do] = '' # どのように実践するか、は空欄でOK
           post api_v1_book_outputs_path(book.id), xhr: true, params: { output: output_params }, headers: headers
           sleep 2 # sleepしないとレスポンスの返却が間に合わない
