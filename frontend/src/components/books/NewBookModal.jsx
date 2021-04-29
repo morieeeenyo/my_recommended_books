@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 //コンポーネントの読み込み
-import {FormBlock} from "../common/UserModal.jsx"
-import {ModalOverlay} from "../common/UserModal.jsx"
-import {ModalContent} from "../common/UserModal.jsx"
-import {ErrorMessage} from "../common/UserModal.jsx"
-import {UserFromContent} from "../common/UserModal.jsx"
+import {FormBlock} from "../common/UserModalForm.jsx"
+import {ModalOverlay} from "../common/UserModalForm.jsx"
+import {ModalContent} from "../common/UserModalForm.jsx"
+import {ErrorMessage} from "../common/UserModalForm.jsx"
+import {UserFromContent} from "../common/UserModalForm.jsx"
 
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
@@ -269,7 +269,7 @@ class NewBookModal extends React.Component {
   } 
 }
 
-// 基本的なスタイルはUserModal.jsxを継承しているためそちらを参照
+// 基本的なスタイルはUserModalForm.jsxを継承しているためそちらを参照
 const NewBooksWrapper = styled.div `
   width: 100%;
   margin: 0 auto;

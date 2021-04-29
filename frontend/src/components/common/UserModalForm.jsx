@@ -86,7 +86,7 @@ function UserFrom(props) {
 }
 
 
-class UserModal extends React.Component {
+class UserModalForm extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -404,4 +404,4 @@ export const FormBlock = styled.div `
   }
 `
 
-export default UserModal;
+export default UserModalForm;

@@ -9,11 +9,11 @@ import { withRouter } from 'react-router-dom'
 
 
 //コンポーネントの読み込み
-import {FormBlock} from "../common/UserModal.jsx"
-import {ModalOverlay} from "../common/UserModal.jsx"
-import {ModalContent} from "../common/UserModal.jsx"
-import {ErrorMessage} from "../common/UserModal.jsx"
-import {UserFromContent} from "../common/UserModal.jsx"
+import {FormBlock} from "../common/UserModalForm.jsx"
+import {ModalOverlay} from "../common/UserModalForm.jsx"
+import {ModalContent} from "../common/UserModalForm.jsx"
+import {ErrorMessage} from "../common/UserModalForm.jsx"
+import {UserFromContent} from "../common/UserModalForm.jsx"
 
 
 function OutputForm(props) {

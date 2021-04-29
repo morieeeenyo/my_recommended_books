@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 // コンポーネントの読み込み
-import UserModal from './UserModal.jsx';
+import UserModalForm from './UserModalForm.jsx';
 
 // ロゴ画像の読み込み。ダブルクオートじゃないと本番環境で読み込めない
 import Logo from "../../../images/header_logo.png"
@@ -125,13 +125,13 @@ class Header extends React.Component {
               </Link>
             </HeaderTitle>
             <HeaderRight>
-              <Link to="/users/sign_up" onClick={this.openSignUpModal}>
+              <Link to="/users/sign_up/menu" onClick={this.openSignUpModal}>
                 新規登録
               </Link>
-              <Link to="/users/sign_in" onClick={this.openSignInModal}>
+              <Link to="/users/sign_in/menu" onClick={this.openSignInModal}>
                 ログイン
               </Link>
-              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModalForm show={this.state.showModal} close={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
         </HeaderContainer>
@@ -150,7 +150,7 @@ class Header extends React.Component {
           <Link to="/users/sign_out" onClick={this.openSignOutModal}>
             ログアウト
           </Link>
-            <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
+            <UserModalForm show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
           <Link to="/mypage" onClick={this.switchToMyPage}>
             マイページ
           </Link>

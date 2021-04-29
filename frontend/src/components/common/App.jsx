@@ -5,7 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // コンポーネントの読み込み
 import Header from './Header.jsx'
-import UserModal from './UserModal.jsx'
+import UserModalForm from './UserModalForm.jsx'
+import UserModalMenu from './UserModalMenu.jsx'
 import Container from './Container.jsx'
 import Index from '../books/Index.jsx'
 import NewBookModal from '../books/NewBookModal.jsx'
@@ -38,7 +39,8 @@ class App extends React.Component {
         <Router>
           <Header>
             {/* Todo：ここのパスにparamsを渡せるようにする */}
-            <Route path="/users/:content" component={UserModal}/>
+            <Route path="/users/:content/menu" component={UserModalMenu}/>
+            <Route path="/users/:content" component={UserModalForm}/>
           </Header>
           <Container>
             <Switch>
