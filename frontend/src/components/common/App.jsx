@@ -39,8 +39,13 @@ class App extends React.Component {
         <Router>
           <Header>
             {/* Todo：ここのパスにparamsを渡せるようにする */}
-            <Route path="/users/:content/menu" component={UserModalMenu}/>
-            <Route path="/users/:content" component={UserModalForm}/>
+            <Route path="/users/:content/menu">
+              <UserModalMenu>
+                <Route exact path="/users/:content/form">
+                  <UserModalForm></UserModalForm>
+                </Route>
+              </UserModalMenu>
+            </Route>
           </Header>
           <Container>
             <Switch>

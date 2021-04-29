@@ -131,7 +131,7 @@ class Header extends React.Component {
               <Link to="/users/sign_in/menu" onClick={this.openSignInModal}>
                 ログイン
               </Link>
-              <UserModalForm show={this.state.showModal} close={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
+              <UserModalForm close={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
         </HeaderContainer>
@@ -150,7 +150,7 @@ class Header extends React.Component {
           <Link to="/users/sign_out" onClick={this.openSignOutModal}>
             ログアウト
           </Link>
-            <UserModalForm show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
+            <UserModalForm close={this.closeModal} content={this.state.content}/> 
           <Link to="/mypage" onClick={this.switchToMyPage}>
             マイページ
           </Link>
