@@ -18,7 +18,6 @@ class Header extends React.Component {
   constructor(){
     super();
     this.state = {
-      showModal: false,
       content: '',
     }
     this.openSignUpModal = this.openSignUpModal.bind(this)
@@ -31,21 +30,18 @@ class Header extends React.Component {
   // 新規登録・ログイン・ログアウトでモーダルの表示を分けるために別メソッドとして定義
   openSignUpModal() {
     this.setState ({
-      showModal: true,
       content: 'SignUp'
     })
   }
 
   openSignInModal() {
     this.setState ({
-      showModal: true,
       content: 'SignIn'
     })
   }
 
   openSignOutModal() {
     this.setState ({
-      showModal: true,
       content: 'SignOut'
     })
   }
@@ -53,7 +49,6 @@ class Header extends React.Component {
   // モーダルを閉じる。contentは空文字列にリセット
   closeModal() {
     this.setState ({
-      showModal: false,
       content: ''
     })
     this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
@@ -62,7 +57,6 @@ class Header extends React.Component {
 
   switchToMyPage() {
     this.setState ({
-      showModal: false,
       content: ''
     })
   }
@@ -73,7 +67,6 @@ class Header extends React.Component {
       if (location.pathname == '/') {
         // ブラウザバックしたときrootパスにいればモーダルを閉じる
         this.setState ({
-          showModal: false,
           content: ''
         })
       }
@@ -81,14 +74,12 @@ class Header extends React.Component {
         if (location.pathname == '/users/sign_up') {
           // ブラウザバックしたときもパスがあっていれば新規登録モーダルを開く
           this.setState ({
-            showModal: true,
             content: 'SignUp'
           })
         }
         if (location.pathname == '/users/sign_in') {
           // ブラウザバックしたときもパスがあっていればログインモーダルを開く
           this.setState ({
-            showModal: true,
             content: 'SignIn'
           })
         }
@@ -101,7 +92,6 @@ class Header extends React.Component {
         if (location.pathname == '/users/sign_out') {
           // ブラウザバックしたときもパスがあっていればログアウトモーダルを開く
           this.setState ({
-            showModal: true,
             content: 'SignOut'
           })
         } else if (location.pathname == '/users/sign_up' || location.pathname == '/users/sign_in')  {
