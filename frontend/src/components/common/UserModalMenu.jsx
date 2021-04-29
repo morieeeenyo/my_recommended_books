@@ -4,28 +4,30 @@ import styled from 'styled-components';
 //axiosの読み込み
 import axios from 'axios';
 
+// react-router用のlinkを使えるようにする
+import { Link, withRouter, useLocation, useHistory } from 'react-router-dom'
+
 //コンポーネント読み込み
 import {ModalOverlay} from "../common/UserModalForm.jsx"
 import {ModalContent} from "../common/UserModalForm.jsx"
 
-class UserModalForm extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-    }
-  }
-
-  render () {
+function UserModalMenu(props) {
+  const location = useLocation();
+  const history = useHistory();
+  if (location.state.show) {
       return (
-      <ModalOverlay onClick={this.resetErrorMessages}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
-        <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
-            <p>{this.props.content}</p>
-            <button onClick={this.resetErrorMessages}>x</button>
+      <ModalOverlay onClick={() => history.goBack()}> 
+        <ModalContent onClick={(e) => e.stopPropagation()}> 
+        {/* モーダル内部をクリックしたときは閉じない */}
+          <p>{location.state.content}</p>
+          <button onClick={() => history.goBack()}>x</button>
         </ModalContent>
       </ModalOverlay>
     )
+  } else {
+    return null
   }
 }
 
 
-export default UserModalForm;
+export default UserModalMenu;

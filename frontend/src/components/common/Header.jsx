@@ -17,48 +17,14 @@ import { Link } from "react-router-dom";
 class Header extends React.Component {
   constructor(){
     super();
-    this.state = {
-      content: '',
-    }
-    this.openSignUpModal = this.openSignUpModal.bind(this)
-    this.openSignInModal = this.openSignInModal.bind(this)
-    this.openSignOutModal = this.openSignOutModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
-    this.switchToMyPage = this.switchToMyPage.bind(this)
-  }
 
-  // 新規登録・ログイン・ログアウトでモーダルの表示を分けるために別メソッドとして定義
-  openSignUpModal() {
-    this.setState ({
-      content: 'SignUp'
-    })
-  }
-
-  openSignInModal() {
-    this.setState ({
-      content: 'SignIn'
-    })
-  }
-
-  openSignOutModal() {
-    this.setState ({
-      content: 'SignOut'
-    })
   }
 
   // モーダルを閉じる。contentは空文字列にリセット
   closeModal() {
-    this.setState ({
-      content: ''
-    })
     this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
     // ※マイページからサインアウトした時はマイページに繊維→一度アラートを出してからトップページに戻る。コードはMypage.jsxに記載
-  }
-
-  switchToMyPage() {
-    this.setState ({
-      content: ''
-    })
   }
 
   componentDidMount(){
@@ -66,22 +32,16 @@ class Header extends React.Component {
     this.props.history.listen((location) => {
       if (location.pathname == '/') {
         // ブラウザバックしたときrootパスにいればモーダルを閉じる
-        this.setState ({
-          content: ''
-        })
+        
       }
       if (!JSON.parse(localStorage.getItem("auth_token"))['uid']) {
         if (location.pathname == '/users/sign_up') {
           // ブラウザバックしたときもパスがあっていれば新規登録モーダルを開く
-          this.setState ({
-            content: 'SignUp'
-          })
+          
         }
         if (location.pathname == '/users/sign_in') {
           // ブラウザバックしたときもパスがあっていればログインモーダルを開く
-          this.setState ({
-            content: 'SignIn'
-          })
+          
         }
         if (location.pathname == '/users/sign_out') {
           // ログアウト時にログアウトのモーダルは開けないようにする
@@ -91,9 +51,7 @@ class Header extends React.Component {
       } else {
         if (location.pathname == '/users/sign_out') {
           // ブラウザバックしたときもパスがあっていればログアウトモーダルを開く
-          this.setState ({
-            content: 'SignOut'
-          })
+          
         } else if (location.pathname == '/users/sign_up' || location.pathname == '/users/sign_in')  {
           // ログイン時にログイン・新規登録のモーダルは開けないようにする
           alert('ログイン・新規登録するにはログアウトしてください')
@@ -115,10 +73,10 @@ class Header extends React.Component {
               </Link>
             </HeaderTitle>
             <HeaderRight>
-              <Link to="/users/sign_up/menu" onClick={this.openSignUpModal}>
+              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}}>
                 新規登録
               </Link>
-              <Link to="/users/sign_in/menu" onClick={this.openSignInModal}>
+              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}}>
                 ログイン
               </Link>
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
@@ -136,10 +94,10 @@ class Header extends React.Component {
           </Link>
         </HeaderTitle>
         <HeaderRight>
-          <Link to="/users/sign_out" onClick={this.openSignOutModal}>
+        <Link to={{pathname: "/users/sign_out", state: {content: 'SignOut'}}}>
             ログアウト
           </Link>
-          <Link to="/mypage" onClick={this.switchToMyPage}>
+          <Link to="/mypage">
             マイページ
           </Link>
         </HeaderRight>
