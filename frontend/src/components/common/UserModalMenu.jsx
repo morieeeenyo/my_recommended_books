@@ -20,6 +20,7 @@ function UserModalMenu(props) {
         <ModalContent onClick={(e) => e.stopPropagation()}> 
         {/* モーダル内部をクリックしたときは閉じない */}
           <p>{location.state.content}</p>
+          {/* ここにリンクを配置 */}
           <button onClick={() => history.goBack()}>x</button>
         </ModalContent>
       </ModalOverlay>
