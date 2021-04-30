@@ -17,15 +17,21 @@ function UserModalMenu(props) {
   if (location.state.show) {
       return (
       <ModalOverlay onClick={() => history.goBack()}> 
-        <ModalContent onClick={(e) => e.stopPropagation()}> 
+        <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
         {/* モーダル内部をクリックしたときは閉じない */}
           <p>{location.state.content}</p>
+          <EmailLink>
+            <i className="fas fa-envelope"></i>
+            <span>{location.state.content} with Email</span>
+          </EmailLink>
+
           <TwitterLink>
             <i className="fab fa-twitter"></i>
             <span>{location.state.content} with Twitter</span>
           </TwitterLink>
+
           <button onClick={() => history.goBack()}>x</button>
-        </ModalContent>
+        </ModalMenuContent>
       </ModalOverlay>
     )
   } else {
@@ -33,33 +39,44 @@ function UserModalMenu(props) {
   }
 }
 
-const TwitterLink = styled.a`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  margin: 10px auto;
-  background-color: #1DA1F2;
-  color: #fff;
-  border-radius: 2px;
-  height: 24px;
-  line-height: 24px;
-  padding: 6px 12px;
-  width: 45%;
-  font-size: 16px;
+const ModalMenuContent = styled(ModalContent)`
+  & a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    margin: 10px auto;
+    border-radius: 2px;
+    height: 24px;
+    line-height: 24px;
+    padding: 6px 12px;
+    width: 45%;
+    font-size: 16px;
 
-  & i{
-    margin: 8px;
-  }
+    & i {
+      margin: 8px;
+    }
 
-  & span {
+    & span {
     font-weight: bold;
   }
 
-  & :hover {
+  :hover {
     cursor: pointer;
   }
+}
 ` 
+
+const TwitterLink = styled.a`
+    background-color: #1DA1F2;
+    color: #fff;
+`
+
+const EmailLink = styled.a`
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+`
 
 
 export default UserModalMenu;
