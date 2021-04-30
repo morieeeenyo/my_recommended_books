@@ -28,6 +28,7 @@ module Api
             end
           else
             #  // わかりやすい様に開発時はjsonとして結果を返す
+            
             render json: @resource, status: :ok
           end
         end
