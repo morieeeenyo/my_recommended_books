@@ -26,7 +26,7 @@ function UserModalMenu(props) {
             <span>{location.state.content} with Email</span>
           </Link>
 
-          <TwitterLink>
+          <TwitterLink href="/api/v1/users/twitter">
             <i className="fab fa-twitter"></i>
             <span>{location.state.content} with Twitter</span>
           </TwitterLink>
@@ -54,6 +54,7 @@ const ModalMenuContent = styled(ModalContent)`
     padding: 6px 12px;
     width: 45%;
     font-size: 16px;
+    text-decoration: none; 
 
     & i {
       margin: 8px;
@@ -72,7 +73,6 @@ const ModalMenuContent = styled(ModalContent)`
     background-color: #fff;
     color: #000;
     border: 1px solid #000;
-    text-decoration: none; 
   }
 ` 
 
