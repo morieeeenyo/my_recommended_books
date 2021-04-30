@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import {withRouter} from 'react-router-dom'
+
 //axiosの読み込み
 import axios from 'axios';
 
@@ -277,13 +279,13 @@ class UserModalForm extends React.Component {
   }
 
   render () {
-    if (this.props.show) {
+    if (this.props.location.state.show) {
       return (
-        <ModalOverlay onClick={this.resetErrorMessages}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
+        <ModalOverlay onClick={() => this.props.history.push('/')}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
         <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
-            <p>{this.props.content}</p>
-            <button onClick={this.resetErrorMessages}>x</button>
-          <UserFrom content={this.props.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
+            <p>{this.props.location.state.content}</p>
+            <button onClick={() => this.props.history.push('/')}>x</button>
+          <UserFrom content={this.props.location.state.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
         </ModalContent>
       </ModalOverlay>
    )
@@ -404,4 +406,4 @@ export const FormBlock = styled.div `
   }
 `
 
-export default UserModalForm;
+export default withRouter(UserModalForm);
