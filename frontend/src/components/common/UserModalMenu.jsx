@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 // react-router用のlinkを使えるようにする
-import { Link, withRouter, useLocation, useHistory } from 'react-router-dom'
+import { Link, withRouter, useParams, useLocation, useHistory } from 'react-router-dom'
 
 //コンポーネント読み込み
 import {ModalOverlay} from "../common/UserModalForm.jsx"
@@ -14,16 +14,17 @@ import {ModalContent} from "../common/UserModalForm.jsx"
 function UserModalMenu(props) {
   const location = useLocation();
   const history = useHistory();
+  const params = useParams();     // URLのパスパラメータを取得。
   if (location.state.show) {
       return (
       <ModalOverlay onClick={() => history.goBack()}> 
         <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
         {/* モーダル内部をクリックしたときは閉じない */}
           <p>{location.state.content}</p>
-          <EmailLink>
+          <Link to={"/users/"+ params.content + "/form"} className="email-button">
             <i className="fas fa-envelope"></i>
             <span>{location.state.content} with Email</span>
-          </EmailLink>
+          </Link>
 
           <TwitterLink>
             <i className="fab fa-twitter"></i>
@@ -40,6 +41,7 @@ function UserModalMenu(props) {
 }
 
 const ModalMenuContent = styled(ModalContent)`
+
   & a {
     display: flex;
     justify-content: space-between;
@@ -59,23 +61,24 @@ const ModalMenuContent = styled(ModalContent)`
 
     & span {
     font-weight: bold;
+    }
+
+    :hover {
+      cursor: pointer;
+    }
   }
 
-  :hover {
-    cursor: pointer;
+  & .email-button {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    text-decoration: none; 
   }
-}
 ` 
 
 const TwitterLink = styled.a`
     background-color: #1DA1F2;
     color: #fff;
-`
-
-const EmailLink = styled.a`
-    background-color: #fff;
-    color: #000;
-    border: 1px solid #000;
 `
 
 
