@@ -20,7 +20,10 @@ function UserModalMenu(props) {
         <ModalContent onClick={(e) => e.stopPropagation()}> 
         {/* モーダル内部をクリックしたときは閉じない */}
           <p>{location.state.content}</p>
-          {/* ここにリンクを配置 */}
+          <TwitterLink>
+            <i className="fab fa-twitter"></i>
+            <span>{location.state.content} with Twitter</span>
+          </TwitterLink>
           <button onClick={() => history.goBack()}>x</button>
         </ModalContent>
       </ModalOverlay>
@@ -29,6 +32,34 @@ function UserModalMenu(props) {
     return null
   }
 }
+
+const TwitterLink = styled.a`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  margin: 10px auto;
+  background-color: #1DA1F2;
+  color: #fff;
+  border-radius: 2px;
+  height: 24px;
+  line-height: 24px;
+  padding: 6px 12px;
+  width: 45%;
+  font-size: 16px;
+
+  & i{
+    margin: 8px;
+  }
+
+  & span {
+    font-weight: bold;
+  }
+
+  & :hover {
+    cursor: pointer;
+  }
+` 
 
 
 export default UserModalMenu;
