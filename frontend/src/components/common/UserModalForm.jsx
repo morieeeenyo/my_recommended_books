@@ -174,7 +174,7 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.close() //モーダルを閉じる
+        this.props.history.push('/')
         return response
       })
       .catch(error => {
@@ -197,7 +197,7 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.close()
+        this.props.history.push('/')
         return response
       })
       .catch(error => {
@@ -220,12 +220,11 @@ class UserModalForm extends React.Component {
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //ログアウト時はこれらはundefinedになる
         localStorage.setItem('uid', JSON.stringify(response.headers['uid']))
-        console.log(axios.defaults.headers)
         this.setState({
           user: {},
           errors: []
         })
-        this.props.close()
+        this.props.history.push('/')
         return response
       })
       .catch(error => {

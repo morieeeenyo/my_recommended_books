@@ -13,6 +13,9 @@ import { withRouter } from 'react-router-dom'
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
+
 
 class Header extends React.Component {
   constructor(){
@@ -28,13 +31,14 @@ class Header extends React.Component {
   }
 
   componentDidMount(){
+    const cookies = new Cookies()
     //ブラウザバックしたときにURLに応じてモーダルの表示を切り替える
     this.props.history.listen((location) => {
       if (location.pathname == '/') {
         // ブラウザバックしたときrootパスにいればモーダルを閉じる
         
       }
-      if (!JSON.parse(localStorage.getItem("auth_token"))['uid']) {
+      if (!JSON.parse(cookies.get("authToken"))['uid']) {
         if (location.pathname == '/users/sign_up') {
           // ブラウザバックしたときもパスがあっていれば新規登録モーダルを開く
           
@@ -62,8 +66,9 @@ class Header extends React.Component {
   }
 
   render () {
-    const authToken = localStorage.getItem("auth_token")
-    if (authToken == undefined || !JSON.parse(authToken)['uid']) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
+    const cookies = new Cookies()
+    const authToken = cookies.get("authToken")
+    if (authToken == undefined || !authToken) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
     return (
           <HeaderContainer>
             {this.props.children}
