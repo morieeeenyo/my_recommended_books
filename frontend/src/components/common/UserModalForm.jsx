@@ -6,6 +6,9 @@ import {withRouter} from 'react-router-dom'
 //axiosの読み込み
 import axios from 'axios';
 
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
+
 export function ErrorMessage(props) {
   if (props.errors.length !== 0) {
     return (
@@ -139,11 +142,14 @@ class UserModalForm extends React.Component {
     axios.defaults.headers.common['uid'] = uid;
     axios.defaults.headers.common['client'] = client;
     axios.defaults.headers.common['access-token'] = accessToken;
-    localStorage.setItem('auth_token', JSON.stringify(axios.defaults.headers.common))
+    // localStorage.setItem('auth_token', JSON.stringify(axios.defaults.headers.common))
+    const cookies = new Cookies();
+    cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' });
+    console.log(cookies.get('authToken'))
   }
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const authToken = JSON.parse(cookies.get("authToken"));
     // uid, client, access-tokenの3つが揃っているか検証
     if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
@@ -157,7 +163,7 @@ class UserModalForm extends React.Component {
   formSubmit(e) {
     e.preventDefault()
     // props.content,つまりモーダルの種類ごとに処理を分ける
-    if (this.props.content == 'SignUp') {
+    if (this.props.location.state.content == 'SignUp') {
       axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
@@ -180,7 +186,7 @@ class UserModalForm extends React.Component {
       })
     }
 
-    if (this.props.content == 'SignIn') {
+    if (this.props.location.state.content == 'SignIn') {
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
@@ -205,7 +211,7 @@ class UserModalForm extends React.Component {
       })
     }
 
-    if (this.props.content == 'SignOut') {
+    if (this.props.location.state.content == 'SignOut') {
       this.setAxiosDefaults();
       this.userAuthentification()
       axios
