@@ -16,22 +16,32 @@ import {MyRecommendedBooks} from '../users/MyPage.jsx'
 import {EditUserInfo} from '../users/MyPage.jsx'
 import OutputModal from '../outputs/OutputModal.jsx'
 
+//axiosの読み込み
+import axios from 'axios';
+
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
+
 
 class App extends React.Component {
-  // constructor(){
-  //   super();
-  //   this.state = {
-  //     showBookModal: false,
-  //   }
-  //   this.closeBookModal = this.closeBookModal.bind(this)
-  // }
 
-  // closeBookModal() {
-  //   this.setState({
-  //     showBookModal: false
-  //   })
-  //   this.history.push("/")
-  // }
+  componentDidMount() {
+    const cookies = new Cookies();
+    let authToken = cookies.get("authToken");
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken) { 
+      if (authToken['uid'] == undefined) {
+        authToken = JSON.parse(authToken)
+      }
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      console.log(axios.defaults.headers.common)
+      return authToken
+    } else {
+      return null
+    }
+  }
 
   render () {
     return (
