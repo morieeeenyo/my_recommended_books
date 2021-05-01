@@ -2,11 +2,24 @@ module Api
   module V1
     module Users
       class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
+        attr_reader :auth_params
+
+        before_action :validate_auth_origin_url_param
+        skip_before_action :set_user_by_token, raise: false
+
+        def redirect_callbacks
+          super
+        end
+
         def omniauth_success
           # 認証に成功した時の処理
           super
           update_auth_header
         end
+
+        def omniauth_failure
+          super
+        end        
 
         protected
 
@@ -16,21 +29,26 @@ module Api
         #   @resource.credentials = auth_hash["credentials"]
         #   clean_resource
         # end
+    
 
         def render_data_or_redirect(message, data, user_data = {})
-          if Rails.env.production?
+          
+          # if Rails.env.production?
             if %w[inAppBrowser newWindow].include?(omniauth_window_type)
               render_data(message, user_data.merge(data))
             elsif auth_origin_url
+              session[:auth_data] = data
+              session[:user_data] = user_data
               redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
             else
               fallback_render data[:error] || 'An error occurred'
             end
-          else
+          # else
             #  // わかりやすい様に開発時はjsonとして結果を返す
-            
-            render json: @resource, status: :ok
-          end
+
+            # render json: @resource, status: :ok
+            # redirect_to root_path
+          # end
         end
 
         # // twitterから取得する絵文字を取り払うメソッドたちDBエラーが起きるときにコメントイン

@@ -26,7 +26,7 @@ function UserModalMenu(props) {
             <span>{location.state.content} with Email</span>
           </Link>
 
-          <TwitterLink href="/api/v1/users/twitter">
+          <TwitterLink href={"/api/v1/users/twitter/?auth_origin_url=" + window.location.origin}>
             <i className="fab fa-twitter"></i>
             <span>{location.state.content} with Twitter</span>
           </TwitterLink>
