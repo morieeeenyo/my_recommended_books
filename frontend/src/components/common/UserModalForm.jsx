@@ -144,12 +144,13 @@ class UserModalForm extends React.Component {
     axios.defaults.headers.common['access-token'] = accessToken;
     // localStorage.setItem('auth_token', JSON.stringify(axios.defaults.headers.common))
     const cookies = new Cookies();
-    cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' });
+    cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60 * 24});
     console.log(cookies.get('authToken'))
   }
 
   userAuthentification() {
-    const authToken = JSON.parse(cookies.get("authToken"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
     if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
@@ -192,7 +193,6 @@ class UserModalForm extends React.Component {
       .then(response => {
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
-        console.log(axios.defaults.headers)
         this.setState({
           user: {},
           errors: []
@@ -219,7 +219,8 @@ class UserModalForm extends React.Component {
       .then(response => {
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //ログアウト時はこれらはundefinedになる
-        localStorage.setItem('uid', JSON.stringify(response.headers['uid']))
+        const cookies = new Cookies();
+        cookies.remove('authToken')
         this.setState({
           user: {},
           errors: []
