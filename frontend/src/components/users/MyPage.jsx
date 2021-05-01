@@ -13,6 +13,9 @@ import axios from 'axios';
 // ロゴ画像の読み込み
 import Sample from "../../../images/sample_avatar.png"
 
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
+
 export function MyRecommendedBooks() {
   const location = useLocation();
   if (location.state.books.length !== 0) {
@@ -73,9 +76,10 @@ class MyPage extends React.Component {
   };
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']

@@ -183,13 +183,14 @@ class NewBookModal extends React.Component {
 
 
   userAuthentification() {
-    const cookies = new Cookies()
-    const authToken = JSON.parse(cookies.get("authToken"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
     } else {
       return null
     }
@@ -197,7 +198,7 @@ class NewBookModal extends React.Component {
 
   componentDidMount(){
     const cookies = new Cookies()
-    const authToken = JSON.parse(cookies.get("authToken"));
+    const authToken = cookies.get("authToken");
     if (!authToken || !authToken['uid']) { //ログインしていない場合モーダルが開かないようにする。初回起動時はそもそもauthTokenが存在しないのでそれも判定
       alert('推薦図書の投稿にはログインが必要です')
       this.props.history.push("/");

@@ -30,41 +30,6 @@ class Header extends React.Component {
     // ※マイページからサインアウトした時はマイページに繊維→一度アラートを出してからトップページに戻る。コードはMypage.jsxに記載
   }
 
-  componentDidMount(){
-    const cookies = new Cookies()
-    //ブラウザバックしたときにURLに応じてモーダルの表示を切り替える
-    this.props.history.listen((location) => {
-      if (location.pathname == '/') {
-        // ブラウザバックしたときrootパスにいればモーダルを閉じる
-        
-      }
-      if (!JSON.parse(cookies.get("authToken"))['uid']) {
-        if (location.pathname == '/users/sign_up') {
-          // ブラウザバックしたときもパスがあっていれば新規登録モーダルを開く
-          
-        }
-        if (location.pathname == '/users/sign_in') {
-          // ブラウザバックしたときもパスがあっていればログインモーダルを開く
-          
-        }
-        if (location.pathname == '/users/sign_out') {
-          // ログアウト時にログアウトのモーダルは開けないようにする
-          alert('ユーザーがログインしていません')
-          this.closeModal()
-        }
-      } else {
-        if (location.pathname == '/users/sign_out') {
-          // ブラウザバックしたときもパスがあっていればログアウトモーダルを開く
-          
-        } else if (location.pathname == '/users/sign_up' || location.pathname == '/users/sign_in')  {
-          // ログイン時にログイン・新規登録のモーダルは開けないようにする
-          alert('ログイン・新規登録するにはログアウトしてください')
-          this.closeModal()
-        }
-      }
-    });
-  }
-
   render () {
     const cookies = new Cookies()
     const authToken = cookies.get("authToken")

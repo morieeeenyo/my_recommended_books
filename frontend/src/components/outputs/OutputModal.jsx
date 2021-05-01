@@ -15,6 +15,9 @@ import {ModalContent} from "../common/UserModalForm.jsx"
 import {ErrorMessage} from "../common/UserModalForm.jsx"
 import {UserFromContent} from "../common/UserModalForm.jsx"
 
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
+
 
 function OutputForm(props) {
   // Todo:アクションプランは3つまで同時に設定できるようにする
@@ -103,12 +106,14 @@ class OutputModal extends React.Component {
   };
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
     } else {
       return null
     }

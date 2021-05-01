@@ -142,20 +142,19 @@ class UserModalForm extends React.Component {
     axios.defaults.headers.common['uid'] = uid;
     axios.defaults.headers.common['client'] = client;
     axios.defaults.headers.common['access-token'] = accessToken;
-    // localStorage.setItem('auth_token', JSON.stringify(axios.defaults.headers.common))
     const cookies = new Cookies();
     cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60 * 24});
-    console.log(cookies.get('authToken'))
   }
 
   userAuthentification() {
     const cookies = new Cookies();
     const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
     } else {
       return null
     }
@@ -282,6 +281,21 @@ class UserModalForm extends React.Component {
       errors: []
     })
     this.props.close()
+  }
+
+  componentDidMount(){
+    const authToken = this.userAuthentification()
+    if (!authToken && location.pathname == '/users/sign_out/form') {
+      alert('ユーザーがログインしていません')
+      this.props.history.push('/')
+    }
+
+    if (authToken) {
+      if (location.pathname == '/users/sign_in/form' || location.pathname == '/users/sign_up/form') {
+        alert('ログイン・新規登録するにはログアウトしてください')
+        this.props.history.push('/')
+      }
+    }
   }
 
   render () {
