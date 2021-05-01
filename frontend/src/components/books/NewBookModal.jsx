@@ -14,59 +14,8 @@ import {UserFromContent} from "../common/UserModalForm.jsx"
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
-// function ManualBookPostForm() {
-//   // もしかしたら使うかも
-//     return(
-//       <form>
-//         <BooksFormBlock>
-//           <label htmlFor="title">タイトル</label>
-//           <input type="text" name="title" id="nickname" onChange={this.searchBook}/>  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="recommends">こんな人におすすめ！</label>
-//           <input type="text" name="recommends" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="description">内容要約</label>
-//           <textarea type="text" name="description" id="nickname"></textarea> 
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="author">著者</label>
-//           <input type="text" name="author" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="author_kana">著者(カナ)</label>
-//           <input type="text" name="author_kana" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="publisher_name">出版社</label>
-//           <input type="text" name="publisher_name" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="genre_id">ジャンル</label>
-//           <input type="text" name="genre_id" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="sales_date">発売日</label>
-//           <input type="text" name="sales_date" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="item_price">価格</label>
-//           <input type="text" name="item_price" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="image_url">画像</label>
-//           <input type="hidden" name="image_url" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <input type="hidden" name="isbn" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <input type="submit" value="推薦図書に追加" id="submit-btn"/>
-//         </BooksFormBlock>
-//       </form>
-//     )
-//   }
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
 
 function SearchBookForm(props) {
   return(
@@ -234,7 +183,8 @@ class NewBookModal extends React.Component {
 
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies()
+    const authToken = JSON.parse(cookies.get("authToken"));
     // uid, client, access-tokenの3つが揃っているか検証
     if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
@@ -246,7 +196,8 @@ class NewBookModal extends React.Component {
   }
 
   componentDidMount(){
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies()
+    const authToken = JSON.parse(cookies.get("authToken"));
     if (!authToken || !authToken['uid']) { //ログインしていない場合モーダルが開かないようにする。初回起動時はそもそもauthTokenが存在しないのでそれも判定
       alert('推薦図書の投稿にはログインが必要です')
       this.props.history.push("/");
