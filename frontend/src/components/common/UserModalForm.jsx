@@ -154,7 +154,6 @@ class UserModalForm extends React.Component {
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
-      console.log(axios.defaults.headers.common)
       return authToken
     } else {
       return null

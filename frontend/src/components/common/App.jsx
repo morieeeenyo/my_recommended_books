@@ -29,10 +29,9 @@ class App extends React.Component {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
     if (authToken) { 
-      // SNS認証時はauthTokenからuidが取得できないためundefinedになる
-      if (authToken['uid'] == undefined) {
-        // コントローラーでJSON.generateで保存しているのでparseしてフロントで使えるようにする
-        authToken = JSON.parse(authToken)
+      if (cookies.get('first_session')) {
+        // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
+        alert('初回ログイン')
       }
       // 通常のログイン/新規登録時の処理
       axios.defaults.headers.common['uid'] = authToken['uid']
