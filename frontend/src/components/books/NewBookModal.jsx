@@ -34,7 +34,10 @@ function SearchBookForm(props) {
 
       </div>
       <BooksFormBlock>
+      <label htmlFor="to_be_shared_on_twitter">
         <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
+        <i className="fab fa-twitter"></i>Twitterでシェア
+      </label>
       </BooksFormBlock>
       <BooksFormBlock>
         <input type="submit" value="推薦図書に追加" id="submit_btn"/>
@@ -103,7 +106,7 @@ class NewBookModal extends React.Component {
         book.title = e.target.value            
         break;
       case 'to_be_shared_on_twitter':
-        to_be_shared_on_twitter = !e.target.value
+        to_be_shared_on_twitter = !to_be_shared_on_twitter
         break;
     }
     this.setState({
@@ -291,6 +294,11 @@ const BooksFormBlock = styled(FormBlock)`
 
   label {
     font-size: 16px;
+  }
+
+  input[type=checkbox] {
+    width: fit-content;
+    margin-right: 2px;
   }
 
 
