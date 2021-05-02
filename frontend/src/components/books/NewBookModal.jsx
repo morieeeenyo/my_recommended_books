@@ -34,6 +34,9 @@ function SearchBookForm(props) {
 
       </div>
       <BooksFormBlock>
+        <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
+      </BooksFormBlock>
+      <BooksFormBlock>
         <input type="submit" value="推薦図書に追加" id="submit_btn"/>
       </BooksFormBlock>
     </NewBookFormContent>
@@ -55,7 +58,8 @@ class NewBookModal extends React.Component {
         item_url: '',
         image_url: '',
       },
-      errors: []
+      errors: [],
+      to_be_shared_on_twitter: false
     }
     this.closeBookModal = this.closeBookModal.bind(this)
     this.searchBook = this.searchBook.bind(this)
@@ -93,9 +97,18 @@ class NewBookModal extends React.Component {
   updateForm(e) {
     //入力欄の変化を検知してstateを変える
     const book = this.state.book;
-    book.title = e.target.value            
+    let to_be_shared_on_twitter = this.state.to_be_shared_on_twitter
+    switch (e.target.name) {
+      case 'title':
+        book.title = e.target.value            
+        break;
+      case 'to_be_shared_on_twitter':
+        to_be_shared_on_twitter = !e.target.value
+        break;
+    }
     this.setState({
-      book: book
+      book: book,
+      to_be_shared_on_twitter: to_be_shared_on_twitter
     })
   }
 
