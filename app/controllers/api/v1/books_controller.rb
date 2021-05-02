@@ -5,6 +5,7 @@ module Api
     class BooksController < ApplicationController
       before_action :user_authentification
       before_action :set_twitter_client, only: :create
+      after_action :post_tweet, only: :create
 
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
@@ -16,9 +17,6 @@ module Api
           @user.books << @book # ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
           render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
           # 一旦テスト時は読み込まない設定にする。次のブランチで詳細実装詰める
-          if !Rails.env.test? # rubocop:disable Style/NegatedIf
-            @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る
-          end
         else
           render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
@@ -57,11 +55,19 @@ module Api
       end
 
       def set_twitter_client
+        return nil unless @user.sns_token
         @twitter_client = Twitter::REST::Client.new do |config|
           config.access_token        = @user.sns_token
           config.access_token_secret = @user.sns_secret
           config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
           config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+        end
+      end
+
+      def post_tweet
+        return nil unless @twitter_client
+        if !Rails.env.test? # rubocop:disable Style/NegatedIf
+          @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る
         end
       end
     end
