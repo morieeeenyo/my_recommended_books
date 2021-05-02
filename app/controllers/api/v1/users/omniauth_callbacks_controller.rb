@@ -33,12 +33,16 @@ module Api
 
         def render_data_or_redirect(message, data, user_data = {})
           
+          cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes }  if @resource.sign_in_count == 0
+          cookies.delete(:first_session, path: root_path) if cookies[:first_session]
+          
+          auth_token = {'uid' => user_data['uid'], 'client' =>  data['client_id'], 'access-token' => data['auth_token'] }
+          cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour}
+          
           # if Rails.env.production?
             if %w[inAppBrowser newWindow].include?(omniauth_window_type)
               render_data(message, user_data.merge(data))
             elsif auth_origin_url
-              auth_token = {'uid' => user_data['uid'], 'client' =>  data['client_id'], 'access-token' => data['auth_token'] }
-              cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour}
               redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
             else
               fallback_render data[:error] || 'An error occurred'
