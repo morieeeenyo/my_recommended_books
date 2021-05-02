@@ -43,10 +43,10 @@ module Api
       end
 
       def post_tweet
-        return nil unless @twitter_client
+        return nil if !@twitter_client || !params[:to_be_shared_on_twitter] #Twitter認証されていないユーザーのときは何もしない
         if !Rails.env.test? # rubocop:disable Style/NegatedIf
           book = Book.find(params[:book_id])
-          @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る
+          @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る(一通り出来上がってから)
         end
       end
     end
