@@ -2,6 +2,7 @@ module Api
   module V1
     class OutputsController < ApplicationController
       before_action :user_authentification
+      before_action :set_twitter_client, only: :create
 
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
@@ -12,6 +13,11 @@ module Api
           output_save_result = @output.save
           # ステータスは手動で設定する。リソース保存時のステータスは201
           render status: 201, json: { awareness: output_save_result[:awareness], action_plans: output_save_result[:action_plans] }
+          # 一旦テスト時は読み込まない設定にする。次のブランチで詳細実装詰める
+          if !Rails.env.test? # rubocop:disable Style/NegatedIf
+            book = Book.find(params[:book_id])
+            @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る
+          end
         else
           render status: 422, json: { errors: @output.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
@@ -30,6 +36,15 @@ module Api
         # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
         @token = request.headers['access-token']
         @client = request.headers['client']
+      end
+
+      def set_twitter_client
+        @twitter_client = Twitter::REST::Client.new do |config|
+          config.access_token        = @user.sns_token
+          config.access_token_secret = @user.sns_secret
+          config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
+          config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+        end
       end
     end
   end
