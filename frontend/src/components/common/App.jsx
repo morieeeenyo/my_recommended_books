@@ -28,15 +28,16 @@ class App extends React.Component {
   componentDidMount() {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
     if (authToken) { 
+      // SNS認証時はauthTokenからuidが取得できないためundefinedになる
       if (authToken['uid'] == undefined) {
+        // コントローラーでJSON.generateで保存しているのでparseしてフロントで使えるようにする
         authToken = JSON.parse(authToken)
       }
+      // 通常のログイン/新規登録時の処理
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
-      console.log(axios.defaults.headers.common)
       return authToken
     } else {
       return null
