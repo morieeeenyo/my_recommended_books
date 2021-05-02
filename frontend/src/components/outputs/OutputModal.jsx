@@ -59,6 +59,12 @@ function OutputForm(props) {
         <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
       </OutputFormBlock>
       <OutputFormBlock>
+      <label htmlFor="to_be_shared_on_twitter">
+        <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
+        <i className="fab fa-twitter"></i>Twitterでシェア
+      </label>
+      </OutputFormBlock>
+      <OutputFormBlock>
         <input type="submit" value="この内容で投稿する" id="submit_btn"></input>  
       </OutputFormBlock>
     </OutputFormContent>
@@ -81,6 +87,7 @@ class OutputModal extends React.Component {
         ],
       },
       errors: [],
+      to_be_shared_on_twitter: false
     }
     // 以下は後で実装するメソッド
     this.getCsrfToken = this.getCsrfToken.bind(this)
@@ -134,6 +141,7 @@ class OutputModal extends React.Component {
   updateForm(e) {
     // ネストされたオブジェクトのdataまでアクセスしておく
     const output = this.state.output
+    let to_be_shared_on_twitter = this.state.to_be_shared_on_twitter
 
     // eventが発火したname属性名ごとに値を処理
     switch (e.target.name) {
@@ -150,10 +158,14 @@ class OutputModal extends React.Component {
         case 'how_to_do':
             output.action_plans[e.target.getAttribute('data-index')].how_to_do = e.target.value;
             break;
+        case 'to_be_shared_on_twitter':
+            to_be_shared_on_twitter = !to_be_shared_on_twitter
+            break;
     }
 
     this.setState({
-      output: output
+      output: output,
+      to_be_shared_on_twitter: to_be_shared_on_twitter
     })
   }
 
@@ -162,7 +174,7 @@ class OutputModal extends React.Component {
     this.userAuthentification()
     this.setAxiosDefaults();
     axios
-    .post('/api/v1/books/' + this.props.location.state.book.id + '/outputs', {output: this.state.output} )
+    .post('/api/v1/books/' + this.props.location.state.book.id + '/outputs', {output: this.state.output, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter} )
     .then(response => {
       this.closeOutputModal()
       return response
@@ -295,6 +307,11 @@ const ActionPlan = styled.div`
 const OutputFormBlock = styled(FormBlock)`
   /* 各入力欄のスタイル */
   width: 70%;
+
+  input[type=checkbox] {
+    width: fit-content;
+    margin-right: 2px;
+  }
 
   .action-plan-label {
     /* 各入力欄のラベルのスタイル */
