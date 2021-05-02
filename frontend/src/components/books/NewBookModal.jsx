@@ -180,7 +180,7 @@ class NewBookModal extends React.Component {
     this.userAuthentification()
     this.setAxiosDefaults();
     axios
-    .post('/api/v1/books', {book: this.state.book})
+    .post('/api/v1/books', {book: this.state.book, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter})
     .then(response => {
       // todo:次のブランチでマイページに書籍情報を渡す
       this.setState({
