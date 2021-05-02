@@ -88,7 +88,8 @@ module Api
             provider: auth_hash['provider']
           ).first_or_initialize
 
-          @resource.credentials = auth_hash["credentials"]
+          @resource.sns_token = auth_hash["credentials"]['token']
+          @resource.sns_secret = auth_hash["credentials"]['secret']
 
           # ここから下はよくわからないので一旦保留
           handle_new_resource if @resource.new_record?
