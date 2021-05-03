@@ -62,7 +62,8 @@ gem 'devise_token_auth'
 gem "rack-cors"
 gem 'pry-rails'
 gem 'rakuten_web_service'
-gem 'twitter'
+gem 'twitter' # ツイッター投稿用
+# ツイッター認証用
 gem 'omniauth', '1.9.1'
 gem 'omniauth-twitter'
-gem 'rails_same_site_cookie'
+gem 'rails_same_site_cookie' # cookieにsecure属性(HTTPSのみ受け付ける)とsamesite属性(クロスサイトからのアクセスを防ぐ)を付与。セキュリティ面の補強。
