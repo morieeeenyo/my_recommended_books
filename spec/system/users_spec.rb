@@ -10,6 +10,7 @@ RSpec.describe 'Users', type: :system do
     before do
       visit root_path
       find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+      click_link 'SignUp with Email'
       expect(page).to have_content 'SignUp'
     end
 
@@ -104,6 +105,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content "Password can't be blank"
         click_button 'x'
         find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignUp with Email'
         expect(page).to have_content 'SignUp'
         expect(page).not_to have_content "Nickname can't be blank"
         expect(page).not_to have_content "Email can't be blank"
@@ -118,6 +120,7 @@ RSpec.describe 'Users', type: :system do
         attach_file 'avatar', 'spec/fixtures/test_avatar.png'
         click_button 'x'
         find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignUp with Email'
         sleep 2 # sleepしないと間に合わない?
         expect(page).to have_content 'SignUp'
         expect(page).to  have_field 'nickname', with: user.nickname
@@ -140,6 +143,7 @@ RSpec.describe 'Users', type: :system do
       user.save
       visit root_path
       find('a', text: 'ログイン').click # href属性がないaタグはclick_link, click_onで検出できないのでfindで検出する
+      click_link 'SignIn with Email'
       expect(page).to have_content 'SignIn'
     end
 
@@ -189,6 +193,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
         click_button 'x'
         find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignIn with Email'
         expect(page).to have_content 'SignIn'
         expect(page).not_to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
       end
@@ -198,6 +203,7 @@ RSpec.describe 'Users', type: :system do
         fill_in 'password',	with: user.password
         click_button 'x'
         find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignIn with Email'
         expect(page).to have_content 'SignIn'
         sleep 2 # sleepしないと間に合わない?
         expect(page).to  have_field 'email', with: user.email
