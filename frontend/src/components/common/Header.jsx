@@ -20,14 +20,6 @@ import Cookies from 'universal-cookie';
 class Header extends React.Component {
   constructor(){
     super();
-    this.closeModal = this.closeModal.bind(this)
-  }
-
-  // モーダルを閉じる。contentは空文字列にリセット
-  closeModal() {
-    this.props.history.goBack() 
-    //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
-    // ※マイページからサインアウトした時はマイページに遷移→一度アラートを出してからトップページに戻る。コードはMypage.jsxに記載
   }
 
   render () {

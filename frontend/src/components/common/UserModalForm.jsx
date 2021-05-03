@@ -300,7 +300,7 @@ class UserModalForm extends React.Component {
 
   render () {
     if (this.props.location.state.show) {
-      // マイページ→サインアウトモーダル→やっぱやめた、の場合を想定してgoBakcにする
+      // マイページ→サインアウトモーダル→やっぱやめた、の場合を想定してgoBackにする
       if (this.props.location.state.content == 'SignOut') {
         return(
             <ModalOverlay onClick={() => this.props.history.goBack()}> 

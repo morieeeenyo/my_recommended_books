@@ -52,7 +52,6 @@ class App extends React.Component {
         console.log('初回ログイン')
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
       }
-      // 通常のログイン/新規登録時の処理
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
