@@ -33,14 +33,14 @@ module Api
           auth_token = {'uid' => user_data['uid'], 'client' =>  data['client_id'], 'access-token' => data['auth_token'] }
           cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour}
           
-            if %w[inAppBrowser newWindow].include?(omniauth_window_type)
-              render_data(message, user_data.merge(data))
-            elsif auth_origin_url
-              # return redirect_to root_path if Rails.env.test?
-              redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
-            else
-              fallback_render data[:error] || 'An error occurred'
-            end
+          if %w[inAppBrowser newWindow].include?(omniauth_window_type)
+            render_data(message, user_data.merge(data))
+          elsif auth_origin_url
+            # return redirect_to root_path if Rails.env.test?
+            redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
+          else
+            fallback_render data[:error] || 'An error occurred'
+          end
         end
 
         # // twitterから取得する絵文字を取り払うメソッドたちDBエラーが起きるときにコメントイン
