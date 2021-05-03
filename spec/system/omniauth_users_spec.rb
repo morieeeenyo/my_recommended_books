@@ -18,6 +18,7 @@ RSpec.describe "OmniauthUsers", type: :system do
       end
 
       it "ユーザーが認証済みの場合ユーザーのカウントは増えない", js: true do
+        # 本来は2回リンク踏ませるのが正しいがなんかうまくいかないので代わりに事前にユーザーを作っておく
         create(:user, uid: twitter_mock['uid'], provider: twitter_mock['provider'])
         expect do
           find('a', text: 'SignUp with Twitter').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
