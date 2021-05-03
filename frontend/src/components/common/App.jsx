@@ -25,13 +25,31 @@ import Cookies from 'universal-cookie';
 
 class App extends React.Component {
 
+  constructor(props){
+    super(props);
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+  }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
   componentDidMount() {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
     if (authToken) { 
       if (cookies.get('first_session')) {
         // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
-        alert('初回ログイン')
+        console.log('初回ログイン')
+        axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
       }
       // 通常のログイン/新規登録時の処理
       axios.defaults.headers.common['uid'] = authToken['uid']
