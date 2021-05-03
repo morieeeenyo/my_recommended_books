@@ -22,8 +22,8 @@ RSpec.describe "OmniauthUsers", type: :system do
         # ページ遷移してマイページにアクセスしたりとかができなかったのでこの形
         cookies = page.driver.browser.manage.all_cookies
         # 認証情報の検証
-        authToken = cookies.find { |c| c[:name] == 'authToken' }
-        expect(authToken[:value]).not_to eq nil        
+        auth_token = cookies.find { |c| c[:name] == 'authToken' }
+        expect(auth_token[:value]).not_to eq nil        
         # 初回ログインデータの検証
         first_session = cookies.find { |c| c[:name] == 'first_session' }
         expect(first_session[:value]).to eq 'true'
@@ -41,8 +41,8 @@ RSpec.describe "OmniauthUsers", type: :system do
         create(:user, uid: twitter_mock['uid'], provider: twitter_mock['provider'])
         click_link 'SignUp with Twitter'
         cookies = page.driver.browser.manage.all_cookies
-        authToken = cookies.find { |c| c[:name] == 'authToken' }
-        expect(authToken[:value]).not_to eq nil        
+        auth_token = cookies.find { |c| c[:name] == 'authToken' }
+        expect(auth_token[:value]).not_to eq nil        
         first_session = cookies.find { |c| c[:name] == 'first_session' }
         expect(first_session).to eq nil
       end

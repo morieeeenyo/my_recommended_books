@@ -23,14 +23,6 @@ module Api
 
         protected
 
-        # // ②credentialを保存。いるのかわからないから一旦保留
-        # def get_resource_from_auth_hash
-        #   super
-        #   @resource.credentials = auth_hash["credentials"]
-        #   clean_resource
-        # end
-    
-
         def render_data_or_redirect(message, data, user_data = {})
           
           # 2回目以降のログイン時にはfirst_sessionのクッキーデータを削除
@@ -41,7 +33,6 @@ module Api
           auth_token = {'uid' => user_data['uid'], 'client' =>  data['client_id'], 'access-token' => data['auth_token'] }
           cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour}
           
-          # if Rails.env.production?
             if %w[inAppBrowser newWindow].include?(omniauth_window_type)
               render_data(message, user_data.merge(data))
             elsif auth_origin_url
@@ -50,12 +41,6 @@ module Api
             else
               fallback_render data[:error] || 'An error occurred'
             end
-          # else
-            #  // わかりやすい様に開発時はjsonとして結果を返す
-
-            # render json: @resource, status: :ok
-            # redirect_to root_path
-          # end
         end
 
         # // twitterから取得する絵文字を取り払うメソッドたちDBエラーが起きるときにコメントイン
