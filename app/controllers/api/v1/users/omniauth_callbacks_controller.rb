@@ -45,6 +45,7 @@ module Api
             if %w[inAppBrowser newWindow].include?(omniauth_window_type)
               render_data(message, user_data.merge(data))
             elsif auth_origin_url
+              # return redirect_to root_path if Rails.env.test?
               redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
             else
               fallback_render data[:error] || 'An error occurred'
@@ -77,12 +78,10 @@ module Api
         end
 
         def get_resource_from_auth_hash # rubocop:disable Naming/AccessorMethodName
-          # テスト通過のためにオーバーライド
+          # テスト通過のためにオーバーライド          
           if Rails.env.test?
-            if !auth_hash # rubocop:disable Style/NegatedIf
               auth_hash = request.env['omniauth.auth']
               # テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
-            end
           elsif !auth_hash
             auth_hash = session['dta.omniauth.auth']
             # 開発環境・本番環境ではauth_hashはsessionから取り出す
