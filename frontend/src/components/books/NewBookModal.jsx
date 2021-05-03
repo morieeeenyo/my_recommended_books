@@ -14,7 +14,7 @@ import {UserFromContent} from "../common/UserModalForm.jsx"
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
-// Cookieの読み込み
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
 import Cookies from 'universal-cookie';
 
 function SearchBookForm(props) {
@@ -35,6 +35,7 @@ function SearchBookForm(props) {
       </div>
       <BooksFormBlock>
       <label htmlFor="to_be_shared_on_twitter">
+        {/* チェックが入っている場合Twitterでシェア */}
         <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
         <i className="fab fa-twitter"></i>Twitterでシェア
       </label>
@@ -62,6 +63,7 @@ class NewBookModal extends React.Component {
         image_url: '',
       },
       errors: [],
+      // Twitterにシェアするかどうかを決めるstate
       to_be_shared_on_twitter: false
     }
     this.closeBookModal = this.closeBookModal.bind(this)
@@ -73,6 +75,7 @@ class NewBookModal extends React.Component {
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
   }
 
+  // emailで新規登録、ログインした場合はこちらを使ってcsrfトークンを更新
   getCsrfToken() {
     if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
       return (
@@ -141,7 +144,7 @@ class NewBookModal extends React.Component {
         <h3>${book.params.title}</h3>
         <p>著者名</p><p>${book.params.author}</p>
         `
-        resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
+        resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent) //変数の埋め込みのために文字列を流し込む
         resultItem.appendChild(resultImage)
         resultItem.appendChild(resultInfoWrapper)
         resultList.appendChild(resultItem)
@@ -187,6 +190,7 @@ class NewBookModal extends React.Component {
         books: {}
       })
       this.closeBookModal()
+      return response
     })
     .catch(error => {
       if (error.response.data && error.response.data.errors) {

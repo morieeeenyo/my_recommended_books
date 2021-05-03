@@ -30,6 +30,7 @@ class App extends React.Component {
     this.getCsrfToken = this.getCsrfToken.bind(this)
   }
 
+  // omniauthによる認証時はトップページに遷移したタイミングでcsrfトークンを更新する
   getCsrfToken() {
     if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
       return (

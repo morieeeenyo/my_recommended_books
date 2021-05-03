@@ -300,15 +300,28 @@ class UserModalForm extends React.Component {
 
   render () {
     if (this.props.location.state.show) {
-      return (
-        <ModalOverlay onClick={() => this.props.history.push('/')}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
-        <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
-            <p>{this.props.location.state.content}</p>
-            <button onClick={() => this.props.history.push('/')}>x</button>
-          <UserFrom content={this.props.location.state.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
-        </ModalContent>
-      </ModalOverlay>
-   )
+      // マイページ→サインアウトモーダル→やっぱやめた、の場合を想定してgoBakcにする
+      if (this.props.location.state.content == 'SignOut') {
+        return(
+            <ModalOverlay onClick={() => this.props.history.goBack()}> 
+            <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
+                <p>{this.props.location.state.content}</p>
+                <button onClick={() => this.props.history.goBack()}>x</button>
+              <UserFrom content={this.props.location.state.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
+            </ModalContent>
+          </ModalOverlay>
+        )
+      } else {
+        return (
+          <ModalOverlay onClick={() => this.props.history.push('/')}> 
+          <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
+              <p>{this.props.location.state.content}</p>
+              <button onClick={() => this.props.history.push('/')}>x</button>
+            <UserFrom content={this.props.location.state.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
+          </ModalContent>
+        </ModalOverlay>
+     )
+   }
   } else {
     return null; //closeModalメソッドが動くとHeader.jsx内のstateが変更され、propsのshowがfalseになる
   }

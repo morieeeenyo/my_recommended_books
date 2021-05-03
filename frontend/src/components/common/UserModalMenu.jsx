@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-//axiosの読み込み
-import axios from 'axios';
-
 // react-router用のlinkを使えるようにする
-import { Link, withRouter, useParams, useLocation, useHistory } from 'react-router-dom'
+import { Link, useParams, useLocation, useHistory } from 'react-router-dom'
 
 //コンポーネント読み込み
 import {ModalOverlay} from "../common/UserModalForm.jsx"
@@ -14,7 +11,7 @@ import {ModalContent} from "../common/UserModalForm.jsx"
 function UserModalMenu(props) {
   const location = useLocation();
   const history = useHistory();
-  const params = useParams();     // URLのパスパラメータを取得。
+  const params = useParams();     // URLのパスパラメータを取得。location.state.contentはキャメルケースなのでスネークケースのデータを取得したい(例：SignUP→sign_up)
   if (location.state.show) {
       return (
       <ModalOverlay onClick={() => history.goBack()}> 

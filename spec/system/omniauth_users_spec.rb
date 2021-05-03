@@ -19,9 +19,12 @@ RSpec.describe "OmniauthUsers", type: :system do
 
       it "初回ログイン時はCookieに認証情報と初回ログインを示すtmpデータが保存される" do        
         click_link 'SignUp with Twitter'
+        # ページ遷移してマイページにアクセスしたりとかができなかったのでこの形
         cookies = page.driver.browser.manage.all_cookies
+        # 認証情報の検証
         authToken = cookies.find { |c| c[:name] == 'authToken' }
         expect(authToken[:value]).not_to eq nil        
+        # 初回ログインデータの検証
         first_session = cookies.find { |c| c[:name] == 'first_session' }
         expect(first_session[:value]).to eq 'true'
       end

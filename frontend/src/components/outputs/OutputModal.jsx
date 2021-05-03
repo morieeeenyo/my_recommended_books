@@ -15,12 +15,11 @@ import {ModalContent} from "../common/UserModalForm.jsx"
 import {ErrorMessage} from "../common/UserModalForm.jsx"
 import {UserFromContent} from "../common/UserModalForm.jsx"
 
-// Cookieの読み込み
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
 import Cookies from 'universal-cookie';
 
 
 function OutputForm(props) {
-  // Todo:アクションプランは3つまで同時に設定できるようにする
   return (
     <OutputFormContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>

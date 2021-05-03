@@ -13,7 +13,7 @@ import { withRouter } from 'react-router-dom'
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-// Cookieの読み込み
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
 import Cookies from 'universal-cookie';
 
 
@@ -21,13 +21,13 @@ class Header extends React.Component {
   constructor(){
     super();
     this.closeModal = this.closeModal.bind(this)
-
   }
 
   // モーダルを閉じる。contentは空文字列にリセット
   closeModal() {
-    this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
-    // ※マイページからサインアウトした時はマイページに繊維→一度アラートを出してからトップページに戻る。コードはMypage.jsxに記載
+    this.props.history.goBack() 
+    //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
+    // ※マイページからサインアウトした時はマイページに遷移→一度アラートを出してからトップページに戻る。コードはMypage.jsxに記載
   }
 
   render () {

@@ -11,10 +11,10 @@ import { Link,withRouter } from 'react-router-dom'
 //axiosの読み込み
 import axios from 'axios';
 
-//momentの読み込み(日付の表示)
+//momentの読み込み(投稿日時の表示)
 import moment from 'moment'
 
-// Cookieの読み込み
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
 import Cookies from 'universal-cookie';
 
 
