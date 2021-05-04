@@ -18,7 +18,8 @@ import { withRouter } from 'react-router-dom'
 import Cookies from 'universal-cookie';
 
 function SearchBookForm(props) {
-  return(
+  if (props.user.sns_token && props.user.sns_secret) {
+  return (
     <NewBookFormContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <BooksFormBlock>
@@ -33,24 +34,49 @@ function SearchBookForm(props) {
 
 
       </div>
-      <BooksFormBlock>
-      <label htmlFor="to_be_shared_on_twitter">
-        {/* チェックが入っている場合Twitterでシェア */}
-        <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
-        <i className="fab fa-twitter"></i>Twitterでシェア
-      </label>
-      </BooksFormBlock>
+        {/* sns未認証の場合表示しない */}
+        <BooksFormBlock>
+        <label htmlFor="to_be_shared_on_twitter">
+          {/* チェックが入っている場合Twitterでシェア */}
+          <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
+          <i className="fab fa-twitter"></i>Twitterでシェア
+        </label>
+        </BooksFormBlock>
       <BooksFormBlock>
         <input type="submit" value="推薦図書に追加" id="submit_btn"/>
       </BooksFormBlock>
     </NewBookFormContent>
-  )
+    )
+  } else {
+    return(
+
+      <NewBookFormContent onSubmit={props.submit}>
+        <ErrorMessage errors={props.errors}></ErrorMessage>
+        <BooksFormBlock>
+          <label htmlFor="title">タイトルで検索</label>
+          <div className="search-form-field">
+            <input type="text" name="title" id="title" onChange={props.change}/>  
+            <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
+          </div>
+        </BooksFormBlock>
+        <div id="search_result">
+          {/* 検索結果が個々に入る */}
+
+
+        </div>
+        <BooksFormBlock>
+          <input type="submit" value="推薦図書に追加" id="submit_btn"/>
+        </BooksFormBlock>
+      </NewBookFormContent>
+    )
+  }
 }
 
 class NewBookModal extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      user: {},
       book: {
         isbn: '',
         title: '',
@@ -222,6 +248,25 @@ class NewBookModal extends React.Component {
     if (!authToken || !authToken['uid']) { //ログインしていない場合モーダルが開かないようにする。初回起動時はそもそもauthTokenが存在しないのでそれも判定
       alert('推薦図書の投稿にはログインが必要です')
       this.props.history.push("/");
+    } else {
+      axios 
+      .get('/api/v1/mypage')
+      .then(response => {
+        if (response.data.avatar) {
+          this.setState({
+            user: response.data.user,
+          })
+        } else {
+          this.setState({
+            user: response.data.user,
+          })
+        }
+        return response
+      })
+      .catch(error =>{
+        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+        console.log(error) 
+      })
     }
   }
 
@@ -233,7 +278,7 @@ class NewBookModal extends React.Component {
         <p>推薦図書を投稿する</p>
         <button onClick={this.closeBookModal}>x</button>
           <NewBooksWrapper>
-            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors}/>
+            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors} user={this.state.user}/>
           </NewBooksWrapper>
         </ModalContent>
       </ModalOverlay>

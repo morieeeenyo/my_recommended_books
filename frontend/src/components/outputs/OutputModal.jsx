@@ -20,54 +20,100 @@ import Cookies from 'universal-cookie';
 
 
 function OutputForm(props) {
-  return (
-    <OutputFormContent onSubmit={props.submit}>
-      <ErrorMessage errors={props.errors}></ErrorMessage>
-      <OutputFormBlock>
-      <label htmlFor="awareness_text">気づき</label>
-      <textarea name="content" value={props.output.content} onChange={props.change} id="output_content"></textarea>
-      </OutputFormBlock>
-      <div id="action_plans">
-      <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
-      {props.output.action_plans.map((action_plan, index) => {
-          return (
-            <ActionPlan data-index={index} key={index}>
-              <h4>
-                {/* indexは0始まりなのでページ上見える部分は+1する */}
-                アクションプラン{index + 1}
-                <span onClick={props.remove} data-index={index}>取り消し</span>
-              </h4>
-              {/* idは結合テストコードでの検証用 */}
-              <OutputFormBlock>
-                <label htmlFor="due_date">いつ</label>
-                <input type="text" name="time_of_execution" value={action_plan.time_of_execution} onChange={props.change} data-index={index} id={"output_time_of_execution_" + index}></input>
-              </OutputFormBlock>
-              <OutputFormBlock>
-                <label htmlFor="what">何を</label>
-                <input type="text" name="what_to_do" value={action_plan.what_to_do} onChange={props.change} data-index={index} id={"output_what_to_do_" + index}></input>
-              </OutputFormBlock>
-              <OutputFormBlock>
-                <label htmlFor="how_much">どのように</label>
-                <input type="text" name="how_to_do" value={action_plan.how_to_do} onChange={props.change} data-index={index} id={"output_how_to_do_" + index}></input>
-              </OutputFormBlock>
-            </ActionPlan>
-          )
-      })}
-      </div>
-      <OutputFormBlock>
-        <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
-      </OutputFormBlock>
-      <OutputFormBlock>
-      <label htmlFor="to_be_shared_on_twitter">
-        <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
-        <i className="fab fa-twitter"></i>Twitterでシェア
-      </label>
-      </OutputFormBlock>
-      <OutputFormBlock>
-        <input type="submit" value="この内容で投稿する" id="submit_btn"></input>  
-      </OutputFormBlock>
-    </OutputFormContent>
-  )
+  if (props.user.sns_token && props.user.sns_secret) {
+    return (
+      <OutputFormContent onSubmit={props.submit}>
+        <ErrorMessage errors={props.errors}></ErrorMessage>
+        <OutputFormBlock>
+        <label htmlFor="awareness_text">気づき</label>
+        <textarea name="content" value={props.output.content} onChange={props.change} id="output_content"></textarea>
+        </OutputFormBlock>
+        <div id="action_plans">
+        <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
+        {props.output.action_plans.map((action_plan, index) => {
+            return (
+              <ActionPlan data-index={index} key={index}>
+                <h4>
+                  {/* indexは0始まりなのでページ上見える部分は+1する */}
+                  アクションプラン{index + 1}
+                  <span onClick={props.remove} data-index={index}>取り消し</span>
+                </h4>
+                {/* idは結合テストコードでの検証用 */}
+                <OutputFormBlock>
+                  <label htmlFor="due_date">いつ</label>
+                  <input type="text" name="time_of_execution" value={action_plan.time_of_execution} onChange={props.change} data-index={index} id={"output_time_of_execution_" + index}></input>
+                </OutputFormBlock>
+                <OutputFormBlock>
+                  <label htmlFor="what">何を</label>
+                  <input type="text" name="what_to_do" value={action_plan.what_to_do} onChange={props.change} data-index={index} id={"output_what_to_do_" + index}></input>
+                </OutputFormBlock>
+                <OutputFormBlock>
+                  <label htmlFor="how_much">どのように</label>
+                  <input type="text" name="how_to_do" value={action_plan.how_to_do} onChange={props.change} data-index={index} id={"output_how_to_do_" + index}></input>
+                </OutputFormBlock>
+              </ActionPlan>
+            )
+        })}
+        </div>
+        <OutputFormBlock>
+          <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
+        </OutputFormBlock>
+        <OutputFormBlock>
+        {/* sns未認証の場合表示しない */}
+        <label htmlFor="to_be_shared_on_twitter">
+          <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
+          <i className="fab fa-twitter"></i>Twitterでシェア
+        </label>
+        </OutputFormBlock>
+        <OutputFormBlock>
+          <input type="submit" value="この内容で投稿する" id="submit_btn"></input>  
+        </OutputFormBlock>
+      </OutputFormContent>
+    )
+  } else {
+      return (
+        <OutputFormContent onSubmit={props.submit}>
+          <ErrorMessage errors={props.errors}></ErrorMessage>
+          <OutputFormBlock>
+          <label htmlFor="awareness_text">気づき</label>
+          <textarea name="content" value={props.output.content} onChange={props.change} id="output_content"></textarea>
+          </OutputFormBlock>
+          <div id="action_plans">
+          <h4 className="action-plan-label">アクションプラン(最大3つまで)</h4>
+          {props.output.action_plans.map((action_plan, index) => {
+              return (
+                <ActionPlan data-index={index} key={index}>
+                  <h4>
+                    {/* indexは0始まりなのでページ上見える部分は+1する */}
+                    アクションプラン{index + 1}
+                    <span onClick={props.remove} data-index={index}>取り消し</span>
+                  </h4>
+                  {/* idは結合テストコードでの検証用 */}
+                  <OutputFormBlock>
+                    <label htmlFor="due_date">いつ</label>
+                    <input type="text" name="time_of_execution" value={action_plan.time_of_execution} onChange={props.change} data-index={index} id={"output_time_of_execution_" + index}></input>
+                  </OutputFormBlock>
+                  <OutputFormBlock>
+                    <label htmlFor="what">何を</label>
+                    <input type="text" name="what_to_do" value={action_plan.what_to_do} onChange={props.change} data-index={index} id={"output_what_to_do_" + index}></input>
+                  </OutputFormBlock>
+                  <OutputFormBlock>
+                    <label htmlFor="how_much">どのように</label>
+                    <input type="text" name="how_to_do" value={action_plan.how_to_do} onChange={props.change} data-index={index} id={"output_how_to_do_" + index}></input>
+                  </OutputFormBlock>
+                </ActionPlan>
+              )
+          })}
+          </div>
+          <OutputFormBlock>
+            <button id="add-actionplan-button" onClick={props.add}>アクションプランを追加</button>
+          </OutputFormBlock>
+          <OutputFormBlock>
+            <input type="submit" value="この内容で投稿する" id="submit_btn"></input>  
+          </OutputFormBlock>
+        </OutputFormContent>
+      )
+  }
 }
 
 
@@ -237,7 +283,7 @@ class OutputModal extends React.Component {
         <p>アウトプットを投稿する</p>
         <button onClick={this.closeOutputModal}>x</button>
           <div>
-            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan} remove={this.removeActionPlan}/>
+            <OutputForm output={this.state.output} change={this.updateForm} submit={this.postOutput} errors={this.state.errors} add={this.addActionPlan} remove={this.removeActionPlan} user={this.props.location.state.user}/>
           </div>
         </ModalContent>
       </ModalOverlay>
