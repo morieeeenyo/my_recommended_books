@@ -43,7 +43,7 @@ module Api
         def invalid_email
           warden.custom_failure!
           # ユーザー認証に引っかかった際のステータスは401(Unautorized)
-          render status: 401, json: { errors: ['Authorization failed. Invalid email'] }
+          render status: 401, json: { errors: ['Authorization failed. Invalid email'] } #新規登録時とエラーメッセージの表示の処理をあわせるために配列で定義
         end
 
         def invalid_password

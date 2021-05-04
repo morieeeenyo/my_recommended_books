@@ -16,7 +16,7 @@ module Api
           @book.save
           user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
           if user_book_relation
-            render status: 422, json: { errors: ['その書籍はすでに追加されています'] } # すでに同じ書籍が投稿されていればエラーメッセージを表示
+            render status: 422, json: { errors: ['その書籍はすでに追加されています'] } # すでに同じ書籍が投稿されていればエラーメッセージを表示。書籍が空だった場合と合わせるために配列で定義
           else
             @user.books << @book # ユーザーと書籍を紐付ける。
             render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
