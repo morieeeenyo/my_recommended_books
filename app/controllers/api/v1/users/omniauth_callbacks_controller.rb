@@ -23,7 +23,7 @@ module Api
 
         protected
 
-        def render_data_or_redirect(message, data, user_data = {})
+        def render_data_or_redirect(message, data, user_data = {}) # rubocop:disable Metrics/PerceivedComplexity
           
           # 2回目以降のログイン時にはfirst_sessionのクッキーデータを削除
           cookies.delete(:first_session, path: root_path, httponly: true) if cookies[:first_session]
@@ -42,7 +42,6 @@ module Api
           if %w[inAppBrowser newWindow].include?(omniauth_window_type)
             render_data(message, user_data.merge(data))
           elsif auth_origin_url
-            # return redirect_to root_path if Rails.env.test?
             redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
           else
             fallback_render data[:error] || 'An error occurred'
