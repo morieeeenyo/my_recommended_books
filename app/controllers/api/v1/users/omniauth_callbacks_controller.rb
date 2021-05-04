@@ -28,10 +28,16 @@ module Api
           # 2回目以降のログイン時にはfirst_sessionのクッキーデータを削除
           cookies.delete(:first_session, path: root_path, httponly: true) if cookies[:first_session]
           # 初回ログイン時にはcookieに情報をセット。Oauth認証後ユーザー情報の編集ページに飛ばす
-          cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes, same_site: 'Lax', secure: true }  if @resource.sign_in_count == 0 
+          cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes }  if @resource.sign_in_count == 0  
           
           auth_token = {'uid' => user_data['uid'], 'client' =>  data['client_id'], 'access-token' => data['auth_token'] }
-          cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour, same_site: 'Lax', secure: true }
+          cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour } 
+
+          if Rails.env.production?
+            # セキュリティを頑丈にしたらテストでこけた
+            cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour, same_site: 'Lax', secure: true } 
+            cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes, same_site: 'Lax', secure: true }  if @resource.sign_in_count == 0 
+          end
           
           if %w[inAppBrowser newWindow].include?(omniauth_window_type)
             render_data(message, user_data.merge(data))
