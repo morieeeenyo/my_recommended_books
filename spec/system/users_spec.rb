@@ -10,6 +10,7 @@ RSpec.describe 'Users', type: :system do
     before do
       visit root_path
       find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+      click_link 'SignUp with Email'
       expect(page).to have_content 'SignUp'
     end
 
@@ -104,6 +105,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content "Password can't be blank"
         click_button 'x'
         find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignUp with Email'
         expect(page).to have_content 'SignUp'
         expect(page).not_to have_content "Nickname can't be blank"
         expect(page).not_to have_content "Email can't be blank"
@@ -118,19 +120,12 @@ RSpec.describe 'Users', type: :system do
         attach_file 'avatar', 'spec/fixtures/test_avatar.png'
         click_button 'x'
         find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignUp with Email'
         sleep 2 # sleepしないと間に合わない?
         expect(page).to have_content 'SignUp'
-        expect(page).to  have_field 'nickname', with: user.nickname
-        expect(page).to  have_field 'email', with: user.email
-        expect(page).to  have_field 'password', with: user.password
-        expect(page).to  have_field 'password_confirmation', with: user.password_confirmation
-        expect do
-          click_button 'SignUp'
-          sleep 2 # sleepしないと間に合わない
-        end.to change(User, :count).by(1)
-        find('a', text: 'マイページ').click
-        expect(page).to have_content "#{user.nickname}さんのマイページ"
-        expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        sleep 2 # sleepしないと間に合わない?
+        expect(page).to have_field 'email', with: ''
+        expect(page).to  have_field 'password', with: ''
       end
     end
   end
@@ -140,6 +135,7 @@ RSpec.describe 'Users', type: :system do
       user.save
       visit root_path
       find('a', text: 'ログイン').click # href属性がないaタグはclick_link, click_onで検出できないのでfindで検出する
+      click_link 'SignIn with Email'
       expect(page).to have_content 'SignIn'
     end
 
@@ -189,24 +185,21 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
         click_button 'x'
         find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignIn with Email'
         expect(page).to have_content 'SignIn'
         expect(page).not_to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
       end
 
-      it 'モーダルを閉じ、再び開くと入力内容が保持されており、ログインも可能である' do
+      it 'モーダルを閉じ、再び開くと入力内容が消える' do
         fill_in 'email',	with: user.email
         fill_in 'password',	with: user.password
         click_button 'x'
         find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        click_link 'SignIn with Email'
         expect(page).to have_content 'SignIn'
         sleep 2 # sleepしないと間に合わない?
-        expect(page).to  have_field 'email', with: user.email
-        expect(page).to  have_field 'password', with: user.password
-        click_button 'SignIn'
-        sleep 2 # sleepしないと間に合わない
-        # ログインすると表示が切り替わる
-        expect(page).to  have_content 'ログアウト'
-        expect(page).to  have_content 'マイページ'
+        expect(page).to have_field 'email', with: ''
+        expect(page).to  have_field 'password', with: ''
       end
     end
   end
@@ -311,11 +304,8 @@ RSpec.describe 'Users', type: :system do
         find('a', text: 'ログアウト').click
         expect(page).to have_content 'SignOut'
         click_button 'SignOut'
-        # ログインすると表示が切り替わる
-        sleep 5
-        expect(page.driver.browser.switch_to.alert.text).to eq 'ユーザーがサインアウトしました。'
-        sleep 2
-        page.driver.browser.switch_to.alert.accept
+        # アラートは表示されずにトップページに遷移する仕様に変更
+        expect(page).not_to have_content "#{user.nickname}さんのマイページ"
         expect(page).to  have_content '新規登録'
         expect(page).to  have_content 'ログイン'
       end

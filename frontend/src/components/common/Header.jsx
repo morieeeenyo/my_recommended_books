@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 // コンポーネントの読み込み
-import UserModal from './UserModal.jsx';
+import UserModalForm from './UserModalForm.jsx';
 
 // ロゴ画像の読み込み。ダブルクオートじゃないと本番環境で読み込めない
 import Logo from "../../../images/header_logo.png"
@@ -13,109 +13,19 @@ import { withRouter } from 'react-router-dom'
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
+import Cookies from 'universal-cookie';
+
 
 class Header extends React.Component {
   constructor(){
     super();
-    this.state = {
-      showModal: false,
-      content: '',
-    }
-    this.openSignUpModal = this.openSignUpModal.bind(this)
-    this.openSignInModal = this.openSignInModal.bind(this)
-    this.openSignOutModal = this.openSignOutModal.bind(this)
-    this.closeModal = this.closeModal.bind(this)
-    this.switchToMyPage = this.switchToMyPage.bind(this)
-  }
-
-  // 新規登録・ログイン・ログアウトでモーダルの表示を分けるために別メソッドとして定義
-  openSignUpModal() {
-    this.setState ({
-      showModal: true,
-      content: 'SignUp'
-    })
-  }
-
-  openSignInModal() {
-    this.setState ({
-      showModal: true,
-      content: 'SignIn'
-    })
-  }
-
-  openSignOutModal() {
-    this.setState ({
-      showModal: true,
-      content: 'SignOut'
-    })
-  }
-
-  // モーダルを閉じる。contentは空文字列にリセット
-  closeModal() {
-    this.setState ({
-      showModal: false,
-      content: ''
-    })
-    this.props.history.goBack() //マイページから来てもトップページから来てもいいようにgoBackに修正(サインアウトのみマイページから来れる)
-    // ※マイページからサインアウトした時はマイページに繊維→一度アラートを出してからトップページに戻る。コードはMypage.jsxに記載
-  }
-
-  switchToMyPage() {
-    this.setState ({
-      showModal: false,
-      content: ''
-    })
-  }
-
-  componentDidMount(){
-    //ブラウザバックしたときにURLに応じてモーダルの表示を切り替える
-    this.props.history.listen((location) => {
-      if (location.pathname == '/') {
-        // ブラウザバックしたときrootパスにいればモーダルを閉じる
-        this.setState ({
-          showModal: false,
-          content: ''
-        })
-      }
-      if (!JSON.parse(localStorage.getItem("auth_token"))['uid']) {
-        if (location.pathname == '/users/sign_up') {
-          // ブラウザバックしたときもパスがあっていれば新規登録モーダルを開く
-          this.setState ({
-            showModal: true,
-            content: 'SignUp'
-          })
-        }
-        if (location.pathname == '/users/sign_in') {
-          // ブラウザバックしたときもパスがあっていればログインモーダルを開く
-          this.setState ({
-            showModal: true,
-            content: 'SignIn'
-          })
-        }
-        if (location.pathname == '/users/sign_out') {
-          // ログアウト時にログアウトのモーダルは開けないようにする
-          alert('ユーザーがログインしていません')
-          this.closeModal()
-        }
-      } else {
-        if (location.pathname == '/users/sign_out') {
-          // ブラウザバックしたときもパスがあっていればログアウトモーダルを開く
-          this.setState ({
-            showModal: true,
-            content: 'SignOut'
-          })
-        } else if (location.pathname == '/users/sign_up' || location.pathname == '/users/sign_in')  {
-          // ログイン時にログイン・新規登録のモーダルは開けないようにする
-          alert('ログイン・新規登録するにはログアウトしてください')
-          this.closeModal()
-        }
-      }
-    });
   }
 
   render () {
-    const authToken = localStorage.getItem("auth_token")
-    if (authToken == undefined || !JSON.parse(authToken)['uid']) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
+    const cookies = new Cookies()
+    const authToken = cookies.get("authToken")
+    if (authToken == undefined || !authToken) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
     return (
           <HeaderContainer>
             {this.props.children}
@@ -125,13 +35,12 @@ class Header extends React.Component {
               </Link>
             </HeaderTitle>
             <HeaderRight>
-              <Link to="/users/sign_up" onClick={this.openSignUpModal}>
+              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}}>
                 新規登録
               </Link>
-              <Link to="/users/sign_in" onClick={this.openSignInModal}>
+              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}}>
                 ログイン
               </Link>
-              <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> {/* stateのcontentでログインと新規登録を分岐 */}
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
         </HeaderContainer>
@@ -147,11 +56,10 @@ class Header extends React.Component {
           </Link>
         </HeaderTitle>
         <HeaderRight>
-          <Link to="/users/sign_out" onClick={this.openSignOutModal}>
+        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}}>
             ログアウト
           </Link>
-            <UserModal show={this.state.showModal} close={this.closeModal} content={this.state.content}/> 
-          <Link to="/mypage" onClick={this.switchToMyPage}>
+          <Link to="/mypage">
             マイページ
           </Link>
         </HeaderRight>

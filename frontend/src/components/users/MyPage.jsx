@@ -13,6 +13,9 @@ import axios from 'axios';
 // ロゴ画像の読み込み
 import Sample from "../../../images/sample_avatar.png"
 
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
+
 export function MyRecommendedBooks() {
   const location = useLocation();
   if (location.state.books.length !== 0) {
@@ -24,7 +27,7 @@ export function MyRecommendedBooks() {
               <img src={book.image_url}/>
               <p className="book-title">{book.title}</p>
               <p className="book-author">{book.author}</p>
-              <Link to={{pathname: "/mypage/books/" + book.id + "/outputs", state: {book: book}}}>アウトプット</Link>
+              <Link to={{pathname: "/mypage/books/" + book.id + "/outputs", state: {book: book, user: location.state.user}}}>アウトプット</Link>
             </li> //returnがないと表示できない
             ) 
           })} 
@@ -73,9 +76,10 @@ class MyPage extends React.Component {
   };
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
@@ -127,7 +131,7 @@ class MyPage extends React.Component {
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
-                <Link to={{pathname: "/mypage/books", state: {books: this.state.books}}}>
+                <Link to={{pathname: "/mypage/books", state: {books: this.state.books, user: this.state.user}}}>
                   推薦図書一覧
                 </Link>
               </li>

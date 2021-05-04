@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import {withRouter} from 'react-router-dom'
+
 //axiosの読み込み
 import axios from 'axios';
+
+// Cookieの読み込み
+import Cookies from 'universal-cookie';
 
 export function ErrorMessage(props) {
   if (props.errors.length !== 0) {
@@ -86,7 +91,7 @@ function UserFrom(props) {
 }
 
 
-class UserModal extends React.Component {
+class UserModalForm extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -137,16 +142,19 @@ class UserModal extends React.Component {
     axios.defaults.headers.common['uid'] = uid;
     axios.defaults.headers.common['client'] = client;
     axios.defaults.headers.common['access-token'] = accessToken;
-    localStorage.setItem('auth_token', JSON.stringify(axios.defaults.headers.common))
+    const cookies = new Cookies();
+    cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60});
   }
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
     } else {
       return null
     }
@@ -155,7 +163,7 @@ class UserModal extends React.Component {
   formSubmit(e) {
     e.preventDefault()
     // props.content,つまりモーダルの種類ごとに処理を分ける
-    if (this.props.content == 'SignUp') {
+    if (this.props.location.state.content == 'SignUp') {
       axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
@@ -166,7 +174,7 @@ class UserModal extends React.Component {
           user: {},
           errors: []
         })
-        this.props.close() //モーダルを閉じる
+        this.props.history.push('/')
         return response
       })
       .catch(error => {
@@ -178,18 +186,17 @@ class UserModal extends React.Component {
       })
     }
 
-    if (this.props.content == 'SignIn') {
+    if (this.props.location.state.content == 'SignIn') {
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token'])
-        console.log(axios.defaults.headers)
         this.setState({
           user: {},
           errors: []
         })
-        this.props.close()
+        this.props.history.push('/')
         return response
       })
       .catch(error => {
@@ -203,7 +210,7 @@ class UserModal extends React.Component {
       })
     }
 
-    if (this.props.content == 'SignOut') {
+    if (this.props.location.state.content == 'SignOut') {
       this.setAxiosDefaults();
       this.userAuthentification()
       axios
@@ -211,13 +218,13 @@ class UserModal extends React.Component {
       .then(response => {
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //ログアウト時はこれらはundefinedになる
-        localStorage.setItem('uid', JSON.stringify(response.headers['uid']))
-        console.log(axios.defaults.headers)
+        const cookies = new Cookies();
+        cookies.remove('authToken')
         this.setState({
           user: {},
           errors: []
         })
-        this.props.close()
+        this.props.history.push('/')
         return response
       })
       .catch(error => {
@@ -276,17 +283,45 @@ class UserModal extends React.Component {
     this.props.close()
   }
 
+  componentDidMount(){
+    const authToken = this.userAuthentification()
+    if (!authToken && location.pathname == '/users/sign_out/form') {
+      alert('ユーザーがログインしていません')
+      this.props.history.push('/')
+    }
+
+    if (authToken) {
+      if (location.pathname == '/users/sign_in/form' || location.pathname == '/users/sign_up/form') {
+        alert('ログイン・新規登録するにはログアウトしてください')
+        this.props.history.push('/')
+      }
+    }
+  }
+
   render () {
-    if (this.props.show) {
-      return (
-        <ModalOverlay onClick={this.resetErrorMessages}> {/* closeModalはみたらわかるけどモーダルを閉じる処理 */}
-        <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
-            <p>{this.props.content}</p>
-            <button onClick={this.resetErrorMessages}>x</button>
-          <UserFrom content={this.props.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
-        </ModalContent>
-      </ModalOverlay>
-   )
+    if (this.props.location.state.show) {
+      // マイページ→サインアウトモーダル→やっぱやめた、の場合を想定してgoBackにする
+      if (this.props.location.state.content == 'SignOut') {
+        return(
+            <ModalOverlay onClick={() => this.props.history.goBack()}> 
+            <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
+                <p>{this.props.location.state.content}</p>
+                <button onClick={() => this.props.history.goBack()}>x</button>
+              <UserFrom content={this.props.location.state.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
+            </ModalContent>
+          </ModalOverlay>
+        )
+      } else {
+        return (
+          <ModalOverlay onClick={() => this.props.history.push('/')}> 
+          <ModalContent onClick={(e) => e.stopPropagation()}> {/* モーダル内部をクリックしたときは閉じない */}
+              <p>{this.props.location.state.content}</p>
+              <button onClick={() => this.props.history.push('/')}>x</button>
+            <UserFrom content={this.props.location.state.content} submit={this.formSubmit} user={this.state.user} change={this.updateForm} errors={this.state.errors}/>
+          </ModalContent>
+        </ModalOverlay>
+     )
+   }
   } else {
     return null; //closeModalメソッドが動くとHeader.jsx内のstateが変更され、propsのshowがfalseになる
   }
@@ -404,4 +439,4 @@ export const FormBlock = styled.div `
   }
 `
 
-export default UserModal;
+export default withRouter(UserModalForm);

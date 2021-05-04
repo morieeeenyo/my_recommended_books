@@ -4,7 +4,10 @@ module Api
   module V1
     class BooksController < ApplicationController
       before_action :user_authentification
+      # ユーザーが認証済みかどうかチェック
       before_action :set_twitter_client, only: :create
+      # ツイートの投稿
+      after_action :post_tweet, only: :create
 
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
@@ -16,9 +19,6 @@ module Api
           @user.books << @book # ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
           render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
           # 一旦テスト時は読み込まない設定にする。次のブランチで詳細実装詰める
-          if !Rails.env.test? # rubocop:disable Style/NegatedIf
-            @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る
-          end
         else
           render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
@@ -57,12 +57,22 @@ module Api
       end
 
       def set_twitter_client
+        # ユーザーがsns認証済みではない場合には何もせず処理を終了
+        return nil unless @user.sns_token
         @twitter_client = Twitter::REST::Client.new do |config|
-          config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
-          config.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']
+          # @userからsns認証情報を渡すことで任意のユーザーでツイート可能になる
+          config.access_token        = @user.sns_token
+          config.access_token_secret = @user.sns_secret
           config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
           config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
         end
+      end
+
+      def post_tweet
+        # ユーザーが認証済みではない、もしくはフォームでTwitterでのシェアをオンにしていない場合には何もしない
+        return nil if !@twitter_client || !params[:to_be_shared_on_twitter] 
+        @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") if !Rails.env.test? # rubocop:disable Style/NegatedIf
+        # ↑アプリURLへの導線を貼る(一通り出来上がってから)
       end
     end
   end

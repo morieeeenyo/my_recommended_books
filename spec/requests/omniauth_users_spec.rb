@@ -23,10 +23,7 @@ RSpec.describe 'OmniauthUsers', type: :request do
 
       it 'oauthのデータが存在する場合リクエストのmockのデータに応じたレスポンスが返却される' do
         get '/api/v1/users/twitter/callback'
-        json = JSON.parse(response.body)
-        expect(json['uid']).to eq request.env['omniauth.auth']['uid'] # 念の為一意性のカラムで検証
-        expect(json['email']).to eq request.env['omniauth.auth']['info']['email'] # 念の為一意性のカラムで検証
-        expect(json['provider']).to eq request.env['omniauth.auth']['provider'] # 念の為一意性のカラムで検証
+        expect(response.headers['uid']).to eq request.env['omniauth.auth']['uid'] # 念の為一意性のカラムで検証
       end
     end
 

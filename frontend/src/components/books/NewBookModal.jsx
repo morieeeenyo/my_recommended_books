@@ -5,71 +5,21 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 //コンポーネントの読み込み
-import {FormBlock} from "../common/UserModal.jsx"
-import {ModalOverlay} from "../common/UserModal.jsx"
-import {ModalContent} from "../common/UserModal.jsx"
-import {ErrorMessage} from "../common/UserModal.jsx"
-import {UserFromContent} from "../common/UserModal.jsx"
+import {FormBlock} from "../common/UserModalForm.jsx"
+import {ModalOverlay} from "../common/UserModalForm.jsx"
+import {ModalContent} from "../common/UserModalForm.jsx"
+import {ErrorMessage} from "../common/UserModalForm.jsx"
+import {UserFromContent} from "../common/UserModalForm.jsx"
 
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
-// function ManualBookPostForm() {
-//   // もしかしたら使うかも
-//     return(
-//       <form>
-//         <BooksFormBlock>
-//           <label htmlFor="title">タイトル</label>
-//           <input type="text" name="title" id="nickname" onChange={this.searchBook}/>  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="recommends">こんな人におすすめ！</label>
-//           <input type="text" name="recommends" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="description">内容要約</label>
-//           <textarea type="text" name="description" id="nickname"></textarea> 
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="author">著者</label>
-//           <input type="text" name="author" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="author_kana">著者(カナ)</label>
-//           <input type="text" name="author_kana" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="publisher_name">出版社</label>
-//           <input type="text" name="publisher_name" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="genre_id">ジャンル</label>
-//           <input type="text" name="genre_id" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="sales_date">発売日</label>
-//           <input type="text" name="sales_date" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="item_price">価格</label>
-//           <input type="text" name="item_price" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <label htmlFor="image_url">画像</label>
-//           <input type="hidden" name="image_url" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <input type="hidden" name="isbn" id="nickname" />  
-//         </BooksFormBlock>
-//         <BooksFormBlock>
-//           <input type="submit" value="推薦図書に追加" id="submit-btn"/>
-//         </BooksFormBlock>
-//       </form>
-//     )
-//   }
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
+import Cookies from 'universal-cookie';
 
 function SearchBookForm(props) {
-  return(
+  if (props.user.sns_token && props.user.sns_secret) {
+  return (
     <NewBookFormContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <BooksFormBlock>
@@ -84,17 +34,49 @@ function SearchBookForm(props) {
 
 
       </div>
+        {/* sns未認証の場合表示しない */}
+        <BooksFormBlock>
+        <label htmlFor="to_be_shared_on_twitter">
+          {/* チェックが入っている場合Twitterでシェア */}
+          <input type="checkbox" name="to_be_shared_on_twitter" id="to_be_shared_on_twitter" onChange={props.change}/>
+          <i className="fab fa-twitter"></i>Twitterでシェア
+        </label>
+        </BooksFormBlock>
       <BooksFormBlock>
         <input type="submit" value="推薦図書に追加" id="submit_btn"/>
       </BooksFormBlock>
     </NewBookFormContent>
-  )
+    )
+  } else {
+    return(
+
+      <NewBookFormContent onSubmit={props.submit}>
+        <ErrorMessage errors={props.errors}></ErrorMessage>
+        <BooksFormBlock>
+          <label htmlFor="title">タイトルで検索</label>
+          <div className="search-form-field">
+            <input type="text" name="title" id="title" onChange={props.change}/>  
+            <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
+          </div>
+        </BooksFormBlock>
+        <div id="search_result">
+          {/* 検索結果が個々に入る */}
+
+
+        </div>
+        <BooksFormBlock>
+          <input type="submit" value="推薦図書に追加" id="submit_btn"/>
+        </BooksFormBlock>
+      </NewBookFormContent>
+    )
+  }
 }
 
 class NewBookModal extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      user: {},
       book: {
         isbn: '',
         title: '',
@@ -106,7 +88,9 @@ class NewBookModal extends React.Component {
         item_url: '',
         image_url: '',
       },
-      errors: []
+      errors: [],
+      // Twitterにシェアするかどうかを決めるstate
+      to_be_shared_on_twitter: false
     }
     this.closeBookModal = this.closeBookModal.bind(this)
     this.searchBook = this.searchBook.bind(this)
@@ -117,6 +101,7 @@ class NewBookModal extends React.Component {
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
   }
 
+  // emailで新規登録、ログインした場合はこちらを使ってcsrfトークンを更新
   getCsrfToken() {
     if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
       return (
@@ -144,9 +129,18 @@ class NewBookModal extends React.Component {
   updateForm(e) {
     //入力欄の変化を検知してstateを変える
     const book = this.state.book;
-    book.title = e.target.value            
+    let to_be_shared_on_twitter = this.state.to_be_shared_on_twitter
+    switch (e.target.name) {
+      case 'title':
+        book.title = e.target.value            
+        break;
+      case 'to_be_shared_on_twitter':
+        to_be_shared_on_twitter = !to_be_shared_on_twitter
+        break;
+    }
     this.setState({
-      book: book
+      book: book,
+      to_be_shared_on_twitter: to_be_shared_on_twitter
     })
   }
 
@@ -176,7 +170,7 @@ class NewBookModal extends React.Component {
         <h3>${book.params.title}</h3>
         <p>著者名</p><p>${book.params.author}</p>
         `
-        resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent)
+        resultInfoWrapper.insertAdjacentHTML('afterbegin', resultInfoContent) //変数の埋め込みのために文字列を流し込む
         resultItem.appendChild(resultImage)
         resultItem.appendChild(resultInfoWrapper)
         resultList.appendChild(resultItem)
@@ -215,13 +209,14 @@ class NewBookModal extends React.Component {
     this.userAuthentification()
     this.setAxiosDefaults();
     axios
-    .post('/api/v1/books', {book: this.state.book})
+    .post('/api/v1/books', {book: this.state.book, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter})
     .then(response => {
       // todo:次のブランチでマイページに書籍情報を渡す
       this.setState({
         books: {}
       })
       this.closeBookModal()
+      return response
     })
     .catch(error => {
       if (error.response.data && error.response.data.errors) {
@@ -234,22 +229,44 @@ class NewBookModal extends React.Component {
 
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
     } else {
       return null
     }
   }
 
   componentDidMount(){
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies()
+    const authToken = cookies.get("authToken");
     if (!authToken || !authToken['uid']) { //ログインしていない場合モーダルが開かないようにする。初回起動時はそもそもauthTokenが存在しないのでそれも判定
       alert('推薦図書の投稿にはログインが必要です')
       this.props.history.push("/");
+    } else {
+      axios 
+      .get('/api/v1/mypage')
+      .then(response => {
+        if (response.data.avatar) {
+          this.setState({
+            user: response.data.user,
+          })
+        } else {
+          this.setState({
+            user: response.data.user,
+          })
+        }
+        return response
+      })
+      .catch(error =>{
+        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+        console.log(error) 
+      })
     }
   }
 
@@ -261,7 +278,7 @@ class NewBookModal extends React.Component {
         <p>推薦図書を投稿する</p>
         <button onClick={this.closeBookModal}>x</button>
           <NewBooksWrapper>
-            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors}/>
+            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors} user={this.state.user}/>
           </NewBooksWrapper>
         </ModalContent>
       </ModalOverlay>
@@ -269,7 +286,7 @@ class NewBookModal extends React.Component {
   } 
 }
 
-// 基本的なスタイルはUserModal.jsxを継承しているためそちらを参照
+// 基本的なスタイルはUserModalForm.jsxを継承しているためそちらを参照
 const NewBooksWrapper = styled.div `
   width: 100%;
   margin: 0 auto;
@@ -326,6 +343,11 @@ const BooksFormBlock = styled(FormBlock)`
 
   label {
     font-size: 16px;
+  }
+
+  input[type=checkbox] {
+    width: fit-content;
+    margin-right: 2px;
   }
 
 

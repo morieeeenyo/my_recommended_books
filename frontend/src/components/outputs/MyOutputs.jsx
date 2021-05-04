@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 //コンポーネントの読み込み
-import {FormBlock} from "../common/UserModal.jsx"
+import {FormBlock} from "../common/UserModalForm.jsx"
 import OutputModal from '../outputs/OutputModal.jsx'
 
 // react-router用のlinkを使えるようにする
@@ -11,8 +11,11 @@ import { Link,withRouter } from 'react-router-dom'
 //axiosの読み込み
 import axios from 'axios';
 
-//momentの読み込み(日付の表示)
+//momentの読み込み(投稿日時の表示)
 import moment from 'moment'
+
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
+import Cookies from 'universal-cookie';
 
 
 class MyOutputs extends React.Component {
@@ -43,9 +46,10 @@ class MyOutputs extends React.Component {
   };
 
   userAuthentification() {
-    const authToken = JSON.parse(localStorage.getItem("auth_token"));
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken['uid'] && authToken['client'] && authToken['access-token']) { 
+    if (authToken) { 
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
@@ -85,7 +89,7 @@ class MyOutputs extends React.Component {
             {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
               <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
               {/* スタイルはMyPage→MyOutputsへのリンクと同じ */}
-              <Link to={{pathname: "/books/" + this.props.location.state.book.id + "/outputs/new", state: {book: this.props.location.state.book}}}>
+              <Link to={{pathname: "/books/" + this.props.location.state.book.id + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
                 アウトプットを投稿する
               </Link>
             </div>

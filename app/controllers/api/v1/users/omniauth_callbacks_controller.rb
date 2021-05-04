@@ -2,33 +2,44 @@ module Api
   module V1
     module Users
       class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
+        attr_reader :auth_params
+
+        before_action :validate_auth_origin_url_param
+        skip_before_action :set_user_by_token, raise: false
+
+        def redirect_callbacks
+          super
+        end
+
         def omniauth_success
           # 認証に成功した時の処理
           super
           update_auth_header
         end
 
+        def omniauth_failure
+          super
+        end        
+
         protected
 
-        # // ②credentialを保存。いるのかわからないから一旦保留
-        # def get_resource_from_auth_hash
-        #   super
-        #   @resource.credentials = auth_hash["credentials"]
-        #   clean_resource
-        # end
-
         def render_data_or_redirect(message, data, user_data = {})
-          if Rails.env.production?
-            if %w[inAppBrowser newWindow].include?(omniauth_window_type)
-              render_data(message, user_data.merge(data))
-            elsif auth_origin_url
-              redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
-            else
-              fallback_render data[:error] || 'An error occurred'
-            end
+          
+          # 2回目以降のログイン時にはfirst_sessionのクッキーデータを削除
+          cookies.delete(:first_session, path: root_path, httponly: true) if cookies[:first_session]
+          # 初回ログイン時にはcookieに情報をセット。Oauth認証後ユーザー情報の編集ページに飛ばす
+          cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes, httponly: true }  if @resource.sign_in_count == 0 
+          
+          auth_token = {'uid' => user_data['uid'], 'client' =>  data['client_id'], 'access-token' => data['auth_token'] }
+          cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour}
+          
+          if %w[inAppBrowser newWindow].include?(omniauth_window_type)
+            render_data(message, user_data.merge(data))
+          elsif auth_origin_url
+            # return redirect_to root_path if Rails.env.test?
+            redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
           else
-            #  // わかりやすい様に開発時はjsonとして結果を返す
-            render json: @resource, status: :ok
+            fallback_render data[:error] || 'An error occurred'
           end
         end
 
@@ -52,12 +63,10 @@ module Api
         end
 
         def get_resource_from_auth_hash # rubocop:disable Naming/AccessorMethodName
-          # テスト通過のためにオーバーライド
+          # テスト通過のためにオーバーライド          
           if Rails.env.test?
-            if !auth_hash # rubocop:disable Style/NegatedIf
               auth_hash = request.env['omniauth.auth']
               # テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
-            end
           elsif !auth_hash
             auth_hash = session['dta.omniauth.auth']
             # 開発環境・本番環境ではauth_hashはsessionから取り出す
@@ -68,6 +77,9 @@ module Api
             uid: auth_hash['uid'],
             provider: auth_hash['provider']
           ).first_or_initialize
+
+          @resource.sns_token = auth_hash["credentials"]['token']
+          @resource.sns_secret = auth_hash["credentials"]['secret']
 
           # ここから下はよくわからないので一旦保留
           handle_new_resource if @resource.new_record?
