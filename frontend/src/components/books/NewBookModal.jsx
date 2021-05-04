@@ -220,9 +220,11 @@ class NewBookModal extends React.Component {
     })
     .catch(error => {
       if (error.response.data && error.response.data.errors) {
-        this.setState({
-          errors: error.response.data.errors //モデルのバリデーションエラーメッセージの表示
-        })
+        const errors = [] //エラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
+          errors.push(error.response.data.errors) 
+          this.setState({
+            errors: errors
+          })
       }
     })
   }
