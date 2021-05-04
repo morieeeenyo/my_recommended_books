@@ -201,10 +201,8 @@ class UserModalForm extends React.Component {
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
-          const errors = [] //ログインではエラーメッセージは1つしか出ないがループ処理でレンダリングするために一度配列を作っておく
-          errors.push(error.response.data.errors) 
           this.setState({
-            errors: errors
+            errors: error.response.data.errors //エラーメッセージの表示
           })
         }
       })

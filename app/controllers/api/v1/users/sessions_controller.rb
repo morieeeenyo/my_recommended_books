@@ -43,12 +43,12 @@ module Api
         def invalid_email
           warden.custom_failure!
           # ユーザー認証に引っかかった際のステータスは401(Unautorized)
-          render status: 401, json: { errors: 'Authorization failed. Invalid email' }
+          render status: 401, json: { errors: ['Authorization failed. Invalid email'] }
         end
 
         def invalid_password
           warden.custom_failure!
-          render status: 401, json: { errors: 'Authorization failed. Invalid password' }
+          render status: 401, json: { errors: ['Authorization failed. Invalid password'] }
         end
 
         def set_csrf_token_header
