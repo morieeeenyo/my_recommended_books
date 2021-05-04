@@ -18,9 +18,9 @@ module Api
           @book.save
           user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
           if user_book_relation
-            render status: 422, json: { errors: 'その書籍はすでに追加されています' } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+            render status: 422, json: { errors: 'その書籍はすでに追加されています' } # すでに同じ書籍が投稿されていればエラーメッセージを表示
           else
-            @user.books << @book # ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
+            @user.books << @book # ユーザーと書籍を紐付ける。
             render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
           end
         else
