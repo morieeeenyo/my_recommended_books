@@ -6,8 +6,6 @@ module Api
       before_action :user_authentification
       # ユーザーが認証済みかどうかチェック
       before_action :set_twitter_client, only: :create
-      # ツイートの投稿
-      after_action :post_tweet, only: :create
 
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
@@ -22,6 +20,7 @@ module Api
           else
             @user.books << @book # ユーザーと書籍を紐付ける。
             render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
+            post_tweet # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
           end
         else
           render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
