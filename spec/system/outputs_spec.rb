@@ -14,6 +14,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
     expect(page).to have_content "#{user.nickname}さんのマイページ"
     find('a', text: '推薦図書一覧').click
     all('a', text: 'アウトプット')[0].click
+    sleep 5
     find('a', text: 'アウトプットを投稿する').click
     expect(page).to have_content 'アウトプットを投稿する'
   end
