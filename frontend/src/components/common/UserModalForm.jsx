@@ -143,7 +143,7 @@ class UserModalForm extends React.Component {
     axios.defaults.headers.common['client'] = client;
     axios.defaults.headers.common['access-token'] = accessToken;
     const cookies = new Cookies();
-    cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60});
+    cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60, secure: true, sameSite: 'Lax'});
   }
 
   userAuthentification() {
