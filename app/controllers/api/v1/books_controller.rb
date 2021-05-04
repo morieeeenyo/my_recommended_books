@@ -6,19 +6,22 @@ module Api
       before_action :user_authentification
       # ユーザーが認証済みかどうかチェック
       before_action :set_twitter_client, only: :create
-      # ツイートの投稿
-      after_action :post_tweet, only: :create
 
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: '推薦図書の投稿にはログインが必要です' } unless @user && @token && @client
 
         @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) # 同じデータを保存しないためにisbnで識別
-        if @book.valid?
+        if @book.valid? #書籍データが送られていればtrue
           @book.save
-          @user.books << @book # ユーザーと書籍を紐付ける。ここで書籍が投稿済みの場合は中間テーブルにのみデータが入る。
-          render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
-          # 一旦テスト時は読み込まない設定にする。次のブランチで詳細実装詰める
+          user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
+          if user_book_relation
+            render status: 422, json: { errors: ['その書籍はすでに追加されています'] } # すでに同じ書籍が投稿されていればエラーメッセージを表示。書籍が空だった場合と合わせるために配列で定義
+          else
+            @user.books << @book # ユーザーと書籍を紐付ける。
+            render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
+            post_tweet # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
+          end
         else
           render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
