@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :book do
-    isbn { '12345667890123' }
+    isbn { Faker::Number.number(digits: 13) }
     title { 'test' }
     author { 'testさん' }
     author_kana { 'テストさん' }

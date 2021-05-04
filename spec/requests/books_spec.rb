@@ -4,8 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Books', type: :request do
   let(:user) { create(:user) }
+  let(:another_user) { create(:user) }
   let(:book) { build(:book) }
   let(:book_params) { attributes_for(:book) } # paramsとして送るためにattributes_forを使用
+  let(:another_book_params) { attributes_for(:book) } # paramsとして送るためにattributes_forを使用
   let(:invalid_book_params) { attributes_for(:book, title: '') } # コントローラーで空のキーワードに対してnilを返すようにしている
   let(:book_search_params) { { keyword: '７つの習慣' } } # 検索したらヒットしそうな本にしてます
   let(:headers) do
@@ -64,6 +66,19 @@ RSpec.describe 'Books', type: :request do
         json = JSON.parse(response.body)
         expect(json['book']['title']).to eq book_params[:title]
       end
+
+      it '同じユーザーは複数の書籍を投稿可能である' do
+        post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
+        post api_v1_books_path, xhr: true, params: { book: another_book_params }, headers: headers # headersは認証用のヘッダー
+        expect(response).to have_http_status(201) # ステータスはコントローラーで設定している
+      end
+
+      it '一つの書籍は複数のユーザーから投稿可能である' do
+        post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
+        headers['uid'] = another_user.uid
+        post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
+        expect(response).to have_http_status(201) # ステータスはコントローラーで設定している
+      end
     end
 
     context '書籍が投稿できない時' do
@@ -76,6 +91,13 @@ RSpec.describe 'Books', type: :request do
         post api_v1_books_path, xhr: true, params: { book: invalid_book_params }, headers: headers # headersは認証用のヘッダー
         json = JSON.parse(response.body)
         expect(json['errors']).to include "Title can't be blank"
+      end
+
+      it '同じ書籍を2度以上投稿しようとするとエラーメッセージが返却される' do
+        post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
+        post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
+        json = JSON.parse(response.body)
+        expect(json['errors']).to include "その書籍はすでに追加されています"
       end
     end
   end
