@@ -24,10 +24,6 @@ RSpec.describe 'Users', type: :request do
       it "パラメータが正しい時ユーザー情報の編集に成功する" do
         user_params[:nickname] = 'updated'
         patch api_v1_user_registration_path, xhr: true, headers: headers, params: { user: user_params }
-        
-        binding.pry
-        
-        
       end
     end
   end
