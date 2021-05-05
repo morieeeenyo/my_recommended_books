@@ -32,20 +32,35 @@ module Api
         def update
           # ユーザー認証に引っかかった際のステータスは401(Unautorized)
           return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
-          if params[:user][:avatar][:data] != '' && params[:user][:avatar][:filename] != '' # 画像データ自体は送られてくるので中身が空かどうか判定をする
-            blob = ActiveStorage::Blob.create_after_upload!(
-              io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
-              filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
-            )
-            @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
-            return render json: { user: @user } if params[:user][:nickname] == ""
-          end
-          if @user.update_attributes(nickname: params[:user][:nickname])
-            update_auth_header # access-token, clientの発行
-            render json: { user: @user }
-          else
-            render status: 422, json: { errors: @user.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
-          end
+
+
+          if @user.update(nickname: params[:user][:nickname])
+              if params[:user][:avatar][:data] != '' && params[:user][:avatar][:filename] != '' 
+                # avatarとnicknameを両方更新する場合
+                @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+                blob = ActiveStorage::Blob.create_after_upload!(
+                  io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
+                  filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
+                )
+                @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
+              end
+              update_auth_header # access-token, clientの発行
+              return render json: { user: @user }  
+            else
+              if params[:user][:avatar][:data] != '' && params[:user][:avatar][:filename] != '' 
+                # avatarだけ更新する場合
+                @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+                blob = ActiveStorage::Blob.create_after_upload!(
+                  io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
+                  filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
+                )
+                @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
+                update_auth_header # access-token, clientの発行
+                return render json: { user: @user, avatar: @user.avatar.blob }  # returnして処理を終える
+              end
+              # nicknameとavatarともに空で更新に失敗した場合
+              render status: 422, json: { errors: @user.errors.full_messages } 
+            end
         end
 
         private

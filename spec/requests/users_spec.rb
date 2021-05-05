@@ -16,14 +16,57 @@ RSpec.describe 'Users', type: :request do
   end
   
   describe "ユーザー情報の更新" do
-    before do
-      user_params[:avatar] = { data: '', filename: '' } # 実行環境でも画像未選択の場合空文字列が送られる
+
+    context "更新に成功する時(nicknameのみ更新)" do
+      it "パラメータが正しい時ステータスが200で返却される" do
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        expect(response).to have_http_status(200) # 成功時ステータスは200
+      end
+
+      it "リクエストに成功した場合ユーザーの数は増加しない" do
+        expect do 
+          put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        end.to change(User, :count)
+      end
+
+      it "パラメータが正しい時更新されたユーザーの情報がレスポンスとして返却される" do
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        json = JSON.parse(response.body)
+        expect(json['user']['nickname']).to eq request.params[:user][:nickname] # 値が変更されているかどうか
+        expect(json['user']['email']).to eq user.email
+        expect(user.avatar.attached?).to eq false # avatarが添付されていないままかどうか
+      end
     end
 
-    context "更新に成功する時" do
+    context "更新に成功する時(avatarのみ更新)" do
       it "パラメータが正しい時ユーザー情報の編集に成功する" do
-        user_params[:nickname] = 'updated'
-        patch api_v1_user_registration_path, xhr: true, headers: headers, params: { user: user_params }
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: { nickname: '', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } #paramsにはこれ以外の値は送信されない想定
+        json = JSON.parse(response.body)  
+        expect(json['avatar']['filename']).to eq request.params[:user][:avatar][:filename]
+      end
+    end
+
+    context "更新に成功する時(nickname, avatarともに更新)" do
+      it "パラメータが正しい時ユーザー情報の編集に成功する" do
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'update', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } #paramsにはこれ以外の値は送信されない想定
+        json = JSON.parse(response.body)
+        expect(json['user']['nickname']).to eq request.params[:user][:nickname] # 値が変更されているかどうか
+        expect(json['user']['email']).to eq user.email # 更新していないカラムの情報が維持されているかどうか
+        expect(user.avatar.blob.filename).to eq 'test_avatar.png' # 値が変更されているかどうか
+      end
+    end
+
+    context "更新に失敗するする時" do
+      it "nicknameとavatarがともに空の場合リクエストに失敗する" do
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        expect(response).to have_http_status(422) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422
+      end
+
+      it "nicknameとavatarがともに空の場合エラーメッセージが返却される" do
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        # レスポンスの中身を検証
+        json = JSON.parse(response.body)
+        expect(json['errors']).to include "Nickname can't be blank"
       end
     end
   end
@@ -145,7 +188,7 @@ RSpec.describe 'Users', type: :request do
         expect(response).to have_http_status(404)
       end
 
-      it 'リクエストに成功する' do
+      it 'リクエストに失敗する' do
         delete destroy_api_v1_user_session_path
         json = JSON.parse(response.body)
         expect(json['success']).to eq false # headersのuid, access-token, clientが全て揃っているときのみtrueを返す
