@@ -38,6 +38,7 @@ module Api
               filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
             )
             @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
+            return render json: { user: @user } if params[:user][:nickname] == ""
           end
           if @user.update_attributes(nickname: params[:user][:nickname])
             update_auth_header # access-token, clientの発行
