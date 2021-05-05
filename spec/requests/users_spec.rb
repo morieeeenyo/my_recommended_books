@@ -14,7 +14,17 @@ RSpec.describe 'Users', type: :request do
   let(:headers) do
     { 'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678' }
   end
-
+  
+  describe "ユーザー情報の更新" do
+    context "更新に成功する時" do
+      it "パラメータが正しい時ユーザー情報の編集に成功する" do
+        
+      end
+    end
+    
+    
+  end
+  
   describe '新規登録' do
     before do
       user_params[:avatar] = { data: '', filename: '' } # 実行環境でも画像未選択の場合空文字列が送られる
@@ -319,4 +329,6 @@ RSpec.describe 'Users', type: :request do
       end
     end
   end
+
+  
 end

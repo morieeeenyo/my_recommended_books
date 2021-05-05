@@ -27,6 +27,10 @@ module Api
           end
         end
 
+        def update
+          super
+        end
+
         private
 
         def sign_up_params
