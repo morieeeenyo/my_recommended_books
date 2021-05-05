@@ -16,15 +16,22 @@ RSpec.describe 'Users', type: :request do
   end
   
   describe "ユーザー情報の更新" do
+    before do
+      user_params[:avatar] = { data: '', filename: '' } # 実行環境でも画像未選択の場合空文字列が送られる
+    end
+
     context "更新に成功する時" do
       it "パラメータが正しい時ユーザー情報の編集に成功する" do
+        user_params[:nickname] = 'updated'
+        patch api_v1_user_registration_path, xhr: true, headers: headers, params: { user: user_params }
+        
+        binding.pry
+        
         
       end
     end
-    
-    
   end
-  
+
   describe '新規登録' do
     before do
       user_params[:avatar] = { data: '', filename: '' } # 実行環境でも画像未選択の場合空文字列が送られる
