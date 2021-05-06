@@ -366,6 +366,19 @@ RSpec.describe 'Users', type: :request do
     end
   
     context "更新に失敗するする時" do
+      it "ヘッダーのユーザー情報が存在しない場合リクエストに失敗する" do
+        headers['uid'] = nil # そもそもユーザーが存在しない
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        expect(response).to have_http_status(401) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422
+      end
+
+      it "ヘッダーのユーザー情報が存在しない場合エラーメッセージが返却される" do
+        headers['uid'] = nil # そもそもユーザーが存在しない
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        json = JSON.parse(response.body)
+        expect(json['errors']).to eq 'ユーザーが存在しません'
+      end
+
       it "nicknameとavatarがともに空の場合リクエストに失敗する" do
         put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
         expect(response).to have_http_status(422) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422

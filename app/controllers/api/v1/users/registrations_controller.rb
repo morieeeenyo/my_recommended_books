@@ -6,6 +6,8 @@ module Api
       class RegistrationsController < DeviseTokenAuth::RegistrationsController
         skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
         skip_before_action :validate_account_update_params, only: :update # 自前でユーザー認証するので不要
+        skip_before_action :set_user_by_token, only: :update
+        skip_after_action :update_auth_header
         before_action :user_authentification, only: :update
         after_action :set_csrf_token_header # csrf-tokenの更新
 
@@ -28,8 +30,7 @@ module Api
         def update
           # ユーザー認証に引っかかった際のステータスは401(Unautorized)
           return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
-
-
+          
           if params[:user]
             if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
               # 画像とnickname両方変更する場合
