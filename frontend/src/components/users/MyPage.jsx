@@ -16,6 +16,9 @@ import Sample from "../../../images/sample_avatar.png"
 // Cookieの読み込み
 import Cookies from 'universal-cookie';
 
+
+
+
 export function MyRecommendedBooks() {
   const location = useLocation();
   if (location.state.books.length !== 0) {

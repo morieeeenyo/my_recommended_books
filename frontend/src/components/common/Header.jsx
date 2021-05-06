@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-// コンポーネントの読み込み
-import UserModalForm from './UserModalForm.jsx';
-
 // ロゴ画像の読み込み。ダブルクオートじゃないと本番環境で読み込めない
 import Logo from "../../../images/header_logo.png"
 

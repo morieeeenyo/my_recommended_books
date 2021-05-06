@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { Link, useParams, useLocation, useHistory } from 'react-router-dom'
 
 //コンポーネント読み込み
-import {ModalOverlay} from "../common/UserModalForm.jsx"
-import {ModalContent} from "../common/UserModalForm.jsx"
+import {ModalOverlay} from "../users/UserModalForm.jsx/index.js"
+import {ModalContent} from "../users/UserModalForm.jsx/index.js"
 
 function UserModalMenu(props) {
   const location = useLocation();

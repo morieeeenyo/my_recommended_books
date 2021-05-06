@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // コンポーネントの読み込み
 import Header from './Header.jsx'
-import UserModalForm from './UserModalForm.jsx'
-import UserModalMenu from './UserModalMenu.jsx'
+import UserModalForm from '../users/UserModalForm.jsx'
+import UserModalMenu from '../users/UserModalMenu.jsx'
 import Container from './Container.jsx'
 import Index from '../books/Index.jsx'
 import NewBookModal from '../books/NewBookModal.jsx'

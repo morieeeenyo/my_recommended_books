@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-//コンポーネントの読み込み
-import {FormBlock} from "../common/UserModalForm.jsx"
-import OutputModal from '../outputs/OutputModal.jsx'
-
 // react-router用のlinkを使えるようにする
 import { Link,withRouter } from 'react-router-dom'
 
