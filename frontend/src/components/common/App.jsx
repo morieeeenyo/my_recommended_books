@@ -13,8 +13,8 @@ import NewBookModal from '../books/NewBookModal.jsx'
 import MyPage from '../users/MyPage.jsx'
 import MyOutputs from '../outputs/MyOutputs.jsx'
 import {MyRecommendedBooks} from '../users/MyPage.jsx'
-import {UserInfo} from '../users/MyPage.jsx'
 import AccountUpdateModal from '../users/AccountUpdateModal.jsx'
+import AccountUpdateForm from '../users/AccountUpdateForm.jsx'
 import OutputModal from '../outputs/OutputModal.jsx'
 
 //axiosの読み込み
@@ -90,6 +90,9 @@ class App extends React.Component {
                   </Route>
                   <Route path="/mypage/edit/menu">
                     <AccountUpdateModal></AccountUpdateModal>
+                  </Route>
+                  <Route exact path="/mypage/:content/edit">
+                    <AccountUpdateForm></AccountUpdateForm>
                   </Route>
                   <Route path="/mypage/books/:book_id/outputs">
                     <MyOutputs></MyOutputs>
