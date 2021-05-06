@@ -58,7 +58,9 @@ export const ModalMenuContent = styled(ModalContent)`
     }
 
     & span {
-    font-weight: bold;
+      font-weight: bold;
+      display: inline-block;
+      margin: 0 auto;
     }
 
     :hover {
