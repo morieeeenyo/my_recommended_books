@@ -14,12 +14,8 @@ module Api
         def create
           @user = User.new(sign_up_params)
           if @user.valid?
-            if params[:user][:avatar][:data] != '' && params[:user][:avatar][:filename] != '' # 画像データ自体は送られてくるので中身が空かどうか判定をする
-              blob = ActiveStorage::Blob.create_after_upload!(
-                io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
-                filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
-              )
-              @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
+            if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present? # 画像データ自体は送られてくるので中身が空かどうか判定をする
+              avatar_attach
             end
             @user.save
             update_auth_header # access-token, clientの発行
@@ -34,39 +30,47 @@ module Api
           return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
 
 
-          if @user.update(nickname: params[:user][:nickname])
-              if params[:user][:avatar][:data] != '' && params[:user][:avatar][:filename] != '' 
-                # avatarとnicknameを両方更新する場合
-                @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
-                blob = ActiveStorage::Blob.create_after_upload!(
-                  io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
-                  filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
-                )
-                @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
-              end
-              update_auth_header # access-token, clientの発行
-              return render json: { user: @user }  
+          if params[:user]
+            if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+              # 画像とnickname両方変更する場合
+              @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+              update_nickname
+              avatar_attach
+            elsif params[:user][:nickname].present?
+              # ニックネームだけ変更する場合
+              update_nickname
+            elsif params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+              # アバターだけ変更する場合
+              @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+              avatar_attach
             else
-              if params[:user][:avatar][:data] != '' && params[:user][:avatar][:filename] != '' 
-                # avatarだけ更新する場合
-                @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
-                blob = ActiveStorage::Blob.create_after_upload!(
-                  io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
-                  filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
-                )
-                @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
-                update_auth_header # access-token, clientの発行
-                return render json: { user: @user, avatar: @user.avatar.blob }  # returnして処理を終える
-              end
-              # nicknameとavatarともに空で更新に失敗した場合
-              render status: 422, json: { errors: @user.errors.full_messages } 
+              # アバターもニックネームも空で送られてきた場合
+              return render status: 422, json: { errors: ["Nickname can't be blank"] }
             end
+            update_auth_header # access-token, clientの発行
+            # 最後に更新した結果をフロントに返す
+            return render json: { user: @user }  
+          end
         end
 
         private
 
         def sign_up_params
           params.require(:user).permit(:nickname, :email, :password, :password_confirmation)
+        end
+
+        def avatar_attach
+          # アバター画像が送られてきた際にユーザーと紐付ける
+          blob = ActiveStorage::Blob.create_after_upload!(
+            io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
+            filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
+          )
+          @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
+        end
+
+        def update_nickname
+          # updateに失敗したらエラーメッセージを発生させる
+          render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
         end
 
         def set_csrf_token_header

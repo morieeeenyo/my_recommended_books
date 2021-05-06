@@ -20,7 +20,7 @@ RSpec.describe 'Users', type: :request do
     before do
       user_params[:avatar] = { data: '', filename: '' } # 実行環境でも画像未選択の場合空文字列が送られる
     end
-
+    
     context 'パラメータが正しい時' do
       it 'リクエストに成功する(画像なし)' do # 念の為画像ありなし検証してます
         post api_v1_user_registration_path, xhr: true, params: { user: user_params }
@@ -104,7 +104,7 @@ RSpec.describe 'Users', type: :request do
         post api_v1_user_session_path, xhr: true, params: { user: { email: user.email, password: '' } }
         expect(response).to have_http_status(401)
       end
-
+      
       it 'エラーメッセージが返却される' do
         post api_v1_user_session_path, xhr: true, params: { user: { email: user.email, password: '' } }
         json = JSON.parse(response.body)
@@ -160,13 +160,13 @@ RSpec.describe 'Users', type: :request do
         expect(json['books'].length).to eq 0
       end
     end
-
+    
     context '画像あり' do
       before do
         user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png',
                                                                                 content_type: 'image/png'))
                                                                               end
-
+                                                                              
       it 'ヘッダーにuidがあればリクエストに成功する' do
         get api_v1_user_mypage_path, headers: headers # headersは認証用のヘッダー
         expect(response).to have_http_status(200)
@@ -263,7 +263,7 @@ RSpec.describe 'Users', type: :request do
         end
       end
     end
-
+    
     context 'アウトプット一覧の表示に成功する時(アウトプットが投稿されていない)' do
       before do
         user_book.user_id = user.id
@@ -348,8 +348,10 @@ RSpec.describe 'Users', type: :request do
       it "パラメータが正しい時更新されたユーザーの情報がレスポンスとして返却される" do
         put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: { nickname: '', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } #paramsにはこれ以外の値は送信されない想定
         json = JSON.parse(response.body)  
-        # json['user']['nickname']が空で返ってくるのでもしかすると更新に失敗している？
-        expect(json['avatar']['filename']).to eq request.params[:user][:avatar][:filename]
+        # 更新していないカラムの情報が維持されているかどうか
+        expect(json['user']['nickname']).to eq user.nickname
+        expect(json['user']['email']).to eq user.email 
+        expect(user.avatar.blob.filename).to eq 'test_avatar.png' # 値が変更されているかどうか
       end
     end
   
@@ -369,7 +371,7 @@ RSpec.describe 'Users', type: :request do
         expect(response).to have_http_status(422) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422
       end
   
-      it "nicknameとavatarがともに空の場合エラーメッセージが返却される" do
+      it "nicknameとavatarがともに空の場合元のデータと同じレスポンスが返却される" do
         put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
         # レスポンスの中身を検証
         json = JSON.parse(response.body)
