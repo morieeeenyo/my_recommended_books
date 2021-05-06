@@ -31,13 +31,79 @@ class AccountUpdateForm extends React.Component {
       },
       errors: []
     }
+    this.formSubmit = this.formSubmit.bind(this)
     this.updateForm = this.updateForm.bind(this)
+    this.getCsrfToken = this.getCsrfToken.bind(this)
+    this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.updateCsrfToken = this.updateCsrfToken.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   componentDidMount() {
     this.setState({
       user: this.props.location.state.user
     })
+  }
+
+  getCsrfToken() {
+    if (!(axios.defaults.headers.common['X-CSRF-Token'])) {
+      return (
+        document.getElementsByName('csrf-token')[0].getAttribute('content') //初回ログイン時新規登録時はheadタグのcsrf-tokenを参照する
+      )
+    } else {
+      return (
+        axios.defaults.headers.common['X-CSRF-Token'] //それ以外のときは既にセットしてあるcsrf-tokenを参照
+      )
+    }
+  };
+
+  setAxiosDefaults() {
+    axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
+  };
+
+  updateCsrfToken(csrf_token){
+    axios.defaults.headers.common['X-CSRF-Token'] = csrf_token;
+  };
+
+  userAuthentification() {
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
+    } else {
+      return null
+    }
+  }
+
+  formSubmit(e) {
+    e.preventDefault()
+    // props.content,つまりモーダルの種類ごとに処理を分ける
+    if (this.props.location.state.content == 'Edit Profile') {
+      axios
+      .put('/api/v1/users', {user: {nickname: this.state.user.nickname, avatar: this.state.user.avatar }} )
+      .then(response => {
+        this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
+        this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //uid, client, access-tokenの3つをログアウトで使えるようにする
+        // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
+        this.setState({
+          user: {},
+          errors: []
+        })
+        this.props.history.push('/')
+        return response
+      })
+      .catch(error => {
+        if (error.response.data && error.response.data.errors) {
+          this.setState({
+            errors: error.response.data.errors //エラーメッセージの表示
+          })
+        }
+      })
+    }
   }
 
   updateForm(e) {
@@ -83,7 +149,7 @@ class AccountUpdateForm extends React.Component {
             <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
             {/* モーダル内部をクリックしたときは閉じない */}
               <p>{this.props.location.state.content}</p>
-              <UserFromContent>
+              <UserFromContent onSubmit={this.formSubmit}>
                 <ErrorMessage errors={this.state.errors}></ErrorMessage>
                 <FormBlock>
                   <label htmlFor="nickname">ニックネーム(必須)</label>
@@ -109,7 +175,7 @@ class AccountUpdateForm extends React.Component {
               <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
               {/* モーダル内部をクリックしたときは閉じない */}
                 <p>{this.props.location.state.content}</p>
-                <UserFromContent>
+                <UserFromContent onSubmit={this.formSubmit}>
                   <ErrorMessage errors={this.state.errors}></ErrorMessage>
                   <FormBlock>
                     <label htmlFor="email">メールアドレス(必須)</label>
@@ -131,7 +197,7 @@ class AccountUpdateForm extends React.Component {
               <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
               {/* モーダル内部をクリックしたときは閉じない */}
                 <p>{this.props.location.state.content}</p>
-                <UserFromContent>
+                <UserFromContent onSubmit={this.formSubmit}>
                   <ErrorMessage errors={this.state.errors}></ErrorMessage>
                   <FormBlock>
                     <label htmlFor="password">パスワード(必須)</label>
