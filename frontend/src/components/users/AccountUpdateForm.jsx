@@ -31,6 +31,7 @@ class AccountUpdateForm extends React.Component {
       },
       errors: []
     }
+    this.updateForm = this.updateForm.bind(this)
   }
 
   componentDidMount() {
@@ -39,29 +40,64 @@ class AccountUpdateForm extends React.Component {
     })
   }
 
+  updateForm(e) {
+    // ネストされたオブジェクトのdataまでアクセスしておく
+    const user = this.state.user;
+
+    // eventが発火したname属性名ごとに値を処理
+    switch (e.target.name) {
+        case 'nickname':
+            user.nickname = e.target.value;
+            break;
+        case 'email':
+            user.email = e.target.value;
+            break;
+        case 'password':
+            user.password = e.target.value;
+            break;
+        case 'password_confirmation':
+            user.password_confirmation = e.target.value;
+            break;
+        case 'avatar':
+            //画像は事前にvalueを取得できないのでFileReaderを使ってデータを読み取る
+            const file = e.target.files[0];
+            const reader = new FileReader()
+            reader.onload = () => { 
+              //以下2つはactivestorageの保存に必要
+              user.avatar.data = reader.result
+              user.avatar.filename = file.name 
+            }
+            reader.readAsDataURL(file) //戻り値はata:image/jpeg;base64,/9j/4AA…のようになる。これをサーバーサイドで複合する
+            break;
+    }
+    this.setState({
+      user: user
+    })
+  }
+
   render() {
     if (this.props.location.state.show) {
         if(this.props.location.state.content == 'Edit Profile') {
           return (
-          <ModalOverlay onClick={() => history.push('/mypage')}> 
+          <ModalOverlay onClick={() => this.props.history.push('/mypage')}> 
             <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
             {/* モーダル内部をクリックしたときは閉じない */}
               <p>{this.props.location.state.content}</p>
               <UserFromContent>
-                <ErrorMessage errors={''}></ErrorMessage>
+                <ErrorMessage errors={this.state.errors}></ErrorMessage>
                 <FormBlock>
                   <label htmlFor="nickname">ニックネーム(必須)</label>
-                  <input type="text" name="nickname" id="nickname" value={this.props.location.state.user.nickname}/>
+                  <input type="text" name="nickname" id="nickname" onChange={this.updateForm} value={this.props.location.state.user.nickname}/>
                 </FormBlock>
                 <FormBlock>
                   <label htmlFor="avatar">アバター画像(任意)</label>
                   <input type="file" name="avatar" id="avatar" accept="image/*,.png,.jpg,.jpeg,.gif"/>
                 </FormBlock>
                 <FormBlock>
-                  <input type="submit" value={this.props.location.state.content} id="submit_btn"/>
+                  <input type="submit" onChange={this.updateForm} value={this.props.location.state.content} id="submit_btn"/>
                 </FormBlock>
               </UserFromContent>
-              <button onClick={() => history.push('/mypage')}>x</button>
+              <button onClick={() => this.props.history.push('/mypage')}>x</button>
             </ModalMenuContent>
           </ModalOverlay>
           )
@@ -69,21 +105,21 @@ class AccountUpdateForm extends React.Component {
   
       if(this.props.location.state.content == 'Change Email') {
         return (
-          <ModalOverlay onClick={() => history.push('/mypage')}> 
+          <ModalOverlay onClick={() => this.props.history.push('/mypage')}> 
               <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
               {/* モーダル内部をクリックしたときは閉じない */}
                 <p>{this.props.location.state.content}</p>
                 <UserFromContent>
-                  <ErrorMessage errors={''}></ErrorMessage>
+                  <ErrorMessage errors={this.state.errors}></ErrorMessage>
                   <FormBlock>
                     <label htmlFor="email">メールアドレス(必須)</label>
-                    <input type="email" name="email" id="email" placeholder="@を含む形式" value={this.props.location.state.user.email}/>
+                    <input type="email" name="email" id="email" placeholder="@を含む形式" onChange={this.updateForm} value={this.props.location.state.user.email}/>
                   </FormBlock>
                   <FormBlock>
-                    <input type="submit" value={this.props.location.state.content} id="submit_btn"/>
+                    <input type="submit" onChange={this.updateForm} value={this.props.location.state.content} id="submit_btn"/>
                   </FormBlock>
                 </UserFromContent>
-                <button onClick={() => history.push('/mypage')}>x</button>
+                <button onClick={() => this.props.history.push('/mypage')}>x</button>
               </ModalMenuContent>
             </ModalOverlay>
         )
@@ -91,25 +127,25 @@ class AccountUpdateForm extends React.Component {
   
       if(this.props.location.state.content == 'Change Password') {
         return (
-          <ModalOverlay onClick={() => history.push('/mypage')}> 
+          <ModalOverlay onClick={() => this.props.history.push('/mypage')}> 
               <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
               {/* モーダル内部をクリックしたときは閉じない */}
                 <p>{this.props.location.state.content}</p>
                 <UserFromContent>
-                  <ErrorMessage errors={''}></ErrorMessage>
+                  <ErrorMessage errors={this.state.errors}></ErrorMessage>
                   <FormBlock>
                     <label htmlFor="password">パスワード(必須)</label>
-                    <input type="password" name="password" id="password" placeholder="英小文字・大文字・数字を全て含み8文字以上" value={this.props.location.state.user.password}/>
+                    <input type="password" name="password" id="password" placeholder="英小文字・大文字・数字を全て含み8文字以上" onChange={this.updateForm} value={this.props.location.state.user.password}/>
                   </FormBlock>
                   <FormBlock>
                     <label htmlFor="password_confirmation">パスワード(確認)</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="同じものを入力" value={this.props.location.state.user.password_confirmation}/>
+                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="同じものを入力" onChange={this.updateForm} value={this.props.location.state.user.password_confirmation}/>
                   </FormBlock>
                   <FormBlock>
-                    <input type="submit" value={this.props.location.state.content} id="submit_btn"/>
+                    <input type="submit" onChange={this.updateForm} value={this.props.location.state.content} id="submit_btn"/>
                   </FormBlock>
                 </UserFromContent>
-                <button onClick={() => history.push('/mypage')}>x</button>
+                <button onClick={() => this.props.history.push('/mypage')}>x</button>
               </ModalMenuContent>
             </ModalOverlay>
         )
