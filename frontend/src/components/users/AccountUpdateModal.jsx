@@ -22,15 +22,15 @@ function AccountUpdateModal(props) {
         <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
         {/* モーダル内部をクリックしたときは閉じない */}
           <p>Account Update</p>
-          <Link to={{pathname: "/mypage/profile/edit", state: {content: 'Edit Profile', show: location.state.show}}} className="email-button">
+          <Link to={{pathname: "/mypage/profile/edit", state: {content: 'Edit Profile', show: location.state.show, user: location.state.user}}} className="email-button">
           <i className="fas fa-user"></i>
             <span>Edit Profile</span>
           </Link>
-          <Link to={{pathname: "/mypage/email/edit", state: {content: 'Change Email', show: location.state.show}}} className="email-button">
+          <Link to={{pathname: "/mypage/email/edit", state: {content: 'Change Email', show: location.state.show, user: location.state.user}}} className="email-button">
             <i className="fas fa-envelope"></i>
             <span>Change Email</span>
           </Link>
-          <Link to={{pathname: "/mypage/password/edit", state: {content: 'Change Password', show: location.state.show}}} className="email-button">
+          <Link to={{pathname: "/mypage/password/edit", state: {content: 'Change Password', show: location.state.show, user: location.state.user}}} className="email-button">
           <i className="fas fa-key"></i>
             <span>Change Password</span>
           </Link>
