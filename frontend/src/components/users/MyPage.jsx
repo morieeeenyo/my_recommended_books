@@ -131,7 +131,7 @@ class MyPage extends React.Component {
                 </Link>
               </li>
               <li>
-                <Link to={{pathname: "/mypage/edit", state: {user: this.state.user, show: true}}}>
+                <Link to={{pathname: "/mypage/edit/menu", state: {user: this.state.user, show: true}}}>
                   ユーザー情報編集
                 </Link>
               </li>

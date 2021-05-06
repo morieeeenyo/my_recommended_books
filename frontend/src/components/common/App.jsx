@@ -88,7 +88,7 @@ class App extends React.Component {
                     <MyRecommendedBooks>
                     </MyRecommendedBooks>
                   </Route>
-                  <Route path="/mypage/edit">
+                  <Route path="/mypage/edit/menu">
                     <AccountUpdateModal></AccountUpdateModal>
                   </Route>
                   <Route path="/mypage/books/:book_id/outputs">
