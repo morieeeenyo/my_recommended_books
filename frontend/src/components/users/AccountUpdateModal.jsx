@@ -22,9 +22,17 @@ function AccountUpdateModal(props) {
         <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
         {/* モーダル内部をクリックしたときは閉じない */}
           <p>Account Update</p>
-          <Link to={{pathname: "/users/"+ params.content + "/form", state: {content: location.state.content, show: location.state.show}}} className="email-button">
+          <Link to={{pathname: "/"+ params.content + "/form", state: {content: location.state.content, show: location.state.show}}} className="email-button">
+          <i className="fas fa-user"></i>
+            <span>Edit Profile</span>
+          </Link>
+          <Link to={{pathname: "/"+ params.content + "/form", state: {content: location.state.content, show: location.state.show}}} className="email-button">
             <i className="fas fa-envelope"></i>
             <span>Change Email</span>
+          </Link>
+          <Link to={{pathname: "/"+ params.content + "/form", state: {content: location.state.content, show: location.state.show}}} className="email-button">
+          <i className="fas fa-key"></i>
+            <span>Change Password</span>
           </Link>
 
           <button onClick={() => history.goBack()}>x</button>
