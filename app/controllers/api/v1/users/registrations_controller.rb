@@ -5,6 +5,10 @@ module Api
     module Users
       class RegistrationsController < DeviseTokenAuth::RegistrationsController
         skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
+        skip_before_action :validate_account_update_params, only: :update # 自前でユーザー認証するので不要
+        skip_before_action :set_user_by_token, only: :update
+        skip_after_action :update_auth_header
+        before_action :user_authentification, only: :update
         after_action :set_csrf_token_header # csrf-tokenの更新
 
         respond_to :json
@@ -12,12 +16,8 @@ module Api
         def create
           @user = User.new(sign_up_params)
           if @user.valid?
-            if params[:user][:avatar][:data] != '' && params[:user][:avatar][:filename] != '' # 画像データ自体は送られてくるので中身が空かどうか判定をする
-              blob = ActiveStorage::Blob.create_after_upload!(
-                io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
-                filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
-              )
-              @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
+            if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present? # 画像データ自体は送られてくるので中身が空かどうか判定をする
+              avatar_attach
             end
             @user.save
             update_auth_header # access-token, clientの発行
@@ -27,10 +27,51 @@ module Api
           end
         end
 
+        
+        def update # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+          # ユーザー認証に引っかかった際のステータスは401(Unautorized)
+          return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
+          
+          return nil unless params[:user]
+          if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+            # 画像とnickname両方変更する場合
+            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+            update_nickname
+            avatar_attach
+          elsif params[:user][:nickname].present?
+            # ニックネームだけ変更する場合
+            update_nickname
+          elsif params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+            # アバターだけ変更する場合
+            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+            avatar_attach
+          else
+            # アバターもニックネームも空で送られてきた場合
+            return render status: 422, json: { errors: ["Nickname can't be blank"] }
+          end
+          update_auth_header # access-token, clientの発行
+          # 最後に更新した結果をフロントに返す
+          return render json: { user: @user }  
+        end
+
         private
 
         def sign_up_params
           params.require(:user).permit(:nickname, :email, :password, :password_confirmation)
+        end
+
+        def avatar_attach
+          # アバター画像が送られてきた際にユーザーと紐付ける
+          blob = ActiveStorage::Blob.create_after_upload!(
+            io: StringIO.new("#{decode(params[:user][:avatar][:data])}\n"), # UserModal.jsxでfilereaderを使って取得した文字列を復号する
+            filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
+          )
+          @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
+        end
+
+        def update_nickname
+          # updateに失敗したらエラーメッセージを発生させる
+          render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
         end
 
         def set_csrf_token_header
@@ -52,6 +93,14 @@ module Api
           else
             refresh_headers
           end
+        end
+
+        def user_authentification
+          # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
+          @user = User.find_for_database_authentication(uid: request.headers['uid'])
+          # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
+          @token = request.headers['access-token']
+          @client = request.headers['client']
         end
       end
     end
