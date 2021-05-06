@@ -41,28 +41,6 @@ export function MyRecommendedBooks() {
   }
 }
 
-export function UserInfo() {
-  const location = useLocation();
-  if (location.state.books.length !== 0) {
-    return (
-      <BookList>
-          {location.state.books.map(book => {
-            return (
-            <li key={book.isbn} className="book-list-item">
-              <img src={book.image_url}/>
-              <p className="book-title">{book.title}</p>
-              <p className="book-author">{book.author}</p>
-              <Link to={{pathname: "/mypage/books/" + book.id + "/outputs", state: {book: book, user: location.state.user}}}>アウトプット</Link>
-            </li> //returnがないと表示できない
-            ) 
-          })} 
-      </BookList>
-    )
-    } else {
-      return null
-  }
-}
-
 class MyPage extends React.Component {
   constructor(props){
     super(props);
@@ -153,7 +131,7 @@ class MyPage extends React.Component {
                 </Link>
               </li>
               <li>
-                <Link to={{pathname: "/mypage/info", state: {user: this.state.user}}}>
+                <Link to={{pathname: "/mypage/edit", state: {user: this.state.user, show: true}}}>
                   ユーザー情報
                 </Link>
               </li>
