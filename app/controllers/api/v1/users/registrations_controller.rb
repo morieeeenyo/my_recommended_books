@@ -28,7 +28,7 @@ module Api
         end
 
         
-        def update # rubocop:disable Metrics/CyclomaticComplexity:, Metrics/PerceivedComplexity:
+        def update # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
           # ユーザー認証に引っかかった際のステータスは401(Unautorized)
           return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
           
