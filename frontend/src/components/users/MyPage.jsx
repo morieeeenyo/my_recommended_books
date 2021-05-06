@@ -41,12 +41,26 @@ export function MyRecommendedBooks() {
   }
 }
 
-export function EditUserInfo() {
-  return (
-    <div>
-      これはユーザー情報の編集フォームです
-    </div>
-  )
+export function UserInfo() {
+  const location = useLocation();
+  if (location.state.books.length !== 0) {
+    return (
+      <BookList>
+          {location.state.books.map(book => {
+            return (
+            <li key={book.isbn} className="book-list-item">
+              <img src={book.image_url}/>
+              <p className="book-title">{book.title}</p>
+              <p className="book-author">{book.author}</p>
+              <Link to={{pathname: "/mypage/books/" + book.id + "/outputs", state: {book: book, user: location.state.user}}}>アウトプット</Link>
+            </li> //returnがないと表示できない
+            ) 
+          })} 
+      </BookList>
+    )
+    } else {
+      return null
+  }
 }
 
 class MyPage extends React.Component {
@@ -139,8 +153,8 @@ class MyPage extends React.Component {
                 </Link>
               </li>
               <li>
-                <Link to="/mypage">
-                  ユーザー情報編集
+                <Link to={{pathname: "/mypage/info", state: {user: this.state.user}}}>
+                  ユーザー情報
                 </Link>
               </li>
             </ul>
