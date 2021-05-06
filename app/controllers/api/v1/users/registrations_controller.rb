@@ -35,7 +35,7 @@ module Api
           return nil unless params[:user]
           if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
             # 画像とnickname両方変更する場合
-            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+            @user.avatar.detach if @user.avatar.attached? #すでにavatarが紐付いていれば外す
             update_nickname
             avatar_attach
           elsif params[:user][:nickname].present?
@@ -43,7 +43,7 @@ module Api
             update_nickname
           elsif params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
             # アバターだけ変更する場合
-            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+            @user.avatar.detach if @user.avatar.attached? #すでにavatarが紐付いていれば外す
             avatar_attach
           else
             # アバターもニックネームも空で送られてきた場合
