@@ -27,31 +27,30 @@ module Api
           end
         end
 
-        def update
+        def update # rubocop:disable Metrics/PerceivedComplexity
           # ユーザー認証に引っかかった際のステータスは401(Unautorized)
           return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
           
-          if params[:user]
-            if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
-              # 画像とnickname両方変更する場合
-              @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
-              update_nickname
-              avatar_attach
-            elsif params[:user][:nickname].present?
-              # ニックネームだけ変更する場合
-              update_nickname
-            elsif params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
-              # アバターだけ変更する場合
-              @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
-              avatar_attach
-            else
-              # アバターもニックネームも空で送られてきた場合
-              return render status: 422, json: { errors: ["Nickname can't be blank"] }
-            end
-            update_auth_header # access-token, clientの発行
-            # 最後に更新した結果をフロントに返す
-            return render json: { user: @user }  
+          return nil unless params[:user]
+          if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+            # 画像とnickname両方変更する場合
+            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+            update_nickname
+            avatar_attach
+          elsif params[:user][:nickname].present?
+            # ニックネームだけ変更する場合
+            update_nickname
+          elsif params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+            # アバターだけ変更する場合
+            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+            avatar_attach
+          else
+            # アバターもニックネームも空で送られてきた場合
+            return render status: 422, json: { errors: ["Nickname can't be blank"] }
           end
+          update_auth_header # access-token, clientの発行
+          # 最後に更新した結果をフロントに返す
+          return render json: { user: @user }  
         end
 
         private

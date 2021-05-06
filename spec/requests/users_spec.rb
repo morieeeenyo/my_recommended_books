@@ -325,18 +325,18 @@ RSpec.describe 'Users', type: :request do
   
     context "更新に成功する時(nicknameのみ更新)" do
       it "パラメータが正しい時ステータスが200で返却される" do
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } 
         expect(response).to have_http_status(200) # 成功時ステータスは200
       end
   
       it "リクエストに成功した場合ユーザーの数は増加しない" do
         expect do 
-          put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+          put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } 
         end.to change(User, :count)
       end
   
       it "パラメータが正しい時更新されたユーザーの情報がレスポンスとして返却される" do
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } 
         json = JSON.parse(response.body)
         expect(json['user']['nickname']).to eq request.params[:user][:nickname] # 値が更新されているかどうか
         expect(json['user']['email']).to eq user.email # emailは更新されていない
@@ -346,7 +346,10 @@ RSpec.describe 'Users', type: :request do
   
     context "更新に成功する時(avatarのみ更新)" do
       it "パラメータが正しい時更新されたユーザーの情報がレスポンスとして返却される" do
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: { nickname: '', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, 
+        xhr: true, 
+        headers: headers, 
+        params: { user: { nickname: '', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } 
         json = JSON.parse(response.body)  
         # 更新していないカラムの情報が維持されているかどうか
         expect(json['user']['nickname']).to eq user.nickname
@@ -357,7 +360,10 @@ RSpec.describe 'Users', type: :request do
   
     context "更新に成功する時(nickname, avatarともに更新)" do
       it "パラメータが正しい時ユーザー情報の編集に成功する" do
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'update', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, 
+        xhr: true, 
+        headers: headers, 
+        params: { user: {nickname: 'update', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } 
         json = JSON.parse(response.body)
         expect(json['user']['nickname']).to eq request.params[:user][:nickname] # 値が変更されているかどうか
         expect(json['user']['email']).to eq user.email # 更新していないカラムの情報が維持されているかどうか
@@ -368,24 +374,24 @@ RSpec.describe 'Users', type: :request do
     context "更新に失敗するする時" do
       it "ヘッダーのユーザー情報が存在しない場合リクエストに失敗する" do
         headers['uid'] = nil # そもそもユーザーが存在しない
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } 
         expect(response).to have_http_status(401) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422
       end
 
       it "ヘッダーのユーザー情報が存在しない場合エラーメッセージが返却される" do
         headers['uid'] = nil # そもそもユーザーが存在しない
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } 
         json = JSON.parse(response.body)
         expect(json['errors']).to eq 'ユーザーが存在しません'
       end
 
       it "nicknameとavatarがともに空の場合リクエストに失敗する" do
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } 
         expect(response).to have_http_status(422) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422
       end
   
       it "nicknameとavatarがともに空の場合元のデータと同じレスポンスが返却される" do
-        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } #paramsにはこれ以外の値は送信されない想定
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } 
         # レスポンスの中身を検証
         json = JSON.parse(response.body)
         expect(json['errors']).to include "Nickname can't be blank"
