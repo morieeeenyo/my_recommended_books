@@ -116,12 +116,25 @@ class MyPage extends React.Component {
     })
 
   }
+
+  componentDidUpdate() {
+    console.log(this.props.location.state)
+    let updatedProps = this.props.location.state
+    if (updatedProps) {
+      if (updatedProps.avatar) {
+        this.state.avatar = updatedProps.avatar
+        console.log(this.state.avatar)
+        document.getElementById('avatar').src = this.state.avatar
+      } 
+    }
+  }
+
   render () {
     return (
       <MyPageWrapper>
         <MyPageBody>
           <MyPageSideBar>
-          <img src={this.state.avatar}/>
+          <img id="avatar"src={this.state.avatar}/>
           <h4>{this.state.user.nickname}さんのマイページ</h4>
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}

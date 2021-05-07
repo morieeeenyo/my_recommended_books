@@ -99,7 +99,6 @@ class AccountUpdateForm extends React.Component {
       axios
       .patch('/api/v1/users', {user: {nickname: this.state.user.nickname, avatar: this.state.avatar }} )
       .then(response => {
-        console.log(response.headers)
         this.updateCsrfToken(response.headers['x-csrf-token']) //クライアントからデフォルトで発行されたcsrf-tokenを使い回せるようにする
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //uid, client, access-tokenの3つをログアウトで使えるようにする
         // stateをリセットすることで再度モーダルを開いたときにフォームに値が残らないようにする
@@ -108,7 +107,8 @@ class AccountUpdateForm extends React.Component {
           errors: [],
           avatar: {}
         })
-        this.props.history.push('/mypage')
+        this.props.history.push({pathname: '/mypage', state: {user: response.data.user, avatar: response.data.avatar}})
+        // this.props.history.push('/mypage')
         return response
       })
       .catch(error => {

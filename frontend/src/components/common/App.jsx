@@ -88,10 +88,10 @@ class App extends React.Component {
                     <MyRecommendedBooks>
                     </MyRecommendedBooks>
                   </Route>
-                  <Route path="/mypage/edit/menu">
+                  <Route exact path="/mypage/edit/menu" key={'menu'}>
                     <AccountUpdateModal></AccountUpdateModal>
                   </Route>
-                  <Route exact path="/mypage/:content/edit">
+                  <Route exact path="/mypage/:content/edit" key={'edit'}>
                     <AccountUpdateForm></AccountUpdateForm>
                   </Route>
                   <Route path="/mypage/books/:book_id/outputs">
