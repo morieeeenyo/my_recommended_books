@@ -36,11 +36,11 @@ module Api
           if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
             # 画像とnickname両方変更する場合
             @user.avatar.detach if @user.avatar.attached? #すでにavatarが紐付いていれば外す
-            update_nickname
+            return render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
             avatar_attach
           elsif params[:user][:nickname].present?
             # ニックネームだけ変更する場合
-            update_nickname
+            return render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
           elsif params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
             # アバターだけ変更する場合
             @user.avatar.detach if @user.avatar.attached? #すでにavatarが紐付いていれば外す
@@ -67,11 +67,6 @@ module Api
             filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
           )
           @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
-        end
-
-        def update_nickname
-          # updateに失敗したらエラーメッセージを発生させる
-          render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
         end
 
         def set_csrf_token_header
