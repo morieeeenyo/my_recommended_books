@@ -45,8 +45,16 @@ class MyPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      user: {},
-      books: [],
+      user: {
+        nickname: '',        
+        email: '',        
+        password: '',        
+        password_confirmation: '',        
+      },
+      avatar: {
+        data: '',
+        filename: ''
+      },
       avatar: ''
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
@@ -114,7 +122,13 @@ class MyPage extends React.Component {
       //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
       console.log(error) 
     })
-
+    const cookies = new Cookies();
+    if (cookies.get('first_session')) {
+      // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
+      // document.getElementById('link_to_mypage').click()
+      this.props.history.push({pathname: "/mypage/profile/edit", state: {content: 'Edit Profile', show: true, user: this.state.user}})
+      cookies.remove('first_session')
+    }
   }
 
   componentDidUpdate() {
@@ -126,6 +140,10 @@ class MyPage extends React.Component {
         console.log(this.state.avatar)
         document.getElementById('avatar').src = this.state.avatar
       } 
+      if (updatedProps.user) {
+      this.state.user.nickname = updatedProps.user.nickname
+      document.getElementById('nickname').innerHTML = `${this.state.user.nickname}さんのマイページ`
+      }
     }
   }
 
@@ -135,7 +153,7 @@ class MyPage extends React.Component {
         <MyPageBody>
           <MyPageSideBar>
           <img id="avatar"src={this.state.avatar}/>
-          <h4>{this.state.user.nickname}さんのマイページ</h4>
+          <h4 id="nickname">{this.state.user.nickname}さんのマイページ</h4>
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
