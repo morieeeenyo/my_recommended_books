@@ -25,7 +25,7 @@ module Api
 
          # break out provider attribute assignment for easy method extension
         def assign_provider_attrs(user, auth_hash)
-          return nil if user.id.present?
+          return nil if user.id.present? # インスタンスの情報自体は存在するのでidがあるかどうか(=DBに保存済みかどうか)で判定
           super
         end
 

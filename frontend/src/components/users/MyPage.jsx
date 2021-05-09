@@ -124,17 +124,17 @@ class MyPage extends React.Component {
     })
     const cookies = new Cookies();
     if (cookies.get('first_session')) {
+      // こっちはhistory.pushでいけた
       this.props.history.push({pathname: "/mypage/profile/edit", state: {content: 'Edit Profile', show: true, user: this.state.user}})
     }
   }
 
   componentDidUpdate() {
-    console.log(this.props.location.state)
     let updatedProps = this.props.location.state
+    // 編集後の挙動。非同期で画面に情報を反映させる
     if (updatedProps) {
       if (updatedProps.avatar) {
         this.state.avatar = updatedProps.avatar
-        console.log(this.state.avatar)
         document.getElementById('avatar').src = this.state.avatar
       } 
       if (updatedProps.user) {

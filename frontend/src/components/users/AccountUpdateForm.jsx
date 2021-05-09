@@ -49,6 +49,7 @@ class AccountUpdateForm extends React.Component {
     })
     const cookies = new Cookies();
     if (cookies.get('first_session')) {
+      // SNS認証での初回ログイン時の挙動
       document.getElementById('first_session_message').innerHTML = "ご登録いただきありがとうございます！" + "<br>" + "まずはプロフィールの設定をしましょう。"
       cookies.remove('first_session')
     }
@@ -247,6 +248,7 @@ class AccountUpdateForm extends React.Component {
 }
 
 const FirstSessionMessage = styled.span`
+/* SNS認証での初回ログイン時に表示するメッセージ */
   color: red;
   text-align: center;
   margin: 0 auto;

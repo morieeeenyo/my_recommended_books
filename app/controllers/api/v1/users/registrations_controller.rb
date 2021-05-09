@@ -33,8 +33,10 @@ module Api
           return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
           
           return nil unless params[:user]
+          # ニックネームがバリデーションに引っかかるかどうかを検証
           return render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
           if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+            # アバターが変更されたときの挙動
             @user.avatar.detach if @user.avatar.attached? #すでにavatarが紐付いていれば外す
             avatar_attach 
             avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}),

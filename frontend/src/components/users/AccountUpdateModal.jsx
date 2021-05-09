@@ -26,6 +26,7 @@ function AccountUpdateModal(props) {
           <i className="fas fa-user"></i>
             <span>Edit Profile</span>
           </Link>
+          {/* 下2つは仮置。後のブランチで実装 */}
           <Link to={{pathname: "/mypage/email/edit", state: {content: 'Change Email', show: location.state.show, user: location.state.user}}} className="email-button">
             <i className="fas fa-envelope"></i>
             <span>Change Email</span>

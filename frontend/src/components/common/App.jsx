@@ -51,6 +51,7 @@ class App extends React.Component {
       if (cookies.get('first_session')) {
         // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
+        // リンクをクリックさせてマイページに遷移する。history.pushだとうまくいかなかった
         document.getElementById('link_to_mypage').click()
       }
       axios.defaults.headers.common['uid'] = authToken['uid']
