@@ -47,6 +47,11 @@ class AccountUpdateForm extends React.Component {
     this.setState({
       user: this.props.location.state.user
     })
+    const cookies = new Cookies();
+    if (cookies.get('first_session')) {
+      document.getElementById('first_session_message').innerHTML = "ご登録いただきありがとうございます！" + "<br>" + "まずはプロフィールの設定をしましょう。"
+      cookies.remove('first_session')
+    }
   }
 
   getCsrfToken() {
@@ -167,6 +172,7 @@ class AccountUpdateForm extends React.Component {
             <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
             {/* モーダル内部をクリックしたときは閉じない */}
               <p>{this.props.location.state.content}</p>
+              <FirstSessionMessage id="first_session_message"></FirstSessionMessage>
               <UserFromContent onSubmit={this.formSubmit}>
                 <ErrorMessage errors={this.state.errors}></ErrorMessage>
                 <FormBlock>
@@ -239,6 +245,13 @@ class AccountUpdateForm extends React.Component {
     }
   }     // URLのパスパラメータを取得。location.state.contentはキャメルケースなのでスネークケースのデータを取得したい(例：SignUP→sign_up)
 }
+
+const FirstSessionMessage = styled.span`
+  color: red;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+`
 
 
 export default withRouter(AccountUpdateForm);

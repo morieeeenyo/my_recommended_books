@@ -124,10 +124,7 @@ class MyPage extends React.Component {
     })
     const cookies = new Cookies();
     if (cookies.get('first_session')) {
-      // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
-      // document.getElementById('link_to_mypage').click()
       this.props.history.push({pathname: "/mypage/profile/edit", state: {content: 'Edit Profile', show: true, user: this.state.user}})
-      cookies.remove('first_session')
     }
   }
 
