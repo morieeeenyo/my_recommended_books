@@ -7,72 +7,8 @@ RSpec.describe 'Users', type: :system do
   let(:book) { build(:book) }
 
 
-  describe "ユーザー情報の編集" do
-    before do
-      sign_in(user) # ログインする
-    end
-    
-    context "編集に成功する" do
-      it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(ニックネームのみ)" do
-        find('a', text: 'マイページ').click
-        expect(page).to have_content "#{user.nickname}さんのマイページ"
-        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
-        click_link 'ユーザー情報編集'
-        click_link 'Edit Profile'
-        fill_in 'nickname',	with: 'updated'
-        expect do
-          click_button 'Edit Profile'
-        end.not_to change(User, :count) # 編集なのでカウントは増えない
-        sleep 3
-        expect(page).to have_content "updatedさんのマイページ"
-        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
-      end
-
-      it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(アバターのみ)" do
-        prev_nickname = user.nickname
-        find('a', text: 'マイページ').click
-        expect(page).to have_content "#{user.nickname}さんのマイページ"
-        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
-        click_link 'ユーザー情報編集'
-        sleep 2
-        click_link 'Edit Profile'
-        attach_file 'avatar', 'spec/fixtures/test_avatar.png'
-        expect do
-          click_button 'Edit Profile'
-        end.not_to change(User, :count) # 編集なのでカウントは増えない
-        sleep 3
-        expect(page).to have_content "#{user.nickname}さんのマイページ" # ニックネームが変わっていないこと
-        expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
-        # DBの変化を検証
-        expect(user.nickname).to eq prev_nickname # DBのニックネームが変化していないこと
-        expect(user.avatar.blob.filename).to  eq 'test_avatar.png' # 画像が添付されていること
-      end
-
-      it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(アバターと画像両方変更)" do
-        find('a', text: 'マイページ').click
-        expect(page).to have_content "#{user.nickname}さんのマイページ"
-        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
-        click_link 'ユーザー情報編集'
-        click_link 'Edit Profile'
-        fill_in 'nickname',	with: 'updated'
-        attach_file 'avatar', 'spec/fixtures/test_avatar.png'
-        expect do
-          click_button 'Edit Profile'
-        end.not_to change(User, :count) # 編集なのでカウントは増えない
-        sleep 3
-        expect(page).to have_content "updatedさんのマイページ"
-        expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
-        # DBの変化を検証。なぜかuser.nicknameが変化しない(実際のアプリでは変化している)
-        expect(user.avatar.blob.filename).to  eq 'test_avatar.png' # 画像が添付されていること
-      end
-      
-      
-    end
-    
-    
-  end
   
-
+  
   describe '新規登録' do
     before do
       visit root_path
@@ -80,7 +16,7 @@ RSpec.describe 'Users', type: :system do
       click_link 'SignUp with Email'
       expect(page).to have_content 'SignUp'
     end
-
+    
     context '新規登録できるとき' do
       it '全てのフォームに値を入力すると新規登録できる' do
         fill_in 'nickname',	with: user.nickname
@@ -111,7 +47,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to  have_content 'マイページ'
       end
     end
-
+    
     context '新規登録できない時' do
       # バリデーションの詳細なテストはmoodels/user_spec.rbにて
       # 今回はuniqueness, presence, formatの3つに分けて検証
@@ -129,7 +65,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content 'Nickname has already been taken'
         expect(page).to have_content 'Email has already been taken'
       end
-
+      
       it '空のデータを送った場合登録できない' do
         fill_in 'nickname',	with: ''
         fill_in 'email',	with: ''
@@ -256,7 +192,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content 'SignIn'
         expect(page).not_to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
       end
-
+      
       it 'モーダルを閉じ、再び開くと入力内容が消える' do
         fill_in 'email',	with: user.email
         fill_in 'password',	with: user.password
@@ -287,7 +223,7 @@ RSpec.describe 'Users', type: :system do
       end
     end
   end
-
+  
   describe 'マイページの表示' do
     context 'マイページの表示に成功' do
       it 'ログイン状態のユーザーがマイページにアクセスすると正しくマイページが読み込める' do
@@ -306,18 +242,18 @@ RSpec.describe 'Users', type: :system do
         sleep 2
       end
     end
-
+    
     context '推薦図書一覧の表示に成功' do
       it 'マイページから推薦図書一覧をクリックすると投稿した推薦図書が一覧で表示されている。新しく推薦図書を追加すると一番下に追加される' do
         user.save
-        create_list(:user_book, 3, user_id: user.id)
+        create_list(:user_book, 2, user_id: user.id)
         sleep 5
         sign_in(user) # ログインする
         find('a', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'
         sleep 5
-        expect(all('.book-list-item').length).to eq 3
+        expect(all('.book-list-item').length).to eq 2
         sleep 1
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
@@ -336,7 +272,7 @@ RSpec.describe 'Users', type: :system do
         expect(all('.book-list-item > .book-title')[-1].text).not_to eq 'test' # テストデータではない、つまり新しく追加したデータは一番うしろに追加される
       end
     end
-
+    
     context 'アウトプットが投稿されている時' do
       it 'アウトプットが投稿されていればマイページでアウトプット一覧が参照できる' do
         user.save
@@ -393,6 +329,172 @@ RSpec.describe 'Users', type: :system do
         click_button 'x'
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).not_to have_content '推薦図書を投稿する'
+      end
+    end
+  end
+
+  describe "ユーザー情報の編集" do
+    before do
+      sign_in(user) # ログインする
+    end
+    
+    context "編集に成功する" do
+      it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(ニックネームのみ)" do
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        fill_in 'nickname',	with: 'updated'
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "updatedさんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+      end
+  
+      it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(アバターのみ)" do
+        prev_nickname = user.nickname
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        sleep 2
+        click_link 'Edit Profile'
+        attach_file 'avatar', 'spec/fixtures/test_avatar.png'
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "#{user.nickname}さんのマイページ" # ニックネームが変わっていないこと
+        expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        # DBの変化を検証
+        expect(user.nickname).to eq prev_nickname # DBのニックネームが変化していないこと
+        expect(user.avatar.blob.filename).to  eq 'test_avatar.png' # 画像が添付されていること
+      end
+  
+      it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(アバターと画像両方変更)" do
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        fill_in 'nickname',	with: 'updated'
+        attach_file 'avatar', 'spec/fixtures/test_avatar.png'
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "updatedさんのマイページ"
+        expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        # DBの変化を検証。なぜかuser.nicknameが変化しない(実際のアプリでは変化している)
+        expect(user.avatar.blob.filename).to  eq 'test_avatar.png' # 画像が添付されていること
+      end
+      
+      
+    end
+  
+    context "失敗する" do
+      it "ニックネームを空にして送信すると編集に失敗しエラーメッセージが表示される(画像添付なし)" do
+        prev_nickname = user.nickname
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        fill_in 'nickname',	with: ''
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "Nickname can't be blank"
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ" # ニックネームが変わっていないこと
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 画像が変わっていない実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        # DBの変化を検証
+        expect(user.nickname).to eq prev_nickname # DBのニックネームが変化していないこと
+      end
+  
+      it "ニックネームを空にして送信すると編集に失敗しエラーメッセージが表示される(画像添付あり)" do
+        prev_nickname = user.nickname
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        fill_in 'nickname',	with: ''
+        attach_file 'avatar', 'spec/fixtures/test_avatar.png'
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "Nickname can't be blank"
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ" # ニックネームが変わっていないこと
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 画像が変わっていない実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        # DBの変化を検証
+        expect(user.nickname).to eq prev_nickname # DBのニックネームが変化していないこと
+      end
+  
+      it "ニックネームがすでに存在していると編集に失敗しエラーメッセージが表示される(画像添付なし)" do
+        prev_nickname = user.nickname
+        another_user = create(:user)
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        fill_in 'nickname',	with: another_user.nickname
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "Nickname has already been taken"
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ" # ニックネームが変わっていないこと
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 画像が変わっていない実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        expect(user.nickname).to eq prev_nickname # DBのニックネームが変化していないこと
+      end
+  
+      it "ニックネームがすでに存在していると編集に失敗しエラーメッセージが表示される(画像添付あり)" do
+        prev_nickname = user.nickname
+        another_user = create(:user)
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        fill_in 'nickname',	with: another_user.nickname
+        attach_file 'avatar', 'spec/fixtures/test_avatar.png'
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "Nickname has already been taken"
+        click_button 'x'
+        expect(page).to have_content "#{user.nickname}さんのマイページ" # ニックネームが変わっていないこと
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 画像が変わっていない実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        # DBの変化を検証
+        expect(user.nickname).to eq prev_nickname # DBのニックネームが変化していないこと
+      end
+  
+      it "エラーメッセージはモーダルを開き直すと消える" do
+        find('a', text: 'マイページ').click
+        expect(page).to have_content "#{user.nickname}さんのマイページ"
+        expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        fill_in 'nickname',	with: ''
+        expect do
+          click_button 'Edit Profile'
+        end.not_to change(User, :count) # 編集なのでカウントは増えない
+        sleep 3
+        expect(page).to have_content "Nickname can't be blank"
+        click_button 'x'
+        click_link 'ユーザー情報編集'
+        click_link 'Edit Profile'
+        expect(page).not_to have_content "Nickname can't be blank"
       end
     end
   end
