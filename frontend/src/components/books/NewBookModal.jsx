@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 //コンポーネントの読み込み
-import {FormBlock} from "../common/UserModalForm.jsx"
-import {ModalOverlay} from "../common/UserModalForm.jsx"
-import {ModalContent} from "../common/UserModalForm.jsx"
-import {ErrorMessage} from "../common/UserModalForm.jsx"
-import {UserFromContent} from "../common/UserModalForm.jsx"
+import {FormBlock} from "../users/UserModalForm.jsx"
+import {ModalOverlay} from "../users/UserModalForm.jsx"
+import {ModalContent} from "../users/UserModalForm.jsx"
+import {ErrorMessage} from "../users/UserModalForm.jsx"
+import {UserFromContent} from "../users/UserModalForm.jsx"
 
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'

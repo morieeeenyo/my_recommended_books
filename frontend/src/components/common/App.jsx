@@ -5,15 +5,16 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // コンポーネントの読み込み
 import Header from './Header.jsx'
-import UserModalForm from './UserModalForm.jsx'
-import UserModalMenu from './UserModalMenu.jsx'
+import UserModalForm from '../users/UserModalForm.jsx'
+import UserModalMenu from '../users/UserModalMenu.jsx'
 import Container from './Container.jsx'
 import Index from '../books/Index.jsx'
 import NewBookModal from '../books/NewBookModal.jsx'
 import MyPage from '../users/MyPage.jsx'
 import MyOutputs from '../outputs/MyOutputs.jsx'
 import {MyRecommendedBooks} from '../users/MyPage.jsx'
-import {EditUserInfo} from '../users/MyPage.jsx'
+import AccountUpdateModal from '../users/AccountUpdateModal.jsx'
+import AccountUpdateForm from '../users/AccountUpdateForm.jsx'
 import OutputModal from '../outputs/OutputModal.jsx'
 
 //axiosの読み込み
@@ -49,8 +50,9 @@ class App extends React.Component {
     if (authToken) { 
       if (cookies.get('first_session')) {
         // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
-        console.log('初回ログイン')
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
+        // リンクをクリックさせてマイページに遷移する。history.pushだとうまくいかなかった
+        document.getElementById('link_to_mypage').click()
       }
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
@@ -87,8 +89,11 @@ class App extends React.Component {
                     <MyRecommendedBooks>
                     </MyRecommendedBooks>
                   </Route>
-                  <Route path="/mypage/edit">
-                    <EditUserInfo></EditUserInfo>
+                  <Route exact path="/mypage/edit/menu" key={'menu'}>
+                    <AccountUpdateModal></AccountUpdateModal>
+                  </Route>
+                  <Route exact path="/mypage/:content/edit" key={'edit'}>
+                    <AccountUpdateForm></AccountUpdateForm>
                   </Route>
                   <Route path="/mypage/books/:book_id/outputs">
                     <MyOutputs></MyOutputs>

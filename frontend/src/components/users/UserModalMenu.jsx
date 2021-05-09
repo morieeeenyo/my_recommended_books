@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { Link, useParams, useLocation, useHistory } from 'react-router-dom'
 
 //コンポーネント読み込み
-import {ModalOverlay} from "../common/UserModalForm.jsx"
-import {ModalContent} from "../common/UserModalForm.jsx"
+import {ModalOverlay} from "../users/UserModalForm.jsx"
+import {ModalContent} from "../users/UserModalForm.jsx"
 
 function UserModalMenu(props) {
   const location = useLocation();
@@ -37,7 +37,7 @@ function UserModalMenu(props) {
   }
 }
 
-const ModalMenuContent = styled(ModalContent)`
+export const ModalMenuContent = styled(ModalContent)`
 
   & a {
     display: flex;
@@ -58,7 +58,9 @@ const ModalMenuContent = styled(ModalContent)`
     }
 
     & span {
-    font-weight: bold;
+      font-weight: bold;
+      display: inline-block;
+      margin: 0 auto;
     }
 
     :hover {

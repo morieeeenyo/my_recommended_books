@@ -337,6 +337,7 @@ RSpec.describe 'Users', type: :request do
   
       it "パラメータが正しい時更新されたユーザーの情報がレスポンスとして返却される" do
         put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } 
+        sleep 3
         json = JSON.parse(response.body)
         expect(json['user']['nickname']).to eq request.params[:user][:nickname] # 値が更新されているかどうか
         expect(json['user']['email']).to eq user.email # emailは更新されていない
@@ -349,11 +350,13 @@ RSpec.describe 'Users', type: :request do
         put api_v1_user_registration_path, 
         xhr: true, 
         headers: headers, 
-        params: { user: { nickname: '', avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } 
+        params: { user: { nickname: user.nickname, avatar: { data: File.read('spec/fixtures/test_avatar.png.bin'), filename: 'test_avatar.png' } } } 
+        sleep 3
         json = JSON.parse(response.body)  
         # 更新していないカラムの情報が維持されているかどうか
+        expect(json['user']['uid']).to eq user.uid
         expect(json['user']['nickname']).to eq user.nickname
-        expect(json['user']['email']).to eq user.email 
+        expect(json['avatar']).to include 'test_avatar.png'
         expect(user.avatar.blob.filename).to eq 'test_avatar.png' # 値が変更されているかどうか
       end
     end
@@ -390,11 +393,25 @@ RSpec.describe 'Users', type: :request do
         expect(response).to have_http_status(422) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422
       end
   
-      it "nicknameとavatarがともに空の場合元のデータと同じレスポンスが返却される" do
+      it "nicknameとavatarがともに空の場合エラーメッセージが返却される" do
         put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: '', avatar: { data: '', filename: '' } } } 
         # レスポンスの中身を検証
         json = JSON.parse(response.body)
         expect(json['errors']).to include "Nickname can't be blank"
+      end
+
+      it "nicknameがすでに登録されている場合リクエストに失敗する" do
+        another_user = create(:user)
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: another_user.nickname, avatar: { data: '', filename: '' } } } 
+        expect(response).to have_http_status(422) # コントローラーで422を返すよう設定。レコードの処理に失敗する、という意味で422
+      end
+  
+      it "nicknameがすでに登録されている場合エラーメッセージが返却される" do
+        another_user = create(:user)
+        put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: another_user.nickname, avatar: { data: '', filename: '' } } } 
+        # レスポンスの中身を検証
+        json = JSON.parse(response.body)
+        expect(json['errors']).to include "Nickname has already been taken"
       end
     end
   end

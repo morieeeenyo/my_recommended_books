@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-// コンポーネントの読み込み
-import UserModalForm from './UserModalForm.jsx';
-
 // ロゴ画像の読み込み。ダブルクオートじゃないと本番環境で読み込めない
 import Logo from "../../../images/header_logo.png"
 
@@ -59,7 +56,7 @@ class Header extends React.Component {
         <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}}>
             ログアウト
           </Link>
-          <Link to="/mypage">
+          <Link to="/mypage" id="link_to_mypage">
             マイページ
           </Link>
         </HeaderRight>

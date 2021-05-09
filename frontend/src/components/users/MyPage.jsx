@@ -16,6 +16,9 @@ import Sample from "../../../images/sample_avatar.png"
 // Cookieの読み込み
 import Cookies from 'universal-cookie';
 
+
+
+
 export function MyRecommendedBooks() {
   const location = useLocation();
   if (location.state.books.length !== 0) {
@@ -38,20 +41,20 @@ export function MyRecommendedBooks() {
   }
 }
 
-export function EditUserInfo() {
-  return (
-    <div>
-      これはユーザー情報の編集フォームです
-    </div>
-  )
-}
-
 class MyPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      user: {},
-      books: [],
+      user: {
+        nickname: '',        
+        email: '',        
+        password: '',        
+        password_confirmation: '',        
+      },
+      avatar: {
+        data: '',
+        filename: ''
+      },
       avatar: ''
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
@@ -119,15 +122,35 @@ class MyPage extends React.Component {
       //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
       console.log(error) 
     })
-
+    const cookies = new Cookies();
+    if (cookies.get('first_session')) {
+      // こっちはhistory.pushでいけた
+      this.props.history.push({pathname: "/mypage/profile/edit", state: {content: 'Edit Profile', show: true, user: this.state.user}})
+    }
   }
+
+  componentDidUpdate() {
+    let updatedProps = this.props.location.state
+    // 編集後の挙動。非同期で画面に情報を反映させる
+    if (updatedProps) {
+      if (updatedProps.avatar) {
+        this.state.avatar = updatedProps.avatar
+        document.getElementById('avatar').src = this.state.avatar
+      } 
+      if (updatedProps.user) {
+      this.state.user.nickname = updatedProps.user.nickname
+      document.getElementById('nickname').innerHTML = `${this.state.user.nickname}さんのマイページ`
+      }
+    }
+  }
+
   render () {
     return (
       <MyPageWrapper>
         <MyPageBody>
           <MyPageSideBar>
-          <img src={this.state.avatar}/>
-          <h4>{this.state.user.nickname}さんのマイページ</h4>
+          <img id="avatar"src={this.state.avatar}/>
+          <h4 id="nickname">{this.state.user.nickname}さんのマイページ</h4>
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
               <li>
@@ -136,7 +159,7 @@ class MyPage extends React.Component {
                 </Link>
               </li>
               <li>
-                <Link to="/mypage">
+                <Link to={{pathname: "/mypage/edit/menu", state: {user: this.state.user, show: true}}}>
                   ユーザー情報編集
                 </Link>
               </li>

@@ -33,25 +33,19 @@ module Api
           return render status: 401, json: { errors: 'ユーザーが存在しません' } unless @user && @token && @client
           
           return nil unless params[:user]
-          if params[:user][:nickname].present? && params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
-            # 画像とnickname両方変更する場合
-            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
-            update_nickname
-            avatar_attach
-          elsif params[:user][:nickname].present?
-            # ニックネームだけ変更する場合
-            update_nickname
-          elsif params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
-            # アバターだけ変更する場合
-            @user.avatar.detatch if @user.avatar.attached? #すでにavatarが紐付いていれば外す
-            avatar_attach
-          else
-            # アバターもニックネームも空で送られてきた場合
-            return render status: 422, json: { errors: ["Nickname can't be blank"] }
+          # ニックネームがバリデーションに引っかかるかどうかを検証
+          return render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
+          if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
+            # アバターが変更されたときの挙動
+            @user.avatar.detach if @user.avatar.attached? #すでにavatarが紐付いていれば外す
+            avatar_attach 
+            avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}),
+                                                                                      only_path: true)
           end
           update_auth_header # access-token, clientの発行
           # 最後に更新した結果をフロントに返す
-          return render json: { user: @user }  
+          return render json: { user: @user, avatar: avatar_path }  
+          
         end
 
         private
@@ -67,11 +61,6 @@ module Api
             filename: params[:user][:avatar][:filename] # filenameはUserModal.jsxで取得
           )
           @user.avatar.attach(blob) # 先に作っておいた画像とuserを紐付ける
-        end
-
-        def update_nickname
-          # updateに失敗したらエラーメッセージを発生させる
-          render status: 422, json: { errors: @user.errors.full_messages }  unless @user.update(nickname: params[:user][:nickname])
         end
 
         def set_csrf_token_header
