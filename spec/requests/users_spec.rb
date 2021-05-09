@@ -337,6 +337,7 @@ RSpec.describe 'Users', type: :request do
   
       it "パラメータが正しい時更新されたユーザーの情報がレスポンスとして返却される" do
         put api_v1_user_registration_path, xhr: true, headers: headers, params: { user: {nickname: 'updated', avatar: { data: '', filename: '' } } } 
+        sleep 3
         json = JSON.parse(response.body)
         expect(json['user']['nickname']).to eq request.params[:user][:nickname] # 値が更新されているかどうか
         expect(json['user']['email']).to eq user.email # emailは更新されていない
