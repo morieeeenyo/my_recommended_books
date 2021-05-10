@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 // react-routerの読み込み
-import { BrowserRouter as Router, Route } from "react-router-dom";
-
-// コンポーネントの読み込み
-import Index from '../books/Index.jsx'
-import MyPage from '../users/MyPage.jsx'
-
-// react-routerの読み込み
 import { Link } from "react-router-dom";
+
+// 背景画像の読み込み
+import BackGroundImage from "../../../images/startup-593341_1920.jpg"
 
 class Container extends React.Component {
   constructor(){
@@ -20,6 +16,7 @@ class Container extends React.Component {
     return (
       <Wrapper>
         {this.props.children}
+        <div class="overlay"></div>
         <NewBooksLink>
           <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
             <i className="fas fa-book-open"></i>
@@ -33,9 +30,15 @@ class Container extends React.Component {
 
 export const Wrapper  = styled.div `
   margin: 0 auto;
-  background-color: #F5F6F2;
+  background-color: #212529;
   /* ヘッダーを抜いた高さ */
   height: calc(100vh - 65px); 
+  background-image: url(${BackGroundImage});
+  opacity: 0.5;
+
+  & #overlay {
+    
+  }
 `
 
 const NewBooksLink = styled.div `
