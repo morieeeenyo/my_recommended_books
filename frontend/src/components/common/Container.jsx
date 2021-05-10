@@ -15,25 +15,19 @@ class Container extends React.Component {
   render () {
     const cookies = new Cookies()
     const isSignedIn = cookies.get('authToken')
-    if (isSignedIn) {
-      return (
-        <Wrapper>
-          {this.props.children}
-            <NewBooksLink>
-              <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
-                <i className="fas fa-book-open"></i>
-                <span>投稿する</span>
-              </Link>
-            </NewBooksLink>
-        </Wrapper>
-      )
-    } else {
-      return (
-        <Wrapper>
-          {this.props.children}
-        </Wrapper>
-      )
-    }
+    return (
+      <Wrapper>
+        {this.props.children}
+        { isSignedIn && 
+          <NewBooksLink>
+            <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
+              <i className="fas fa-book-open"></i>
+              <span>投稿する</span>
+            </Link>
+          </NewBooksLink>
+        }
+      </Wrapper>
+    )
   } 
 }
 
@@ -46,7 +40,7 @@ export const Wrapper  = styled.div `
 `
 
 const NewBooksLink = styled.div `
-  background-color: #cb4d00;
+  background-color: #ABA098;
   width: 100px;
   height: 100px;
   position: fixed;
@@ -56,7 +50,7 @@ const NewBooksLink = styled.div `
 
   & .fa-book-open {
     font-size: 48px;
-    color: #FFF;
+    color: #F4F5F7;
   }
 
   & a {

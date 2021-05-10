@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+// react-routerの読み込み
+import { Link } from "react-router-dom";
+
 // 背景画像の読み込み
 import HeadingRightImage from "../../../images/heading_right_image.jpg"
 import HeadingLeftImage from "../../../images/heading_left_image.jpg"
@@ -37,6 +40,7 @@ class Welcome extends React.Component {
             まずは以下のリンクから投稿されたアウトプットをチェックしてみましょう。
             <br></br>
             あなたのアウトプットも誰かの役に立つかもしれません。
+            <Link to="books/outputs">みんなのアウトプットを見る</Link>
           </p>
         </div>
         <div className="description-content">
@@ -46,6 +50,7 @@ class Welcome extends React.Component {
             まずは以下のリンクから開催予定の読書会をチェックしてみましょう。
             <br></br>
             ※現在開発中
+            <Link to="/kaidoku">輪読会を探す</Link>
           </p>
         </div>
       </div>
@@ -127,6 +132,24 @@ const WelcomeWrapper = styled.div`
 
     & p {
       color: #000
+    }
+
+    & a {
+      display: block;
+      margin: 10px auto;
+      background-color: #989EAB;
+      color: #F4F5F7;
+      padding: 5px;
+      text-decoration: none;
+      text-align: center;
+      width: fit-content;
+    }
+
+    & a:hover {
+      border: 1px solid #000;
+      color: #000;
+      background-color: #FFF;
+      font-weight: bold;
     }
   }
 `
