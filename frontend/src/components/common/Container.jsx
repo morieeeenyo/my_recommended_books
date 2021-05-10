@@ -16,7 +16,9 @@ class Container extends React.Component {
     return (
       <Wrapper>
         {this.props.children}
-        <div id="overlay"></div>
+        <div class="heading">
+          <div id="overlay"></div>
+        </div>
         <NewBooksLink>
           <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
             <i className="fas fa-book-open"></i>
@@ -30,19 +32,23 @@ class Container extends React.Component {
 
 export const Wrapper  = styled.div `
   margin: 0 auto;
-  background-color: #212529;
+  background-color: #F4F5F7;
   /* ヘッダーを抜いた高さ */
   height: calc(100vh - 65px); 
-  background-image: url(${BackGroundImage});
-  position: relative;
+  .heading {
+    background-image: url(${BackGroundImage});
+    position: relative;
+    height: 40%;
 
-  & #overlay {
-    background-color: #212529;
-    opacity: 0.5;
-    position: absolute;
-    height: 100%;
-    width: 100%;
+    & #overlay {
+      background-color: #212529;
+      opacity: 0.5;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+    }
   }
+
 `
 
 const NewBooksLink = styled.div `

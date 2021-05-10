@@ -70,12 +70,12 @@ class Header extends React.Component {
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
-  background-color: #cb4d00;
+  background-color: #F4F5F7;
   height: 65px;
 `;
 
 const HeaderTitle = styled.h1`
-  color: #FFF;
+  color: #000;
   margin: 0;
   line-height: 65px;
   margin-left: 16%;
@@ -88,11 +88,11 @@ const HeaderRight = styled.div`
   width: 500px;
 
   & a {
-  color: #FFF;
+  color: #000;
   line-height: 40px;
   display: inline-block;
   font-size: 16px;
-  border: 1px solid #FFF;
+  border: 1px solid #000;
   border-radius: 2px;
   height: 40px;
   padding: 5px 10px;
