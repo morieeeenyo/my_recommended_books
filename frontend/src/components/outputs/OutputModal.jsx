@@ -332,8 +332,8 @@ const ActionPlan = styled.div`
 
     & span {
       /* 取り消しボタンのスタイル */
-      background-color: lightgray;
-      color: #FFF;
+      background-color: #FFF;
+      color: #000;
       position: absolute;
       right: 5%;
       padding: 1px;
@@ -343,8 +343,9 @@ const ActionPlan = styled.div`
     & span:hover {
       /* 取り消しボタンはホバーすると色が変わる */
       cursor: pointer;
-      background-color: #F7F17F;
-      color: #000;
+      background-color: #ABA087;
+      color: #FFF;
+      border: 1px solid #000;
     }
   }
 `

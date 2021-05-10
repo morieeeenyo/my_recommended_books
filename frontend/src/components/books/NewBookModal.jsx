@@ -379,7 +379,7 @@ const BooksFormBlock = styled(FormBlock)`
 
     & .search-button:hover {
       cursor: pointer;
-      color: #ABA098;
+      color: #535F78;
       background-color: #F4F5F7;
     }
   }
