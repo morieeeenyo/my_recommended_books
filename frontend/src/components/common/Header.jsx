@@ -28,7 +28,7 @@ class Header extends React.Component {
             {this.props.children}
             <HeaderTitle>
               <Link to="/">
-                <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+                <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
               </Link>
             </HeaderTitle>
             <HeaderRight>
@@ -49,7 +49,7 @@ class Header extends React.Component {
         {this.props.children}
         <HeaderTitle>
           <Link to="/">
-            <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+            <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
           </Link>
         </HeaderTitle>
         <HeaderRight>
