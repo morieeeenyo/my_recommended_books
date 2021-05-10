@@ -61,16 +61,20 @@ class Welcome extends React.Component {
           </p>
         </div>
       </div>
+      <div className="lets-start">
+        <p>さぁ、はじめよう</p>
+        <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}}>新規登録</Link>
+        <Link to="/kaidoku">ゲストとしてログイン</Link>
+      </div>
     </WelcomeWrapper>
     )
   }
 }
 
 const WelcomeWrapper = styled.div`
-
   background-color: #F4F5F7;
   /* ヘッダーを抜いた高さ */
-  height: calc(100vh - 65px); 
+  height: 100%; 
 
   .title {
     margin: 0 auto;
@@ -140,6 +144,32 @@ const WelcomeWrapper = styled.div`
     & p {
       color: #000
     }
+
+    & a {
+      display: block;
+      margin: 10px auto;
+      background-color: #989EAB;
+      color: #F4F5F7;
+      padding: 5px;
+      text-decoration: none;
+      text-align: center;
+      width: fit-content;
+    }
+
+    & a:hover {
+      border: 1px solid #000;
+      color: #000;
+      background-color: #FFF;
+      font-weight: bold;
+    }
+  }
+
+  .lets-start {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 50%;
 
     & a {
       display: block;

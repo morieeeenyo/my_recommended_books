@@ -36,6 +36,7 @@ export const Wrapper  = styled.div `
   background-color: #F4F5F7;
   /* ヘッダーを抜いた高さ */
   height: calc(100vh - 65px); 
+  overflow: scroll;
 
 `
 
