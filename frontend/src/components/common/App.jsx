@@ -81,12 +81,12 @@ class App extends React.Component {
           <Container>
             <Switch>
               <Route exact path='/'>
-                <Welcome>
-                </Welcome>
-              </Route>
-              <Route exact path='/books'>
                 <Index>
                 </Index>
+              </Route>
+              <Route exact path='/welcome'>
+                <Welcome>
+                </Welcome>
               </Route>
               <Route path="/mypage">
                 <MyPage>
