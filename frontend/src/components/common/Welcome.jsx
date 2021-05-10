@@ -14,6 +14,13 @@ class Welcome extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    const newBookLink = document.getElementById('new_book_link')
+    if (newBookLink) {
+      newBookLink.remove()
+    }
+  }
+
   render (){
     return(
     <WelcomeWrapper>

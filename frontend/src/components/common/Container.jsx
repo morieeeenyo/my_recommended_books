@@ -18,8 +18,8 @@ class Container extends React.Component {
     return (
       <Wrapper>
         {this.props.children}
-        { isSignedIn && 
-          <NewBooksLink>
+        { isSignedIn && location.pathname !== "/welcome" &&
+          <NewBooksLink id="new_book_link">
             <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
               <i className="fas fa-book-open"></i>
               <span>投稿する</span>
