@@ -8,6 +8,7 @@ import Header from './Header.jsx'
 import UserModalForm from '../users/UserModalForm.jsx'
 import UserModalMenu from '../users/UserModalMenu.jsx'
 import Container from './Container.jsx'
+import Welcome from './Welcome.jsx'
 import Index from '../books/Index.jsx'
 import NewBookModal from '../books/NewBookModal.jsx'
 import MyPage from '../users/MyPage.jsx'
@@ -80,6 +81,10 @@ class App extends React.Component {
           <Container>
             <Switch>
               <Route exact path='/'>
+                <Welcome>
+                </Welcome>
+              </Route>
+              <Route exact path='/books'>
                 <Index>
                 </Index>
               </Route>
