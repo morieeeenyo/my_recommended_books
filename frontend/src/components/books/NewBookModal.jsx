@@ -367,7 +367,7 @@ const BooksFormBlock = styled(FormBlock)`
       /* 検索ボタン */
       vertical-align: center;
       position: static;
-      background-color: #ABA098;
+      background-color: #989EAB;
       color: #F4F5F7;
       height: 30px;
       padding: 0 10px;

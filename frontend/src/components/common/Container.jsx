@@ -40,7 +40,7 @@ export const Wrapper  = styled.div `
 `
 
 const NewBooksLink = styled.div `
-  background-color: #ABA098;
+  background-color: #989EAB;
   width: 100px;
   height: 100px;
   position: fixed;

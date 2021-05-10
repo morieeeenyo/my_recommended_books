@@ -432,7 +432,7 @@ export const FormBlock = styled.div `
 
   /* ホバー時にクリックできることがわかりやすくなるようにする */
   & #submit_btn:hover {
-    background-color: #ABA998;
+    background-color: #000;
     cursor: pointer;
   }
 `
