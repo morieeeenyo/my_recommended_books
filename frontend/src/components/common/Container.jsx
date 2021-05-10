@@ -16,7 +16,7 @@ class Container extends React.Component {
     return (
       <Wrapper>
         {this.props.children}
-        <div class="overlay"></div>
+        <div id="overlay"></div>
         <NewBooksLink>
           <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
             <i className="fas fa-book-open"></i>
@@ -34,10 +34,14 @@ export const Wrapper  = styled.div `
   /* ヘッダーを抜いた高さ */
   height: calc(100vh - 65px); 
   background-image: url(${BackGroundImage});
-  opacity: 0.5;
+  position: relative;
 
   & #overlay {
-    
+    background-color: #212529;
+    opacity: 0.5;
+    position: absolute;
+    height: 100%;
+    width: 100%;
   }
 `
 
