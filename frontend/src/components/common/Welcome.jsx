@@ -63,8 +63,8 @@ class Welcome extends React.Component {
       </div>
       <div className="lets-start">
         <p>さぁ、はじめよう</p>
-        <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}}>新規登録</Link>
-        <Link to="/kaidoku">ゲストとしてログイン</Link>
+        <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}} className="sign_up">新規登録</Link>
+        <Link to="/kaidoku" className="guest">ゲストとしてログイン</Link>
       </div>
     </WelcomeWrapper>
     )
@@ -154,6 +154,7 @@ const WelcomeWrapper = styled.div`
       text-decoration: none;
       text-align: center;
       width: fit-content;
+      border-radius: 2px;
     }
 
     & a:hover {
@@ -161,6 +162,7 @@ const WelcomeWrapper = styled.div`
       color: #000;
       background-color: #FFF;
       font-weight: bold;
+      margin-bottom: 8px;
     }
   }
 
@@ -174,19 +176,21 @@ const WelcomeWrapper = styled.div`
     & a {
       display: block;
       margin: 10px auto;
-      background-color: #989EAB;
-      color: #F4F5F7;
-      padding: 5px;
+      width: 25%;
+      padding: 10px 0;
       text-decoration: none;
       text-align: center;
-      width: fit-content;
+      border-radius: 2px;
+      background-color: #989EAB;
+      color: #F4F5F7;
     }
 
     & a:hover {
-      border: 1px solid #000;
-      color: #000;
-      background-color: #FFF;
       font-weight: bold;
+      border: 1px solid #000;
+      margin-bottom: 8px;
+      background-color: #F4F5F7;
+      color: #000;
     }
   }
 `
