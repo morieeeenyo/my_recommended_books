@@ -261,7 +261,7 @@ const BookList = styled.ul`
     & a {
       display: inline-block;
       text-decoration: none;
-      background-color: #0ACC64;
+      background-color: #ACC47E;
       color: #FFF;
       border-style: none;
       border-radius: 5px;

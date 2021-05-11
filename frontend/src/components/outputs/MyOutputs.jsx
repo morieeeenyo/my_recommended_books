@@ -144,7 +144,7 @@ const OutputContent = styled.div`
         /* 「アウトプットを投稿する」ボタンのスタイル(Mypage.jsxの「アウトプットボタン」と同じ) */
         display: inline-block;
         text-decoration: none;
-        background-color: #0ACC64;
+        background-color: #ACC47E;
         color: #FFF;
         border-style: none;
         border-radius: 5px;
