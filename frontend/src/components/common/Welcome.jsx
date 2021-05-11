@@ -15,6 +15,7 @@ class Welcome extends React.Component {
   }
 
   componentDidMount() {
+    // 書籍投稿ボタンが表示されている場合消す(removeだとエラーが出る)
     const newBookLink = document.getElementById('new_book_link')
     if (newBookLink) {
       newBookLink.setAttribute('style', 'display: none;')
@@ -24,6 +25,7 @@ class Welcome extends React.Component {
   render (){
     return(
     <WelcomeWrapper>
+      {/* 一部リンクの遷移先は未実装 */}
       <div className="title">
         <h1>Kaidoku - 会読</h1>
         <p>Kaidokuは読書とアウトプットを通じて人生をより面白くする機会を提供するサービスです。</p>

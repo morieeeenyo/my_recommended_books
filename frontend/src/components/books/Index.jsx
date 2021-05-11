@@ -19,6 +19,7 @@ class Index extends React.Component {
       // なんかundefinedも判定しないとエラーになる
       this.props.history.push('/welcome')
     }
+    // 書籍投稿ボタンが非表示の場合表示する
     const newBookLink = document.getElementById('new_book_link')
     if (newBookLink.getAttribute('style') == 'display: none;') {
       newBookLink.setAttribute('style', 'display: block;')

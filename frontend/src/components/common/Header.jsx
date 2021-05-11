@@ -32,6 +32,7 @@ class Header extends React.Component {
               </Link>
             </HeaderTitle>
             <HeaderRight>
+              {/* welcomeページのリンクと重複し、テストでエラーが出るためクラスを付与 */}
               <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}} className="header-link">
                 新規登録
               </Link>
