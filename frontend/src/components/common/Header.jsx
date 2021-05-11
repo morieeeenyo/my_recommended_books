@@ -32,10 +32,10 @@ class Header extends React.Component {
               </Link>
             </HeaderTitle>
             <HeaderRight>
-              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}}>
+              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}} className="header-link">
                 新規登録
               </Link>
-              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}}>
+              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}} className="header-link">
                 ログイン
               </Link>
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
@@ -53,10 +53,10 @@ class Header extends React.Component {
           </Link>
         </HeaderTitle>
         <HeaderRight>
-        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}}>
+        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}} className="header-link">
             ログアウト
           </Link>
-          <Link to="/mypage" id="link_to_mypage">
+          <Link to="/mypage" id="link_to_mypage" className="header-link">
             マイページ
           </Link>
         </HeaderRight>

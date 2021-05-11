@@ -70,7 +70,7 @@ RSpec.describe 'Books', type: :system do
           sleep 2
         end.to change(user.books, :count).by(1) # ユーザーと紐付いているかどうかも検証
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
-        find('a', text: 'ログアウト').click
+        find('.header-link', text: 'ログアウト').click
         expect(page).to have_content 'SignOut'
         click_button 'SignOut'
         sign_in(another_user) # 別のユーザーでログイン
