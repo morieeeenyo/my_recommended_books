@@ -131,16 +131,6 @@ RSpec.describe 'Books', type: :system do
         end.to change(user.books, :count).by(0) # ユーザーと紐付いているかどうかも検証
         expect(page).to  have_content 'その書籍はすでに追加されています'
       end
-
-      it 'ユーザーがログインしていない場合書籍投稿のモーダルが開かずアラートが出る' do
-        visit root_path
-        click_link href: '/books/new'
-        sleep 5
-        expect(page.driver.browser.switch_to.alert.text).to eq '推薦図書の投稿にはログインが必要です'
-        sleep 2
-        page.driver.browser.switch_to.alert.accept
-        expect(page).not_to have_content '推薦図書を投稿する' # トップページにとどまることを検証
-      end
     end
 
     context 'モーダルの開閉' do
