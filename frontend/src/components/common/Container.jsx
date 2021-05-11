@@ -4,28 +4,21 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
 class Container extends React.Component {
   constructor(){
     super();
   }
 
   render () {
-    const cookies = new Cookies()
-    const isSignedIn = cookies.get('authToken')
     return (
       <Wrapper>
         {this.props.children}
-        { isSignedIn && location.pathname !== "/welcome" &&
-          <NewBooksLink id="new_book_link">
-            <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
-              <i className="fas fa-book-open"></i>
-              <span>投稿する</span>
-            </Link>
-          </NewBooksLink>
-        }
+        <NewBooksLink id="new_book_link">
+          <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
+            <i className="fas fa-book-open"></i>
+            <span>投稿する</span>
+          </Link>
+        </NewBooksLink>
       </Wrapper>
     )
   } 

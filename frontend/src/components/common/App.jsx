@@ -59,9 +59,7 @@ class App extends React.Component {
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
       return authToken
-    } else {
-      return null
-    }
+    } 
   }
 
   render () {

@@ -17,7 +17,7 @@ class Welcome extends React.Component {
   componentDidMount() {
     const newBookLink = document.getElementById('new_book_link')
     if (newBookLink) {
-      newBookLink.remove()
+      newBookLink.setAttribute('style', 'display: none;')
     }
   }
 

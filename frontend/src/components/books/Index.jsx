@@ -15,8 +15,13 @@ class Index extends React.Component {
   componentDidMount() {
     const cookies = new Cookies()
     const authToken = cookies.get("authToken")
-    if (!authToken) {
+    if (authToken == undefined || !authToken) {
+      // なんかundefinedも判定しないとエラーになる
       this.props.history.push('/welcome')
+    }
+    const newBookLink = document.getElementById('new_book_link')
+    if (newBookLink.getAttribute('style') == 'display: none;') {
+      newBookLink.setAttribute('style', 'display: block;')
     }
   }
 
