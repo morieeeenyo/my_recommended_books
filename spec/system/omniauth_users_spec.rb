@@ -6,7 +6,7 @@ RSpec.describe "OmniauthUsers", type: :system do
     OmniAuth.config.mock_auth[:twitter] = nil # テストごとに認証情報を初期化する
     Rails.application.env_config['omniauth.auth'] = twitter_mock
     visit root_path
-    click_link '新規登録'
+    find('.header-link', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
   end
 
   describe "Twitter認証ログイン" do

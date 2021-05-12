@@ -12,7 +12,7 @@ RSpec.describe 'Users', type: :system do
   describe '新規登録' do
     before do
       visit root_path
-      find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+      find('.header-link', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
       click_link 'SignUp with Email'
       expect(page).to have_content 'SignUp'
     end
@@ -107,7 +107,7 @@ RSpec.describe 'Users', type: :system do
         expect(page).to have_content "Email can't be blank"
         expect(page).to have_content "Password can't be blank"
         click_button 'x'
-        find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        find('.header-link', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
         click_link 'SignUp with Email'
         expect(page).to have_content 'SignUp'
         expect(page).not_to have_content "Nickname can't be blank"
@@ -122,7 +122,7 @@ RSpec.describe 'Users', type: :system do
         fill_in 'password_confirmation',	with: user.password_confirmation
         attach_file 'avatar', 'spec/fixtures/test_avatar.png'
         click_button 'x'
-        find('a', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        find('.header-link', text: '新規登録').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
         click_link 'SignUp with Email'
         sleep 2 # sleepしないと間に合わない?
         expect(page).to have_content 'SignUp'
@@ -137,7 +137,7 @@ RSpec.describe 'Users', type: :system do
     before do
       user.save
       visit root_path
-      find('a', text: 'ログイン').click # href属性がないaタグはclick_link, click_onで検出できないのでfindで検出する
+      find('.header-link', text: 'ログイン').click # href属性がないaタグはclick_link, click_onで検出できないのでfindで検出する
       click_link 'SignIn with Email'
       expect(page).to have_content 'SignIn'
     end
@@ -187,7 +187,7 @@ RSpec.describe 'Users', type: :system do
         sleep 2 # sleepしないと間に合わない
         expect(page).to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
         click_button 'x'
-        find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        find('.header-link', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
         click_link 'SignIn with Email'
         expect(page).to have_content 'SignIn'
         expect(page).not_to have_content 'Authorization failed. Invalid email' # email→passwordと順番に判定しているのでパスワードのエラーメッセージ出てこない
@@ -197,7 +197,7 @@ RSpec.describe 'Users', type: :system do
         fill_in 'email',	with: user.email
         fill_in 'password',	with: user.password
         click_button 'x'
-        find('a', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
+        find('.header-link', text: 'ログイン').click # reactで作ったaタグはhref属性がつかないのでfindで検出する
         click_link 'SignIn with Email'
         expect(page).to have_content 'SignIn'
         sleep 2 # sleepしないと間に合わない?
@@ -214,7 +214,7 @@ RSpec.describe 'Users', type: :system do
 
     context 'ログアウトできる時' do
       it 'ログインしているユーザーはヘッダーのボタンからログアウトできる' do
-        find('a', text: 'ログアウト').click
+        find('.header-link', text: 'ログアウト').click
         expect(page).to have_content 'SignOut'
         click_button 'SignOut'
         # ログインすると表示が切り替わる
@@ -228,7 +228,7 @@ RSpec.describe 'Users', type: :system do
     context 'マイページの表示に成功' do
       it 'ログイン状態のユーザーがマイページにアクセスすると正しくマイページが読み込める' do
         sign_in(user) # ログインする
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
       end
 
@@ -236,7 +236,7 @@ RSpec.describe 'Users', type: :system do
         # 厳密にいうと新規登録で画像添付すべき
         user.avatar.attach(fixture_file_upload('spec/fixtures/test_avatar.png', filename: 'test_avatar.png', content_type: 'image/png'))
         sign_in(user) # ログインする
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='test_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         sleep 2
@@ -249,12 +249,12 @@ RSpec.describe 'Users', type: :system do
         create_list(:user_book, 2, user_id: user.id)
         sleep 5
         sign_in(user) # ログインする
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'
         sleep 5
         expect(all('.book-list-item').length).to eq 2
-        sleep 1
+        sleep 5
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'title',	with: book.title
@@ -286,7 +286,7 @@ RSpec.describe 'Users', type: :system do
           outputs.push(output)
         end
         sign_in(user) # ログインする
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'
         sleep 7
@@ -302,9 +302,9 @@ RSpec.describe 'Users', type: :system do
     context 'マイページからサインアウト' do
       it 'マイページからサインアウトするとアラートが出てトップページに戻る' do
         sign_in(user) # ログインする
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
-        find('a', text: 'ログアウト').click
+        find('.header-link', text: 'ログアウト').click
         expect(page).to have_content 'SignOut'
         click_button 'SignOut'
         # アラートは表示されずにトップページに遷移する仕様に変更
@@ -317,13 +317,14 @@ RSpec.describe 'Users', type: :system do
     context 'マイページからモーダルを操作' do
       it 'マイページからサインアウトモーダル、推薦図書投稿モーダルを開き、何もせず閉じるとマイページに戻る' do
         sign_in(user) # ログインする
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
-        find('a', text: 'ログアウト').click
+        find('.header-link', text: 'ログアウト').click
         expect(page).to have_content 'SignOut'
         click_button 'x'
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).not_to have_content 'SignOut'
+        sleep 5
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
         click_button 'x'
@@ -340,7 +341,7 @@ RSpec.describe 'Users', type: :system do
     
     context "編集に成功する" do
       it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(ニックネームのみ)" do
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'
@@ -356,7 +357,7 @@ RSpec.describe 'Users', type: :system do
   
       it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(アバターのみ)" do
         prev_nickname = user.nickname
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'
@@ -375,7 +376,7 @@ RSpec.describe 'Users', type: :system do
       end
   
       it "登録されたユーザーはマイページよりユーザー情報の編集が可能である(アバターと画像両方変更)" do
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'
@@ -398,7 +399,7 @@ RSpec.describe 'Users', type: :system do
     context "失敗する" do
       it "ニックネームを空にして送信すると編集に失敗しエラーメッセージが表示される(画像添付なし)" do
         prev_nickname = user.nickname
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'
@@ -418,7 +419,7 @@ RSpec.describe 'Users', type: :system do
   
       it "ニックネームを空にして送信すると編集に失敗しエラーメッセージが表示される(画像添付あり)" do
         prev_nickname = user.nickname
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'
@@ -440,7 +441,7 @@ RSpec.describe 'Users', type: :system do
       it "ニックネームがすでに存在していると編集に失敗しエラーメッセージが表示される(画像添付なし)" do
         prev_nickname = user.nickname
         another_user = create(:user)
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'
@@ -460,7 +461,7 @@ RSpec.describe 'Users', type: :system do
       it "ニックネームがすでに存在していると編集に失敗しエラーメッセージが表示される(画像添付あり)" do
         prev_nickname = user.nickname
         another_user = create(:user)
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'
@@ -480,7 +481,7 @@ RSpec.describe 'Users', type: :system do
       end
   
       it "エラーメッセージはモーダルを開き直すと消える" do
-        find('a', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         expect(page).to have_selector "img[src*='sample_avatar.png']" # 実際には画像URLが入るのでもっと長い。ファイル名は必ず含むので部分一致で検索
         click_link 'ユーザー情報編集'

@@ -28,14 +28,15 @@ class Header extends React.Component {
             {this.props.children}
             <HeaderTitle>
               <Link to="/">
-                <img src={Logo} alt="私の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+                <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
               </Link>
             </HeaderTitle>
             <HeaderRight>
-              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}}>
+              {/* welcomeページのリンクと重複し、テストでエラーが出るためクラスを付与 */}
+              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}} className="header-link">
                 新規登録
               </Link>
-              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}}>
+              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}} className="header-link">
                 ログイン
               </Link>
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
@@ -49,14 +50,14 @@ class Header extends React.Component {
         {this.props.children}
         <HeaderTitle>
           <Link to="/">
-            <img src={Logo} alt="俺の推薦図書" width="200" height="60"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+            <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
           </Link>
         </HeaderTitle>
         <HeaderRight>
-        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}}>
+        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}} className="header-link">
             ログアウト
           </Link>
-          <Link to="/mypage" id="link_to_mypage">
+          <Link to="/mypage" id="link_to_mypage" className="header-link">
             マイページ
           </Link>
         </HeaderRight>
@@ -70,12 +71,12 @@ class Header extends React.Component {
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
-  background-color: #cb4d00;
+  background-color: #F4F5F7;
   height: 65px;
 `;
 
 const HeaderTitle = styled.h1`
-  color: #FFF;
+  color: #000;
   margin: 0;
   line-height: 65px;
   margin-left: 16%;
@@ -88,11 +89,11 @@ const HeaderRight = styled.div`
   width: 500px;
 
   & a {
-  color: #FFF;
+  color: #000;
   line-height: 40px;
   display: inline-block;
   font-size: 16px;
-  border: 1px solid #FFF;
+  border: 1px solid #000;
   border-radius: 2px;
   height: 40px;
   padding: 5px 10px;

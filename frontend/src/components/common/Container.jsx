@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 // react-routerの読み込み
-import { BrowserRouter as Router, Route } from "react-router-dom";
-
-// コンポーネントの読み込み
-import Index from '../books/Index.jsx'
-import MyPage from '../users/MyPage.jsx'
-
-// react-routerの読み込み
 import { Link } from "react-router-dom";
 
 class Container extends React.Component {
@@ -20,7 +13,8 @@ class Container extends React.Component {
     return (
       <Wrapper>
         {this.props.children}
-        <NewBooksLink>
+        {/* 表示非表示の切り替えのためidを付与 */}
+        <NewBooksLink id="new_book_link">
           <Link to="/books/new" style={{color: "#FFF", textDecoration: "none"}}>
             <i className="fas fa-book-open"></i>
             <span>投稿する</span>
@@ -33,13 +27,15 @@ class Container extends React.Component {
 
 export const Wrapper  = styled.div `
   margin: 0 auto;
-  background-color: #F5F6F2;
+  background-color: #F4F5F7;
   /* ヘッダーを抜いた高さ */
   height: calc(100vh - 65px); 
+  overflow: scroll;
+
 `
 
 const NewBooksLink = styled.div `
-  background-color: #cb4d00;
+  background-color: #989EAB;
   width: 100px;
   height: 100px;
   position: fixed;
@@ -49,7 +45,7 @@ const NewBooksLink = styled.div `
 
   & .fa-book-open {
     font-size: 48px;
-    color: #FFF;
+    color: #F4F5F7;
   }
 
   & a {

@@ -4,7 +4,7 @@ module SignInSupport
   def sign_in(user)
     user.save
     visit root_path
-    find('a', text: 'ログイン').click # href属性がないaタグはclick_link, click_onで検出できないのでfindで検出する
+    find('.header-link', text: 'ログイン').click # href属性がないaタグはclick_link, click_onで検出できないのでfindで検出する
     click_link 'SignIn with Email'
     expect(page).to have_content 'SignIn'
     fill_in 'email',	with: user.email

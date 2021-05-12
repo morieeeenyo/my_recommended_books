@@ -385,6 +385,7 @@ export const ModalContent = styled.div `
     background-color: #fff;
     border: 1px #000 solid;
     cursor: pointer;
+    font-weight: bold;
   }
 
 `
@@ -432,7 +433,7 @@ export const FormBlock = styled.div `
 
   /* ホバー時にクリックできることがわかりやすくなるようにする */
   & #submit_btn:hover {
-    background-color: #000;
+    background-color: #535F78;
     cursor: pointer;
   }
 `

@@ -367,8 +367,8 @@ const BooksFormBlock = styled(FormBlock)`
       /* 検索ボタン */
       vertical-align: center;
       position: static;
-      background-color: #cb4d00;
-      color: #FFF;
+      background-color: #989EAB;
+      color: #F4F5F7;
       height: 30px;
       padding: 0 10px;
 
@@ -379,8 +379,8 @@ const BooksFormBlock = styled(FormBlock)`
 
     & .search-button:hover {
       cursor: pointer;
-      color: #cb4d00;
-      background-color: #FFF;
+      color: #535F78;
+      background-color: #F4F5F7;
     }
   }
 

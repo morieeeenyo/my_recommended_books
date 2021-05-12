@@ -8,6 +8,7 @@ import Header from './Header.jsx'
 import UserModalForm from '../users/UserModalForm.jsx'
 import UserModalMenu from '../users/UserModalMenu.jsx'
 import Container from './Container.jsx'
+import Welcome from './Welcome.jsx'
 import Index from '../books/Index.jsx'
 import NewBookModal from '../books/NewBookModal.jsx'
 import MyPage from '../users/MyPage.jsx'
@@ -58,9 +59,7 @@ class App extends React.Component {
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
       return authToken
-    } else {
-      return null
-    }
+    } 
   }
 
   render () {
@@ -68,7 +67,6 @@ class App extends React.Component {
       <div className="container">
         <Router>
           <Header>
-            {/* Todo：ここのパスにparamsを渡せるようにする */}
             <Route path="/users/:content/menu">
               <UserModalMenu>
               </UserModalMenu>
@@ -82,6 +80,10 @@ class App extends React.Component {
               <Route exact path='/'>
                 <Index>
                 </Index>
+              </Route>
+              <Route exact path='/welcome'>
+                <Welcome>
+                </Welcome>
               </Route>
               <Route path="/mypage">
                 <MyPage>

@@ -343,7 +343,7 @@ const ActionPlan = styled.div`
     & span:hover {
       /* 取り消しボタンはホバーすると色が変わる */
       cursor: pointer;
-      background-color: #cb4d00;
+      background-color: #ACC47E;
       color: #FFF;
     }
   }
@@ -379,10 +379,11 @@ const OutputFormBlock = styled(FormBlock)`
     background-color: lightgray;
     color: #FFF;
     position: static;
+    border-style: none;
   }
 
   & #add-actionplan-button:hover {
-    background-color: #cb4d00;
+    background-color: #ACC47E;
     color: #FFF;
     cursor: pointer;
   }

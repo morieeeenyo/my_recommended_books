@@ -10,7 +10,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
     sleep 5
     create_list(:user_book, 2, user_id: user.id)
     sleep 5
-    find('a', text: 'マイページ').click
+    find('.header-link', text: 'マイページ').click
     expect(page).to have_content "#{user.nickname}さんのマイページ"
     find('a', text: '推薦図書一覧').click
     all('a', text: 'アウトプット')[0].click
