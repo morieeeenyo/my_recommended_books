@@ -19,7 +19,7 @@ RSpec.describe 'Books', type: :request do
       # インスタンスはbeforeで生成するとidがずれる。
       # letで生成するとそもそもテーブルにレコードがないって言われる
       it "書籍が投稿済みの場合、リクエストに成功する" do
-        book_list = create_list(:book, 5) 
+        create_list(:book, 5) 
         get api_v1_books_path, xhr: true
         expect(response).to have_http_status(200) 
       end
