@@ -8,8 +8,9 @@ module Api
       before_action :set_twitter_client, only: :create
 
       def index
-        # アウトプット投稿数が多い順にソート
-        render json: { books: Book.joins(:awarenesses).group(:id).order('count(book_id) DESC') }
+        # アウトプット投稿数が多い順にソート(これは検索機能で使う)
+        # render json: { books: Book.joins(:awarenesses).group(:id).order('count(book_id) DESC') }
+        render json: { books: Book.order('created_at DESC') }
       end
 
       def create
