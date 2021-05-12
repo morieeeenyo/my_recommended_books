@@ -101,4 +101,47 @@ RSpec.describe 'Books', type: :request do
       end
     end
   end
+
+  describe "書籍一覧" do
+    context "一覧表示に成功(書籍が投稿済み)" do
+      before do
+        @user_books = create_list(:user_book, 5)
+      end
+      
+      it "書籍が投稿済みの場合、リクエストに成功する" do
+        get api_v1_books_path, xhr: true
+        expect(response).to have_http_status(200) 
+      end
+
+      it "書籍が投稿済みの場合、投稿した分と同じ数書籍が返却される" do
+        get api_v1_books_path, xhr: true
+        json = JSON.parse(response.body)
+        expect(json['books'].length).to eq @user_books.length
+      end
+
+      it "書籍が投稿済みの場合、書籍が新しい順に一覧で返却される" do
+        get api_v1_books_path, xhr: true
+        json = JSON.parse(response.body)
+        # 添字を使って順番も検証
+        expect(json['books'][0]['id']).to eq @user_books[4].id
+        expect(json['books'][3]['id']).to eq @user_books[1].id
+        expect(json['books'][4]['id']).to eq @user_books[0].id
+      end
+    end
+    
+    context "一覧表示に成功(書籍が投稿済みではない場合)" do
+      it "書籍が投稿済みではない場合もリクエストに成功する" do
+        get api_v1_books_path, xhr: true
+        expect(response).to have_http_status(200) 
+      end
+
+      it "書籍が投稿済みの場合、書籍が新しい順に一覧で返却される" do
+        get api_v1_books_path, xhr: true
+        json = JSON.parse(response.body)
+        # レスポンスは0件
+        expect(json['books'].length).to eq 0
+      end
+    end
+  end
+  
 end
