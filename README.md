@@ -74,6 +74,7 @@ https://kaidoku.herokuapp.com/
 |image_url|text|null: false|
 
 ### Associations
+- has_many :awarenesses
 - has_many :user_books
 - has_many :users, through: :user_books
 - has_many :likes

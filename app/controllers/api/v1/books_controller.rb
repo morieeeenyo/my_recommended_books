@@ -7,6 +7,12 @@ module Api
       # ユーザーが認証済みかどうかチェック
       before_action :set_twitter_client, only: :create
 
+      def index
+        # アウトプット投稿数が多い順にソート(これは検索機能で使う)
+        # render json: { books: Book.left_joins(:awarenesses).group(:id).order('count(book_id) DESC') }
+        render json: { books: Book.order('created_at DESC') }
+      end
+
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: '推薦図書の投稿にはログインが必要です' } unless @user && @token && @client
