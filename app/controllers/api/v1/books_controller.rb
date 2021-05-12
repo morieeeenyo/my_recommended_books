@@ -9,7 +9,7 @@ module Api
 
       def index
         # アウトプット投稿数が多い順にソート
-        render json: { books: Books.includes(:awarenesses).order('count(book_id) DESC') }
+        render json: { books: Book.joins(:awarenesses).group(:id).order('count(book_id) DESC') }
       end
 
       def create
