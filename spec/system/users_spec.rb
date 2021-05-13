@@ -137,6 +137,7 @@ RSpec.describe 'Users', type: :system do
     before do
       user.save
       visit root_path
+      expect(page).not_to  have_link, href: '/books/new'
       find('.header-link', text: 'ログイン').click # href属性がないaタグはclick_link, click_onで検出できないのでfindで検出する
       click_link 'SignIn with Email'
       expect(page).to have_content 'SignIn'
@@ -151,6 +152,14 @@ RSpec.describe 'Users', type: :system do
         # ログインすると表示が切り替わる
         expect(page).to  have_content 'ログアウト'
         expect(page).to  have_content 'マイページ'
+      end
+
+      it 'ログインすると書籍投稿用ボタンが出現する' do
+        fill_in 'email',	with: user.email
+        fill_in 'password',	with: user.password
+        click_button 'SignIn'
+        sleep 2 # sleepしないと間に合わない
+        expect(page).to  have_link, href: '/books/new'
       end
     end
 
@@ -213,13 +222,24 @@ RSpec.describe 'Users', type: :system do
     end
 
     context 'ログアウトできる時' do
-      it 'ログインしているユーザーはヘッダーのボタンからログアウトできる' do
+      it 'ログインしているユーザーはヘッダーのボタンからログアウトでき、welcomeページに遷移する' do
         find('.header-link', text: 'ログアウト').click
         expect(page).to have_content 'SignOut'
         click_button 'SignOut'
         # ログインすると表示が切り替わる
         expect(page).to  have_content '新規登録'
         expect(page).to  have_content 'ログイン'
+        # ログアウトすると書籍投稿ボタンは消える
+        expect(page).to  have_content 'Kaidoku - 会読'
+      end
+
+      it 'ログアウトすると書籍投稿用のリンクは消える' do
+        expect(page).to  have_link, href: '/books/new'
+        find('.header-link', text: 'ログアウト').click
+        expect(page).to have_content 'SignOut'
+        click_button 'SignOut'
+        # ログアウトすると書籍投稿ボタンは消える
+        expect(page).not_to  have_link, href: '/books/new'
       end
     end
   end
