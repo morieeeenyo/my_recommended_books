@@ -49,7 +49,7 @@ class Welcome extends React.Component {
             まずは以下のリンクから投稿されたアウトプットをチェックしてみましょう。
             <br></br>
             あなたのアウトプットも誰かの役に立つかもしれません。
-            <Link to="books">みんなのアウトプットを見る</Link>
+            <Link to="/books">みんなのアウトプットを見る</Link>
           </p>
         </div>
         <div className="description-content">
