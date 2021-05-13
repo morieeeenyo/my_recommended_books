@@ -23,29 +23,35 @@ class Index extends React.Component {
   componentDidMount() {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
+    let newBookLink = document.getElementById('new_book_link')
     if (authToken == undefined || !authToken) {
       // なんかundefinedも判定しないとエラーになる
       if (location.pathname === "/") {
         // ルートパスアクセス時、ログインしていなければwelcomeページへ
         this.props.history.push('/welcome')
+      } 
+      if (newBookLink.getAttribute('style') == 'display: block;') {
+        newBookLink.setAttribute('style', 'display: none;')
       }
-    } else {
-      axios
-      .get('/api/v1/books')
-      .then(response => {
-         this.setState({
-           books: response.data.books
-         })
-      })
-      .catch(error => {
-        alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
-      })
-    }
+    } 
+
     // 書籍投稿ボタンが非表示の場合表示する
-    const newBookLink = document.getElementById('new_book_link')
-    if (newBookLink.getAttribute('style') == 'display: none;') {
-      newBookLink.setAttribute('style', 'display: block;')
+    if (authToken) {
+      if (newBookLink.getAttribute('style') == 'display: none;') {
+        newBookLink.setAttribute('style', 'display: block;')
+      }
     }
+
+    axios
+    .get('/api/v1/books')
+    .then(response => {
+        this.setState({
+          books: response.data.books
+        })
+    })
+    .catch(error => {
+      alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
+    })
   }
 
   render () {
