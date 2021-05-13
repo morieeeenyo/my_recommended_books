@@ -63,12 +63,13 @@ class Index extends React.Component {
         <div className="book_list">
           <h2>新着書籍一覧</h2>
           <BookList>
-            {this.state.books.map(book => {
+            {this.state.books.slice(0,12).map(book => {
               return (
               <li key={book.isbn} className="book-list-item">
                 <img src={book.image_url}/>
                 <p className="book-title">{book.title}</p>
                 <p className="book-author">{book.author}</p>
+                <Link to="/">アウトプット一覧</Link>
               </li> //returnがないと表示できない
               ) 
             })} 
