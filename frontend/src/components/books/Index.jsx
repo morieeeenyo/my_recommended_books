@@ -30,6 +30,8 @@ class Index extends React.Component {
         // ルートパスアクセス時、ログインしていなければwelcomeページへ
         this.props.history.push('/welcome')
       } 
+
+      // 書籍投稿ボタンはログアウト時は押せないようにする
       if (newBookLink.getAttribute('style') == 'display: block;') {
         newBookLink.setAttribute('style', 'display: none;')
       }
