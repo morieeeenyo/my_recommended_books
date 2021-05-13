@@ -7,17 +7,39 @@ import { Link, withRouter } from "react-router-dom";
 // Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
 import Cookies from 'universal-cookie';
 
+//axiosの読み込み
+import axios from 'axios';
+
+import {BookList} from '../users/MyPage.jsx'
+
 class Index extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      books: []
+    }
   }
 
   componentDidMount() {
-    const cookies = new Cookies()
-    const authToken = cookies.get("authToken")
+    const cookies = new Cookies();
+    let authToken = cookies.get("authToken");
     if (authToken == undefined || !authToken) {
       // なんかundefinedも判定しないとエラーになる
-      this.props.history.push('/welcome')
+      if (location.pathname === "/") {
+        // ルートパスアクセス時、ログインしていなければwelcomeページへ
+        this.props.history.push('/welcome')
+      }
+    } else {
+      axios
+      .get('/api/v1/books')
+      .then(response => {
+         this.setState({
+           books: response.data.books
+         })
+      })
+      .catch(error => {
+        alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
+      })
     }
     // 書籍投稿ボタンが非表示の場合表示する
     const newBookLink = document.getElementById('new_book_link')
@@ -40,6 +62,17 @@ class Index extends React.Component {
 
         <div className="book_list">
           <h2>新着書籍一覧</h2>
+          <BookList>
+            {this.state.books.map(book => {
+              return (
+              <li key={book.isbn} className="book-list-item">
+                <img src={book.image_url}/>
+                <p className="book-title">{book.title}</p>
+                <p className="book-author">{book.author}</p>
+              </li> //returnがないと表示できない
+              ) 
+            })} 
+          </BookList>
         </div>
       </BookIndexContainer>
      )
