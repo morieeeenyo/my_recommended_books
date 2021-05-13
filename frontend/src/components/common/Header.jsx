@@ -27,7 +27,7 @@ class Header extends React.Component {
           <HeaderContainer>
             {this.props.children}
             <HeaderTitle>
-              <Link to="/welcome">
+              <Link to="/">
                 <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
               </Link>
             </HeaderTitle>
