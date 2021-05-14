@@ -198,7 +198,7 @@ const BookIndexContainer = styled.div`
       /* ページネーションボタン */
       display: flex;
       justify-content: space-between;
-      margin: 0 auto;
+      margin: 0 auto 30px;
       width: 20%;
       padding: 0;
 
@@ -252,6 +252,10 @@ const BookIndexContainer = styled.div`
       & .disabled {
         /* 端までいくと< , >が非表示になる */
           display: none;
+      }
+
+      & .active {
+        font-weight: bold;
       }
     }
   }

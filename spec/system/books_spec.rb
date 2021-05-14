@@ -20,7 +20,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user) # ログインする
         expect(page).to  have_content '新着書籍一覧'
         sleep 3
-        # どれだけ投稿しても表示されるのは12件
+        # どれだけ投稿しても1ページ目に表示されるのは12件
         expect(all('.book-list-item').length).to  eq 12
         # 新しい順になっていることを検証
         expect(all('.book-title')[0].text).to  eq @book_list[14].title
@@ -33,10 +33,11 @@ RSpec.describe 'Books', type: :system do
         sign_in(user) # ログインする
         expect(page).to  have_content '新着書籍一覧'
         sleep 3
+        # 12件に満たない場合は今ある分がすべて出てくる
         expect(all('.book-list-item').length).to  eq 6
       end
 
-      it "書籍が0件の場合は投稿されている分だけ書籍が表示されている" do
+      it "書籍が0件の場合は書籍一覧にも表示されていない" do
         Book.delete_all
         sign_in(user) # ログインする
         expect(page).to  have_content '新着書籍一覧'
@@ -60,7 +61,7 @@ RSpec.describe 'Books', type: :system do
         new_book_title = all('#search_result h3')[0].text
         expect do
           find('input[type="submit"]').click
-          sleep 2
+          sleep 4
         end.to change(user.books, :count).by(1) # ユーザーと紐付いているかどうかも検証
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
         # 書籍を追加しても表示されるのは12件
@@ -75,13 +76,76 @@ RSpec.describe 'Books', type: :system do
     context "一覧表示に成功(ログアウト時)" do
       it "welcomeページより「みんなのアウトプットを見る」ボタンを押すとすでに投稿された書籍が一覧で表示されている" do
         visit root_path
+        expect(page).to  have_content 'Kaidoku - 会読' # welcomeページにいることを検証
+        click_link 'みんなのアウトプットを見る' # welcomeページから一覧へのリンク
+        sleep 3
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        # 同じく1ページ目には12件しか表示されていない
+        expect(all('.book-list-item').length).to  eq 12
+      end
+    end
+
+    context "一覧表示に成功(ページネーション)" do
+      it "「>」ボタンを押すと13冊目以降が表示される。また「<」が出現する" do
+        visit root_path
         expect(page).to  have_content 'Kaidoku - 会読'
         click_link 'みんなのアウトプットを見る'
         sleep 3
         expect(page).to  have_content '新着書籍一覧'
         expect(all('.book-list-item').length).to  eq 12
+        find('a', text: '>').click
+        expect(all('.book-list-item').length).to  eq @book_list.length - 12
+        expect(all('.book-title')[0].text).to  eq @book_list[2].title # 13冊目
+        expect(all('.book-title')[1].text).to  eq @book_list[1].title # 14冊目
+        expect(page).to  have_content '<'
+      end
+
+      it "「2」ボタンを押すと13冊目以降が表示される。また「<」が出現する" do
+        visit root_path
+        expect(page).to  have_content 'Kaidoku - 会読'
+        click_link 'みんなのアウトプットを見る'
+        sleep 3
+        expect(page).to  have_content '新着書籍一覧'
+        expect(all('.book-list-item').length).to  eq 12
+        # 「2」を押してもページネーションが動く
+        find('a', text: '2').click
+        expect(all('.book-list-item').length).to  eq @book_list.length - 12
+        expect(all('.book-title')[0].text).to  eq @book_list[2].title
+        expect(all('.book-title')[1].text).to  eq @book_list[1].title
+        expect(page).to  have_content '<'
+      end
+
+      it "「<」ボタンを押すと1 ~ 12冊目が表示される。また「>」が出現する" do
+        visit root_path
+        expect(page).to  have_content 'Kaidoku - 会読'
+        click_link 'みんなのアウトプットを見る'
+        sleep 3
+        expect(page).to  have_content '新着書籍一覧'
+        expect(all('.book-list-item').length).to  eq 12
+        find('a', text: '>').click
+        find('a', text: '<').click
+        # 1,2冊目が表示されているか検証
+        expect(all('.book-title')[0].text).to  eq @book_list[14].title
+        expect(all('.book-title')[1].text).to  eq @book_list[13].title
+        expect(page).to  have_content '>'
+      end
+
+      it "「1」ボタンを押すと1 ~ 12冊目が表示される。また「>」が出現する" do
+        visit root_path
+        expect(page).to  have_content 'Kaidoku - 会読'
+        click_link 'みんなのアウトプットを見る'
+        sleep 3
+        expect(page).to  have_content '新着書籍一覧'
+        expect(all('.book-list-item').length).to  eq 12
+        find('a', text: '>').click
+        find('a', text: '1').click
+        # 1,2冊目が表示されているか検証
+        expect(all('.book-title')[0].text).to  eq @book_list[14].title
+        expect(all('.book-title')[1].text).to  eq @book_list[13].title
+        expect(page).to  have_content '>'
       end
     end
+    
   end
   
 
