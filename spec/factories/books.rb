@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :book do
     isbn { Faker::Number.number(digits: 13) }
-    title { Faker::Book.title }
+    title { Faker::Book.title } # titleが一致しているかテストするときにFakerを使う必要があった
     author { 'testさん' }
     author_kana { 'テストさん' }
     publisher_name { '株式会社test' }

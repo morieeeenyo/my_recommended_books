@@ -243,6 +243,7 @@ export const BookList = styled.ul`
   width: 100%;
   flex-wrap: wrap;
   overflow: scroll;
+  margin-bottom: 0;
 
   & .book-list-item {
     display: flex;

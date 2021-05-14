@@ -21,16 +21,17 @@ class Index extends React.Component {
     super(props)
     this.state = {
       books: [],
-      start: 0,
-      perPage: 12
+      start: 0, //最初は0番目(=最新)の要素から
+      perPage: 12 //1ページには12冊表示
     }
     this.pageChange = this.pageChange.bind(this)
   }
 
   pageChange(data) {
-    let pageNumber = data['selected'];
+    let pageNumber = data['selected']; //選択されたページ番号
     this.setState({
-      start: pageNumber * this.state.perPage
+      //スタート位置をページ番号 * 1ページあたりの数、とする(例えば2番を選ぶと12 * 1で12番が先頭になる、つまり13番目以降の書籍が表示される)
+      start: pageNumber * this.state.perPage 
     })
   }
 
@@ -86,6 +87,7 @@ class Index extends React.Component {
         <div className="book-list">
           <h2>新着書籍一覧</h2>
           <BookList>
+            {/* 12冊ずつ表示。this.state.startは(ページ番号 - 1) * 12 */}
             {this.state.books.slice(this.state.start, this.state.start + this.state.perPage).map(book => {
               return (
               <li key={book.isbn} className="book-list-item">
@@ -125,6 +127,7 @@ class Index extends React.Component {
 }
 
 const BookIndexContainer = styled.div`
+  /* 一覧表示全体 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -132,6 +135,7 @@ const BookIndexContainer = styled.div`
   margin: 0 auto;
 
   & div {
+    /* .search, book-list共通 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -139,15 +143,18 @@ const BookIndexContainer = styled.div`
     margin: 0 auto;
 
     & h2 {
+      /* 「書籍検索」 */
       font-size: 32px;
     }
 
     & p {
+      /* 「書籍検索」の説明文のスタイル */
       text-align: center;
     }
   }
 
   & .search-form-field {
+    /* 検索フォーム */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -155,6 +162,7 @@ const BookIndexContainer = styled.div`
     width: 40%;
 
     & input {
+      /* 検索ワードを入力するテキストボックス */
       height: 24px;
       width: 82%;
       padding: 10px;
@@ -171,11 +179,13 @@ const BookIndexContainer = styled.div`
       border-style: none;
 
       & i {
+        /* アイコン */
         font-size: 16px;
       }
     }
 
     & .search-button:hover {
+      /* 検索ボタンにホバーしたとき */
       cursor: pointer;
       color: #535F78;
       background-color: #F4F5F7;
@@ -184,8 +194,8 @@ const BookIndexContainer = styled.div`
   }
 
   & .book-list {
-    
     & .pagination {
+      /* ページネーションボタン */
       display: flex;
       justify-content: space-between;
       margin: 0 auto;
@@ -193,10 +203,12 @@ const BookIndexContainer = styled.div`
       padding: 0;
 
       & > li {
+        /* 1個1個のボタン */
           list-style: none;
           margin: 0 12px;
 
           & > a {
+            /* ボタン内にあるリンク */
               position: relative;
               font-size: 12px;
               outline: none;
@@ -205,6 +217,7 @@ const BookIndexContainer = styled.div`
               color: #000;
 
               &::before {
+                /* ボタンにホバーしたときの丸 */
                 content: "";
                 display: block;
                 position: absolute;
@@ -218,6 +231,7 @@ const BookIndexContainer = styled.div`
               }
 
               &:hover {
+                /* ホバーすると白丸に黒太文字になる */
                   font-weight: bold;
                   
                   &::before {
@@ -225,22 +239,18 @@ const BookIndexContainer = styled.div`
                   }
               }
           }
-
-          &.active {
-              & > a::before {
-                  background-color: $white;
-              }
-          }
       }
 
-      &__previous,
-      &__next {
+      & .previous,
+      & .next {
+        /* <, > のスタイル */
           & > a {
-              font-size: 0.7rem;
+              font-size: 10px;
           }
       }
 
-      &__disabled {
+      & .disabled {
+        /* 端までいくと< , >が非表示になる */
           display: none;
       }
     }
