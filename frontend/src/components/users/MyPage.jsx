@@ -237,11 +237,13 @@ const MyPageMainContent = styled.div`
   background-color: #FFF;
 `
 
-const BookList = styled.ul`
+export const BookList = styled.ul`
   display: flex;
   list-style: none;
   width: 100%;
   flex-wrap: wrap;
+  overflow: scroll;
+  margin-bottom: 0;
 
   & .book-list-item {
     display: flex;

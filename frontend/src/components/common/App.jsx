@@ -85,6 +85,11 @@ class App extends React.Component {
                 <Welcome>
                 </Welcome>
               </Route>
+              {/* ログアウト時に一覧を表示するために/booksでもアクセスできるようにしておく */}
+              <Route exact path='/books'>
+                <Index>
+                </Index>
+              </Route>
               <Route path="/mypage">
                 <MyPage>
                   <Route exact path="/mypage/books">
