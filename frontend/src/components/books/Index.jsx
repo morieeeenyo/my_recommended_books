@@ -47,7 +47,8 @@ class Index extends React.Component {
     })
   }
 
-  searchBook() {
+  searchBook(e) {
+    e.preventDefault()
     const keyword = this.state.keyword
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}`)
@@ -114,10 +115,10 @@ class Index extends React.Component {
         <div className="search">
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>
-          <div className="search-form-field">
+          <form className="search-form-field">
             <input type="text" placeholder="書籍名で検索" onChange={this.updateForm} value={this.state.keyword}></input>
             <button className="search-button" onClick={this.searchBook}><i className="fas fa-search"></i></button>  
-          </div>
+          </form>
         </div>
 
         <div className="book-list">
@@ -195,7 +196,7 @@ const BookIndexContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center; 
-    width: 40%;
+    width: 50%;
 
     & input {
       /* 検索ワードを入力するテキストボックス */
