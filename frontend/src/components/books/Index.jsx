@@ -25,7 +25,8 @@ class Index extends React.Component {
       perPage: 12, //1ページには12冊表示
       keyword: '',
       queryParams: '',
-      queryText: 'タイトル'
+      queryText: 'タイトル',
+      title: '新着書籍一覧'
     }
     this.pageChange = this.pageChange.bind(this)
     this.searchBook = this.searchBook.bind(this)
@@ -65,7 +66,8 @@ class Index extends React.Component {
           books.push(book.params)
         })
         this.setState({
-          books: books
+          books: books,
+          title: '検索結果'
         })
       }
     })
@@ -137,7 +139,7 @@ class Index extends React.Component {
         </div>
 
         <div className="book-list">
-          <h2>新着書籍一覧</h2>
+          <h2>{this.state.title}</h2>
           <BookList>
             {/* 12冊ずつ表示。this.state.startは(ページ番号 - 1) * 12 */}
             {this.state.books.slice(this.state.start, this.state.start + this.state.perPage).map(book => {
