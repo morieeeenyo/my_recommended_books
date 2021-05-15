@@ -22,9 +22,12 @@ class Index extends React.Component {
     this.state = {
       books: [],
       start: 0, //最初は0番目(=最新)の要素から
-      perPage: 12 //1ページには12冊表示
+      perPage: 12, //1ページには12冊表示
+      keyword: ''
     }
     this.pageChange = this.pageChange.bind(this)
+    this.searchBook = this.searchBook.bind(this)
+    this.updateForm = this.updateForm.bind(this)
   }
 
   pageChange(data) {
@@ -34,6 +37,34 @@ class Index extends React.Component {
       start: pageNumber * this.state.perPage 
     })
   }
+
+  updateForm(e) {
+    //入力欄の変化を検知してstateを変える
+    let keyword = this.state.book;
+    keyword = e.target.value            
+    this.setState({
+      keyword: keyword,
+    })
+  }
+
+  searchBook() {
+    const keyword = this.state.keyword
+    axios
+    .get(`/api/v1/books/search/?keyword=${keyword}`)
+    .then(response => {
+      if (response.data.books.length === 0) {
+        return alert('検索結果が見つかりませんでした') //memo: サーバー側で検索結果が0件であるかどうかを判定できない
+      } else {
+        this.setState({
+          books: response.data.books
+        })
+      }
+    })
+      .catch(error => {
+        alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
+      })
+    }
+    
 
   componentDidMount() {
     const cookies = new Cookies();
@@ -79,8 +110,8 @@ class Index extends React.Component {
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>
           <div className="search-form-field">
-            <input type="text" placeholder="書籍名で検索" ></input>
-            <button className="search-button"><i className="fas fa-search"></i></button>  
+            <input type="text" placeholder="書籍名で検索" onChange={this.updateForm} value={this.state.keyword}></input>
+            <button className="search-button" onClick={this.searchBook}><i className="fas fa-search"></i></button>  
           </div>
         </div>
 
