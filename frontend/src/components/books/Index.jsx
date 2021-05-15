@@ -55,8 +55,13 @@ class Index extends React.Component {
       if (response.data.books.length === 0) {
         return alert('検索結果が見つかりませんでした') //memo: サーバー側で検索結果が0件であるかどうかを判定できない
       } else {
+        let books = []
+        response.data.books.forEach(book => {
+          book.params.image_url = book.params.mediumImageUrl
+          books.push(book.params)
+        })
         this.setState({
-          books: response.data.books
+          books: books
         })
       }
     })
