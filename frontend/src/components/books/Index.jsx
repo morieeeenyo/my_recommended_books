@@ -211,12 +211,19 @@ const BookIndexContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center; 
-    width: 50%;
+    width: 70%;
 
     & input {
       /* 検索ワードを入力するテキストボックス */
       height: 24px;
-      width: 82%;
+      width: calc(100% - 200px);
+      padding: 10px;
+    }
+
+    & select {
+      height: 46px;
+      display: block;
+      width: 100px;
       padding: 10px;
     }
 
