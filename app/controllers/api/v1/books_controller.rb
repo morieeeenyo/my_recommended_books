@@ -34,7 +34,6 @@ module Api
       end
 
       def search
-        return render status: 401, json: { errors: '書籍の検索にはログインが必要です' } unless @user && @token && @client
         return render status: 406, json: { errors: 'タイトルを入力してください' } if params[:keyword] == '' # 何も入力しなくても空文字列が送られる想定
 
         @books = RakutenWebService::Books::Book.search(title: params[:keyword]) # TODO: 複数のパラメータで同時に検索できないか検証
