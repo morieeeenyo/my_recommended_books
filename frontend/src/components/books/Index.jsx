@@ -23,11 +23,14 @@ class Index extends React.Component {
       books: [],
       start: 0, //最初は0番目(=最新)の要素から
       perPage: 12, //1ページには12冊表示
-      keyword: ''
+      keyword: '',
+      queryParams: '',
+      queryText: 'タイトル'
     }
     this.pageChange = this.pageChange.bind(this)
     this.searchBook = this.searchBook.bind(this)
     this.updateForm = this.updateForm.bind(this)
+    this.selectQuery = this.selectQuery.bind(this)
   }
 
   pageChange(data) {
@@ -51,7 +54,7 @@ class Index extends React.Component {
     e.preventDefault()
     const keyword = this.state.keyword
     axios
-    .get(`/api/v1/books/search/?keyword=${keyword}`)
+    .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
     .then(response => {
       if (response.data.books.length === 0) {
         return alert('検索結果が見つかりませんでした') //memo: サーバー側で検索結果が0件であるかどうかを判定できない
@@ -70,6 +73,14 @@ class Index extends React.Component {
         alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
       })
     }
+
+  selectQuery(e){
+    let selectedIndex = e.target.selectedIndex
+    this.setState({
+      queryParams: e.target.value,
+      queryText: e.target[selectedIndex].text
+    })
+  }
     
 
   componentDidMount() {
@@ -116,7 +127,11 @@ class Index extends React.Component {
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>
           <form className="search-form-field">
-            <input type="text" placeholder="書籍名で検索" onChange={this.updateForm} value={this.state.keyword}></input>
+            <select onChange={this.selectQuery}>
+              <option value="title">タイトル</option>
+              <option value="author">著者名</option>
+            </select>
+            <input type="text" placeholder={`${this.state.queryText}で検索`} onChange={this.updateForm} value={this.state.keyword}></input>
             <button className="search-button" onClick={this.searchBook}><i className="fas fa-search"></i></button>  
           </form>
         </div>
