@@ -63,7 +63,7 @@ function SearchBookForm(props) {
               <option value="title">タイトル</option>
               <option value="author">著者名</option>
             </select>
-            <input type="text" name="title" id="title" onChange={props.change}/>  
+            <input type="text" name="title" id="keyword" onChange={props.change}/>  
             <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
           </div>
         </BooksFormBlock>
