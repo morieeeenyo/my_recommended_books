@@ -133,7 +133,7 @@ class Index extends React.Component {
               <option value="title">タイトル</option>
               <option value="author">著者名</option>
             </select>
-            <input type="text" placeholder={`${this.state.queryText}で検索`} onChange={this.updateForm} value={this.state.keyword}></input>
+            <input type="text" placeholder={`${this.state.queryText}で検索`} onChange={this.updateForm} value={this.state.keyword} id="keyword"></input>
             <button className="search-button" onClick={this.searchBook}><i className="fas fa-search"></i></button>  
           </form>
         </div>
