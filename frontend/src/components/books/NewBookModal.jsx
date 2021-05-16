@@ -29,7 +29,7 @@ function SearchBookForm(props) {
             <option value="title">タイトル</option>
             <option value="author">著者名</option>
           </select>
-          <input type="text" name="title" id="title" onChange={props.change}/>  
+          <input type="text" name="keyword" id="keyword" onChange={props.change}/>  
           <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
         </div>
       </BooksFormBlock>
@@ -63,7 +63,7 @@ function SearchBookForm(props) {
               <option value="title">タイトル</option>
               <option value="author">著者名</option>
             </select>
-            <input type="text" name="title" id="keyword" onChange={props.change}/>  
+            <input type="text" name="keyword" id="keyword" onChange={props.change}/>  
             <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
           </div>
         </BooksFormBlock>
@@ -99,8 +99,9 @@ class NewBookModal extends React.Component {
       errors: [],
       // Twitterにシェアするかどうかを決めるstate
       to_be_shared_on_twitter: false,
-      queryParams: '',
-      queryText: 'タイトル'
+      queryParams: 'title',
+      queryText: 'タイトル',
+      keyword: ''
     }
     this.closeBookModal = this.closeBookModal.bind(this)
     this.searchBook = this.searchBook.bind(this)
@@ -139,18 +140,18 @@ class NewBookModal extends React.Component {
 
   updateForm(e) {
     //入力欄の変化を検知してstateを変える
-    const book = this.state.book;
+    let keyword = ''
     let to_be_shared_on_twitter = this.state.to_be_shared_on_twitter
     switch (e.target.name) {
-      case 'title':
-        book.title = e.target.value            
+      case 'keyword':
+        keyword = e.target.value
         break;
       case 'to_be_shared_on_twitter':
         to_be_shared_on_twitter = !to_be_shared_on_twitter
         break;
     }
     this.setState({
-      book: book,
+      keyword: keyword,
       to_be_shared_on_twitter: to_be_shared_on_twitter
     })
   }
@@ -165,7 +166,7 @@ class NewBookModal extends React.Component {
 
   searchBook(e) {
     e.preventDefault()
-    const keyword = this.state.book.title
+    const keyword = this.state.keyword
     // ユーザー認証とcsrf-tokenの準備
     this.userAuthentification()
     this.setAxiosDefaults();
