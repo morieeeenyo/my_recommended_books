@@ -42,6 +42,7 @@ module Api
           return render status: 406, json: { errors: '著者名を入力してください' } if params[:keyword] == '' # 何も入力しなくても空文字列が送られる想定
           @books = RakutenWebService::Books::Book.search(author: params[:keyword]) # TODO: 複数のパラメータで同時に検索できないか検証
         end
+        return render status: 404, json: { errors: '検索結果が見つかりませんでした' } if params[:keyword] != '' && @books.length == 0 # 何も入力しなくても空文字列が送られる想定
         render json: { books: @books }
       end
 

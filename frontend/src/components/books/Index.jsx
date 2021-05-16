@@ -24,7 +24,7 @@ class Index extends React.Component {
       start: 0, //最初は0番目(=最新)の要素から
       perPage: 12, //1ページには12冊表示
       keyword: '',
-      queryParams: '',
+      queryParams: 'title',
       queryText: 'タイトル',
       title: '新着書籍一覧'
     }
@@ -57,19 +57,15 @@ class Index extends React.Component {
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
     .then(response => {
-      if (response.data.books.length === 0) {
-        return alert('検索結果が見つかりませんでした') //memo: サーバー側で検索結果が0件であるかどうかを判定できない
-      } else {
-        let books = []
-        response.data.books.forEach(book => {
-          book.params.image_url = book.params.mediumImageUrl
-          books.push(book.params)
-        })
-        this.setState({
-          books: books,
-          title: '検索結果'
-        })
-      }
+      let books = []
+      response.data.books.forEach(book => {
+        book.params.image_url = book.params.mediumImageUrl
+        books.push(book.params)
+      })
+      this.setState({
+        books: books,
+        title: '検索結果'
+      })
     })
       .catch(error => {
         alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする

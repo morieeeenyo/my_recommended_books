@@ -229,7 +229,6 @@ RSpec.describe 'Users', type: :system do
         # ログインすると表示が切り替わる
         expect(page).to  have_content '新規登録'
         expect(page).to  have_content 'ログイン'
-        # ログアウトすると書籍投稿ボタンは消える
         expect(page).to  have_content 'Kaidoku - 会読'
       end
 
