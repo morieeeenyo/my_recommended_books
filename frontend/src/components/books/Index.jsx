@@ -57,15 +57,19 @@ class Index extends React.Component {
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
     .then(response => {
-      let books = []
-      response.data.books.forEach(book => {
-        book.params.image_url = book.params.mediumImageUrl
-        books.push(book.params)
-      })
-      this.setState({
-        books: books,
-        title: '検索結果'
-      })
+      if (response.data.books.length === 0) {
+        alert('検索結果が見つかりませんでした')
+      } else {
+        let books = []
+        response.data.books.forEach(book => {
+          book.params.image_url = book.params.mediumImageUrl
+          books.push(book.params)
+        })
+        this.setState({
+          books: books,
+          title: '検索結果'
+        })
+      }
     })
       .catch(error => {
         alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
