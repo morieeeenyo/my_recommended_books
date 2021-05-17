@@ -9,7 +9,7 @@ RSpec.describe 'Books', type: :request do
   let(:book_params) { attributes_for(:book) } # paramsとして送るためにattributes_forを使用
   let(:another_book_params) { attributes_for(:book) } # paramsとして送るためにattributes_forを使用
   let(:invalid_book_params) { attributes_for(:book, title: '') } # コントローラーで空のキーワードに対してnilを返すようにしている
-  let(:book_search_params) { { keyword: '７つの習慣' } } # 検索したらヒットしそうな本にしてます
+  let(:book_search_params) { { keyword: '７つの習慣', query: 'title' } } # 検索したらヒットしそうな本にしてます
   let(:headers) do
     { 'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678' }
   end
@@ -58,7 +58,7 @@ RSpec.describe 'Books', type: :request do
   end
 
   describe '書籍の検索' do
-    context '検索に成功' do
+    context '検索に成功(タイトル検索)' do
       it 'パラメータが存在すればリクエストに成功する' do
         get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
         expect(response).to have_http_status(200)
@@ -71,23 +71,77 @@ RSpec.describe 'Books', type: :request do
       end
 
       it '検索結果がない時レスポンスが0件になる' do
+        book_search_params[:keyword] = 'hogefugahoge'
         # 検索処理そのものは正しく行われている、という意味で正常形に分類
-        get search_api_v1_books_path, xhr: true, params: { keyword: 'hogefugahogefugahoge' }, headers: headers # headersは認証用のヘッダー
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
         json = JSON.parse(response.body)
         expect(json['books'].length).to eq 0
       end
     end
 
-    context '検索に失敗' do
-      it 'パラメータが空文字列の時ステータス400が返却される' do
-        get search_api_v1_books_path, xhr: true, params: { keyword: '' }, headers: headers # headersは認証用のヘッダー
+    context '検索に成功(著者名検索)' do
+      before do
+        book_search_params[:query] = 'author'
+      end
+      
+      it 'パラメータが存在すればリクエストに成功する' do
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
+        expect(response).to have_http_status(200)
+      end
+
+      it '検索結果が存在する時JSON形式で検索結果が返却される' do
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
+        json = JSON.parse(response.body)
+        expect(json['books'].length).not_to eq 0 # 検索結果が0のときはlengthが0になる
+      end
+
+      it '検索結果がない時レスポンスが0件になる' do
+        book_search_params[:keyword] = 'hogefugahoge'
+        # 検索処理そのものは正しく行われている、という意味で正常形に分類
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
+        json = JSON.parse(response.body)
+        expect(json['books'].length).to eq 0
+      end
+    end
+
+    context '検索に失敗(タイトル検索)' do
+      it 'パラメータが空文字列の時ステータス406が返却される' do
+        book_search_params[:keyword] = ''
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
         expect(response).to have_http_status(406)
       end
 
       it 'パラメータが空文字列の時レスポンスでエラーメッセージが返却される' do
-        get search_api_v1_books_path, xhr: true, params: { keyword: '' }, headers: headers # headersは認証用のヘッダー
+        book_search_params[:keyword] = ''
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
         json = JSON.parse(response.body)
         expect(json['errors']).to include 'タイトルを入力してください'
+      end
+    end
+
+    context '検索に失敗(著者名検索)' do
+      before do
+        book_search_params[:query] = 'author'
+      end
+      
+      it 'パラメータが空文字列の時ステータス406が返却される' do
+        book_search_params[:keyword] = ''
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
+        expect(response).to have_http_status(406)
+      end
+
+      it 'パラメータが空文字列の時レスポンスでエラーメッセージが返却される' do
+        book_search_params[:keyword] = ''
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
+        json = JSON.parse(response.body)
+        expect(json['errors']).to include '著者名を入力してください'
+      end
+
+      it 'パラメータが空文字列の時レスポンスでエラーメッセージが返却される(queryがauthor)' do
+        book_search_params[:keyword] = ''
+        get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
+        json = JSON.parse(response.body)
+        expect(json['errors']).to include '著者名を入力してください'
       end
     end
   end
