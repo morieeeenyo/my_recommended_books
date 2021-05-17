@@ -72,7 +72,7 @@ RSpec.describe 'Outputs', type: :request do
 
     context "アウトプットが0件の場合" do
       before do
-        Awareness.delete_all # letを用いてすでに投稿されたアウトプットを削除
+        another_book.awarenesses.delete_all # すでに投稿されたアウトプットを削除
       end
       
       it "ログイン中のユーザーが推薦図書に追加していない場合ステータスは200" do
