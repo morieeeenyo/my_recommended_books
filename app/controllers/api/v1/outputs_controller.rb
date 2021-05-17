@@ -9,13 +9,21 @@ module Api
 
       def index
         @book = Book.find_by(isbn: params[:book_isbn])
-        @user_book_relation = UserBook.find_by(book_id: @book.id, user_id: @user.id)
-        if @user_book_relation
-          @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id, false)
-          render json: { myoutputs: @my_outputs, outputs: @outputs }
-        else
+        if @user
+          @user_book_relation = UserBook.find_by(book_id: @book.id, user_id: @user.id)
+          if @user_book_relation
+            # ログインしていて推薦図書に追加済み
+            @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id, false)
+            render json: { myoutputs: @my_outputs, outputs: @outputs }
+          else
+            # ログインしているが推薦図書には追加していない
+            @outputs = Output.fetch_resources(@book.id, nil, false)
+            render json: { outputs: @outputs, posted: false }
+          end
+        else 
+          # ログアウト時
           @outputs = Output.fetch_resources(@book.id, nil, false)
-          render json: { outputs: @outputs, posted: false }
+          render json: { outputs: @outputs }
         end
       end
 
@@ -23,8 +31,9 @@ module Api
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
         @output = Output.new(output_params)
+        
         if @output.valid?
-          output_save_result = @output.save
+          output_save_result = @output.save(params[:book_isbn])
           # ステータスは手動で設定する。リソース保存時のステータスは201
           render status: 201, json: { awareness: output_save_result[:awareness], action_plans: output_save_result[:action_plans] }
         else
@@ -35,13 +44,14 @@ module Api
       private
 
       def output_params
-        params.require(:output).permit(:content, action_plans: [:time_of_execution, :what_to_do, :how_to_do]).merge(book_id: params[:book_id],
+        params.require(:output).permit(:content, :book_id, action_plans: [:time_of_execution, :what_to_do, :how_to_do]).merge(
                                                                                                                     user_id: @user.id)
       end
 
       def user_authentification
         # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
         @user = User.find_for_database_authentication(uid: request.headers['uid'])
+        return nil unless @user
         # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
         @token = request.headers['access-token']
         @client = request.headers['client']

@@ -28,8 +28,9 @@ class Output
     end
   end
 
-  def save
-    awareness = Awareness.new(content: content, book_id: book_id, user_id: user_id)
+  def save(isbn)
+    book = Book.find_by(isbn: isbn)
+    awareness = Awareness.new(content: content, book_id: book.id, user_id: user_id)
     awareness.save
     action_plans.each do |action_plan|
       action_plan = ActionPlan.new(time_of_execution: action_plan[:time_of_execution], what_to_do: action_plan[:what_to_do],
