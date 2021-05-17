@@ -10,7 +10,7 @@ RSpec.describe 'Users', type: :request do
     attributes_for(:user, email: user.email)
   end
   let(:user_book) { build(:user_book) }
-  let(:output) { build(:output, user_id: user.id) }
+  let(:output) { build(:output) }
   let(:headers) do
     { 'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678' }
   end
@@ -229,16 +229,27 @@ RSpec.describe 'Users', type: :request do
   end
   
   describe '自分が投稿したアウトプット一覧の表示' do
+    before do
+      # 自分以外のアウトプットがマイページでは返却されないことを検証
+      @outputs_of_others = []
+      # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
+      2.times do
+        output_save_result = output.save
+        @outputs_of_others << output_save_result
+      end
+    end
+    
     context 'アウトプット一覧の表示に成功する時(アウトプット投稿済み)' do
       before do
+        output.user_id = user.id
         user_book.user_id = user.id
         user_book.save # ユーザーと書籍の紐付け
         output.book_id = user_book.book.id # アウトプットとユーザーと書籍の紐付け
-        @outputs = []
+        @my_outputs = []
         # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do
           output_save_result = output.save
-          @outputs << output_save_result
+          @my_outputs << output_save_result
         end
       end
 
@@ -254,11 +265,11 @@ RSpec.describe 'Users', type: :request do
         sleep 2
         expect(json['outputs'].length).to eq 2 # beforeの部分で2個保存している
         json['outputs'].each_with_index do |output, output_index|
-          expect(output['awareness']['content']).to eq @outputs[output_index][:awareness].content
+          expect(output['awareness']['content']).to eq @my_outputs[output_index][:awareness].content
           output['action_plans'].each_with_index do |action_plan, action_plan_index|
-            expect(action_plan['what_to_do']).to eq @outputs[output_index][:action_plans][action_plan_index][:what_to_do]
-            expect(action_plan['how_to_do']).to eq @outputs[output_index][:action_plans][action_plan_index][:how_to_do]
-            expect(action_plan['time_of_execution']).to eq @outputs[output_index][:action_plans][action_plan_index][:time_of_execution]
+            expect(action_plan['what_to_do']).to eq @my_outputs[output_index][:action_plans][action_plan_index][:what_to_do]
+            expect(action_plan['how_to_do']).to eq @my_outputs[output_index][:action_plans][action_plan_index][:how_to_do]
+            expect(action_plan['time_of_execution']).to eq @my_outputs[output_index][:action_plans][action_plan_index][:time_of_execution]
           end
         end
       end
