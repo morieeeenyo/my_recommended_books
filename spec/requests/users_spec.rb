@@ -243,12 +243,12 @@ RSpec.describe 'Users', type: :request do
       end
 
       it 'リクエストに成功する' do
-        get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
+        get api_v1_user_mypage_book_outputs_path(user_book.book.isbn), xhr: true, headers: headers
         expect(response).to have_http_status(200)
       end
 
       it 'レスポンスが正しく返却される' do
-        get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
+        get api_v1_user_mypage_book_outputs_path(user_book.book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         sleep 2
@@ -271,7 +271,7 @@ RSpec.describe 'Users', type: :request do
       end
       
       it 'アウトプットが投稿されていない時レスポンスが0件になる' do
-        get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
+        get api_v1_user_mypage_book_outputs_path(user_book.book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         sleep 2
@@ -287,12 +287,12 @@ RSpec.describe 'Users', type: :request do
       end
       
       it 'ヘッダーのユーザーが存在しないときリクエストに失敗する' do
-        get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
+        get api_v1_user_mypage_book_outputs_path(user_book.book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         expect(response).to have_http_status(401)
       end
       it 'ヘッダーのユーザーが存在しないときエラーメッセージが返却される' do
-        get api_v1_user_outputs_path(user_book.book.id), xhr: true, headers: headers
+        get api_v1_user_mypage_book_outputs_path(user_book.book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         expect(json['errors']).to eq 'ユーザーが見つかりませんでした'
@@ -307,13 +307,13 @@ RSpec.describe 'Users', type: :request do
       end
 
       it '書籍が推薦図書として追加されていない場合、ステータスが422になる' do
-        get api_v1_user_outputs_path(book.id), xhr: true, headers: headers
+        get api_v1_user_mypage_book_outputs_path(book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         expect(response).to have_http_status(422)
       end
       
       it '書籍が推薦図書として追加されていない場合、エラーメッセージが返却される' do
-        get api_v1_user_outputs_path(book.id), xhr: true, headers: headers
+        get api_v1_user_mypage_book_outputs_path(book.id), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         expect(json['errors']).to eq '書籍が推薦図書として追加されていません'
