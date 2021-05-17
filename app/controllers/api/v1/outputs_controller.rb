@@ -11,10 +11,10 @@ module Api
         @book = Book.find_by(isbn: params[:book_isbn])
         @user_book_relation = UserBook.find_by(book_id: @book.id, user_id: @user.id)
         if @user_book_relation
-          @outputs = Output.fetch_resources(@book.id, @user.id, false)
-          render json: { outputs: @outputs }
+          @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id, false)
+          render json: { myoutputs: @my_outputs, outputs: @outputs }
         else
-          @outputs = Output.fetch_resources(@book.id)
+          @outputs = Output.fetch_resources(@book.id, nil, false)
           render json: { outputs: @outputs, posted: false }
         end
       end
