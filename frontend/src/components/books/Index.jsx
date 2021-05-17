@@ -23,10 +23,10 @@ class Index extends React.Component {
       books: [],
       start: 0, //最初は0番目(=最新)の要素から
       perPage: 12, //1ページには12冊表示
-      keyword: '',
-      queryParams: 'title',
-      queryText: 'タイトル',
-      title: '新着書籍一覧'
+      keyword: '', //検索ワード。初期値は空にしておく
+      queryParams: 'title', //どのカラムに対して検索をかけるか
+      queryText: 'タイトル', //検索入力欄のテキストボックスに使ってます
+      title: '新着書籍一覧' //検索すると「検索結果」に変わる
     }
     this.pageChange = this.pageChange.bind(this)
     this.searchBook = this.searchBook.bind(this)
@@ -44,8 +44,7 @@ class Index extends React.Component {
 
   updateForm(e) {
     //入力欄の変化を検知してstateを変える
-    let keyword = this.state.book;
-    keyword = e.target.value            
+    let keyword = e.target.value            
     this.setState({
       keyword: keyword,
     })
@@ -58,16 +57,18 @@ class Index extends React.Component {
     .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
     .then(response => {
       if (response.data.books.length === 0) {
+        // サーバー側でlengthを使った判定ができないためフロントで判定している
         alert('検索結果が見つかりませんでした')
       } else {
         let books = []
         response.data.books.forEach(book => {
-          book.params.image_url = book.params.mediumImageUrl
+          // 検索結果の書籍情報はbook.paramsに入っている
+          book.params.image_url = book.params.mediumImageUrl //画像はカラム名と楽天APIから返却されるキーの値が違うためテコ入れが必要
           books.push(book.params)
         })
         this.setState({
           books: books,
-          title: '検索結果'
+          title: '検索結果' 
         })
       }
     })
@@ -77,6 +78,7 @@ class Index extends React.Component {
     }
 
   selectQuery(e){
+    // プルダウンの選択に応じてテキストボックスのplaceholderを変える
     let selectedIndex = e.target.selectedIndex
     this.setState({
       queryParams: e.target.value,
@@ -84,7 +86,6 @@ class Index extends React.Component {
     })
   }
     
-
   componentDidMount() {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
@@ -167,7 +168,7 @@ class Index extends React.Component {
           previousClassName='page-item' // '<'の親要素(li)のクラス名
           nextClassName='page-item' //'>'の親要素(li)のクラス名
           previousLinkClassName='page-link'  //'<'のリンクのクラス名
-          nextLinkClassName='page-link'　//'>'のリンクのクラス名
+          nextLinkClassName='page-link' //'>'のリンクのクラス名
           disabledClassName='disabled' //先頭 or 末尾に行ったときにそれ以上戻れ(進め)なくするためのクラス
           breakLabel='...' // ページがたくさんあるときに表示しない番号に当たる部分をどう表示するか
           breakClassName='page-item' // 上記の「…」のクラス名

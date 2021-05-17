@@ -23,6 +23,7 @@ function SearchBookForm(props) {
     <NewBookFormContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <BooksFormBlock>
+        {/* Index.jsx同様プルダウンを選択するとlabelの値および検索対象のカラムが変化する */}
         <label htmlFor="title">{props.queryText}で検索</label>
         <div className="search-form-field">
           <select onChange={props.select}>
@@ -52,6 +53,7 @@ function SearchBookForm(props) {
     </NewBookFormContent>
     )
   } else {
+    // Todo:条件付きレンダーで記述を減らす
     return(
 
       <NewBookFormContent onSubmit={props.submit}>
@@ -99,9 +101,9 @@ class NewBookModal extends React.Component {
       errors: [],
       // Twitterにシェアするかどうかを決めるstate
       to_be_shared_on_twitter: false,
-      queryParams: 'title',
-      queryText: 'タイトル',
-      keyword: ''
+      queryParams: 'title', //検索対象のカラム
+      queryText: 'タイトル', //フォームのlabelに表示するテキスト
+      keyword: '' //フォームの入力内容
     }
     this.closeBookModal = this.closeBookModal.bind(this)
     this.searchBook = this.searchBook.bind(this)
@@ -157,6 +159,7 @@ class NewBookModal extends React.Component {
   }
 
   selectQuery(e){
+    // プルダウンの選択内容に応じてlabelのテキストを変えつ
     let selectedIndex = e.target.selectedIndex
     this.setState({
       queryParams: e.target.value,

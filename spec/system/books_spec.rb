@@ -294,7 +294,7 @@ RSpec.describe 'Books', type: :system do
   describe '書籍の検索' do
     context "検索に成功(書籍一覧)" do
       before do
-        @book_list = create_list(:book, 15)
+        @book_list = create_list(:book, 15) # 一覧で表示している内容が検索したときに消えるかどうか検証
         sign_in(user) # ログインする
       end
       
@@ -309,47 +309,41 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
-        # どれだけ投稿しても1ページ目に表示されるのは12件
-        expect(all('.book-list-item').length).to  eq 12
+        expect(all('.book-list-item').length).to  eq 12 # どれだけ投稿しても1ページ目に表示されるのは12件
         first_page_book = all('.book-list-item')[0]
         find('a', text: '>').click
-        # 1ページ目にあった書籍は表示されない
-        expect(page).not_to  have_content first_page_book
-        # 「<」ボタンが表示される
-        expect(page).to  have_content '<'
+        expect(page).not_to  have_content first_page_book # 1ページ目にあった書籍は表示されない
+        expect(page).to  have_content '<' # 「<」ボタンが表示される
       end
 
       it "「2」を押すことで検索結果の2ページ目以降を表示できる" do
         expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
-        # どれだけ投稿しても1ページ目に表示されるのは12件
-        expect(all('.book-list-item').length).to  eq 12
+        expect(all('.book-list-item').length).to  eq 12 # どれだけ投稿しても1ページ目に表示されるのは12件
         first_page_book = all('.book-list-item')[0]
         find('a', text: '2').click
-        # 1ページ目にあった書籍は表示されない
-        expect(page).not_to  have_content first_page_book
-        # 「<」ボタンが表示される
-        expect(page).to  have_content '<'
+        expect(page).not_to  have_content first_page_book # 1ページ目にあった書籍は表示されない
+        expect(page).to  have_content '<' # 「<」ボタンが表示される
       end
 
       it "一覧表示の際に表示されていたデータは表示されない" do
         expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        expect(page).to  have_content @book_list[14].title # 新着順なので一番うしろのデータが先頭に来る
         fill_in 'keyword', with: 'test'
         find('.search-button').click
-        # 1ページ目にあった書籍は表示されない
-        expect(page).not_to  have_content @book_list[0].title
+        expect(page).not_to  have_content @book_list[14].title # 1ページ目にあった書籍は表示されない。
       end
 
       it "プルダウンで著者名を選択するとタイトルで検索した場合とは異なる結果になる" do
         expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
-        title_search_result = all('.book-list-item')[0]
+        title_search_result = all('.book-list-item')[0] # タイトル検索した際の先頭の要素を変数化しておく
         select '著者名'
         fill_in 'keyword', with: 'test'
         find('.search-button').click
-        expect(page).not_to  have_content title_search_result
+        expect(page).not_to  have_content title_search_result # タイトル検索したときの内容が消えている
       end
 
       it "何も入力せずに検索ボタンをクリックするとプルダウンの内容に応じてアラートが出る" do
