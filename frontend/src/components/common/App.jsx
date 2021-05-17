@@ -17,6 +17,7 @@ import {MyRecommendedBooks} from '../users/MyPage.jsx'
 import AccountUpdateModal from '../users/AccountUpdateModal.jsx'
 import AccountUpdateForm from '../users/AccountUpdateForm.jsx'
 import OutputModal from '../outputs/OutputModal.jsx'
+import OutputIndex from '../outputs/OutputIndex.jsx'
 
 //axiosの読み込み
 import axios from 'axios';
@@ -89,6 +90,10 @@ class App extends React.Component {
               <Route exact path='/books'>
                 <Index>
                 </Index>
+              </Route>
+              <Route exact path='/books/:isbn/outpus'>
+                <OutputIndex>
+                </OutputIndex>
               </Route>
               <Route path="/mypage">
                 <MyPage>

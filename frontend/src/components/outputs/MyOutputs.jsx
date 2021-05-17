@@ -74,7 +74,6 @@ class MyOutputs extends React.Component {
           console.log(error) 
         }
       })
-
   }
 
   render () {
