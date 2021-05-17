@@ -43,14 +43,30 @@ class Output
     output # 生成したハッシュをコントローラーに返し、レスポンスにする
   end
 
-  def self.fetch_resources(book_id)
+  def self.fetch_resources(book_id, user_id, my_page)
     book = Book.find(book_id)
     outputs = [] # アウトプットは複数投稿できるので配列で定義
-    book.awarenesses.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
-      output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
-      output[:awareness] = awareness
-      output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
-      outputs.push(output)
+    if my_page
+      book.awarenesses.select { |awareness| awareness.user_id == user_id }.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+        output[:awareness] = awareness
+        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+        outputs.push(output)
+      end
+    elsif user_id.present?
+      book.awarenesses.where(user_id: user_id).or(book.awarenesses.where.not(user_id: user_id)).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+        output[:awareness] = awareness
+        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+        outputs.push(output)
+      end
+    else
+      book.awarenesses.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+        output[:awareness] = awareness
+        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+        outputs.push(output)
+      end
     end
     outputs # コントローラー側に戻り値として配列を返す
   end

@@ -8,13 +8,14 @@ module Api
       after_action :post_tweet, only: :create
 
       def index
-        @book = Book.find_by(isbn: params[:isbn])
-        binding.pry
-        if @book
-          
-          
-          
+        @book = Book.find_by(isbn: params[:book_isbn])
+        @user_book_relation = UserBook.find_by(book_id: @book.id, user_id: @user.id)
+        if @user_book_relation
+          @outputs = Output.fetch_resources(@book.id, @user.id, false)
+          render json: { outputs: @outputs }
         else
+          @outputs = Output.fetch_resources(@book.id)
+          render json: { outputs: @outputs, posted: false }
         end
       end
 
