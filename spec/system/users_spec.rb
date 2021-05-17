@@ -276,7 +276,7 @@ RSpec.describe 'Users', type: :system do
         sleep 5
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         sleep 1
         find('.search-button').click
         sleep 2
