@@ -21,10 +21,10 @@ module Api
       def my_outputs
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
-
-        user_book_relation = UserBook.find_by(user_id: @user.id, book_id: params[:book_id]) # ユーザーが書籍を投稿していない場合に処理を失敗させるために中間テーブルを参照
+        @book = Book.find_by(isbn: params[:book_isbn])
+        user_book_relation = UserBook.find_by(book_id: @book.id, user_id: @user.id) # ユーザーが書籍を投稿していない場合に処理を失敗させるために中間テーブルを参照
         if user_book_relation
-          outputs = Output.fetch_resources(user_book_relation.book.id, @user.id, true) # fect_resourcesメソッドはoutput.rbにて定義
+          outputs = Output.fetch_resources(@book.id, @user.id, true) # fect_resourcesメソッドはoutput.rbにて定義
           render json: { outputs: outputs }
         else
           render status: 422, json: { errors: '書籍が推薦図書として追加されていません' }
