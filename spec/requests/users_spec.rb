@@ -258,13 +258,14 @@ RSpec.describe 'Users', type: :request do
         expect(response).to have_http_status(200)
       end
 
-      it 'レスポンスが正しく返却される' do
+      it '自分が投稿したアウトプットのみレスポンスとして返却される' do
         get api_v1_user_mypage_book_outputs_path(user_book.book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         sleep 2
-        expect(json['outputs'].length).to eq 2 # beforeの部分で2個保存している
+        expect(json['outputs'].length).to eq 2 # 自分以外のアウトプットを含む場合4つになるはずなので正しくレスポンスが返ってきてそう
         json['outputs'].each_with_index do |output, output_index|
+          expect(output['awareness']['user_id']).to eq user.id # 自分が投稿したアウトプットかどうか検証
           expect(output['awareness']['content']).to eq @my_outputs[output_index][:awareness].content
           output['action_plans'].each_with_index do |action_plan, action_plan_index|
             expect(action_plan['what_to_do']).to eq @my_outputs[output_index][:action_plans][action_plan_index][:what_to_do]
