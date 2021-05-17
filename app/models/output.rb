@@ -54,12 +54,20 @@ class Output
         outputs.push(output)
       end
     elsif user_id.present?
-      book.awarenesses.where(user_id: user_id).or(book.awarenesses.where.not(user_id: user_id)).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+      my_outputs = []
+      book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+        output[:awareness] = awareness
+        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+        my_outputs.push(output)
+      end
+      book.awarenesses.where.not(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
         output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
         output[:awareness] = awareness
         output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
         outputs.push(output)
       end
+      return my_outputs, outputs # 一覧では自分の投稿と自分以外の投稿を別々に返却
     else
       book.awarenesses.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
         output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
@@ -68,6 +76,6 @@ class Output
         outputs.push(output)
       end
     end
-    outputs # コントローラー側に戻り値として配列を返す
+    return outputs # コントローラー側に戻り値として配列を返す
   end
 end
