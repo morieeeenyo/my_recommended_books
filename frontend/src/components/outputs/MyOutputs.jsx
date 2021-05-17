@@ -124,11 +124,11 @@ class MyOutputs extends React.Component {
   } 
 }
 
-const OutputWrapper = styled.div`
+export const OutputWrapper = styled.div`
   height: 100%;
 `
 
-const OutputContent = styled.div`
+export const OutputContent = styled.div`
   height: 100%;
   width: 90%;
   margin: 0 auto;
@@ -169,7 +169,7 @@ const OutputContent = styled.div`
 
 `
 
-const OutputList = styled.ul`
+export const OutputList = styled.ul`
   list-style: none;
   overflow: scroll;
   /* heightがないとscrollしない */

@@ -7,6 +7,10 @@ module Api
       # ツイートの投稿
       after_action :post_tweet, only: :create
 
+      def index
+        
+      end
+
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
