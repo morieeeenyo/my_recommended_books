@@ -61,7 +61,7 @@ class OutputIndex extends React.Component {
     this.userAuthentification()
     //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
     axios
-      .get('/api/v1/mypage/books/' + this.props.location.state.book.id + '/outputs')
+      .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
       .then(response => {
         this.setState({
             outputs: response.data.outputs

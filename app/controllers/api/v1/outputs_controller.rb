@@ -8,7 +8,14 @@ module Api
       after_action :post_tweet, only: :create
 
       def index
-        
+        @book = Book.find_by(isbn: params[:isbn])
+        binding.pry
+        if @book
+          
+          
+          
+        else
+        end
       end
 
       def create
