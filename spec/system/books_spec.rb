@@ -52,7 +52,7 @@ RSpec.describe 'Books', type: :system do
         expect(all('.book-list-item').length).to  eq 12
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -86,12 +86,16 @@ RSpec.describe 'Books', type: :system do
     end
 
     context "一覧表示に成功(ページネーション)" do
-      it "「>」ボタンを押すと13冊目以降が表示される。また「<」が出現する" do
+      before do
         visit root_path
         expect(page).to  have_content 'Kaidoku - 会読'
         click_link 'みんなのアウトプットを見る'
         sleep 3
         expect(page).to  have_content '新着書籍一覧'
+        expect(all('.book-list-item').length).to  eq 12
+      end
+      
+      it "「>」ボタンを押すと13冊目以降が表示される。また「<」が出現する" do
         expect(all('.book-list-item').length).to  eq 12
         find('a', text: '>').click
         expect(all('.book-list-item').length).to  eq @book_list.length - 12
@@ -101,12 +105,6 @@ RSpec.describe 'Books', type: :system do
       end
 
       it "「2」ボタンを押すと13冊目以降が表示される。また「<」が出現する" do
-        visit root_path
-        expect(page).to  have_content 'Kaidoku - 会読'
-        click_link 'みんなのアウトプットを見る'
-        sleep 3
-        expect(page).to  have_content '新着書籍一覧'
-        expect(all('.book-list-item').length).to  eq 12
         # 「2」を押してもページネーションが動く
         find('a', text: '2').click
         expect(all('.book-list-item').length).to  eq @book_list.length - 12
@@ -116,12 +114,6 @@ RSpec.describe 'Books', type: :system do
       end
 
       it "「<」ボタンを押すと1 ~ 12冊目が表示される。また「>」が出現する" do
-        visit root_path
-        expect(page).to  have_content 'Kaidoku - 会読'
-        click_link 'みんなのアウトプットを見る'
-        sleep 3
-        expect(page).to  have_content '新着書籍一覧'
-        expect(all('.book-list-item').length).to  eq 12
         find('a', text: '>').click
         find('a', text: '<').click
         # 1,2冊目が表示されているか検証
@@ -132,12 +124,6 @@ RSpec.describe 'Books', type: :system do
       end
 
       it "「1」ボタンを押すと1 ~ 12冊目が表示される。また「>」が出現する" do
-        visit root_path
-        expect(page).to  have_content 'Kaidoku - 会読'
-        click_link 'みんなのアウトプットを見る'
-        sleep 3
-        expect(page).to  have_content '新着書籍一覧'
-        expect(all('.book-list-item').length).to  eq 12
         find('a', text: '>').click
         find('a', text: '1').click
         # 1,2冊目が表示されているか検証
@@ -157,7 +143,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user) # ログインする
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -173,7 +159,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user) # ログインする
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -185,7 +171,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -201,7 +187,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user) # ログインする
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -217,7 +203,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(another_user) # 別のユーザーでログイン
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -235,7 +221,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user)
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
         expect do
@@ -249,7 +235,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user) # ログインする
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -261,7 +247,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -292,7 +278,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user) # ログインする
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         find('.search-button').click
         sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
@@ -300,21 +286,147 @@ RSpec.describe 'Books', type: :system do
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
         expect(all('#search_result > div').length).to eq 0 # 検索結果が0件ではないことを検証
-        expect(page).to have_field 'title', with: ''
+        expect(page).to have_field 'keyword', with: ''
       end
     end
   end
 
   describe '書籍の検索' do
-    context '検索に成功' do
-      it '何も入力せずに検索ボタンを入力すると検索結果が0件である' do
+    context "検索に成功(書籍一覧)" do
+      before do
+        @book_list = create_list(:book, 15) # 一覧で表示している内容が検索したときに消えるかどうか検証
+        sign_in(user) # ログインする
+      end
+      
+      it "検索結果が存在する場合画面に表示される" do
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        expect(all('.book-list-item').length).not_to  eq 0
+      end
+
+      it "「>」を押すことで検索結果の2ページ目以降を表示できる" do
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        expect(all('.book-list-item').length).to  eq 12 # どれだけ投稿しても1ページ目に表示されるのは12件
+        first_page_book = all('.book-list-item')[0]
+        find('a', text: '>').click
+        expect(page).not_to  have_content first_page_book # 1ページ目にあった書籍は表示されない
+        expect(page).to  have_content '<' # 「<」ボタンが表示される
+      end
+
+      it "「2」を押すことで検索結果の2ページ目以降を表示できる" do
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        expect(all('.book-list-item').length).to  eq 12 # どれだけ投稿しても1ページ目に表示されるのは12件
+        first_page_book = all('.book-list-item')[0]
+        find('a', text: '2').click
+        expect(page).not_to  have_content first_page_book # 1ページ目にあった書籍は表示されない
+        expect(page).to  have_content '<' # 「<」ボタンが表示される
+      end
+
+      it "一覧表示の際に表示されていたデータは表示されない" do
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        expect(page).to  have_content @book_list[14].title # 新着順なので一番うしろのデータが先頭に来る
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        expect(page).not_to  have_content @book_list[14].title # 1ページ目にあった書籍は表示されない。
+      end
+
+      it "プルダウンで著者名を選択するとタイトルで検索した場合とは異なる結果になる" do
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        title_search_result = all('.book-list-item')[0] # タイトル検索した際の先頭の要素を変数化しておく
+        select '著者名'
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        expect(page).not_to  have_content title_search_result # タイトル検索したときの内容が消えている
+      end
+
+      it "何も入力せずに検索ボタンをクリックするとプルダウンの内容に応じてアラートが出る" do
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        fill_in 'keyword', with: ''
+        find('.search-button').click
+        sleep 7
+        expect(page.driver.browser.switch_to.alert.text).to eq 'タイトルを入力してください'
+        sleep 2
+        page.driver.browser.switch_to.alert.accept
+        select '著者名'
+        fill_in 'keyword', with: ''
+        find('.search-button').click
+        sleep 5
+        expect(page.driver.browser.switch_to.alert.text).to eq '著者名を入力してください'
+        sleep 2
+        page.driver.browser.switch_to.alert.accept
+      end
+
+      it "キーワードを入力しても検索結果が見つからない場合アラートが出る" do
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        fill_in 'keyword', with: ' ほげほげふが'
+        find('.search-button').click
+        sleep 7
+        expect(page.driver.browser.switch_to.alert.text).to eq '検索結果が見つかりませんでした'
+        sleep 2
+        page.driver.browser.switch_to.alert.accept
+        expect(page).to  have_content @book_list[14].title # 画面表示に変化がないことを検証
+      end
+
+      it "ログアウト時でも検索に成功する" do
+        # 本当はログアウト時もログイン時のexampleを全部検証したほうがいい
+        find('.header-link', text: 'ログアウト').click
+        expect(page).to have_content 'SignOut'
+        click_button 'SignOut'
+        # ログインすると表示が切り替わる
+        expect(page).to  have_content '新規登録'
+        expect(page).to  have_content 'ログイン'
+        expect(page).to  have_content 'Kaidoku - 会読' # welcomeページにいることを検証
+        click_link 'みんなのアウトプットを見る' # welcomeページから一覧へのリンク
+        sleep 3
+        expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        expect(all('.book-list-item').length).not_to  eq 0    
+      end
+      
+    end
+    
+    context '検索に成功(書籍投稿モーダル)' do
+      it 'プルダウンの選択内容に応じて検索結果は変わる' do
         sign_in(user)
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: ''
+        fill_in 'keyword',	with: 'test'
+        find('.search-button').click
+        sleep 5
+        expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
+        title_search_result = all('#search_result h3')[0].text
+        select '著者名'
+        fill_in 'keyword', with: 'test'
+        find('.search-button').click
+        sleep 5
+        expect(page).not_to  have_content title_search_result
+      end
+
+      it '何も入力せずに検索ボタンを入力すると検索結果が0件であり、プルダウンの内容に応じてアラートが出る' do
+        sign_in(user)
+        click_link href: '/books/new'
+        expect(page).to  have_content '推薦図書を投稿する'
+        fill_in 'keyword',	with: ''
         find('.search-button').click
         sleep 5
         expect(page.driver.browser.switch_to.alert.text).to eq 'タイトルを入力してください'
+        sleep 2
+        page.driver.browser.switch_to.alert.accept
+        expect(find('#search_result').text).to eq '' # 検索結果が0件になることを検証
+        expect(page).to have_content '推薦図書を投稿する' # モーダルにとどまっていることを検証
+        select '著者名'
+        fill_in 'keyword', with: ''
+        find('.search-button').click
+        sleep 5
+        expect(page.driver.browser.switch_to.alert.text).to eq '著者名を入力してください'
         sleep 2
         page.driver.browser.switch_to.alert.accept
         expect(find('#search_result').text).to eq '' # 検索結果が0件になることを検証
@@ -326,7 +438,7 @@ RSpec.describe 'Books', type: :system do
         sign_in(user)
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'hogefugahoge'
+        fill_in 'keyword',	with: 'hogefugahoge'
         find('.search-button').click
         sleep 5
         expect(page.driver.browser.switch_to.alert.text).to eq '検索結果が見つかりませんでした'

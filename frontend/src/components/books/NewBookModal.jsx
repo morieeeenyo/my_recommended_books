@@ -23,9 +23,14 @@ function SearchBookForm(props) {
     <NewBookFormContent onSubmit={props.submit}>
       <ErrorMessage errors={props.errors}></ErrorMessage>
       <BooksFormBlock>
-        <label htmlFor="title">タイトルで検索</label>
+        {/* Index.jsx同様プルダウンを選択するとlabelの値および検索対象のカラムが変化する */}
+        <label htmlFor="title">{props.queryText}で検索</label>
         <div className="search-form-field">
-          <input type="text" name="title" id="title" onChange={props.change}/>  
+          <select onChange={props.select}>
+            <option value="title">タイトル</option>
+            <option value="author">著者名</option>
+          </select>
+          <input type="text" name="keyword" id="keyword" onChange={props.change}/>  
           <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
         </div>
       </BooksFormBlock>
@@ -48,14 +53,19 @@ function SearchBookForm(props) {
     </NewBookFormContent>
     )
   } else {
+    // Todo:条件付きレンダーで記述を減らす
     return(
 
       <NewBookFormContent onSubmit={props.submit}>
         <ErrorMessage errors={props.errors}></ErrorMessage>
         <BooksFormBlock>
-          <label htmlFor="title">タイトルで検索</label>
+          <label htmlFor="title">{props.queryText}で検索</label>
           <div className="search-form-field">
-            <input type="text" name="title" id="title" onChange={props.change}/>  
+            <select onChange={props.select}>
+              <option value="title">タイトル</option>
+              <option value="author">著者名</option>
+            </select>
+            <input type="text" name="keyword" id="keyword" onChange={props.change}/>  
             <button className="search-button" onClick={props.search}><i className="fas fa-search"></i></button>  
           </div>
         </BooksFormBlock>
@@ -90,7 +100,10 @@ class NewBookModal extends React.Component {
       },
       errors: [],
       // Twitterにシェアするかどうかを決めるstate
-      to_be_shared_on_twitter: false
+      to_be_shared_on_twitter: false,
+      queryParams: 'title', //検索対象のカラム
+      queryText: 'タイトル', //フォームのlabelに表示するテキスト
+      keyword: '' //フォームの入力内容
     }
     this.closeBookModal = this.closeBookModal.bind(this)
     this.searchBook = this.searchBook.bind(this)
@@ -99,6 +112,7 @@ class NewBookModal extends React.Component {
     this.userAuthentification = this.userAuthentification.bind(this)
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.selectQuery = this.selectQuery.bind(this)
   }
 
   // emailで新規登録、ログインした場合はこちらを使ってcsrfトークンを更新
@@ -128,30 +142,39 @@ class NewBookModal extends React.Component {
 
   updateForm(e) {
     //入力欄の変化を検知してstateを変える
-    const book = this.state.book;
+    let keyword = ''
     let to_be_shared_on_twitter = this.state.to_be_shared_on_twitter
     switch (e.target.name) {
-      case 'title':
-        book.title = e.target.value            
+      case 'keyword':
+        keyword = e.target.value
         break;
       case 'to_be_shared_on_twitter':
         to_be_shared_on_twitter = !to_be_shared_on_twitter
         break;
     }
     this.setState({
-      book: book,
+      keyword: keyword,
       to_be_shared_on_twitter: to_be_shared_on_twitter
+    })
+  }
+
+  selectQuery(e){
+    // プルダウンの選択内容に応じてlabelのテキストを変えつ
+    let selectedIndex = e.target.selectedIndex
+    this.setState({
+      queryParams: e.target.value,
+      queryText: e.target[selectedIndex].text
     })
   }
 
   searchBook(e) {
     e.preventDefault()
-    const keyword = this.state.book.title
+    const keyword = this.state.keyword
     // ユーザー認証とcsrf-tokenの準備
     this.userAuthentification()
     this.setAxiosDefaults();
     axios
-    .get(`/api/v1/books/search/?keyword=${keyword}`)
+    .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
     .then(response => {
       if (response.data.books.length === 0) {
         return alert('検索結果が見つかりませんでした') //memo: サーバー側で検索結果が0件であるかどうかを判定できない
@@ -278,7 +301,7 @@ class NewBookModal extends React.Component {
         <p>推薦図書を投稿する</p>
         <button onClick={this.closeBookModal}>x</button>
           <NewBooksWrapper>
-            <SearchBookForm search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors} user={this.state.user}/>
+            <SearchBookForm select={this.selectQuery} queryText={this.state.queryText} search={this.searchBook} change={this.updateForm} submit={this.postBook} errors={this.state.errors} user={this.state.user}/>
           </NewBooksWrapper>
         </ModalContent>
       </ModalOverlay>
@@ -359,8 +382,14 @@ const BooksFormBlock = styled(FormBlock)`
     & input {
       /* 検索入力欄のスタイル */
       height: 24px;
+      width: calc(100% - 200px);
       line-height: 24px;
-      width: 80%;
+    }
+
+    & select {
+      height: 30px;
+      display: block;
+      width: 100px;
     }
 
     & .search-button {

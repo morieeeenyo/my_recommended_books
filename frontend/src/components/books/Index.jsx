@@ -22,9 +22,16 @@ class Index extends React.Component {
     this.state = {
       books: [],
       start: 0, //最初は0番目(=最新)の要素から
-      perPage: 12 //1ページには12冊表示
+      perPage: 12, //1ページには12冊表示
+      keyword: '', //検索ワード。初期値は空にしておく
+      queryParams: 'title', //どのカラムに対して検索をかけるか
+      queryText: 'タイトル', //検索入力欄のテキストボックスに使ってます
+      title: '新着書籍一覧' //検索すると「検索結果」に変わる
     }
     this.pageChange = this.pageChange.bind(this)
+    this.searchBook = this.searchBook.bind(this)
+    this.updateForm = this.updateForm.bind(this)
+    this.selectQuery = this.selectQuery.bind(this)
   }
 
   pageChange(data) {
@@ -35,6 +42,50 @@ class Index extends React.Component {
     })
   }
 
+  updateForm(e) {
+    //入力欄の変化を検知してstateを変える
+    let keyword = e.target.value            
+    this.setState({
+      keyword: keyword,
+    })
+  }
+
+  searchBook(e) {
+    e.preventDefault()
+    const keyword = this.state.keyword
+    axios
+    .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
+    .then(response => {
+      if (response.data.books.length === 0) {
+        // サーバー側でlengthを使った判定ができないためフロントで判定している
+        alert('検索結果が見つかりませんでした')
+      } else {
+        let books = []
+        response.data.books.forEach(book => {
+          // 検索結果の書籍情報はbook.paramsに入っている
+          book.params.image_url = book.params.mediumImageUrl //画像はカラム名と楽天APIから返却されるキーの値が違うためテコ入れが必要
+          books.push(book.params)
+        })
+        this.setState({
+          books: books,
+          title: '検索結果' 
+        })
+      }
+    })
+      .catch(error => {
+        alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
+      })
+    }
+
+  selectQuery(e){
+    // プルダウンの選択に応じてテキストボックスのplaceholderを変える
+    let selectedIndex = e.target.selectedIndex
+    this.setState({
+      queryParams: e.target.value,
+      queryText: e.target[selectedIndex].text
+    })
+  }
+    
   componentDidMount() {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
@@ -78,14 +129,18 @@ class Index extends React.Component {
         <div className="search">
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>
-          <div className="search-form-field">
-            <input type="text" placeholder="書籍名で検索" ></input>
-            <button className="search-button"><i className="fas fa-search"></i></button>  
-          </div>
+          <form className="search-form-field">
+            <select onChange={this.selectQuery}>
+              <option value="title">タイトル</option>
+              <option value="author">著者名</option>
+            </select>
+            <input type="text" placeholder={`${this.state.queryText}で検索`} onChange={this.updateForm} value={this.state.keyword} id="keyword"></input>
+            <button className="search-button" onClick={this.searchBook}><i className="fas fa-search"></i></button>  
+          </form>
         </div>
 
         <div className="book-list">
-          <h2>新着書籍一覧</h2>
+          <h2>{this.state.title}</h2>
           <BookList>
             {/* 12冊ずつ表示。this.state.startは(ページ番号 - 1) * 12 */}
             {this.state.books.slice(this.state.start, this.state.start + this.state.perPage).map(book => {
@@ -113,7 +168,7 @@ class Index extends React.Component {
           previousClassName='page-item' // '<'の親要素(li)のクラス名
           nextClassName='page-item' //'>'の親要素(li)のクラス名
           previousLinkClassName='page-link'  //'<'のリンクのクラス名
-          nextLinkClassName='page-link'　//'>'のリンクのクラス名
+          nextLinkClassName='page-link' //'>'のリンクのクラス名
           disabledClassName='disabled' //先頭 or 末尾に行ったときにそれ以上戻れ(進め)なくするためのクラス
           breakLabel='...' // ページがたくさんあるときに表示しない番号に当たる部分をどう表示するか
           breakClassName='page-item' // 上記の「…」のクラス名
@@ -159,12 +214,19 @@ const BookIndexContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center; 
-    width: 40%;
+    width: 70%;
 
     & input {
       /* 検索ワードを入力するテキストボックス */
       height: 24px;
-      width: 82%;
+      width: calc(100% - 200px);
+      padding: 10px;
+    }
+
+    & select {
+      height: 46px;
+      display: block;
+      width: 100px;
       padding: 10px;
     }
 

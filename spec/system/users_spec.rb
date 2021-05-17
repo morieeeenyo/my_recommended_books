@@ -229,7 +229,6 @@ RSpec.describe 'Users', type: :system do
         # ログインすると表示が切り替わる
         expect(page).to  have_content '新規登録'
         expect(page).to  have_content 'ログイン'
-        # ログアウトすると書籍投稿ボタンは消える
         expect(page).to  have_content 'Kaidoku - 会読'
       end
 
@@ -277,7 +276,7 @@ RSpec.describe 'Users', type: :system do
         sleep 5
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        fill_in 'title',	with: 'test'
+        fill_in 'keyword',	with: 'test'
         sleep 1
         find('.search-button').click
         sleep 2
