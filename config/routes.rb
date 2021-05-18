@@ -6,7 +6,7 @@ Rails.application.routes.draw do
         sessions: 'api/v1/users/sessions',
         omniauth_callbacks: 'api/v1/users/omniauth_callbacks'
       }
-      resources :books, param: :isbn do 
+      resources :books, param: :isbn do # これでparams[:id]→params[:isbn]となる。DBにない書籍のページも読み込みたいのでこの仕様にした
         collection do
           get "search"
         end
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       end
       # 20210429 以下2つはomniauthとルーティングがプログラム側で混同してしまうようなのでパスを変更
       get '/mypage', to: "users#show", as: :user_mypage #RESTではないがdevise_auth_tokenを用いる設計でidを使用せずuidを使用する関係でパスを独自に設定
-      get '/mypage/books/:book_isbn/outputs', to: "users#my_outputs", as: :user_mypage_book_outputs
+      get '/mypage/books/:book_isbn/outputs', to: "users#my_outputs", as: :user_mypage_book_outputs # 上のparams[:isbn]に合わせるためにURL変更
     end
   end
   root 'homes#index'

@@ -149,7 +149,7 @@ class Index extends React.Component {
                 <img src={book.image_url}/>
                 <p className="book-title">{book.title}</p>
                 <p className="book-author">{book.author}</p>
-                <Link to={{pathname: "/books/" + book.isbn + "/outpus", state: {book: book}}}>アウトプット一覧</Link>
+                {/* <Link to={{pathname: "/books/" + book.isbn + "/outpus", state: {book: book}}}>アウトプット一覧</Link> */}
               </li> //returnがないと表示できない
               ) 
             })} 
