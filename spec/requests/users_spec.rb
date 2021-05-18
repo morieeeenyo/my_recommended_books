@@ -238,7 +238,7 @@ RSpec.describe 'Users', type: :request do
         @my_outputs = []
         # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do
-          output_save_result = output.save(user_book.book.isbn)
+          output_save_result = output.save
           @my_outputs << output_save_result
         end
       end

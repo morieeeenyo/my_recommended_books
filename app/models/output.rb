@@ -28,9 +28,8 @@ class Output
     end
   end
 
-  def save(isbn)
-    book = Book.find_by(isbn: isbn)
-    awareness = Awareness.new(content: content, book_id: book.id, user_id: user_id)
+  def save
+    awareness = Awareness.new(content: content, book_id: book_id, user_id: user_id)
     awareness.save
     action_plans.each do |action_plan|
       action_plan = ActionPlan.new(time_of_execution: action_plan[:time_of_execution], what_to_do: action_plan[:what_to_do],
@@ -48,6 +47,8 @@ class Output
     book = Book.find(book_id)
     outputs = [] # アウトプットは複数投稿できるので配列で定義
     if my_page
+      # マイページにいる場合自分が投稿したアウトプットのみ表示する
+      # user_idが一致するものだけを抜き出す
       book.awarenesses.select { |awareness| awareness.user_id == user_id }.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
         output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
         output[:awareness] = awareness
@@ -55,6 +56,7 @@ class Output
         outputs.push(output)
       end
     elsif user_id.present?
+      # 一覧表示で自分がすでに推薦図書に追加済みの場合は自分のアウトプットと他人のアウトプットを別々に返却する
       my_outputs = []
       book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
         output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
@@ -70,6 +72,7 @@ class Output
       end
       return my_outputs, outputs # 一覧では自分の投稿と自分以外の投稿を別々に返却
     else
+      # 一覧表示で、自分が推薦図書に追加していない場合他人のアウトプットだけを返却する
       book.awarenesses.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
         output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
         output[:awareness] = awareness

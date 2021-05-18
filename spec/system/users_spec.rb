@@ -298,7 +298,7 @@ RSpec.describe 'Users', type: :system do
         outputs = []
         3.times do
           output = build(:output, user_id: user.id, book_id: user.books[0].id)
-          output.save(user.books[0].isbn)
+          output.save
           outputs.push(output)
         end
         sign_in(user) # ログインする
