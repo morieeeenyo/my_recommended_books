@@ -298,14 +298,14 @@ RSpec.describe 'Users', type: :system do
         outputs = []
         3.times do
           output = build(:output, user_id: user.id, book_id: user.books[0].id)
-          output.save
+          output.save(user.books[0].isbn)
           outputs.push(output)
         end
         sign_in(user) # ログインする
         find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'
-        sleep 7
+        sleep 10
         expect(all('.book-list-item').length).to eq 2
         all('a', text: 'アウトプット')[0].click
         expect(page).to have_content "『#{user.books[0].title}』のアウトプット"

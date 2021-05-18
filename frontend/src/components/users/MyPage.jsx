@@ -30,7 +30,7 @@ export function MyRecommendedBooks() {
               <img src={book.image_url}/>
               <p className="book-title">{book.title}</p>
               <p className="book-author">{book.author}</p>
-              <Link to={{pathname: "/mypage/books/" + book.id + "/outputs", state: {book: book, user: location.state.user}}}>アウトプット</Link>
+              <Link to={{pathname: "/mypage/books/" + book.isbn + "/outputs", state: {book: book, user: location.state.user}}}>アウトプット</Link>
             </li> //returnがないと表示できない
             ) 
           })} 
