@@ -26,7 +26,6 @@ module Api
           @outputs = Output.fetch_resources(@book.id, nil, false)
           render json: { outputs: @outputs, posted: false } # Tdo:フロント側で「推薦図書に追加」というボタンを作る
         end
-        end
       end
 
       def create

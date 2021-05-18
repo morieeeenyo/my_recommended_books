@@ -48,8 +48,8 @@ class Output
     outputs = [] # アウトプットは複数投稿できるので配列で定義
     if my_page
       # マイページにいる場合自分が投稿したアウトプットのみ表示する
-      # user_idが一致するものだけを抜き出す
-      book.awarenesses.select { |awareness| awareness.user_id == user_id }.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+      # user_idが一致するものだけを抜き出す。
+      book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
         output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
         output[:awareness] = awareness
         output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
