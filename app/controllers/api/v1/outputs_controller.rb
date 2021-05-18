@@ -7,10 +7,33 @@ module Api
       # ツイートの投稿
       after_action :post_tweet, only: :create
 
+      def index
+        @book = Book.find_by(isbn: params[:book_isbn])
+        # ログアウト時
+        unless @user 
+          @outputs = Output.fetch_resources(@book.id, nil, false)
+          return render json: { outputs: @outputs }
+        end
+        
+        @book_is_posted_by_user = UserBook.find_by(book_id: @book.id, user_id: @user.id)
+
+        if @book_is_posted_by_user
+          # ログインしていて推薦図書に追加済み
+          @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id, false) # 3つめの引数はマイページにいるかどうか
+          render json: { myoutputs: @my_outputs, outputs: @outputs } # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
+        else
+          # ログインしているが推薦図書には追加していない
+          @outputs = Output.fetch_resources(@book.id, nil, false)
+          render json: { outputs: @outputs, posted: false } # Tdo:フロント側で「推薦図書に追加」というボタンを作る
+        end
+      end
+
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
+
         @output = Output.new(output_params)
+
         if @output.valid?
           output_save_result = @output.save
           # ステータスは手動で設定する。リソース保存時のステータスは201
@@ -23,8 +46,9 @@ module Api
       private
 
       def output_params
-        params.require(:output).permit(:content, action_plans: [:time_of_execution, :what_to_do, :how_to_do]).merge(book_id: params[:book_id],
-                                                                                                                    user_id: @user.id)
+        params.require(:output).permit(:content, :book_id, action_plans: [:time_of_execution, :what_to_do, :how_to_do]).merge(
+          user_id: @user.id
+        )
       end
 
       def user_authentification
@@ -48,7 +72,8 @@ module Api
 
       def post_tweet
         # ユーザーが認証済みではない、もしくはフォームでTwitterでのシェアをオンにしていない場合には何もしない
-        return nil if !@twitter_client || !params[:to_be_shared_on_twitter] 
+        return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
+
         if !Rails.env.test? # rubocop:disable Style/NegatedIf, Style/GuardClause
           book = Book.find(params[:book_id])
           @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る(一通り出来上がってから)

@@ -13,7 +13,7 @@ RSpec.describe Output, type: :model do
         expect(output).to be_valid
       end
       it 'どのように実践するか、は空でも保存できる' do
-        output.action_plans.length.times  do |action_plan_index|
+        output.action_plans.length.times do |action_plan_index|
           output.action_plans[action_plan_index][:how_to_do] = ''
           expect(output).to be_valid
           output.action_plans[action_plan_index][:how_to_do] = 'test' # これがないと空にした値が引き継がれてしまう

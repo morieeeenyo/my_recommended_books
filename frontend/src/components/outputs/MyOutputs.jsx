@@ -60,7 +60,7 @@ class MyOutputs extends React.Component {
     this.userAuthentification()
     //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
     axios
-      .get('/api/v1/mypage/books/' + this.props.location.state.book.id + '/outputs')
+      .get('/api/v1/mypage/books/' + this.props.location.state.book.isbn + '/outputs')
       .then(response => {
         this.setState({
             outputs: response.data.outputs
@@ -74,7 +74,6 @@ class MyOutputs extends React.Component {
           console.log(error) 
         }
       })
-
   }
 
   render () {
@@ -85,7 +84,7 @@ class MyOutputs extends React.Component {
             {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
               <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
               {/* スタイルはMyPage→MyOutputsへのリンクと同じ */}
-              <Link to={{pathname: "/books/" + this.props.location.state.book.id + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
+              <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
                 アウトプットを投稿する
               </Link>
             </div>
@@ -125,11 +124,11 @@ class MyOutputs extends React.Component {
   } 
 }
 
-const OutputWrapper = styled.div`
+export const OutputWrapper = styled.div`
   height: 100%;
 `
 
-const OutputContent = styled.div`
+export const OutputContent = styled.div`
   height: 100%;
   width: 90%;
   margin: 0 auto;
@@ -170,7 +169,7 @@ const OutputContent = styled.div`
 
 `
 
-const OutputList = styled.ul`
+export const OutputList = styled.ul`
   list-style: none;
   overflow: scroll;
   /* heightがないとscrollしない */

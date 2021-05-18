@@ -13,26 +13,26 @@ RSpec.describe 'Books', type: :request do
   let(:headers) do
     { 'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678' }
   end
-  
-  describe "書籍一覧" do
-    context "一覧表示に成功(書籍が投稿済み)" do
+
+  describe '書籍一覧' do
+    context '一覧表示に成功(書籍が投稿済み)' do
       # インスタンスはbeforeで生成するとidがずれる。
       # letで生成するとそもそもテーブルにレコードがないって言われる
-      it "書籍が投稿済みの場合、リクエストに成功する" do
-        create_list(:book, 5) 
+      it '書籍が投稿済みの場合、リクエストに成功する' do
+        create_list(:book, 5)
         get api_v1_books_path, xhr: true
-        expect(response).to have_http_status(200) 
+        expect(response).to have_http_status(200)
       end
-  
-      it "書籍が投稿済みの場合、投稿した分と同じ数書籍が返却される" do
+
+      it '書籍が投稿済みの場合、投稿した分と同じ数書籍が返却される' do
         book_list = create_list(:book, 5)
         get api_v1_books_path, xhr: true
         json = JSON.parse(response.body)
         expect(json['books'].length).to eq book_list.length
       end
-  
-      it "書籍が投稿済みの場合、書籍が新しい順に一覧で返却される" do
-        book_list = create_list(:book, 5) 
+
+      it '書籍が投稿済みの場合、書籍が新しい順に一覧で返却される' do
+        book_list = create_list(:book, 5)
         get api_v1_books_path, xhr: true
         json = JSON.parse(response.body)
         # 添字を使って順番も検証
@@ -41,14 +41,14 @@ RSpec.describe 'Books', type: :request do
         expect(json['books'][4]['id']).to eq book_list[0].id
       end
     end
-    
-    context "一覧表示に成功(書籍が投稿済みではない場合)" do
-      it "書籍が投稿済みではない場合もリクエストに成功する" do
+
+    context '一覧表示に成功(書籍が投稿済みではない場合)' do
+      it '書籍が投稿済みではない場合もリクエストに成功する' do
         get api_v1_books_path, xhr: true
-        expect(response).to have_http_status(200) 
+        expect(response).to have_http_status(200)
       end
-  
-      it "書籍が投稿済みの場合、書籍が新しい順に一覧で返却される" do
+
+      it '書籍が投稿済みの場合、書籍が新しい順に一覧で返却される' do
         get api_v1_books_path, xhr: true
         json = JSON.parse(response.body)
         # レスポンスは0件
@@ -83,7 +83,7 @@ RSpec.describe 'Books', type: :request do
       before do
         book_search_params[:query] = 'author'
       end
-      
+
       it 'パラメータが存在すればリクエストに成功する' do
         get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
         expect(response).to have_http_status(200)
@@ -123,7 +123,7 @@ RSpec.describe 'Books', type: :request do
       before do
         book_search_params[:query] = 'author'
       end
-      
+
       it 'パラメータが空文字列の時ステータス406が返却される' do
         book_search_params[:keyword] = ''
         get search_api_v1_books_path, xhr: true, params: book_search_params, headers: headers # headersは認証用のヘッダー
@@ -194,10 +194,8 @@ RSpec.describe 'Books', type: :request do
         post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
         post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
         json = JSON.parse(response.body)
-        expect(json['errors']).to include "その書籍はすでに追加されています"
+        expect(json['errors']).to include 'その書籍はすでに追加されています'
       end
     end
   end
-
-  
 end

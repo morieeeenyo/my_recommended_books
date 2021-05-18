@@ -18,7 +18,7 @@ module Api
         return render status: 401, json: { errors: '推薦図書の投稿にはログインが必要です' } unless @user && @token && @client
 
         @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) # 同じデータを保存しないためにisbnで識別
-        if @book.valid? #書籍データが送られていればtrue
+        if @book.valid? # 書籍データが送られていればtrue
           @book.save
           user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
           if user_book_relation
@@ -38,12 +38,14 @@ module Api
         case params[:query]
         when 'title'
           return render status: 406, json: { errors: 'タイトルを入力してください' } if params[:keyword] == '' # 何も入力しなくても空文字列が送られる想定
+
           @books = RakutenWebService::Books::Book.search(title: params[:keyword]) # TODO: 複数のパラメータで同時に検索できないか検証
         when 'author'
           return render status: 406, json: { errors: '著者名を入力してください' } if params[:keyword] == '' # 何も入力しなくても空文字列が送られる想定
+
           @books = RakutenWebService::Books::Book.search(author: params[:keyword]) # TODO: 複数のパラメータで同時に検索できないか検証
         end
-        
+
         render json: { books: @books }
       end
 
@@ -74,6 +76,7 @@ module Api
       def set_twitter_client
         # ユーザーがsns認証済みではない場合には何もせず処理を終了
         return nil unless @user.sns_token
+
         @twitter_client = Twitter::REST::Client.new do |config|
           # @userからsns認証情報を渡すことで任意のユーザーでツイート可能になる
           config.access_token        = @user.sns_token
@@ -85,7 +88,8 @@ module Api
 
       def post_tweet
         # ユーザーが認証済みではない、もしくはフォームでTwitterでのシェアをオンにしていない場合には何もしない
-        return nil if !@twitter_client || !params[:to_be_shared_on_twitter] 
+        return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
+
         @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") if !Rails.env.test? # rubocop:disable Style/NegatedIf
         # ↑アプリURLへの導線を貼る(一通り出来上がってから)
       end
