@@ -77,50 +77,53 @@ class MyOutputs extends React.Component {
   }
 
   render () {
-    return (
-      <OutputWrapper>
-        <OutputContent>
-            <div className="output-header">
-            {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
-              <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
-              {/* スタイルはMyPage→MyOutputsへのリンクと同じ */}
-              <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
-                アウトプットを投稿する
-              </Link>
-            </div>
-            <OutputList>
-              {/* Todo:編集ボタンをつける */}
-              {this.state.outputs.map((output, output_index) => {
-                return(
-                  <li key={output_index}>
-                  <h3 className="output-header output-list-header">
-                    アウトプット{output_index + 1}
-                    <div className="output-edit-delete-buttons">
-                      {/* ここのリンクは後で実装 */}
-                      <Link>編集</Link>  
-                      <Link>削除</Link>  
-                    </div>  
-                  </h3>
-                  <h4>気づき</h4>
-                  <p>{output.awareness.content}</p>
-                  <h4>アクションプラン</h4>
-                  <div className="action-plan">
-                    {output.action_plans.map(action_plan => {
-                    return(
-                        <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
-                        )
-                    })}
-                  </div>
-                  {/* Railsのcreated_atが汚いので整形 */}
-                  <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
-                  </li>
-                )
-              })}
-            </OutputList>
-        </OutputContent>
-      </OutputWrapper>
-     )
-   
+    if (this.props.location.state.user) {
+      return (
+        <OutputWrapper>
+          <OutputContent>
+              <div className="output-header">
+              {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
+                <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
+                {/* スタイルはMyPage→MyOutputsへのリンクと同じ */}
+                <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
+                  アウトプットを投稿する
+                </Link>
+              </div>
+              <OutputList>
+                {/* Todo:編集ボタンをつける */}
+                {this.state.outputs.map((output, output_index) => {
+                  return(
+                    <li key={output_index}>
+                    <h3 className="output-header output-list-header">
+                      アウトプット{output_index + 1}
+                      <div className="output-edit-delete-buttons">
+                        {/* ここのリンクは後で実装 */}
+                        <Link>編集</Link>  
+                        <Link>削除</Link>  
+                      </div>  
+                    </h3>
+                    <h4>気づき</h4>
+                    <p>{output.awareness.content}</p>
+                    <h4>アクションプラン</h4>
+                    <div className="action-plan">
+                      {output.action_plans.map(action_plan => {
+                      return(
+                          <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                          )
+                      })}
+                    </div>
+                    {/* Railsのcreated_atが汚いので整形 */}
+                    <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
+                    </li>
+                  )
+                })}
+              </OutputList>
+          </OutputContent>
+        </OutputWrapper>
+       )  
+    } else {
+      return null
+    }
   } 
 }
 
