@@ -12,7 +12,7 @@ module Api
         # ログアウト時
         unless @user 
           @outputs = Output.fetch_resources(@book.id, nil, false)
-          render json: { outputs: @outputs }
+          return render json: { outputs: @outputs }
         end
         
         @book_is_posted_by_user = UserBook.find_by(book_id: @book.id, user_id: @user.id)
