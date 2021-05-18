@@ -20,7 +20,7 @@ module Api
             @outputs = Output.fetch_resources(@book.id, nil, false)
             render json: { outputs: @outputs, posted: false }
           end
-        else 
+        else
           # ログアウト時
           @outputs = Output.fetch_resources(@book.id, nil, false)
           render json: { outputs: @outputs }
@@ -30,8 +30,9 @@ module Api
       def create
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
+
         @output = Output.new(output_params)
-        
+
         if @output.valid?
           output_save_result = @output.save(params[:book_isbn])
           # ステータスは手動で設定する。リソース保存時のステータスは201
@@ -45,13 +46,15 @@ module Api
 
       def output_params
         params.require(:output).permit(:content, :book_id, action_plans: [:time_of_execution, :what_to_do, :how_to_do]).merge(
-                                                                                                                    user_id: @user.id)
+          user_id: @user.id
+        )
       end
 
       def user_authentification
         # NewBookModal.jsxでLocalStorageからログインしているuidを抜き出し、request.headerに仕込む
         @user = User.find_for_database_authentication(uid: request.headers['uid'])
         return nil unless @user
+
         # 同様にaccess-token, clientについてもrequest.headersから抜き出して変数に代入
         @token = request.headers['access-token']
         @client = request.headers['client']
@@ -70,7 +73,8 @@ module Api
 
       def post_tweet
         # ユーザーが認証済みではない、もしくはフォームでTwitterでのシェアをオンにしていない場合には何もしない
-        return nil if !@twitter_client || !params[:to_be_shared_on_twitter] 
+        return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
+
         if !Rails.env.test? # rubocop:disable Style/NegatedIf, Style/GuardClause
           book = Book.find(params[:book_id])
           @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る(一通り出来上がってから)

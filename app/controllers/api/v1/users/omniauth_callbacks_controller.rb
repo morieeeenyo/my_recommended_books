@@ -7,44 +7,39 @@ module Api
         before_action :validate_auth_origin_url_param
         skip_before_action :set_user_by_token, raise: false
 
-        def redirect_callbacks
-          super
-        end
-
         def omniauth_success
           # 認証に成功した時の処理
           super
           update_auth_header
         end
 
-        def omniauth_failure
-          super
-        end        
-
         protected
 
-         # break out provider attribute assignment for easy method extension
+        # break out provider attribute assignment for easy method extension
         def assign_provider_attrs(user, auth_hash)
           return nil if user.id.present? # インスタンスの情報自体は存在するのでidがあるかどうか(=DBに保存済みかどうか)で判定
+
           super
         end
 
         def render_data_or_redirect(message, data, user_data = {}) # rubocop:disable Metrics/PerceivedComplexity
-          
           # 2回目以降のログイン時にはfirst_sessionのクッキーデータを削除
           cookies.delete(:first_session, path: root_path, httponly: true) if cookies[:first_session]
           # 初回ログイン時にはcookieに情報をセット。Oauth認証後ユーザー情報の編集ページに飛ばす
-          cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes }  if @resource.sign_in_count == 0  
-          
-          auth_token = {'uid' => user_data['uid'], 'client' =>  data['client_id'], 'access-token' => data['auth_token'] }
-          cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour } 
+          cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes } if @resource.sign_in_count.zero?
+
+          auth_token = { 'uid' => user_data['uid'], 'client' => data['client_id'], 'access-token' => data['auth_token'] }
+          cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour }
 
           if Rails.env.production?
             # セキュリティを頑丈にしたらテストでこけた
-            cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour, same_site: 'Lax', secure: true } 
-            cookies[:first_session] = { value: true, path: root_path, expres: 10.minutes, same_site: 'Lax', secure: true }  if @resource.sign_in_count == 0 
+            cookies['authToken'] = { value: JSON.generate(auth_token), path: root_path, expires: 1.hour, same_site: 'Lax', secure: true }
+            if @resource.sign_in_count.zero?
+              cookies[:first_session] =
+                { value: true, path: root_path, expres: 10.minutes, same_site: 'Lax', secure: true }
+            end
           end
-          
+
           if %w[inAppBrowser newWindow].include?(omniauth_window_type)
             render_data(message, user_data.merge(data))
           elsif auth_origin_url
@@ -74,10 +69,10 @@ module Api
         end
 
         def get_resource_from_auth_hash # rubocop:disable Naming/AccessorMethodName
-          # テスト通過のためにオーバーライド          
+          # テスト通過のためにオーバーライド
           if Rails.env.test?
-              auth_hash = request.env['omniauth.auth']
-              # テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
+            auth_hash = request.env['omniauth.auth']
+          # テストコード用。auth_hashを直接定義できないくさいのでrequest.envから取り出す
           elsif !auth_hash
             auth_hash = session['dta.omniauth.auth']
             # 開発環境・本番環境ではauth_hashはsessionから取り出す
@@ -89,8 +84,8 @@ module Api
             provider: auth_hash['provider']
           ).first_or_initialize
 
-          @resource.sns_token = auth_hash["credentials"]['token']
-          @resource.sns_secret = auth_hash["credentials"]['secret']
+          @resource.sns_token = auth_hash['credentials']['token']
+          @resource.sns_secret = auth_hash['credentials']['secret']
 
           # ここから下はよくわからないので一旦保留
           handle_new_resource if @resource.new_record?

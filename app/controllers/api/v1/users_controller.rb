@@ -21,7 +21,7 @@ module Api
       def my_outputs
         # ユーザー認証に引っかかった際のステータスは401(Unautorized)
         return render status: 401, json: { errors: 'ユーザーが見つかりませんでした' } unless @user && @token && @client
-        
+
         @book = Book.find_by(isbn: params[:book_isbn])
         return render status: 422, json: { errors: '書籍が推薦図書として追加されていません' } unless @book # 誰も推薦図書に追加していない場合
 

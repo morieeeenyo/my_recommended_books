@@ -44,7 +44,7 @@ class Output
     output # 生成したハッシュをコントローラーに返し、レスポンスにする
   end
 
-  def self.fetch_resources(book_id, user_id, my_page)
+  def self.fetch_resources(book_id, user_id, my_page) # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
     book = Book.find(book_id)
     outputs = [] # アウトプットは複数投稿できるので配列で定義
     if my_page
@@ -77,6 +77,6 @@ class Output
         outputs.push(output)
       end
     end
-    return outputs # コントローラー側に戻り値として配列を返す
+    outputs # コントローラー側に戻り値として配列を返す
   end
 end
