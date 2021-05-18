@@ -107,7 +107,7 @@ class App extends React.Component {
                   <Route exact path="/mypage/:content/edit" key={'edit'}>
                     <AccountUpdateForm></AccountUpdateForm>
                   </Route>
-                  <Route path="/mypage/books/:book_id/outputs">
+                  <Route path="/mypage/books/:book_isbn/outputs">
                     <MyOutputs></MyOutputs>
                   </Route>
                 </MyPage>
@@ -118,7 +118,7 @@ class App extends React.Component {
             <NewBookModal>
             </NewBookModal>
           </Route>
-          <Route path="/books/:book_id/outputs/new">
+          <Route path="/books/:book_isbn/outputs/new">
             <OutputModal></OutputModal>
           </Route>
         </Router>

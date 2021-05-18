@@ -123,6 +123,7 @@ class OutputModal extends React.Component {
     this.state = {
       output: {
         content: '',
+        book_id: this.props.location.state.book.id,
         action_plans: [
           {
             time_of_execution: '',
@@ -219,7 +220,7 @@ class OutputModal extends React.Component {
     this.userAuthentification()
     this.setAxiosDefaults();
     axios
-    .post('/api/v1/books/' + this.props.location.state.book.id + '/outputs', {output: this.state.output, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter} )
+    .post('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs', {output: this.state.output, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter} )
     .then(response => {
       this.closeOutputModal()
       return response
