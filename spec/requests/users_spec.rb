@@ -228,15 +228,6 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe '自分が投稿したアウトプット一覧の表示' do
-    before do
-      # 自分以外のアウトプットがマイページでは返却されないことを検証
-      @outputs_of_others = []
-      # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
-      2.times do
-        output_save_result = output.save
-        @outputs_of_others << output_save_result
-      end
-    end
 
     context 'アウトプット一覧の表示に成功する時(アウトプット投稿済み)' do
       before do
@@ -247,7 +238,7 @@ RSpec.describe 'Users', type: :request do
         @my_outputs = []
         # 2個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do
-          output_save_result = output.save
+          output_save_result = output.save(user_book.book.isbn)
           @my_outputs << output_save_result
         end
       end

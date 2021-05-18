@@ -20,7 +20,7 @@ RSpec.describe 'Outputs', type: :request do
     context 'アウトプットが1件以上投稿されている場合' do
       before do
         3.times do
-          output_of_others.save
+          output_of_others.save(book.isbn)
         end
       end
 
@@ -61,7 +61,7 @@ RSpec.describe 'Outputs', type: :request do
       it 'ログイン中のユーザーがアウトプットを投稿している場合、ステータスが200になる' do
         # 3個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do
-          output.save
+          output.save(book.isbn)
         end
         get api_v1_book_outputs_path(book.isbn), xhr: true, headers: headers
         expect(response).to have_http_status(200)
@@ -70,7 +70,7 @@ RSpec.describe 'Outputs', type: :request do
       it 'ログイン中のユーザーがアウトプットを投稿している場合、自分が投稿したアウトプットと他の人が投稿したアウトプットが別々に返却される' do
         # 3個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do
-          output.save
+          output.save(book.isbn)
         end
         get api_v1_book_outputs_path(book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
