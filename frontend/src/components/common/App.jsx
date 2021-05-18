@@ -95,7 +95,7 @@ class App extends React.Component {
                 <OutputIndex>
                 </OutputIndex>
               </Route>
-              <Route path="/mypage" key={'mypage'}>
+              <Route exact path="/mypage" key={'mypage'}>
                 <MyPage>
                   <Route exact path="/mypage/books">
                     <MyRecommendedBooks>
@@ -114,11 +114,11 @@ class App extends React.Component {
               </Route>
             </Switch>
           </Container>
-          <Route path="/books/new">
+          <Route exact path="/books/new">
             <NewBookModal>
             </NewBookModal>
           </Route>
-          <Route path="/books/:book_isbn/outputs/new">
+          <Route exact path="/books/:book_isbn/outputs/new">
             <OutputModal></OutputModal>
           </Route>
         </Router>

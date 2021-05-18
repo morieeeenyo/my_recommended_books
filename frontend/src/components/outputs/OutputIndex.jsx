@@ -88,7 +88,7 @@ class OutputIndex extends React.Component {
             {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
               <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
               {/* スタイルはMyPage→MyOutputsへのリンクと同じ */}
-              <Link to={{pathname: "/books/" + this.props.location.state.book.id + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
+              <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
                 アウトプットを投稿する
               </Link>
             </div>
@@ -101,8 +101,8 @@ class OutputIndex extends React.Component {
                     アウトプット{output_index + 1}
                     <div className="output-edit-delete-buttons">
                       {/* ここのリンクは後で実装 */}
-                      <Link>編集</Link>  
-                      <Link>削除</Link>  
+                      <Link to="/">編集</Link>  
+                      <Link to="/">削除</Link>  
                     </div>  
                   </h3>
                   <h4>気づき</h4>

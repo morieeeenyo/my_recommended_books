@@ -98,8 +98,8 @@ class MyOutputs extends React.Component {
                       アウトプット{output_index + 1}
                       <div className="output-edit-delete-buttons">
                         {/* ここのリンクは後で実装 */}
-                        <Link>編集</Link>  
-                        <Link>削除</Link>  
+                        <Link to="/">編集</Link>  
+                        <Link to="/">削除</Link>  
                       </div>  
                     </h3>
                     <h4>気づき</h4>
