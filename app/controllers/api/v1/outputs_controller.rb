@@ -19,11 +19,11 @@ module Api
 
         if @book_is_posted_by_user
           # ログインしていて推薦図書に追加済み
-          @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id, false) # 3つめの引数はマイページにいるかどうか
+          @my_outputs, @outputs = Output.fetch_resources(@book.id) # 3つめの引数はマイページにいるかどうか
           render json: { myoutputs: @my_outputs, outputs: @outputs } # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
         else
           # ログインしているが推薦図書には追加していない
-          @outputs = Output.fetch_resources(@book.id, nil, false)
+          @outputs = Output.fetch_resources(@book.id)
           render json: { outputs: @outputs, posted: false } # Tdo:フロント側で「推薦図書に追加」というボタンを作る
         end
       end
