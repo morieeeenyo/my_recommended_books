@@ -8,9 +8,9 @@ import { Link, withRouter } from "react-router-dom";
 import axios from 'axios';
 
 // コンポーネントの読み込み
-import OutputWrapper from './MyOutputs.jsx'
-import OutputContent from './MyOutputs.jsx'
-import OutputList from './MyOutputs.jsx'
+import {OutputWrapper} from './MyOutputs.jsx'
+import {OutputContent} from './MyOutputs.jsx'
+import {OutputList} from './MyOutputs.jsx'
 
 // Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
 import Cookies from 'universal-cookie';
@@ -67,9 +67,8 @@ class OutputIndex extends React.Component {
       .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
       .then(response => {
         this.setState({
-            outputs: response.data.outputs
-          }
-        )
+          outputs: response.data.outputs
+        })
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
@@ -82,8 +81,8 @@ class OutputIndex extends React.Component {
 
   render () {
     return (
-      <OutputIndexWrapper>
-        <OutputContent>
+      <OutputWrapper>
+          <OutputContent>
             <div className="output-header">
             {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
               <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
@@ -122,14 +121,9 @@ class OutputIndex extends React.Component {
               })}
             </OutputList>
         </OutputContent>
-      </OutputIndexWrapper>
+      </OutputWrapper>
     )
   }
 }
-
-const OutputIndexWrapper = styled(OutputWrapper)`
-  width: 80%;
-  margin: 0 auto;
-`
 
 export default withRouter(OutputIndex);

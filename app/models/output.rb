@@ -43,7 +43,7 @@ class Output
     output # 生成したハッシュをコントローラーに返し、レスポンスにする
   end
 
-  def self.fetch_resources(book_id) # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
+  def self.fetch_resources(book_id, user_id) # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
     book = Book.find(book_id)
     outputs = [] # アウトプットは複数投稿できるので配列で定義
     # 一覧表示で自分がすでに推薦図書に追加済みの場合は自分のアウトプットと他人のアウトプットを別々に返却する
@@ -63,7 +63,7 @@ class Output
     return my_outputs, outputs # 一覧では自分の投稿と自分以外の投稿を別々に返却
   end
 
-  def self.fetch_my_resources(book_id) # マイページでは自分が投稿したアウトプットのみ返す
+  def self.fetch_my_resources(book_id, user_id) # マイページでは自分が投稿したアウトプットのみ返す
     book = Book.find(book_id)
     outputs = [] # アウトプットは複数投稿できるので配列で定義
     book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用

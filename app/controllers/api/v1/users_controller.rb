@@ -27,7 +27,7 @@ module Api
 
         user_book_relation = UserBook.find_by(book_id: @book.id, user_id: @user.id) # ユーザーが書籍を投稿していない場合に処理を失敗させるために中間テーブルを参照
         if user_book_relation
-          outputs = Output.fetch_my_resources(@book.id) # fect_resourcesメソッドはoutput.rbにて定義
+          outputs = Output.fetch_my_resources(@book.id, @user.id) # fect_resourcesメソッドはoutput.rbにて定義
           render json: { outputs: outputs }
         else
           # 書籍自体は保存されているけどログインしているユーザーが推薦図書に追加していないケース(発生する可能性は低い)
