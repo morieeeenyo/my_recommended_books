@@ -77,7 +77,6 @@ class MyOutputs extends React.Component {
   }
 
   render () {
-    if (this.props.location.state.user) {
       return (
         <OutputWrapper>
           <OutputContent>
@@ -121,9 +120,6 @@ class MyOutputs extends React.Component {
           </OutputContent>
         </OutputWrapper>
        )  
-    } else {
-      return null
-    }
   } 
 }
 

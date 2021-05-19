@@ -23,7 +23,7 @@ module Api
           render json: { myoutputs: @my_outputs, outputs: @outputs } # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
         else
           # ログインしているが推薦図書には追加していない
-          @outputs = Output.fetch_resources(@book.id, @user.id)
+          myoutpus, @outputs = Output.fetch_resources(@book.id, @user.id)
           render json: { outputs: @outputs, posted: false } # Tdo:フロント側で「推薦図書に追加」というボタンを作る
         end
       end

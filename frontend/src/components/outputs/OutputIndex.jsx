@@ -22,7 +22,8 @@ class OutputIndex extends React.Component {
   constructor(props){
     super(props);
     this.state ={
-      outputs: []
+      outputs: [],
+      myOutputs: []
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
@@ -66,9 +67,16 @@ class OutputIndex extends React.Component {
     axios
       .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
       .then(response => {
-        this.setState({
-          outputs: response.data.outputs
-        })
+        if (response.data.myoutputs) {
+          this.setState({
+            outputs: response.data.outputs,
+            myOutputs: response.data.myoutputs
+          })
+        } else {
+          this.setState({
+            outputs: response.data.outputs
+          })
+        }
       })
       .catch(error => {
         if (error.response.data && error.response.data.errors) {
