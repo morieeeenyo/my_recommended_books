@@ -57,6 +57,7 @@ class Output
     book.awarenesses.where.not(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
       output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
       output[:awareness] = awareness
+      output[:username] = awareness.user.nickname
       output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
       outputs.push(output)
     end

@@ -97,11 +97,8 @@ class OutputIndex extends React.Component {
               return(
                 <li key={output_index}>
                 <h3 className="output-header output-list-header">
-                  アウトプット{output_index + 1}
+                  {output.username}さんのアウトプット
                   <div className="output-edit-delete-buttons">
-                    {/* ここのリンクは後で実装 */}
-                    <Link to="/">編集</Link>  
-                    <Link to="/">削除</Link>  
                   </div>  
                 </h3>
                 <h4>気づき</h4>
