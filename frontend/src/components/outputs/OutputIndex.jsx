@@ -99,6 +99,37 @@ class OutputIndex extends React.Component {
               アウトプットを投稿する
             </Link>
           </div>
+          <h2>自分のアウトプット</h2>
+          <MyOutputList>
+            {/* Todo:編集ボタンをつける */}
+            {this.state.myOutputs.map((output, output_index) => {
+              return(
+                <li key={output_index}>
+                <h3 className="output-header output-list-header">
+                  アウトプット{output_index + 1}
+                  <div className="output-edit-delete-buttons">
+                    {/* ここのリンクは後で実装 */}
+                    <Link to="/">編集</Link>  
+                    <Link to="/">削除</Link> 
+                  </div>  
+                </h3>
+                <h4>気づき</h4>
+                <p>{output.awareness.content}</p>
+                <h4>アクションプラン</h4>
+                <div className="action-plan">
+                  {output.action_plans.map(action_plan => {
+                  return(
+                      <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                      )
+                  })}
+                </div>
+                {/* Railsのcreated_atが汚いので整形 */}
+                <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
+                </li>
+              )
+            })}
+          </MyOutputList>
+          <h2>みんなのアウトプット</h2>
           <OutputIndexList>
             {/* Todo:編集ボタンをつける */}
             {this.state.outputs.map((output, output_index) => {
@@ -106,8 +137,6 @@ class OutputIndex extends React.Component {
                 <li key={output_index}>
                 <h3 className="output-header output-list-header">
                   {output.username}さんのアウトプット
-                  <div className="output-edit-delete-buttons">
-                  </div>  
                 </h3>
                 <h4>気づき</h4>
                 <p>{output.awareness.content}</p>
@@ -141,10 +170,32 @@ const OutputIndexList = styled(OutputList)`
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 0;
+  height: fit-content;
 
   & li {
     width: 45%;
     margin: 0 20px 25px 0;
+    height: fit-content;
+    padding: 5px 15px 15px;
+
+    & .output-edit-delete-buttons {
+      width: 18%;
+    }
+  }
+`
+
+const MyOutputList = styled(OutputList)`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  height: fit-content;
+
+  & li {
+    width: 45%;
+    margin: 0 20px 25px 0;
+    height: fit-content;
+    padding: 5px 15px 15px;
 
     & .output-edit-delete-buttons {
       width: 18%;
