@@ -98,9 +98,11 @@ class OutputIndex extends React.Component {
     this.userAuthentification()
     this.setAxiosDefaults();
     let to_be_shared_on_twitter = false
-    if (confirm('Twitterにシェアしますか？')) {
-      to_be_shared_on_twitter = true
-    } 
+    if (this.state.user.sns_token && this.state.user.sns_secret) {
+      if (confirm('Twitterにシェアしますか？')) {
+        to_be_shared_on_twitter = true
+      } 
+    }
     axios
     .post('/api/v1/books', {book: this.props.location.state.book, to_be_shared_on_twitter: to_be_shared_on_twitter})
     .then(response => {
@@ -128,13 +130,13 @@ class OutputIndex extends React.Component {
             {/* スタイルはMyPage→MyOutputsへのリンクと同じ */} 
             
             <div className="header-left">
-              {!this.state.posted && this.state.user.uid &&
+              {!this.state.posted && 
                 <Link onClick={this.postBook}>
                   推薦図書に追加する
                 </Link>
               }
 
-              {this.state.posted && this.state.user.uid && 
+              {this.state.posted && 
                 <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.state.user}}}>
                   アウトプットを投稿する
                 </Link>
