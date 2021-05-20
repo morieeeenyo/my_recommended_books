@@ -88,6 +88,8 @@ class OutputIndex extends React.Component {
   }
 
   render () {
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
     return (
       <OutputIndexWrapper>
         <OutputContent>
@@ -95,11 +97,15 @@ class OutputIndex extends React.Component {
           {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
             <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
             {/* スタイルはMyPage→MyOutputsへのリンクと同じ */} 
-            <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
-              アウトプットを投稿する
-            </Link>
+            {authToken && 
+              <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
+                アウトプットを投稿する
+              </Link>
+            }
           </div>
-          <h2>自分のアウトプット</h2>
+          {authToken && 
+            <h2>自分のアウトプット</h2>
+          }
           <MyOutputList>
             {/* Todo:編集ボタンをつける */}
             {this.state.myOutputs.map((output, output_index) => {
