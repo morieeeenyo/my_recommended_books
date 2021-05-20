@@ -23,7 +23,8 @@ class OutputIndex extends React.Component {
     super(props);
     this.state ={
       outputs: [],
-      myOutputs: []
+      myOutputs: [],
+      user: {}
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
@@ -67,14 +68,16 @@ class OutputIndex extends React.Component {
     axios
       .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
       .then(response => {
-        if (response.data.myoutputs) {
+        if (response.data.user) {
           this.setState({
             outputs: response.data.outputs,
-            myOutputs: response.data.myoutputs
+            myOutputs: response.data.myoutputs,
+            user: response.data.user
           })
         } else {
           this.setState({
-            outputs: response.data.outputs
+            outputs: response.data.outputs,
+            myOutputs: response.data.myoutputs
           })
         }
       })
@@ -98,7 +101,7 @@ class OutputIndex extends React.Component {
             <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
             {/* スタイルはMyPage→MyOutputsへのリンクと同じ */} 
             {authToken && 
-              <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
+              <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.state.user}}}>
                 アウトプットを投稿する
               </Link>
             }

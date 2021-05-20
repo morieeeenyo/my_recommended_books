@@ -11,8 +11,8 @@ module Api
         @book = Book.find_by(isbn: params[:book_isbn])
         # ログアウト時
         unless @user 
-          myoutputs, @outputs = Output.fetch_resources(@book.id, nil)
-          return render json: { outputs: @outputs }
+          @my_outputs, @outputs = Output.fetch_resources(@book.id, nil)
+          return render json: { myoutputs: @my_outputs, outputs: @outputs }
         end
         
         @book_is_posted_by_user = UserBook.find_by(book_id: @book.id, user_id: @user.id)
@@ -20,11 +20,11 @@ module Api
         if @book_is_posted_by_user
           # ログインしていて推薦図書に追加済み
           @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id) # 3つめの引数はマイページにいるかどうか
-          render json: { myoutputs: @my_outputs, outputs: @outputs } # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
+          render json: { myoutputs: @my_outputs, outputs: @outputs, user: @user } # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
         else
           # ログインしているが推薦図書には追加していない
-          myoutpus, @outputs = Output.fetch_resources(@book.id, @user.id)
-          render json: { outputs: @outputs, posted: false } # Tdo:フロント側で「推薦図書に追加」というボタンを作る
+          @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id)
+          render json: { myoutputs: @my_outputs,  outputs: @outputs, user: @user, posted: false } # Tdo:フロント側で「推薦図書に追加」というボタンを作る
         end
       end
 
