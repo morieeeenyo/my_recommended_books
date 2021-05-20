@@ -70,7 +70,7 @@ module Api
         return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
 
         if !Rails.env.test? # rubocop:disable Style/NegatedIf, Style/GuardClause
-          book = Book.find(params[:book_id])
+          book = Book.find_by(isbn: params[:book_isbn])
           @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る(一通り出来上がってから)
         end
       end
