@@ -24,11 +24,13 @@ class OutputIndex extends React.Component {
     this.state ={
       outputs: [],
       myOutputs: [],
-      user: {}
+      user: {},
+      posted: false
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.userAuthentification = this.userAuthentification.bind(this)
+    this.postBook = this.postBook.bind(this)
   }
 
   getCsrfToken() {
@@ -72,7 +74,8 @@ class OutputIndex extends React.Component {
           this.setState({
             outputs: response.data.outputs,
             myOutputs: response.data.myoutputs,
-            user: response.data.user
+            user: response.data.user,
+            posted: response.data.posted
           })
         } else {
           this.setState({
@@ -90,9 +93,32 @@ class OutputIndex extends React.Component {
       })
   }
 
+  postBook(e) {
+    e.preventDefault()
+    this.userAuthentification()
+    this.setAxiosDefaults();
+    let to_be_shared_on_twitter = false
+    if (confirm('Twitterにシェアしますか？')) {
+      to_be_shared_on_twitter = true
+    } 
+    axios
+    .post('/api/v1/books', {book: this.props.location.state.book, to_be_shared_on_twitter: to_be_shared_on_twitter})
+    .then(response => {
+      this.setState({
+        posted: true
+      })
+      return response
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        this.setState({
+          errors: error.response.data.errors
+        })
+      }
+    })
+  }
+
   render () {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
     return (
       <OutputIndexWrapper>
         <OutputContent>
@@ -100,13 +126,22 @@ class OutputIndex extends React.Component {
           {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
             <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
             {/* スタイルはMyPage→MyOutputsへのリンクと同じ */} 
-            {authToken && 
-              <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.state.user}}}>
-                アウトプットを投稿する
-              </Link>
-            }
+            
+            <div className="header-left">
+              {!this.state.posted && this.state.user.uid &&
+                <Link onClick={this.postBook}>
+                  推薦図書に追加する
+                </Link>
+              }
+
+              {this.state.posted && this.state.user.uid && 
+                <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.state.user}}}>
+                  アウトプットを投稿する
+                </Link>
+              }
+            </div>
           </div>
-          {authToken && 
+          {this.state.user.uid && 
             <h2>自分のアウトプット</h2>
           }
           <MyOutputList>
