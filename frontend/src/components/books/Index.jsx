@@ -98,14 +98,14 @@ class Index extends React.Component {
       } 
 
       // 書籍投稿ボタンはログアウト時は押せないようにする
-      if (newBookLink.getAttribute('style') == 'display: block;') {
+      if (newBookLink && newBookLink.getAttribute('style') == 'display: block;') {
         newBookLink.setAttribute('style', 'display: none;')
       }
     } 
 
     // 書籍投稿ボタンが非表示の場合表示する
     // else文だとうまく作動しないためauthTokenがあるかどうかで分ける
-    if (authToken) {
+    if (authToken && newBookLink) {
       if (newBookLink.getAttribute('style') == 'display: none;') {
         newBookLink.setAttribute('style', 'display: block;')
       }

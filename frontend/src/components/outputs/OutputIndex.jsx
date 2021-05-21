@@ -64,7 +64,6 @@ class OutputIndex extends React.Component {
   }
 
   componentDidMount() {
-    this.setAxiosDefaults();
     this.userAuthentification()
     //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
     axios
@@ -131,9 +130,9 @@ class OutputIndex extends React.Component {
             
             <div className="header-left">
               {!this.state.posted && 
-                <Link onClick={this.postBook}>
+                <a onClick={this.postBook}>
                   推薦図書に追加する
-                </Link>
+                </a>
               }
 
               {this.state.posted && 
@@ -143,7 +142,7 @@ class OutputIndex extends React.Component {
               }
             </div>
           </div>
-          {this.state.user.uid && 
+          {this.state.myOutputs.length > 0 && 
             <h2>自分のアウトプット</h2>
           }
           <MyOutputList>
@@ -160,7 +159,7 @@ class OutputIndex extends React.Component {
                   </div>  
                 </h3>
                 <h4>気づき</h4>
-                <p>{output.awareness.content}</p>
+                <p className="awareness">{output.awareness.content}</p>
                 <h4>アクションプラン</h4>
                 <div className="action-plan">
                   {output.action_plans.map(action_plan => {
@@ -185,7 +184,7 @@ class OutputIndex extends React.Component {
                   {output.username}さんのアウトプット
                 </h3>
                 <h4>気づき</h4>
-                <p>{output.awareness.content}</p>
+                <p className="awareness">{output.awareness.content}</p>
                 <h4>アクションプラン</h4>
                 <div className="action-plan">
                   {output.action_plans.map(action_plan => {

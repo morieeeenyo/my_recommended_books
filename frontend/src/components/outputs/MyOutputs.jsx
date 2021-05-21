@@ -102,7 +102,7 @@ class MyOutputs extends React.Component {
                       </div>  
                     </h3>
                     <h4>気づき</h4>
-                    <p>{output.awareness.content}</p>
+                    <p className="awareness">{output.awareness.content}</p>
                     <h4>アクションプラン</h4>
                     <div className="action-plan">
                       {output.action_plans.map(action_plan => {
