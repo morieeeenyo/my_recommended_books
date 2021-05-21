@@ -5,8 +5,9 @@ RSpec.describe 'Outputs', type: :system, js: true do
   let(:output_user_1) { create(:user) }
   let(:output_user_2) { create(:user) }
   let(:book) { create(:book) }
-  let(:user_1_book) { create(:user_book, user_id: output_user_1.id, book_id: book.id) }
-  let(:user_2_book) { create(:user_book, user_id: output_user_2.id, book_id: book.id) }
+  let(:user_book) { build(:user_book, user: user, book: book) }
+  let(:user_1_book) { build(:user_book, user_id: output_user_1.id, book_id: book.id) }
+  let(:user_2_book) { build(:user_book, user_id: output_user_2.id, book_id: book.id) }
   let(:output) { build(:output) }
   let(:user_1_output) { build(:output, user_id: output_user_1.id, book_id: book.id) }
   let(:user_2_output) { build(:output, user_id: output_user_2.id, book_id: book.id) }
@@ -14,6 +15,9 @@ RSpec.describe 'Outputs', type: :system, js: true do
 
   describe "アウトプット一覧" do
     before do
+      user_1_book.save
+      user_2_book.save
+
       3.times do 
         user_1_output.save
       end
@@ -21,23 +25,28 @@ RSpec.describe 'Outputs', type: :system, js: true do
       2.times do 
         user_2_output.save
       end
-      visit root_path
     end
     
     context "ログアウト時" do
       before do
+        visit root_path
         expect(page).to have_content 'Kaidoku - 会読' # welcomeページにいることを検証
         click_link 'みんなのアウトプットを見る' # welcomeページから一覧へのリンク
         sleep 3
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         sleep 3
         click_link href: "/books/#{book.isbn}/outputs"
+        expect(page).to have_content "『#{book.title}』のアウトプット"
       end
 
-      it "投稿されているアウトプットが「みんなのアウトプット」として掲載されている" do
-        # puts page.driver.browser.manage.logs.get(:browser).collect(&:message) コンソールの内容を出力
-        expect(page).to have_content "『#{book.title}』のアウトプット"
+      it "「自分のアウトプット」という文字列および「推薦図書に追加する」「アウトプットを投稿する」ボタンが表示されていない" do
         expect(page).not_to have_content '自分のアウトプット'
+        expect(page).not_to have_link '推薦図書に追加する'
+        expect(page).not_to have_link 'アウトプットを投稿する'
+      end
+      
+
+      it "投稿されているアウトプットが「みんなのアウトプット」として掲載されている" do
         expect(page).to have_content 'みんなのアウトプット'
         expect(all('.output-list-header').length).to  eq book.awarenesses.length
         expect(all('.awareness')[0].text).to  eq book.awarenesses[-1].content # 一番新しいものが一番上に来る
@@ -45,16 +54,70 @@ RSpec.describe 'Outputs', type: :system, js: true do
       
     end
 
-    context "ログイン中のユーザーが推薦図書に追加していないとき" do
-      
-    end
+    context "ログイン時" do
+      context "ログイン中のユーザーが推薦図書に追加していないとき" do
+        before do
+          sign_in(user)
+          all('a', text: 'アウトプット一覧')[0].click
+          expect(page).to  have_content "『#{book.title}』のアウトプット"
+        end
 
-    context "ログイン中のユーザーがアウトプットを投稿していないとき" do
-      
-    end
+        it "「推薦図書に追加する」ボタンが表示されている。「アウトプットを投稿する」ボタンは表示されていない" do
+          expect(page).to  have_selector 'a', text: '推薦図書に追加する'
+          expect(page).not_to  have_link 'アウトプットを投稿する'
+        end
 
-    context "ログイン中のユーザーがアウトプットを投稿しているとき" do
+        it "他のユーザーが投稿したアウトプットが「みんなのアウトプット」として掲載されている" do
+          expect(page).to have_content 'みんなのアウトプット'
+          expect(all('.output-list-header').length).to  eq book.awarenesses.length
+          expect(all('.awareness')[0].text).to  eq book.awarenesses[-1].content # 一番新しいものが一番上に来る
+        end
+      end
       
+      context "ログイン中のユーザーが推薦図書に追加しているがアウトプットを投稿していないとき" do
+        before do
+          sign_in(user)
+          user_book.save
+          all('a', text: 'アウトプット一覧')[0].click
+          expect(page).to  have_content "『#{book.title}』のアウトプット"
+        end
+        
+        it "「アウトプットを投稿する」ボタンが表示されている。「推薦図書に追加する」ボタンは表示されていない" do
+          expect(page).not_to  have_selector 'a', text: '推薦図書に追加する'
+          expect(page).to  have_link 'アウトプットを投稿する'
+        end
+  
+        it "他のユーザーが投稿したアウトプットが「みんなのアウトプット」として掲載されている" do
+          expect(page).to have_content 'みんなのアウトプット'
+          expect(all('.output-list-header').length).to  eq book.awarenesses.length
+          expect(all('.awareness')[0].text).to  eq book.awarenesses[-1].content # 一番新しいものが一番上に来る
+        end
+      end
+      
+      context "ログイン中のユーザーがアウトプットを投稿しているとき" do
+        before do
+          sign_in(output_user_1)
+          all('a', text: 'アウトプット一覧')[0].click
+          expect(page).to  have_content "『#{book.title}』のアウトプット"
+          # puts page.driver.browser.manage.logs.get(:browser).collect(&:message) # コンソールの内容を出力
+        end
+        
+        it "「アウトプットを投稿する」ボタンが表示されている" do
+          expect(page).to  have_link 'アウトプットを投稿する'
+        end
+  
+        it "自分が投稿したアウトプットが「自分のアウトプット」として掲載されている" do
+          expect(page).to have_content '自分のアウトプット'
+          expect(all('.myoutputs').length).to  eq book.awarenesses.where(user_id: output_user_1.id).length
+          expect(all('.myoutputs .awareness')[0].text).to  eq book.awarenesses.where(user_id: output_user_1.id)[-1].content # 一番新しいものが一番上に来る
+        end
+
+        it "他のユーザーが投稿したアウトプットが「みんなのアウトプット」として掲載されている" do
+          expect(page).to have_content 'みんなのアウトプット'
+          expect(all('.outputs-of-others').length).to  eq book.awarenesses.where.not(user_id: output_user_1.id).length
+          expect(all('.outputs-of-others .awareness')[0].text).to  eq book.awarenesses.where.not(user_id: output_user_1.id)[-1].content # 一番新しいものが一番上に来る
+        end
+      end
     end
   end
   

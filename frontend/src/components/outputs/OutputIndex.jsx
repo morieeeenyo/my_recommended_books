@@ -129,7 +129,7 @@ class OutputIndex extends React.Component {
             {/* スタイルはMyPage→MyOutputsへのリンクと同じ */} 
             
             <div className="header-left">
-              {!this.state.posted && 
+              {!this.state.posted && this.state.user.uid &&
                 <a onClick={this.postBook}>
                   推薦図書に追加する
                 </a>
@@ -149,7 +149,7 @@ class OutputIndex extends React.Component {
             {/* Todo:編集ボタンをつける */}
             {this.state.myOutputs.map((output, output_index) => {
               return(
-                <li key={output_index}>
+                <li key={output_index} className="myoutputs">
                 <h3 className="output-header output-list-header">
                   アウトプット{output_index + 1}
                   <div className="output-edit-delete-buttons">
@@ -174,12 +174,14 @@ class OutputIndex extends React.Component {
               )
             })}
           </MyOutputList>
-          <h2>みんなのアウトプット</h2>
+          {this.state.outputs.length > 0 && 
+            <h2>みんなのアウトプット</h2>
+          }
           <OutputIndexList>
             {/* Todo:編集ボタンをつける */}
             {this.state.outputs.map((output, output_index) => {
               return(
-                <li key={output_index}>
+                <li key={output_index} className="outputs-of-others">
                 <h3 className="output-header output-list-header">
                   {output.username}さんのアウトプット
                 </h3>
