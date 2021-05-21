@@ -16,10 +16,13 @@ module Api
           return render json: { myoutputs: @my_outputs, outputs: @outputs } 
         end
         
+        # ユーザーが書籍を投稿済みかどうか
         @book_is_posted_by_user = UserBook.find_by(book_id: @book.id, user_id: @user.id)
 
+        # アウトプット一覧を取得
         @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id) 
         # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
+        # 書籍が投稿済みの場合アウトプット投稿ボタンが、投稿済みではない場合推薦図書追加ボタンが表示される
         render json: { myoutputs: @my_outputs, outputs: @outputs, user: @user, posted: @book_is_posted_by_user.present? } 
       end
 
