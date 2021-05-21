@@ -6,6 +6,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
   let(:output_user_2) { create(:user) }
   let(:book) { create(:book) }
   let(:user_book) { build(:user_book, user: user, book: book) }
+  let(:user_another_book) { build(:user_book, user: user) }
   let(:user_1_book) { build(:user_book, user_id: output_user_1.id, book_id: book.id) }
   let(:user_2_book) { build(:user_book, user_id: output_user_2.id, book_id: book.id) }
   let(:output) { build(:output) }
@@ -126,7 +127,10 @@ RSpec.describe 'Outputs', type: :system, js: true do
     before do
       sign_in(user)
       sleep 10
-      create_list(:user_book, 2, user: user) # なんかletだとうまく作動しない
+      user_book.save
+      sleep 5
+      user_another_book.save
+      sleep 5
       find('.header-link', text: 'マイページ').click
       expect(page).to have_content "#{user.nickname}さんのマイページ"
       find('a', text: '推薦図書一覧').click
@@ -466,6 +470,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
         end
       end
     end
+
     context 'モーダルの操作' do
       it '入力内容はモーダルを閉じ再び開くと消える' do
         fill_in 'output_content',	with: output.content
@@ -523,6 +528,34 @@ RSpec.describe 'Outputs', type: :system, js: true do
         sleep 2
         page.driver.browser.switch_to.alert.accept
         expect(page).to have_content 'アウトプットを投稿する' # モーダルにとどまることを検証
+      end
+    end
+
+    context "アウトプット一覧からアウトプットを投稿する" do
+      it "アウトプット一覧から「アウトプットを投稿する」ボタンを押すとアウトプットモーダルが開き、投稿できる" do
+        click_button 'x'
+        click_link nil, href: '/'
+        sleep 3
+        expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
+        all('a', text: 'アウトプット一覧')[-1].click
+        expect(page).to  have_content "『#{Book.all[0].title}』のアウトプット"
+        expect(page).not_to have_content '自分のアウトプット'
+        prev_output_length = Book.all[0].awarenesses.where(user_id: user.id).length
+        expect(all('.myoutputs').length).to  eq prev_output_length
+        click_link 'アウトプットを投稿する'
+        fill_in 'output_content',	with: output.content
+        fill_in 'output_time_of_execution_0',	with: output.action_plans[0][:time_of_execution]
+        fill_in 'output_what_to_do_0',	with: output.action_plans[0][:what_to_do]
+        fill_in 'output_how_to_do_0',	with: output.action_plans[0][:how_to_do]
+        expect do
+          click_button 'この内容で投稿する'
+          sleep 3
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) # ユーザーや書籍との紐付も同時に検証する
+        expect(page).to have_content "『#{Book.all[0].title}』のアウトプット" # もとのページに返ってくる
+        expect(page).to have_content '自分のアウトプット'
+        sleep 5
+        expect(all('.myoutputs .awareness')[0].text).to  eq Book.all[0].awarenesses.where(user_id: user.id)[-1].content # 一番新しいものが一番上に来る
+        expect(all('.myoutputs').length).to  eq prev_output_length + 1 # 画面上に即座にアウトプットの投稿が反映されている
       end
     end
   end
