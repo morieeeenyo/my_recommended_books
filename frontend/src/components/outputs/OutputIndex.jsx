@@ -69,6 +69,9 @@ class OutputIndex extends React.Component {
     axios
       .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
       .then(response => {
+        // ユーザーがログイン済みかどうかによる条件分岐
+        // 引数の内容で条件分岐しちゃってるので本当はよくなさそう
+        // サーバー側で条件分岐させるべき？
         if (response.data.user) {
           this.setState({
             outputs: response.data.outputs,
@@ -97,6 +100,7 @@ class OutputIndex extends React.Component {
     this.userAuthentification()
     this.setAxiosDefaults();
     let to_be_shared_on_twitter = false
+    // ユーザーがSNS認証済みの場合
     if (this.state.user.sns_token && this.state.user.sns_secret) {
       if (confirm('Twitterにシェアしますか？')) {
         to_be_shared_on_twitter = true
@@ -105,6 +109,7 @@ class OutputIndex extends React.Component {
     axios
     .post('/api/v1/books', {book: this.props.location.state.book, to_be_shared_on_twitter: to_be_shared_on_twitter})
     .then(response => {
+      // 推薦図書に追加した際に推薦図書追加済みにしつつリンクを「アウトプットを投稿する」に変える
       this.setState({
         posted: true
       })
@@ -129,12 +134,14 @@ class OutputIndex extends React.Component {
             {/* スタイルはMyPage→MyOutputsへのリンクと同じ */} 
             
             <div className="header-left">
+              {/* ログイン済み、かつ推薦図書に追加ずみではない場合に出る */}
               {!this.state.posted && this.state.user.uid &&
                 <a onClick={this.postBook}>
                   推薦図書に追加する
                 </a>
               }
 
+              {/* 推薦図書追加済みの場合のみ出る */}
               {this.state.posted && 
                 <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.state.user}}}>
                   アウトプットを投稿する
@@ -142,6 +149,7 @@ class OutputIndex extends React.Component {
               }
             </div>
           </div>
+
           {this.state.myOutputs.length > 0 && 
             <h2>自分のアウトプット</h2>
           }
@@ -174,6 +182,7 @@ class OutputIndex extends React.Component {
               )
             })}
           </MyOutputList>
+          
           {this.state.outputs.length > 0 && 
             <h2>みんなのアウトプット</h2>
           }

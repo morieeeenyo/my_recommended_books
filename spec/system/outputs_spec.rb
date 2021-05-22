@@ -16,9 +16,11 @@ RSpec.describe 'Outputs', type: :system, js: true do
 
   describe "アウトプット一覧" do
     before do
+      # 中間テーブルのデータの保存はletでやるとなんかアソシエーションがうまくいかなかった
       user_1_book.save
       user_2_book.save
 
+      # 検証のためにあえて保存する数を別々にしてます
       3.times do 
         user_1_output.save
       end
@@ -46,7 +48,6 @@ RSpec.describe 'Outputs', type: :system, js: true do
         expect(page).not_to have_link 'アウトプットを投稿する'
       end
       
-
       it "投稿されているアウトプットが「みんなのアウトプット」として掲載されている" do
         expect(page).to have_content 'みんなのアウトプット'
         expect(all('.output-list-header').length).to  eq book.awarenesses.length
@@ -64,8 +65,8 @@ RSpec.describe 'Outputs', type: :system, js: true do
         end
 
         it "「推薦図書に追加する」ボタンが表示されている。「アウトプットを投稿する」ボタンは表示されていない" do
-          expect(page).to  have_selector 'a', text: '推薦図書に追加する'
-          expect(page).not_to  have_link 'アウトプットを投稿する'
+          expect(page).to  have_selector 'a', text: '推薦図書に追加する' # href属性がないリンクなのでhave_linkが使えない
+          expect(page).not_to  have_link 'アウトプットを投稿する' # 推薦図書に追加すると出てくるボタン
         end
 
         it "他のユーザーが投稿したアウトプットが「みんなのアウトプット」として掲載されている" do
