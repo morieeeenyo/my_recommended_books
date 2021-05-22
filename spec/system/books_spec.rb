@@ -290,12 +290,12 @@ RSpec.describe 'Books', type: :system do
       end
     end
 
-    context "一覧からの投稿" do
+    context '一覧からの投稿' do
       before do
         book.save
       end
-      
-      it "ログイン中のユーザーは書籍が推薦図書に追加されていない場合アウトプット一覧から推薦図書を追加できる" do
+
+      it 'ログイン中のユーザーは書籍が推薦図書に追加されていない場合アウトプット一覧から推薦図書を追加できる' do
         sign_in(user) # ログインする
         expect(page).to have_content '新着書籍一覧'
         sleep 3
@@ -306,9 +306,9 @@ RSpec.describe 'Books', type: :system do
           find('a', text: '推薦図書に追加する').click
           sleep 3
         end.to change(user.books, :count).by(1)
-        expect(page).not_to  have_selector 'a', text: '推薦図書に追加する'
-        expect(page).to  have_link "アウトプットを投稿する"
-      end      
+        expect(page).not_to have_selector 'a', text: '推薦図書に追加する'
+        expect(page).to have_link 'アウトプットを投稿する'
+      end
     end
   end
 

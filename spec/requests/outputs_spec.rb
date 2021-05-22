@@ -19,7 +19,6 @@ RSpec.describe 'Outputs', type: :request do
     { 'uid' => user.uid, 'access-token' => 'ABCDEFGH12345678', 'client' => 'H-12345678' } # ユーザー認証用ヘッダ
   end
 
-  
   describe 'アウトプット一覧' do
     context 'アウトプットが1件以上投稿されている場合' do
       before do
@@ -27,12 +26,12 @@ RSpec.describe 'Outputs', type: :request do
           output_of_others.save
         end
       end
-      
+
       it 'ログイン中のユーザーがアウトプットを投稿していない場合ステータスが200になる' do
         get api_v1_book_outputs_path(book.isbn), xhr: true, headers: headers
         expect(response).to have_http_status(200)
       end
-      
+
       it 'ログイン中のユーザーがアウトプットを投稿していない場合すべてのアウトプットが新しい順に返却される' do
         get api_v1_book_outputs_path(book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
@@ -44,12 +43,12 @@ RSpec.describe 'Outputs', type: :request do
         expect(json['outputs'][0]['awareness']['id']).to be > json['outputs'][1]['awareness']['id']
         expect(json['outputs'][1]['awareness']['id']).to be > json['outputs'][2]['awareness']['id']
       end
-      
+
       it 'ユーザーがログアウトしている場合ステータスが200になる' do
         get api_v1_book_outputs_path(book.isbn), xhr: true
         expect(response).to have_http_status(200)
       end
-      
+
       it 'ユーザーがログアウトしている場合すべてのアウトプットが新しい順に返却される' do
         get api_v1_book_outputs_path(book.isbn), xhr: true
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
@@ -61,7 +60,7 @@ RSpec.describe 'Outputs', type: :request do
         expect(json['outputs'][0]['awareness']['id']).to be > json['outputs'][1]['awareness']['id']
         expect(json['outputs'][1]['awareness']['id']).to be > json['outputs'][2]['awareness']['id']
       end
-      
+
       it 'ログイン中のユーザーがアウトプットを投稿している場合、ステータスが200になる' do
         # 3個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do
@@ -70,7 +69,7 @@ RSpec.describe 'Outputs', type: :request do
         get api_v1_book_outputs_path(book.isbn), xhr: true, headers: headers
         expect(response).to have_http_status(200)
       end
-      
+
       it 'ログイン中のユーザーがアウトプットを投稿している場合、自分が投稿したアウトプットと他の人が投稿したアウトプットが別々に返却される' do
         # 3個保存することで複数データの取得が可能かどうか、順番は正しいかを検証
         2.times do
@@ -89,17 +88,17 @@ RSpec.describe 'Outputs', type: :request do
         expect(json['outputs'][1]['awareness']['id']).to be > json['outputs'][2]['awareness']['id']
       end
     end
-    
+
     context 'アウトプットが0件の場合' do
       before do
         another_book.awarenesses.delete_all # すでに投稿されたアウトプットを削除
       end
-      
+
       it 'ログイン中のユーザーが推薦図書に追加していない場合ステータスは200' do
         get api_v1_book_outputs_path(another_book.isbn), xhr: true, headers: headers
         expect(response).to have_http_status(200)
       end
-      
+
       it 'ログイン中のユーザーが推薦図書に追加していない場合レスポンスは0件' do
         get api_v1_book_outputs_path(another_book.isbn), xhr: true, headers: headers
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
@@ -107,13 +106,13 @@ RSpec.describe 'Outputs', type: :request do
         sleep 2
         expect(json['outputs'].length).to eq 0
       end
-      
+
       it 'ログイン中のユーザーが推薦図書に追加している場合ステータスは200' do
         user_another_book_relation.save
         get api_v1_book_outputs_path(another_book.isbn), xhr: true, headers: headers
         expect(response).to have_http_status(200)
       end
-      
+
       it 'ログイン中のユーザーが推薦図書に追加している場合レスポンスが0件' do
         user_another_book_relation.save
         get api_v1_book_outputs_path(another_book.isbn), xhr: true, headers: headers
@@ -124,7 +123,7 @@ RSpec.describe 'Outputs', type: :request do
       end
     end
   end
-  
+
   describe 'アウトプットの投稿' do
     context '投稿に成功する時' do
       before do
@@ -132,7 +131,7 @@ RSpec.describe 'Outputs', type: :request do
         three_action_plans = output_params[:action_plans].slice(0, 3)
         output_params[:action_plans] = three_action_plans
       end
-      
+
       it '投稿に成功するとステータスが201で返却される' do
         post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
         sleep 2
@@ -145,7 +144,7 @@ RSpec.describe 'Outputs', type: :request do
           sleep 2
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3) # andを使うことで複数のモデルの増減を同時に検証
       end
-      
+
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
         output_params[:action_plans].length.times do |action_plan_index|
           post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
@@ -164,19 +163,19 @@ RSpec.describe 'Outputs', type: :request do
         one_action_plan = output_params[:action_plans].slice(0, 1)
         output_params[:action_plans] = one_action_plan
       end
-      
+
       it '投稿に成功するとステータスが201で返却される' do
         post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
         expect(response).to have_http_status(201)
       end
-      
+
       it '投稿に成功するとAwarenessモデルのカウントが1増え、ActionPlanモデルのカウントが1増える' do
         expect do
           post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) # andを使うことで複数のモデルの増減を同時に検証
       end
-      
+
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
         output_params[:action_plans].length.times do |action_plan_index|
           post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
@@ -188,25 +187,25 @@ RSpec.describe 'Outputs', type: :request do
         end
       end
     end
-    
+
     context '投稿に成功(アクションプランが2つ)' do
       before do
         two_action_plans = output_params[:action_plans].slice(0, 2)
         output_params[:action_plans] = two_action_plans
       end
-      
+
       it '投稿に成功するとステータスが201で返却される' do
         post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
         expect(response).to have_http_status(201)
       end
-      
+
       it '投稿に成功するとAwarenessモデルのカウントが1増え、ActionPlanモデルのカウントが2増える' do
         expect do
           post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(2) # andを使うことで複数のモデルの増減を同時に検証
       end
-      
+
       it 'すべてのカラムが揃っていればレスポンスで気づきとアクションプランが得られる' do
         output_params[:action_plans].length.times do |action_plan_index|
           post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
@@ -218,14 +217,14 @@ RSpec.describe 'Outputs', type: :request do
         end
       end
     end
-    
+
     context '投稿に成功する時(任意項目が空)' do
       before do
         # なんかbeofreがないとcircleciに怒られる
         three_action_plans = output_params[:action_plans].slice(0, 3)
         output_params[:action_plans] = three_action_plans
       end
-      
+
       it '投稿に成功するとステータスが201で返却される' do
         output_params[:action_plans].each do |action_plan|
           action_plan[:how_to_do] = '' # どのように実践するか、は空欄でOK
@@ -234,14 +233,14 @@ RSpec.describe 'Outputs', type: :request do
           expect(response).to have_http_status(201) # リソース保存時のステータスは201
         end
       end
-      
+
       it '投稿に成功するとAwarenessモデルのカウントが1増え、ActionPlanモデルのカウントが3増える' do
         expect do
           post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
           sleep 2
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3) # andを使うことで複数のモデルの増減を同時に検証
       end
-      
+
       it 'レスポンスで気づきとアクションプランが得られる' do
         output_params[:action_plans].each_with_index do |action_plan, action_plan_index|
           action_plan[:how_to_do] = '' # どのように実践するか、は空欄でOK
@@ -254,7 +253,7 @@ RSpec.describe 'Outputs', type: :request do
         end
       end
     end
-    
+
     # 異常形は3つ中1つ空のときのみ検証。それ以外のパターンはsystem_specにて
     context '投稿に失敗する時' do
       # 個別のバリデーションの検証はmodel_psecにて。バリデーションはすべてpresence: true
@@ -266,7 +265,7 @@ RSpec.describe 'Outputs', type: :request do
           output_params[:action_plans][index][:what_to_do] = 'test' # これがないと空にした値が引き継がれてしまう
         end
       end
-      
+
       it '投稿に失敗するとAwarenessモデルのカウントが増えていない' do
         output_params[:action_plans].length.times do |index|
           output_params[:action_plans][index][:what_to_do] = ''

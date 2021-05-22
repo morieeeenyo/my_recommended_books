@@ -310,7 +310,7 @@ RSpec.describe 'Users', type: :system do
         sleep 5
         # アウトプットのリストに1個しかない要素
         expect(all('.output-list-header').length).to eq user.books[0].awarenesses.length
-        expect(all('.awareness')[0].text).to  eq user.books[0].awarenesses[-1].content # 一番新しいものが一番上に来る
+        expect(all('.awareness')[0].text).to eq user.books[0].awarenesses[-1].content # 一番新しいものが一番上に来る
       end
     end
 

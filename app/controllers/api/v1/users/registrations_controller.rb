@@ -17,7 +17,7 @@ module Api
           @user = User.new(sign_up_params)
           if @user.valid?
             # 画像データ自体は送られてくるので中身が空かどうか判定をする
-            avatar_attach if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present? 
+            avatar_attach if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
             @user.save
             update_auth_header # access-token, clientの発行
             render json: { user: @user }

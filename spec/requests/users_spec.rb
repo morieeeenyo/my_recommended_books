@@ -228,7 +228,6 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe '自分が投稿したアウトプット一覧の表示' do
-
     context 'アウトプット一覧の表示に成功する時(アウトプット投稿済み)' do
       before do
         output.user_id = user.id
