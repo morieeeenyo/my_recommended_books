@@ -37,7 +37,7 @@ RSpec.describe 'Outputs', type: :request do
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         sleep 2
-        expect(json['myoutputs']).to eq nil # ログイン中のユーザーがアウトプットを投稿していれば返却されるデータ
+        expect(json['myoutputs'].length).to eq 0 # ログイン中のユーザーがアウトプットを投稿していれば返却されるデータ
         expect(json['outputs'].length).to eq 3
         # 添字が若いほどidの値が大きい=新しい順
         expect(json['outputs'][0]['awareness']['id']).to be > json['outputs'][1]['awareness']['id']
@@ -54,7 +54,7 @@ RSpec.describe 'Outputs', type: :request do
         sleep 2 # sleepしないとレスポンスの返却が間に合わない
         json = JSON.parse(response.body)
         sleep 2
-        expect(json['myoutputs']).to eq nil # ログイン中のユーザーがアウトプットを投稿していれば返却されるデータ
+        expect(json['myoutputs'].length).to eq 0 # ログイン中のユーザーがアウトプットを投稿していれば返却されるデータ
         expect(json['outputs'].length).to eq 3
         # 添字が若いほどidの値が大きい=新しい順
         expect(json['outputs'][0]['awareness']['id']).to be > json['outputs'][1]['awareness']['id']
