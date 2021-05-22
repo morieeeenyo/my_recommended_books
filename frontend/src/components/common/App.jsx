@@ -17,7 +17,7 @@ import {MyRecommendedBooks} from '../users/MyPage.jsx'
 import AccountUpdateModal from '../users/AccountUpdateModal.jsx'
 import AccountUpdateForm from '../users/AccountUpdateForm.jsx'
 import OutputModal from '../outputs/OutputModal.jsx'
-// import OutputIndex from '../outputs/OutputIndex.jsx'
+import OutputIndex from '../outputs/OutputIndex.jsx'
 
 //axiosの読み込み
 import axios from 'axios';
@@ -91,11 +91,11 @@ class App extends React.Component {
                 <Index>
                 </Index>
               </Route>
-              {/* <Route exact path='/books/:isbn/outpus'>
+              <Route exact path='/books/:isbn/outputs' key={'outputs'}>
                 <OutputIndex>
                 </OutputIndex>
-              </Route> */}
-              <Route path="/mypage">
+              </Route>
+              <Route path="/mypage" key={'mypage'}>
                 <MyPage>
                   <Route exact path="/mypage/books">
                     <MyRecommendedBooks>
@@ -107,18 +107,18 @@ class App extends React.Component {
                   <Route exact path="/mypage/:content/edit" key={'edit'}>
                     <AccountUpdateForm></AccountUpdateForm>
                   </Route>
-                  <Route path="/mypage/books/:book_isbn/outputs">
+                  <Route path="/mypage/books/:book_isbn/outputs" key={'myoutputs'}>
                     <MyOutputs></MyOutputs>
                   </Route>
                 </MyPage>
               </Route>
             </Switch>
           </Container>
-          <Route path="/books/new">
+          <Route exact path="/books/new">
             <NewBookModal>
             </NewBookModal>
           </Route>
-          <Route path="/books/:book_isbn/outputs/new">
+          <Route exact path="/books/:book_isbn/outputs/new">
             <OutputModal></OutputModal>
           </Route>
         </Router>

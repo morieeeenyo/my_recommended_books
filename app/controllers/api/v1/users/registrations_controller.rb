@@ -4,19 +4,20 @@ module Api
   module V1
     module Users
       class RegistrationsController < DeviseTokenAuth::RegistrationsController
-        skip_before_action :verify_authenticity_token, only: [:create] # APIではCSRFチェックをしない
+        skip_before_action :verify_authenticity_token, only: [:create] # 新規登録ではCSRFチェックをしない
         skip_before_action :validate_account_update_params, only: :update # 自前でユーザー認証するので不要
         skip_before_action :set_user_by_token, only: :update
-        skip_after_action :update_auth_header
+        skip_after_action :update_auth_header # 手動で呼び出す仕様にしたので不要
         before_action :user_authentification, only: :update
         after_action :set_csrf_token_header # csrf-tokenの更新
 
-        respond_to :json
+        respond_to :json # 利用されてる？
 
         def create
           @user = User.new(sign_up_params)
           if @user.valid?
-            avatar_attach if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present? # 画像データ自体は送られてくるので中身が空かどうか判定をする
+            # 画像データ自体は送られてくるので中身が空かどうか判定をする
+            avatar_attach if params[:user][:avatar][:data].present? && params[:user][:avatar][:filename].present?
             @user.save
             update_auth_header # access-token, clientの発行
             render json: { user: @user }
@@ -40,6 +41,7 @@ module Api
             avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}),
                                                                                         only_path: true)
           end
+
           update_auth_header # access-token, clientの発行
           # 最後に更新した結果をフロントに返す
           render json: { user: @user, avatar: avatar_path }
@@ -61,10 +63,12 @@ module Api
         end
 
         def set_csrf_token_header
+          # フロントでcsrf-tokenを更新している
           response.set_header('X-CSRF-Token', form_authenticity_token)
         end
 
         def decode(str)
+          # 画像データを複合するためのメソッド
           Base64.decode64(str.split(',').last)
         end
 

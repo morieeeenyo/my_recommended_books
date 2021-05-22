@@ -7,7 +7,7 @@ module Api
         skip_before_action :verify_authenticity_token, only: [:create] # ログイン時はCSRFチェックをしない
         after_action :set_csrf_token_header # csrf-tokenの更新
         after_action :reset_session, only: [:destroy] # session情報を削除
-        respond_to :json
+        respond_to :json # いる？
 
         def create
           @user = User.find_by(email: params[:user][:email])
@@ -47,6 +47,7 @@ module Api
         end
 
         def invalid_password
+          # emailとpassword両方バリデーションに引っかかったときにはこれは出てこない
           warden.custom_failure!
           render status: 401, json: { errors: ['Authorization failed. Invalid password'] }
         end

@@ -43,43 +43,37 @@ class Output
     output # 生成したハッシュをコントローラーに返し、レスポンスにする
   end
 
-  def self.fetch_resources(book_id, user_id, my_page) # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
+  def self.fetch_resources(book_id, user_id)
     book = Book.find(book_id)
     outputs = [] # アウトプットは複数投稿できるので配列で定義
-    if my_page
-      # マイページにいる場合自分が投稿したアウトプットのみ表示する
-      # user_idが一致するものだけを抜き出す。
-      book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
-        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
-        output[:awareness] = awareness
-        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
-        outputs.push(output)
-      end
-    elsif user_id.present?
-      # 一覧表示で自分がすでに推薦図書に追加済みの場合は自分のアウトプットと他人のアウトプットを別々に返却する
-      my_outputs = []
-      book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
-        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
-        output[:awareness] = awareness
-        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
-        my_outputs.push(output)
-      end
-      book.awarenesses.where.not(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
-        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
-        output[:awareness] = awareness
-        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
-        outputs.push(output)
-      end
-      return my_outputs, outputs # 一覧では自分の投稿と自分以外の投稿を別々に返却
-    else
-      # 一覧表示で、自分が推薦図書に追加していない場合他人のアウトプットだけを返却する
-      book.awarenesses.reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
-        output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
-        output[:awareness] = awareness
-        output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
-        outputs.push(output)
-      end
+    # 一覧表示で自分がすでに推薦図書に追加済みの場合は自分のアウトプットと他人のアウトプットを別々に返却する
+    my_outputs = []
+    book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+      output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+      output[:awareness] = awareness
+      output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+      my_outputs.push(output)
     end
-    outputs # コントローラー側に戻り値として配列を返す
+    book.awarenesses.where.not(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+      output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+      output[:awareness] = awareness
+      output[:username] = awareness.user.nickname
+      output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+      outputs.push(output)
+    end
+    [my_outputs, outputs] # 一覧では自分の投稿と自分以外の投稿を別々に返却
+  end
+
+  # マイページでは自分が投稿したアウトプットのみ返す
+  def self.fetch_my_resources(book_id, user_id)
+    book = Book.find(book_id)
+    outputs = [] # アウトプットは複数投稿できるので配列で定義
+    book.awarenesses.where(user_id: user_id).reverse_each do |awareness| # 新しいものから上に表示できるようにreverse_eachを使用
+      output = {} # 1つ1つのアウトプットはハッシュ形式。都度都度空にするためにeachの中に入れる
+      output[:awareness] = awareness
+      output[:action_plans] = awareness.action_plans # AwarenessとActionPlanで1対多のアソシエーションが組まれているのでこの書き方で参照可能
+      outputs.push(output)
+    end
+    outputs
   end
 end

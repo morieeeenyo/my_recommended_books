@@ -10,6 +10,8 @@ RSpec.describe 'Books', type: :system do
   let(:invalid_book_params) { attributes_for(:book, title: '') } # コントローラーで空のキーワードに対してnilを返すようにしている
   let(:book_search_params) { { keyword: '７つの習慣' } } # 検索したらヒットしそうな本にしてます
 
+  # memo: twitter認証関係はomniauth_users_specにて
+
   describe '書籍一覧' do
     before do
       @book_list = create_list(:book, 15)
@@ -285,6 +287,27 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         expect(all('#search_result > div').length).to eq 0 # 検索結果が0件ではないことを検証
         expect(page).to have_field 'keyword', with: ''
+      end
+    end
+
+    context '一覧からの投稿' do
+      before do
+        book.save
+      end
+
+      it 'ログイン中のユーザーは書籍が推薦図書に追加されていない場合アウトプット一覧から推薦図書を追加できる' do
+        sign_in(user) # ログインする
+        expect(page).to have_content '新着書籍一覧'
+        sleep 3
+        all('a', text: 'アウトプット一覧')[-1].click
+        expect(page).to  have_content "『#{book.title}』のアウトプット"
+        expect(page).to  have_selector 'a', text: '推薦図書に追加する'
+        expect do
+          find('a', text: '推薦図書に追加する').click
+          sleep 3
+        end.to change(user.books, :count).by(1)
+        expect(page).not_to have_selector 'a', text: '推薦図書に追加する'
+        expect(page).to have_link 'アウトプットを投稿する'
       end
     end
   end

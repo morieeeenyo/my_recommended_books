@@ -295,23 +295,22 @@ RSpec.describe 'Users', type: :system do
         create_list(:user_book, 2, user_id: user.id)
         sleep 5
         # formオブジェクトではcreate_listが使えないのでちょっと回りくどく同じデータを複数個生成している
-        outputs = []
         3.times do
           output = build(:output, user_id: user.id, book_id: user.books[0].id)
           output.save
-          outputs.push(output)
         end
         sign_in(user) # ログインする
         find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'
         sleep 10
-        expect(all('.book-list-item').length).to eq 2
+        expect(all('.book-list-item').length).to eq user.books.length
         all('a', text: 'アウトプット')[0].click
         expect(page).to have_content "『#{user.books[0].title}』のアウトプット"
         sleep 5
         # アウトプットのリストに1個しかない要素
-        expect(all('.output-list-header').length).to eq 3
+        expect(all('.output-list-header').length).to eq user.books[0].awarenesses.length
+        expect(all('.awareness')[0].text).to eq user.books[0].awarenesses[-1].content # 一番新しいものが一番上に来る
       end
     end
 

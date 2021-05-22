@@ -98,14 +98,14 @@ class Index extends React.Component {
       } 
 
       // 書籍投稿ボタンはログアウト時は押せないようにする
-      if (newBookLink.getAttribute('style') == 'display: block;') {
+      if (newBookLink && newBookLink.getAttribute('style') == 'display: block;') {
         newBookLink.setAttribute('style', 'display: none;')
       }
     } 
 
     // 書籍投稿ボタンが非表示の場合表示する
     // else文だとうまく作動しないためauthTokenがあるかどうかで分ける
-    if (authToken) {
+    if (authToken && newBookLink) {
       if (newBookLink.getAttribute('style') == 'display: none;') {
         newBookLink.setAttribute('style', 'display: block;')
       }
@@ -149,31 +149,33 @@ class Index extends React.Component {
                 <img src={book.image_url}/>
                 <p className="book-title">{book.title}</p>
                 <p className="book-author">{book.author}</p>
-                {/* <Link to={{pathname: "/books/" + book.isbn + "/outpus", state: {book: book}}}>アウトプット一覧</Link> */}
+                <Link to={{pathname: "/books/" + book.isbn + "/outputs", state: {book: book}}}>アウトプット一覧</Link>
               </li> //returnがないと表示できない
               ) 
             })} 
           </BookList>
-          <ReactPaginate
-          pageCount={Math.ceil(this.state.books.length / this.state.perPage)} //総ページ数。今回は一覧表示したいデータ数 / 1ページあたりの表示数としてます。
-          marginPagesDisplayed={2} //先頭と末尾に表示するページの数。今回は2としたので1,2…今いるページの前後…後ろから2番目, 1番目 のように表示されます。
-          pageRangeDisplayed={5} //上記の「今いるページの前後」の番号をいくつ表示させるかを決めます。
-          onPageChange={this.pageChange} //ページネーションのリンクをクリックしたときのイベント(詳しくは下で解説します)
-          containerClassName='pagination' //ページネーションリンクの親要素のクラス名
-          pageClassName='page-item' //各子要素(li要素)のクラス名
-          pageLinkClassName='page-link' //ページネーションのリンクのクラス名
-          activeClassName='active' //今いるページ番号のクラス名。今いるページの番号だけ太字にしたりできます 
-          previousLabel='<' //前のページ番号に戻すリンクのテキスト
-          nextLabel='>' //次のページに進むボタンのテキスト
-          previousClassName='page-item' // '<'の親要素(li)のクラス名
-          nextClassName='page-item' //'>'の親要素(li)のクラス名
-          previousLinkClassName='page-link'  //'<'のリンクのクラス名
-          nextLinkClassName='page-link' //'>'のリンクのクラス名
-          disabledClassName='disabled' //先頭 or 末尾に行ったときにそれ以上戻れ(進め)なくするためのクラス
-          breakLabel='...' // ページがたくさんあるときに表示しない番号に当たる部分をどう表示するか
-          breakClassName='page-item' // 上記の「…」のクラス名
-          breakLinkClassName='page-link' // 「…」の中のリンクにつけるクラス
-          />
+          {this.state.books.length > 0 &&
+            <ReactPaginate
+            pageCount={Math.ceil(this.state.books.length / this.state.perPage)} //総ページ数。今回は一覧表示したいデータ数 / 1ページあたりの表示数としてます。
+            marginPagesDisplayed={2} //先頭と末尾に表示するページの数。今回は2としたので1,2…今いるページの前後…後ろから2番目, 1番目 のように表示されます。
+            pageRangeDisplayed={5} //上記の「今いるページの前後」の番号をいくつ表示させるかを決めます。
+            onPageChange={this.pageChange} //ページネーションのリンクをクリックしたときのイベント(詳しくは下で解説します)
+            containerClassName='pagination' //ページネーションリンクの親要素のクラス名
+            pageClassName='page-item' //各子要素(li要素)のクラス名
+            pageLinkClassName='page-link' //ページネーションのリンクのクラス名
+            activeClassName='active' //今いるページ番号のクラス名。今いるページの番号だけ太字にしたりできます 
+            previousLabel='<' //前のページ番号に戻すリンクのテキスト
+            nextLabel='>' //次のページに進むボタンのテキスト
+            previousClassName='page-item' // '<'の親要素(li)のクラス名
+            nextClassName='page-item' //'>'の親要素(li)のクラス名
+            previousLinkClassName='page-link'  //'<'のリンクのクラス名
+            nextLinkClassName='page-link' //'>'のリンクのクラス名
+            disabledClassName='disabled' //先頭 or 末尾に行ったときにそれ以上戻れ(進め)なくするためのクラス
+            breakLabel='...' // ページがたくさんあるときに表示しない番号に当たる部分をどう表示するか
+            breakClassName='page-item' // 上記の「…」のクラス名
+            breakLinkClassName='page-link' // 「…」の中のリンクにつけるクラス
+            />
+          }
         </div>
       </BookIndexContainer>
      )

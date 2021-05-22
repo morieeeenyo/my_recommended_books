@@ -10,22 +10,21 @@ module Api
       def index
         @book = Book.find_by(isbn: params[:book_isbn])
         # ログアウト時
-        unless @user 
-          @outputs = Output.fetch_resources(@book.id, nil, false)
-          return render json: { outputs: @outputs }
+        unless @user
+          @my_outputs, @outputs = Output.fetch_resources(@book.id, nil)
+          # フロントでの条件分岐をへらすためにmy_outputsも返却。フロント側ではuserがいるかどうかで条件分岐
+          return render json: { myoutputs: @my_outputs, outputs: @outputs }
         end
-        
+
+        # ユーザーが書籍を投稿済みかどうか
         @book_is_posted_by_user = UserBook.find_by(book_id: @book.id, user_id: @user.id)
 
-        if @book_is_posted_by_user
-          # ログインしていて推薦図書に追加済み
-          @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id, false) # 3つめの引数はマイページにいるかどうか
-          render json: { myoutputs: @my_outputs, outputs: @outputs } # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
-        else
-          # ログインしているが推薦図書には追加していない
-          @outputs = Output.fetch_resources(@book.id, nil, false)
-          render json: { outputs: @outputs, posted: false } # Tdo:フロント側で「推薦図書に追加」というボタンを作る
-        end
+        # アウトプット一覧を取得
+        @my_outputs, @outputs = Output.fetch_resources(@book.id, @user.id)
+        # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
+        # postedは書籍をユーザーが投稿済みかどうかを管理しているキー
+        # 書籍が投稿済みの場合アウトプット投稿ボタンが、投稿済みではない場合推薦図書追加ボタンが表示される
+        render json: { myoutputs: @my_outputs, outputs: @outputs, user: @user, posted: @book_is_posted_by_user.present? }
       end
 
       def create
@@ -75,7 +74,7 @@ module Api
         return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
 
         if !Rails.env.test? # rubocop:disable Style/NegatedIf, Style/GuardClause
-          book = Book.find(params[:book_id])
+          book = Book.find_by(isbn: params[:book_isbn])
           @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る(一通り出来上がってから)
         end
       end

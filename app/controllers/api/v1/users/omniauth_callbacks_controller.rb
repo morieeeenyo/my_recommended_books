@@ -63,6 +63,7 @@ module Api
 
         def set_random_password
           # パスワードのバリデーション突破のためにオーバーライド
+          # パスワードは英大文字・英小文字・数字をすべて含む必要あり
           random_password = SecureRandom.alphanumeric(10) + [*'A'..'Z'].sample(1).join + [*'a'..'z'].sample(1).join + [*'0'..'9'].sample(1).join
           @resource.password = random_password
           @resource.password_confirmation = random_password
