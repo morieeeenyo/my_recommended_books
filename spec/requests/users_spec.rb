@@ -199,7 +199,7 @@ RSpec.describe 'Users', type: :request do
       it 'ヘッダーにuidがあれば正しく書籍情報がレスポンスとして返却される' do
         get api_v1_user_mypage_path, headers: headers
         json = JSON.parse(response.body)
-        expect(json['books'][0]['title']).to eq user_book.book.title # booksは配列なので添字を使う
+        expect(json['books'][-1]['title']).to eq user_book.book.title # booksは配列なので添字を使う
       end
 
       it 'ヘッダーにuidがあれば正しくユーザー情報がレスポンスとして返却される' do
