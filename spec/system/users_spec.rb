@@ -285,20 +285,24 @@ RSpec.describe 'Users', type: :system do
         end.to change(user.books, :count).by(1) # ユーザーと紐付いているかどうかも検証
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
         click_link '推薦図書一覧'
-        expect(all('.book-list-item > .book-title')[-1].text).not_to eq 'test' # テストデータではない、つまり新しく追加したデータは一番うしろに追加される
+        expect(all('.book-list-item > .book-title')[0].text).not_to eq 'test' # テストデータではない、つまり新しく追加したデータは一番うしろに追加される
       end
     end
 
     context 'アウトプットが投稿されている時' do
-      it 'アウトプットが投稿されていればマイページでアウトプット一覧が参照できる' do
+      before do
+        # 事前準備なのでbeforeに移した
         user.save
         create_list(:user_book, 2, user_id: user.id)
         sleep 5
         # formオブジェクトではcreate_listが使えないのでちょっと回りくどく同じデータを複数個生成している
         3.times do
-          output = build(:output, user_id: user.id, book_id: user.books[0].id)
+          output = build(:output, user_id: user.id, book_id: user.books[-1].id)
           output.save
-        end
+        end  
+      end
+      
+      it 'アウトプットが投稿されていればマイページでアウトプット一覧が参照できる' do
         sign_in(user) # ログインする
         find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
@@ -306,11 +310,11 @@ RSpec.describe 'Users', type: :system do
         sleep 10
         expect(all('.book-list-item').length).to eq user.books.length
         all('a', text: 'アウトプット')[0].click
-        expect(page).to have_content "『#{user.books[0].title}』のアウトプット"
+        expect(page).to have_content "『#{user.books[-1].title}』のアウトプット"
         sleep 5
         # アウトプットのリストに1個しかない要素
-        expect(all('.output-list-header').length).to eq user.books[0].awarenesses.length
-        expect(all('.awareness')[0].text).to eq user.books[0].awarenesses[-1].content # 一番新しいものが一番上に来る
+        expect(all('.output-list-header').length).to eq user.books[-1].awarenesses.length
+        expect(all('.awareness')[0].text).to eq user.books[-1].awarenesses[-1].content # 一番新しいものが一番上に来る
       end
     end
 
