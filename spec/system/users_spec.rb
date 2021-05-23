@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Users', type: :system do
   let(:user) { build(:user) }
   let(:book) { build(:book) }
+  let(:another_book) { build(:book) }
 
   describe '新規登録' do
     before do
@@ -260,17 +261,27 @@ RSpec.describe 'Users', type: :system do
     end
 
     context '推薦図書一覧の表示に成功' do
-      it 'マイページから推薦図書一覧をクリックすると投稿した推薦図書が一覧で表示されている。新しく推薦図書を追加すると一番下に追加される' do
+      before do
         user.save
-        create_list(:user_book, 2, user_id: user.id)
+        # booksテーブルのデータとしてはanother_bookが新しいが、userがbooksに追加した順としてはbookが新しい
+        book.save
+        another_book.save
+        user.books.push(another_book, book)
         sleep 5
         sign_in(user) # ログインする
         find('.header-link', text: 'マイページ').click
         expect(page).to have_content "#{user.nickname}さんのマイページ"
-        click_link '推薦図書一覧'
+        click_link '推薦図書一覧'  
         sleep 5
+      end
+      
+      it 'マイページから推薦図書一覧をクリックすると投稿した推薦図書がユーザーが推薦図書に追加した順で表示されている。' do
         expect(all('.book-list-item').length).to eq 2
-        sleep 5
+        expect(all('.book-title')[0].text).to eq book.title
+        expect(all('.book-title')[1].text).to eq another_book.title
+      end
+      
+      it "新しく推薦図書を追加すると一番下に追加される" do
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'keyword',	with: 'test'
@@ -287,6 +298,7 @@ RSpec.describe 'Users', type: :system do
         click_link '推薦図書一覧'
         expect(all('.book-list-item > .book-title')[0].text).not_to eq 'test' # テストデータではない、つまり新しく追加したデータは一番うしろに追加される
       end
+      
     end
 
     context 'アウトプットが投稿されている時' do
