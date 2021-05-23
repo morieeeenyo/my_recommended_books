@@ -134,7 +134,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
       find('.header-link', text: 'マイページ').click
       expect(page).to have_content "#{user.nickname}さんのマイページ"
       find('a', text: '推薦図書一覧').click
-      sleep 10
+      sleep 15
       all('a', text: 'アウトプット')[0].click
       sleep 10
       find('a', text: 'アウトプットを投稿する').click
@@ -151,7 +151,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
           click_button 'この内容で投稿する'
           sleep 3
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) # ユーザーや書籍との紐付も同時に検証する
-        expect(page).to have_content "『#{user.books[0].title}』のアウトプット"
+        expect(page).to have_content "『#{user.books[-1].title}』のアウトプット"
         sleep 5
         expect(all('.output-list-header').length).to eq 1 # アウトプットは1件
         expect(all('.action-plan > p').length).to eq 1 # アクションプランは1件
@@ -169,7 +169,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
           click_button 'この内容で投稿する'
           sleep 3
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(2)
-        expect(page).to have_content "『#{user.books[0].title}』のアウトプット"
+        expect(page).to have_content "『#{user.books[-1].title}』のアウトプット"
         sleep 5
         expect(all('.output-list-header').length).to eq 1 # アウトプットは1件
         expect(all('.action-plan > p').length).to eq 2 # アクションプランは2件
@@ -189,7 +189,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
           click_button 'この内容で投稿する'
           sleep 3
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(3)
-        expect(page).to have_content "『#{user.books[0].title}』のアウトプット"
+        expect(page).to have_content "『#{user.books[-1].title}』のアウトプット"
         sleep 5
         expect(all('.output-list-header').length).to eq 1 # アウトプットは1件
         expect(all('.action-plan > p').length).to eq 3 # アクションプランは3件
