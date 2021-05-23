@@ -12,9 +12,9 @@ module Api
         if @user.avatar.attached? # 添付されていないときにエラーが出るのを防ぐ
           avatar_path = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}),
                                                                                       only_path: true)
-          render json: { user: @user, books: @user.books.order('created_at DESC'), avatar: avatar_path }
+          render json: { user: @user, books: @user.books.includes(:user_books).order('user_books.updated_at DESC'), avatar: avatar_path }
         else
-          render json: { user: @user, books: @user.books.order('created_at DESC') }
+          render json: { user: @user, books: @user.books.includes(:user_books).order('user_books.updated_at DESC') }
         end
       end
 
