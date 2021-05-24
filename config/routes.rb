@@ -18,5 +18,9 @@ Rails.application.routes.draw do
     end
   end
   root 'homes#index'
+  get '/welcome', to: 'homes#index'
+  get '/*books', to: 'homes#index'
+  get '/*mypage', to: 'homes#index'
+  get '/*users', to: 'homes#index'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
