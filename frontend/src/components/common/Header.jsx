@@ -13,6 +13,9 @@ import { Link } from "react-router-dom";
 // Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
 import Cookies from 'universal-cookie';
 
+//axiosの読み込み
+import axios from 'axios';
+
 
 class Header extends React.Component {
   constructor(){
@@ -22,7 +25,7 @@ class Header extends React.Component {
   render () {
     const cookies = new Cookies()
     const authToken = cookies.get("authToken")
-    if (authToken == undefined || !authToken) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
+    if (authToken == undefined || !authToken || !authToken['uid']) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
     return (
           <HeaderContainer>
             {this.props.children}
