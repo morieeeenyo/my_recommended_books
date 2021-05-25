@@ -17,7 +17,10 @@ Rails.application.routes.draw do
       get '/mypage/books/:book_isbn/outputs', to: "users#my_outputs", as: :user_mypage_book_outputs # 上のparams[:isbn]に合わせるためにURL変更
     end
   end
+  get '*path', to: "homes#index", constraints: lambda { |req|
+    # 'rails/active_storage'が含まれているパスはリダイレクト対象外にする(マイページでの画像の表示に使用)
+    req.path.exclude? 'rails/active_storage'
+  }
   root 'homes#index'
-  match '*path', to: 'homes#index', via: :get
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
