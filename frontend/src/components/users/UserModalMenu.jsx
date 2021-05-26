@@ -18,7 +18,7 @@ function UserModalMenu(props) {
         <ModalMenuContent onClick={(e) => e.stopPropagation()}> 
         {/* モーダル内部をクリックしたときは閉じない */}
           <p>{location.state.content}</p>
-          <Link to={{pathname: "/users/"+ params.content + "/form", state: {content: location.state.content, show: location.state.show}}} className="email-button">
+          <Link to={{pathname: "/users/"+ params.content + "/form", state: {content: location.state.content, show: location.state.show, isSignedIn: props.isSignedIn}}} className="email-button">
             <i className="fas fa-envelope"></i>
             <span>{location.state.content} with Email</span>
           </Link>

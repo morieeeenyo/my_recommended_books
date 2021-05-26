@@ -22,7 +22,6 @@ class MyOutputs extends React.Component {
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   getCsrfToken() {
@@ -41,23 +40,8 @@ class MyOutputs extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
-  }
-
   componentDidMount() {
     this.setAxiosDefaults();
-    this.userAuthentification()
     //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
     axios
       .get('/api/v1/mypage/books/' + this.props.location.state.book.isbn + '/outputs')
