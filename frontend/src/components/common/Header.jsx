@@ -20,44 +20,12 @@ import axios from 'axios';
 class Header extends React.Component {
   constructor(){
     super();
-    this.state = {
-      isSignedIn: false
-    }
-  }
-
-  componentDidMount() {
-    const cookies = new Cookies()
-    const authToken = cookies.get("authToken")
-    if (!this.state.isSignedIn && authToken) {
-      this.setState({
-        isSignedIn: true
-      })
-    }
-  }
-
-  componentDidUpdate() {
-    const cookies = new Cookies()
-    const authToken = cookies.get("authToken")
-    console.log(authToken)
-    if (!authToken || authToken == null) {
-      if (this.state.isSignedIn) {
-          this.setState({
-            isSignedIn: false
-          })
-          console.log(authToken)
-        } 
-    } else {
-      if (!this.state.isSignedIn) {
-        this.setState({
-          isSignedIn: true
-        })
-        console.log(authToken)
-      }
-    }
   }
 
   render () {
-    if (this.state.isSignedIn == false) { 
+    const cookies = new Cookies()
+    const authToken = cookies.get("authToken")
+    if (authToken == undefined || !authToken || !authToken['uid']) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
     return (
           <HeaderContainer>
             {this.props.children}
@@ -68,10 +36,10 @@ class Header extends React.Component {
             </HeaderTitle>
             <HeaderRight>
               {/* welcomeページのリンクと重複し、テストでエラーが出るためクラスを付与 */}
-              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}} className="header-link" isSignedIn={this.state.isSignedIn}>
+              <Link to={{pathname: "/users/sign_up/menu", state: {content: 'SignUp', show: true}}} className="header-link">
                 新規登録
               </Link>
-              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}} className="header-link" isSignedIn={this.state.isSignedIn}>
+              <Link to={{pathname: "/users/sign_in/menu", state: {content: 'SignIn', show: true}}} className="header-link">
                 ログイン
               </Link>
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
@@ -89,7 +57,7 @@ class Header extends React.Component {
           </Link>
         </HeaderTitle>
         <HeaderRight>
-        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true, isSignedIn: this.state.isSignedIn}}} className="header-link">
+        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}} className="header-link">
             ログアウト
           </Link>
           <Link to="/mypage" id="link_to_mypage" className="header-link">

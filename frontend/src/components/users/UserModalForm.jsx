@@ -114,6 +114,7 @@ class UserModalForm extends React.Component {
     this.updateCsrfToken = this.updateCsrfToken.bind(this)
     this.resetErrorMessages = this.resetErrorMessages.bind(this)
     this.authenticatedUser = this.authenticatedUser.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   getCsrfToken() {
@@ -142,11 +143,21 @@ class UserModalForm extends React.Component {
     axios.defaults.headers.common['client'] = client;
     axios.defaults.headers.common['access-token'] = accessToken;
     const cookies = new Cookies();
-    cookies.set(
-      'authToken', 
-    JSON.stringify(uid + client + accessToken), 
-    { path: '/' , maxAge: 60 * 60, secure: true, sameSite: 'Lax'}
-    );
+    cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60, secure: true, sameSite: 'Lax'});
+  }
+
+  userAuthentification() {
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
+    } else {
+      return null
+    }
   }
 
   formSubmit(e) {
@@ -199,6 +210,7 @@ class UserModalForm extends React.Component {
 
     if (this.props.location.state.content == 'SignOut') {
       this.setAxiosDefaults();
+      this.userAuthentification()
       axios
       .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
       .then(response => {
@@ -206,11 +218,12 @@ class UserModalForm extends React.Component {
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //ログアウト時はこれらはundefinedになる
         const cookies = new Cookies();
         cookies.remove('authToken')
+        console.log(cookies.get('authToken'))
         this.setState({
           user: {},
           errors: []
         })
-        this.props.history.push('/welcome')
+        this.props.history.push('/')
         return response
       })
       .catch(error => {
@@ -270,12 +283,13 @@ class UserModalForm extends React.Component {
   }
 
   componentDidMount(){
-    if (!this.props.location.state.isSignedIn) {
-      if (location.pathname == '/users/sign_out/form') {
-        alert('ユーザーがログインしていません')
-        this.props.history.push('/')
-      }
-    } else {
+    const authToken = this.userAuthentification()
+    if (!authToken && location.pathname == '/users/sign_out/form') {
+      alert('ユーザーがログインしていません')
+      this.props.history.push('/')
+    }
+
+    if (authToken) {
       if (location.pathname == '/users/sign_in/form' || location.pathname == '/users/sign_up/form') {
         alert('ログイン・新規登録するにはログアウトしてください')
         this.props.history.push('/')

@@ -138,6 +138,7 @@ class OutputModal extends React.Component {
     // 以下は後で実装するメソッド
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
     this.closeOutputModal = this.closeOutputModal.bind(this)
     this.updateForm = this.updateForm.bind(this)
     this.postOutput = this.postOutput.bind(this)
@@ -156,6 +157,20 @@ class OutputModal extends React.Component {
       )
     }
   };
+
+  userAuthentification() {
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
+    } else {
+      return null
+    }
+  }
 
   setAxiosDefaults() {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
@@ -202,6 +217,7 @@ class OutputModal extends React.Component {
 
   postOutput(e) {
     e.preventDefault()
+    this.userAuthentification()
     this.setAxiosDefaults();
     axios
     .post('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs', {output: this.state.output, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter} )

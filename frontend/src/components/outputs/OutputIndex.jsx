@@ -29,6 +29,7 @@ class OutputIndex extends React.Component {
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
     this.postBook = this.postBook.bind(this)
   }
 
@@ -48,7 +49,22 @@ class OutputIndex extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
+  userAuthentification() {
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
+    } else {
+      return null
+    }
+  }
+
   componentDidMount() {
+    this.userAuthentification()
     //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
     axios
       .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
@@ -81,6 +97,7 @@ class OutputIndex extends React.Component {
 
   postBook(e) {
     e.preventDefault()
+    this.userAuthentification()
     this.setAxiosDefaults();
     let to_be_shared_on_twitter = false
     // ユーザーがSNS認証済みの場合

@@ -109,6 +109,7 @@ class NewBookModal extends React.Component {
     this.searchBook = this.searchBook.bind(this)
     this.updateForm = this.updateForm.bind(this)
     this.postBook = this.postBook.bind(this)
+    this.userAuthentification = this.userAuthentification.bind(this)
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.selectQuery = this.selectQuery.bind(this)
@@ -170,7 +171,7 @@ class NewBookModal extends React.Component {
     e.preventDefault()
     const keyword = this.state.keyword
     // ユーザー認証とcsrf-tokenの準備
-    ()
+    this.userAuthentification()
     this.setAxiosDefaults();
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
@@ -228,7 +229,7 @@ class NewBookModal extends React.Component {
 
   postBook(e) {
     e.preventDefault()
-    ()
+    this.userAuthentification()
     this.setAxiosDefaults();
     axios
     .post('/api/v1/books', {book: this.state.book, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter})
@@ -247,6 +248,21 @@ class NewBookModal extends React.Component {
         })
       }
     })
+  }
+
+
+  userAuthentification() {
+    const cookies = new Cookies();
+    const authToken = cookies.get("authToken");
+    // uid, client, access-tokenの3つが揃っているか検証
+    if (authToken) { 
+      axios.defaults.headers.common['uid'] = authToken['uid']
+      axios.defaults.headers.common['client']  = authToken['client']
+      axios.defaults.headers.common['access-token']  = authToken['access-token']
+      return authToken
+    } else {
+      return null
+    }
   }
 
   componentDidMount(){
