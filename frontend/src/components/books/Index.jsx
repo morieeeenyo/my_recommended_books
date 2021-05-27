@@ -89,14 +89,13 @@ class Index extends React.Component {
   componentDidMount() {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
-    let newBookLink = document.getElementById('new_book_link')
     if (authToken == undefined || !authToken) {
       // なんかundefinedも判定しないとエラーになる
       if (location.pathname === "/") {
         // ルートパスアクセス時、ログインしていなければwelcomeページへ
         this.props.history.push('/welcome')
       } 
-      } 
+    } 
     
     axios
     .get('/api/v1/books')
