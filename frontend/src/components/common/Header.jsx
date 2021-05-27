@@ -18,15 +18,33 @@ import axios from 'axios';
 
 
 class Header extends React.Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
   }
 
   render () {
-    const cookies = new Cookies()
-    const authToken = cookies.get("authToken")
-    if (authToken == undefined || !authToken) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
+    if (this.props.isSignedIn) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
     return (
+          // 以下はログインしているときのみ表示
+        <HeaderContainer>
+          {this.props.children}
+          <HeaderTitle>
+            <Link to="/">
+              <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+            </Link>
+          </HeaderTitle>
+          <HeaderRight>
+          <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}} className="header-link">
+              ログアウト
+            </Link>
+            <Link to="/mypage" id="link_to_mypage" className="header-link">
+              マイページ
+            </Link>
+          </HeaderRight>
+        </HeaderContainer>
+        )  
+      } else {
+      return (
           <HeaderContainer>
             {this.props.children}
             <HeaderTitle>
@@ -45,26 +63,6 @@ class Header extends React.Component {
                 {/* ゲストユーザーログインは別途フロント実装のブランチで実装予定  */}
             </HeaderRight>
         </HeaderContainer>
-      )  
-    } else {
-    return (
-         // 以下はログインしているときのみ表示
-      <HeaderContainer>
-        {this.props.children}
-        <HeaderTitle>
-          <Link to="/">
-            <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
-          </Link>
-        </HeaderTitle>
-        <HeaderRight>
-        <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}} className="header-link">
-            ログアウト
-          </Link>
-          <Link to="/mypage" id="link_to_mypage" className="header-link">
-            マイページ
-          </Link>
-        </HeaderRight>
-      </HeaderContainer>
       )
     }
   } 

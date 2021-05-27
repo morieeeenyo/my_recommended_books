@@ -4,9 +4,6 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link, withRouter } from "react-router-dom";
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
 // axiosの読み込み
 import axios from 'axios';
 
@@ -87,16 +84,13 @@ class Index extends React.Component {
   }
     
   componentDidMount() {
-    const cookies = new Cookies();
-    let authToken = cookies.get("authToken");
-    if (authToken == undefined || !authToken) {
+    if (!this.props.isSignedIn) {
       // なんかundefinedも判定しないとエラーになる
       if (location.pathname === "/") {
         // ルートパスアクセス時、ログインしていなければwelcomeページへ
         this.props.history.push('/welcome')
       } 
     } 
-    
     axios
     .get('/api/v1/books')
     .then(response => {

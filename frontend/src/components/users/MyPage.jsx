@@ -59,7 +59,6 @@ class MyPage extends React.Component {
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   getCsrfToken() {
@@ -78,24 +77,9 @@ class MyPage extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
-  }
-
   componentDidMount() {
     this.setAxiosDefaults();
-    const authToken = this.userAuthentification()
-    if (!authToken) {
+    if(!this.props.isSignedIn) { 
       // マイページからサインアウトした場合にはここを経由してトップページに戻る
       alert('ユーザーがサインアウトしました。')
       this.props.history.push("/")

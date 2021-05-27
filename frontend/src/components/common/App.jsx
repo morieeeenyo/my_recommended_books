@@ -87,19 +87,19 @@ class App extends React.Component {
     return (
       <div className="container">
         <Router>
-          <Header>
+          <Header isSignedIn={this.state.isSignedIn}>
             <Route path="/users/:content/menu">
               <UserModalMenu>
               </UserModalMenu>
             </Route>
             <Route exact path="/users/:content/form">
-              <UserModalForm></UserModalForm>
+              <UserModalForm isSignedIn={this.state.isSignedIn}></UserModalForm>
             </Route>
           </Header>
           <Container>
             <Switch>
               <Route exact path='/'>
-                <Index>
+                <Index isSignedIn={this.state.isSignedIn}>
                 </Index>
               </Route>
               <Route exact path='/welcome'>
@@ -108,15 +108,15 @@ class App extends React.Component {
               </Route>
               {/* ログアウト時に一覧を表示するために/booksでもアクセスできるようにしておく */}
               <Route exact path='/books'>
-                <Index>
+                <Index isSignedIn={this.state.isSignedIn}>
                 </Index>
               </Route>
               <Route exact path='/books/:isbn/outputs' key={'outputs'}>
-                <OutputIndex>
+                <OutputIndex isSignedIn={this.state.isSignedIn}>
                 </OutputIndex>
               </Route>
               <Route path="/mypage" key={'mypage'}>
-                <MyPage>
+                <MyPage isSignedIn={this.state.isSignedIn}>
                   <Route exact path="/mypage/books">
                     <MyRecommendedBooks>
                     </MyRecommendedBooks>
@@ -125,21 +125,21 @@ class App extends React.Component {
                     <AccountUpdateModal></AccountUpdateModal>
                   </Route>
                   <Route exact path="/mypage/:content/edit" key={'edit'}>
-                    <AccountUpdateForm></AccountUpdateForm>
+                    <AccountUpdateForm isSignedIn={this.state.isSignedIn}></AccountUpdateForm>
                   </Route>
                   <Route path="/mypage/books/:book_isbn/outputs" key={'myoutputs'}>
-                    <MyOutputs></MyOutputs>
+                    <MyOutputs isSignedIn={this.state.isSignedIn}></MyOutputs>
                   </Route>
                 </MyPage>
               </Route>
             </Switch>
           </Container>
           <Route exact path="/books/new">
-            <NewBookModal>
+            <NewBookModal isSignedIn={this.state.isSignedIn}>
             </NewBookModal>
           </Route>
           <Route exact path="/books/:book_isbn/outputs/new">
-            <OutputModal></OutputModal>
+            <OutputModal isSignedIn={this.state.isSignedIn}></OutputModal>
           </Route>
         </Router>
       </div>

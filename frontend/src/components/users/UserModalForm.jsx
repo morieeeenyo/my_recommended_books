@@ -114,7 +114,6 @@ class UserModalForm extends React.Component {
     this.updateCsrfToken = this.updateCsrfToken.bind(this)
     this.resetErrorMessages = this.resetErrorMessages.bind(this)
     this.authenticatedUser = this.authenticatedUser.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   getCsrfToken() {
@@ -144,20 +143,6 @@ class UserModalForm extends React.Component {
     axios.defaults.headers.common['access-token'] = accessToken;
     const cookies = new Cookies();
     cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60, secure: true, sameSite: 'Lax'});
-  }
-
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
   }
 
   formSubmit(e) {
@@ -210,7 +195,7 @@ class UserModalForm extends React.Component {
 
     if (this.props.location.state.content == 'SignOut') {
       this.setAxiosDefaults();
-      this.userAuthentification()
+      if(!this.props.isSignedIn) { return null }
       axios
       .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
       .then(response => {
@@ -283,8 +268,7 @@ class UserModalForm extends React.Component {
   }
 
   componentDidMount(){
-    const authToken = this.userAuthentification()
-    if (!authToken && location.pathname == '/users/sign_out/form') {
+    if (!this.props.isSignedIn && location.pathname == '/users/sign_out/form') {
       alert('ユーザーがログインしていません')
       this.props.history.push('/')
     }
