@@ -30,6 +30,9 @@ class App extends React.Component {
 
   constructor(props){
     super(props);
+    this.state = {
+      isSignedIn: false
+    }
     this.getCsrfToken = this.getCsrfToken.bind(this)
   }
 
@@ -50,6 +53,7 @@ class App extends React.Component {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
     if (authToken) { 
+      // omiauth認証時の挙動
       if (cookies.get('first_session')) {
         // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
@@ -59,8 +63,24 @@ class App extends React.Component {
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
+      this.setState({
+        isSignedIn: true
+      })
     } 
+  }
+
+  componentDidUpdate() {
+    const cookies = new Cookies();
+    let authToken = cookies.get("authToken");
+    if (authToken != undefined) {
+      if (!authToken['uid']) {
+        // ログアウト時の挙動。ログアウト時に強制でリロードさせてstateを更新させる。
+        cookies.remove('authToken')
+        this.setState({
+          isSignedIn: false
+        })
+      }
+    }
   }
 
   render () {

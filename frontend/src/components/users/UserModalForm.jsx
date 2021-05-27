@@ -223,6 +223,7 @@ class UserModalForm extends React.Component {
           errors: []
         })
         this.props.history.push('/')
+        window.location.reload(true)
         return response
       })
       .catch(error => {
