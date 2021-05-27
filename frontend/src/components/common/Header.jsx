@@ -25,7 +25,7 @@ class Header extends React.Component {
   render () {
     const cookies = new Cookies()
     const authToken = cookies.get("authToken")
-    if (authToken == undefined || !authToken || !authToken['uid']) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
+    if (authToken == undefined || !authToken) { //undefinedのときも判定することで初回リロード時のエラーを防ぐ
     return (
           <HeaderContainer>
             {this.props.children}

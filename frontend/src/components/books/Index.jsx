@@ -96,33 +96,20 @@ class Index extends React.Component {
         // ルートパスアクセス時、ログインしていなければwelcomeページへ
         this.props.history.push('/welcome')
       } 
-
-      // 書籍投稿ボタンはログアウト時は押せないようにする
-      if (newBookLink && newBookLink.getAttribute('style') == 'display: block;') {
-        newBookLink.setAttribute('style', 'display: none;')
-      }
-    } 
-
-    // 書籍投稿ボタンが非表示の場合表示する
-    // else文だとうまく作動しないためauthTokenがあるかどうかで分ける
-    if (authToken && newBookLink) {
-      if (newBookLink.getAttribute('style') == 'display: none;') {
-        newBookLink.setAttribute('style', 'display: block;')
-      }
-    }
-
+      } 
+    
     axios
     .get('/api/v1/books')
     .then(response => {
-        this.setState({
-          books: response.data.books
-        })
+      this.setState({
+        books: response.data.books
+      })
     })
     .catch(error => {
       alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
     })
   }
-
+  
   render () {
     return (
       <BookIndexContainer>

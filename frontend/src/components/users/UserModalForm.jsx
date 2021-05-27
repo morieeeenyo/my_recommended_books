@@ -218,7 +218,6 @@ class UserModalForm extends React.Component {
         this.authenticatedUser(response.headers['uid'], response.headers['client'], response.headers['access-token']) //ログアウト時はこれらはundefinedになる
         const cookies = new Cookies();
         cookies.remove('authToken')
-        console.log(cookies.get('authToken'))
         this.setState({
           user: {},
           errors: []
