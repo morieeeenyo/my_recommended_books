@@ -160,7 +160,7 @@ class UserModalForm extends React.Component {
           errors: []
         })
         this.props.history.push('/books')
-        window.location.reload(true) // 強制的にリロードさせることでヘッダーのstateを更新できるようにする
+        window.location.reload(false) // 強制的にリロードさせることでヘッダーのstateを更新できるようにする
         return response
       })
       .catch(error => {
@@ -183,7 +183,7 @@ class UserModalForm extends React.Component {
           errors: []
         })
         this.props.history.push('/books')
-        window.location.reload(true) // 強制的にリロードさせることでヘッダーのstateを更新できるようにする
+        window.location.reload(false) // 強制的にリロードさせることでヘッダーのstateを更新できるようにする
         return response
       })
       .catch(error => {

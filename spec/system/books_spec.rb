@@ -12,6 +12,16 @@ RSpec.describe 'Books', type: :system do
 
   # memo: twitter認証関係はomniauth_users_specにて
 
+  # metaタグの設定を一時的にonにしてcsrf-tokenを取り出せるようにする。
+  # フロントではsetAxiosDefaultsメソッドでエラーが発生しなくなる
+  before do
+    ActionController::Base.allow_forgery_protection = true
+  end
+  
+  after do
+    ActionController::Base.allow_forgery_protection = false
+  end
+
   describe '書籍一覧' do
     before do
       @book_list = create_list(:book, 15)

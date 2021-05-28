@@ -85,6 +85,8 @@ class AccountUpdateForm extends React.Component {
 
   formSubmit(e) {
     e.preventDefault()
+    this.setAxiosDefaults();
+    if(!this.props.isSignedIn) { return null }
     // props.content,つまりモーダルの種類ごとに処理を分ける
     if (this.props.location.state.content == 'Edit Profile') {
       axios

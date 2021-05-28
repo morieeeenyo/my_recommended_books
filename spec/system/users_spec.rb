@@ -7,6 +7,16 @@ RSpec.describe 'Users', type: :system do
   let(:book) { build(:book) }
   let(:another_book) { build(:book) }
 
+  # metaタグの設定を一時的にonにしてcsrf-tokenを取り出せるようにする。
+  # フロントではsetAxiosDefaultsメソッドでエラーが発生しなくなる
+  before do
+    ActionController::Base.allow_forgery_protection = true
+  end
+  
+  after do
+    ActionController::Base.allow_forgery_protection = false
+  end
+
   describe '新規登録' do
     before do
       visit root_path
@@ -245,7 +255,7 @@ RSpec.describe 'Users', type: :system do
     context 'マイページの表示に成功' do
       it 'ログイン状態のユーザーがマイページにアクセスすると正しくマイページが読み込める' do
         sign_in(user) # ログインする
-        find('.header-link', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click      
         expect(page).to have_content "#{user.nickname}さんのマイページ"
       end
 
@@ -269,7 +279,7 @@ RSpec.describe 'Users', type: :system do
         user.books.push(another_book, book)
         sleep 5
         sign_in(user) # ログインする
-        find('.header-link', text: 'マイページ').click
+        find('.header-link', text: 'マイページ').click 
         expect(page).to have_content "#{user.nickname}さんのマイページ"
         click_link '推薦図書一覧'  
         sleep 5
@@ -285,9 +295,9 @@ RSpec.describe 'Users', type: :system do
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'keyword',	with: 'test'
-        sleep 1
+        sleep 3
         find('.search-button').click
-        sleep 2
+        sleep 5
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
         all('#search_result > div')[0].click
         expect do
