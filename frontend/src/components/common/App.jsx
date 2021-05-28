@@ -101,8 +101,11 @@ class App extends React.Component {
           <Container isSignedIn={this.state.isSignedIn}>
             <Switch>
               <Route exact path='/'>
-                <Index isSignedIn={this.state.isSignedIn}>
-                </Index>
+                {/* ログイン状態に応じて遷移先を変える */}
+                {this.state.isSignedIn 
+                  ? <Index isSignedIn={this.state.isSignedIn}></Index>
+                  : <Welcome></Welcome>
+                }
               </Route>
               <Route exact path='/welcome'>
                 <Welcome>
