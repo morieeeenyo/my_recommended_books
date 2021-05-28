@@ -13,28 +13,24 @@ class Container extends React.Component {
     this.newBookLinkDisplaySwitch = this.newBookLinkDisplaySwitch.bind(this)
   }
 
-  newBookLinkDisplaySwitch(authToken) {
+  newBookLinkDisplaySwitch() {
+    // 書籍投稿ボタンが非表示の場合表示する
     let newBookLink = document.getElementById('new_book_link')
-    if (authToken == undefined || !authToken) {
+    if (this.props.isSignedIn) {
+      if (newBookLink) {
+        if (newBookLink.getAttribute('style') == 'display: none;') {
+          newBookLink.setAttribute('style', 'display: block;')
+        }
+      }
+    } else {
       // 書籍投稿ボタンはログアウト時は押せないようにする
-      if (newBookLink && newBookLink.getAttribute('style') != 'display: none;') {
+      if (newBookLink.getAttribute('style') != 'display: none;') {
         newBookLink.setAttribute('style', 'display: none;')
       }
-    } 
-
-    // 書籍投稿ボタンが非表示の場合表示する
-    // else文だとうまく作動しないためauthTokenがあるかどうかで分ける
-    if (authToken && newBookLink) {
-      if (newBookLink.getAttribute('style') == 'display: none;') {
-        newBookLink.setAttribute('style', 'display: block;')
-      }
     }
-
   }
 
   componentDidMount() {
-    const cookies = new Cookies();
-    let authToken = cookies.get("authToken");
     setTimeout(this.newBookLinkDisplaySwitch, 50)
   }
 

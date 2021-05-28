@@ -31,7 +31,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      isSignedIn: false
+      isSignedIn: false // 今まで各ページでcookieを読み込んでいた仕様を変更
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
   }
@@ -63,6 +63,7 @@ class App extends React.Component {
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      // ログインしたときにはstateをtrueに変更
       this.setState({
         isSignedIn: true
       })
@@ -75,6 +76,7 @@ class App extends React.Component {
     if (authToken != undefined) {
       if (!authToken['uid']) {
         // ログアウト時の挙動。ログアウト時に強制でリロードさせてstateを更新させる。
+        // stateを変更することでヘッダーの表示を変え、ログアウト状態にする
         cookies.remove('authToken')
         this.setState({
           isSignedIn: false
@@ -96,7 +98,7 @@ class App extends React.Component {
               <UserModalForm isSignedIn={this.state.isSignedIn}></UserModalForm>
             </Route>
           </Header>
-          <Container>
+          <Container isSignedIn={this.state.isSignedIn}>
             <Switch>
               <Route exact path='/'>
                 <Index isSignedIn={this.state.isSignedIn}>
