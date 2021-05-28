@@ -49,7 +49,6 @@ class OutputIndex extends React.Component {
   };
 
   componentDidMount() {
-    if(!this.props.isSignedIn) { return null }
     //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
     axios
       .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
