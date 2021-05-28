@@ -268,12 +268,12 @@ class UserModalForm extends React.Component {
   }
 
   componentDidMount(){
-    if (!this.props.isSignedIn && location.pathname == '/users/sign_out/form') {
-      alert('ユーザーがログインしていません')
-      this.props.history.push('/')
-    }
-
-    if (authToken) {
+    if (!this.props.isSignedIn) {
+      if( location.pathname == '/users/sign_out/form') {
+       alert('ユーザーがログインしていません')
+       this.props.history.push('/')
+     }
+    } else {
       if (location.pathname == '/users/sign_in/form' || location.pathname == '/users/sign_up/form') {
         alert('ログイン・新規登録するにはログアウトしてください')
         this.props.history.push('/')
