@@ -84,13 +84,6 @@ class Index extends React.Component {
   }
     
   componentDidMount() {
-    if (!this.props.isSignedIn) {
-      // なんかundefinedも判定しないとエラーになる
-      if (location.pathname === "/") {
-        // ルートパスアクセス時、ログインしていなければwelcomeページへ
-        this.props.history.push('/welcome')
-      } 
-    } 
     axios
     .get('/api/v1/books')
     .then(response => {

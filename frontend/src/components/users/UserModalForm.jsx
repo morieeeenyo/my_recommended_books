@@ -159,7 +159,8 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.history.push('/')
+        this.props.history.push('/books')
+        window.location.reload(true)
         return response
       })
       .catch(error => {
@@ -181,7 +182,8 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.history.push('/')
+        this.props.history.push('/books')
+        window.location.reload(true)
         return response
       })
       .catch(error => {
@@ -207,7 +209,7 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.history.push('/')
+        this.props.history.push('/welcome')
         window.location.reload(true)
         return response
       })
