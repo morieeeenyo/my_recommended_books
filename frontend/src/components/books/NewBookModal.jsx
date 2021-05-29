@@ -14,9 +14,6 @@ import {UserFromContent} from "../users/UserModalForm.jsx"
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
 function SearchBookForm(props) {
   if (props.user.sns_token && props.user.sns_secret) {
   return (
@@ -101,7 +98,7 @@ class NewBookModal extends React.Component {
       errors: [],
       // Twitterにシェアするかどうかを決めるstate
       to_be_shared_on_twitter: false,
-      reloaded: false,
+      reloaded: false, // componentDidUpdateの無限ループを防ぐためにリロード済みかどうかを判定するstateを用意
       queryParams: 'title', //検索対象のカラム
       queryText: 'タイトル', //フォームのlabelに表示するテキスト
       keyword: '' //フォームの入力内容
@@ -258,6 +255,8 @@ class NewBookModal extends React.Component {
   }
 
   setUser() {
+    // ユーザーがTwitter認証済みかどうかを調べるためにAPIと通信。
+    // mypageにリクエスト送ってるけどusers#showで、これはコントローラー側の設計の問題
     axios 
     .get('/api/v1/mypage')
     .then(response => {
@@ -278,6 +277,7 @@ class NewBookModal extends React.Component {
 
   componentDidUpdate(){
     if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
       this.state.reloaded = true
       this.setUser()
     }

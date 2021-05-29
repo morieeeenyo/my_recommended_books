@@ -10,13 +10,6 @@ import { withRouter } from 'react-router-dom'
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
-//axiosの読み込み
-import axios from 'axios';
-
-
 class Header extends React.Component {
   constructor(props){
     super(props);
@@ -48,7 +41,7 @@ class Header extends React.Component {
           <HeaderContainer>
             {this.props.children}
             <HeaderTitle>
-              <Link to="/">
+              <Link to="/books">
                 <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
               </Link>
             </HeaderTitle>

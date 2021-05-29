@@ -19,7 +19,7 @@ class MyOutputs extends React.Component {
     super(props);
     this.state ={
       outputs: [],
-      reloaded: false
+      reloaded: false // componentDidUpdateの無限ループを防ぐためにリロード済みかどうかを判定するstateを用意
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
@@ -63,12 +63,16 @@ class MyOutputs extends React.Component {
 
   componentDidMount() {
     this.setAxiosDefaults();
-    if(!this.props.isSignedIn) { return null }
+    if(!this.props.isSignedIn) { 
+      alert('ユーザーがログインしていません。')
+      return this.props.hisotyr.push('/welcome')
+    }
     this.fetchResources()
   }
 
   componentDidUpdate () {
     if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
       this.state.reloaded = true
       this.fetchResources()
     }

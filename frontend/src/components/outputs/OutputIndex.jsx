@@ -85,6 +85,7 @@ class OutputIndex extends React.Component {
 
   componentDidUpdate () {
     if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
       this.state.reloaded = true
       this.fetchResources()
     }

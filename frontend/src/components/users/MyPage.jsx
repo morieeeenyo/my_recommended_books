@@ -56,7 +56,7 @@ class MyPage extends React.Component {
         filename: ''
       },
       avatar: '',
-      reloaded: false
+      reloaded: false // componentDidUpdateの無限ループを防ぐためにリロード済みかどうかを判定するstateを用意
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
@@ -115,6 +115,7 @@ class MyPage extends React.Component {
 
   componentDidUpdate() {
     if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
       this.state.reloaded = true
       this.fetchResources()
     }

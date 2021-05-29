@@ -202,7 +202,11 @@ class OutputModal extends React.Component {
 
   postOutput(e) {
     e.preventDefault()
-    if(!this.props.isSignedIn) { return null }
+    // ログアウト時に投稿できないようにするための条件式
+    if(!this.props.isSignedIn) { 
+      alert('アウトプットの投稿にはログイン・新規登録が必要です。')
+      return this.props.hisotyr.push('/welcome')
+    }
     this.setAxiosDefaults();
     axios
     .post('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs', {output: this.state.output, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter} )
