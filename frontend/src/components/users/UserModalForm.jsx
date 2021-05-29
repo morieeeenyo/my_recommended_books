@@ -149,6 +149,10 @@ class UserModalForm extends React.Component {
     e.preventDefault()
     // props.content,つまりモーダルの種類ごとに処理を分ける
     if (this.props.location.state.content == 'SignUp') {
+      if (this.props.isSignedIn) {
+        alert('ログイン・新規登録するにはログアウトしてください')
+        return this.props.history.push('/')
+      }
       axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
@@ -173,6 +177,10 @@ class UserModalForm extends React.Component {
     }
 
     if (this.props.location.state.content == 'SignIn') {
+      if (this.props.isSignedIn) {
+        alert('ログイン・新規登録するにはログアウトしてください')
+        return this.props.history.push('/')
+      }
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
@@ -197,7 +205,10 @@ class UserModalForm extends React.Component {
 
     if (this.props.location.state.content == 'SignOut') {
       this.setAxiosDefaults();
-      if(!this.props.isSignedIn) { return null }
+      if(!this.props.isSignedIn) { 
+        alert('ユーザーがログインしていません') 
+        return this.props.history.push('/') 
+      }
       axios
       .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
       .then(response => {
@@ -267,20 +278,6 @@ class UserModalForm extends React.Component {
       errors: []
     })
     this.props.close()
-  }
-
-  componentDidMount(){
-    if (!this.props.isSignedIn) {
-      if( location.pathname == '/users/sign_out/form') {
-       alert('ユーザーがログインしていません')
-       this.props.history.push('/')
-     }
-    } else {
-      if (location.pathname == '/users/sign_in/form' || location.pathname == '/users/sign_up/form') {
-        alert('ログイン・新規登録するにはログアウトしてください')
-        this.props.history.push('/')
-      }
-    }
   }
 
   render () {
