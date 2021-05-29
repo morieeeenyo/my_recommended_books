@@ -101,6 +101,7 @@ class NewBookModal extends React.Component {
       errors: [],
       // Twitterにシェアするかどうかを決めるstate
       to_be_shared_on_twitter: false,
+      reloaded: false,
       queryParams: 'title', //検索対象のカラム
       queryText: 'タイトル', //フォームのlabelに表示するテキスト
       keyword: '' //フォームの入力内容
@@ -112,6 +113,7 @@ class NewBookModal extends React.Component {
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.selectQuery = this.selectQuery.bind(this)
+    this.setUser = this.setUser.bind(this)
   }
 
   // emailで新規登録、ログインした場合はこちらを使ってcsrfトークンを更新
@@ -255,25 +257,30 @@ class NewBookModal extends React.Component {
     })
   }
 
-  componentDidMount(){
+  setUser() {
     axios 
     .get('/api/v1/mypage')
     .then(response => {
-      if (response.data.avatar) {
-        this.setState({
-          user: response.data.user,
-        })
-      } else {
-        this.setState({
-          user: response.data.user,
-        })
-      }
+      this.setState({
+        user: response.data.user,
+      })
       return response
     })
     .catch(error =>{
       //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
       console.log(error) 
     })
+  }
+
+  componentDidMount(){
+    this.setUser()
+  }
+
+  componentDidUpdate(){
+    if (!this.state.reloaded) {
+      this.state.reloaded = true
+      this.setUser()
+    }
   }
 
   render () {
