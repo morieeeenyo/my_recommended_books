@@ -14,9 +14,6 @@ import {UserFromContent} from "../users/UserModalForm.jsx"
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
 function SearchBookForm(props) {
   if (props.user.sns_token && props.user.sns_secret) {
   return (
@@ -101,6 +98,7 @@ class NewBookModal extends React.Component {
       errors: [],
       // Twitterにシェアするかどうかを決めるstate
       to_be_shared_on_twitter: false,
+      reloaded: false, // componentDidUpdateの無限ループを防ぐためにリロード済みかどうかを判定するstateを用意
       queryParams: 'title', //検索対象のカラム
       queryText: 'タイトル', //フォームのlabelに表示するテキスト
       keyword: '' //フォームの入力内容
@@ -109,10 +107,10 @@ class NewBookModal extends React.Component {
     this.searchBook = this.searchBook.bind(this)
     this.updateForm = this.updateForm.bind(this)
     this.postBook = this.postBook.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.selectQuery = this.selectQuery.bind(this)
+    this.setUser = this.setUser.bind(this)
   }
 
   // emailで新規登録、ログインした場合はこちらを使ってcsrfトークンを更新
@@ -169,9 +167,12 @@ class NewBookModal extends React.Component {
 
   searchBook(e) {
     e.preventDefault()
+    if(!this.props.isSignedIn) { 
+      alert('推薦図書の投稿にはログインが必要です')
+      return this.props.history.push("/");
+     }
     const keyword = this.state.keyword
     // ユーザー認証とcsrf-tokenの準備
-    this.userAuthentification()
     this.setAxiosDefaults();
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
@@ -229,7 +230,10 @@ class NewBookModal extends React.Component {
 
   postBook(e) {
     e.preventDefault()
-    this.userAuthentification()
+    if(!this.props.isSignedIn) { 
+      alert('推薦図書の投稿にはログインが必要です')
+      return this.props.history.push("/");
+     }
     this.setAxiosDefaults();
     axios
     .post('/api/v1/books', {book: this.state.book, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter})
@@ -250,46 +254,32 @@ class NewBookModal extends React.Component {
     })
   }
 
-
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
+  setUser() {
+    // ユーザーがTwitter認証済みかどうかを調べるためにAPIと通信。
+    // mypageにリクエスト送ってるけどusers#showで、これはコントローラー側の設計の問題
+    axios 
+    .get('/api/v1/mypage')
+    .then(response => {
+      this.setState({
+        user: response.data.user,
+      })
+      return response
+    })
+    .catch(error =>{
+      //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+      console.log(error) 
+    })
   }
 
   componentDidMount(){
-    const cookies = new Cookies()
-    const authToken = cookies.get("authToken");
-    if (!authToken || !authToken['uid']) { //ログインしていない場合モーダルが開かないようにする。初回起動時はそもそもauthTokenが存在しないのでそれも判定
-      alert('推薦図書の投稿にはログインが必要です')
-      this.props.history.push("/");
-    } else {
-      axios 
-      .get('/api/v1/mypage')
-      .then(response => {
-        if (response.data.avatar) {
-          this.setState({
-            user: response.data.user,
-          })
-        } else {
-          this.setState({
-            user: response.data.user,
-          })
-        }
-        return response
-      })
-      .catch(error =>{
-        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
-        console.log(error) 
-      })
+    this.setUser()
+  }
+
+  componentDidUpdate(){
+    if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
+      this.state.reloaded = true
+      this.setUser()
     }
   }
 

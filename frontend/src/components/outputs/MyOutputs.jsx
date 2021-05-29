@@ -18,11 +18,12 @@ class MyOutputs extends React.Component {
   constructor(props){
     super(props);
     this.state ={
-      outputs: []
+      outputs: [],
+      reloaded: false // componentDidUpdateの無限ループを防ぐためにリロード済みかどうかを判定するstateを用意
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
+    this.fetchResources = this.fetchResources.bind(this)
   }
 
   getCsrfToken() {
@@ -41,39 +42,40 @@ class MyOutputs extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
+  fetchResources() {
+    //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
+    axios
+    .get('/api/v1/mypage/books/' + this.props.location.state.book.isbn + '/outputs')
+    .then(response => {
+      this.setState({
+          outputs: response.data.outputs
+        }
+      )
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
+        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+        console.log(error) 
+      }
+    })
   }
 
   componentDidMount() {
     this.setAxiosDefaults();
-    this.userAuthentification()
-    //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
-    axios
-      .get('/api/v1/mypage/books/' + this.props.location.state.book.isbn + '/outputs')
-      .then(response => {
-        this.setState({
-            outputs: response.data.outputs
-          }
-        )
-      })
-      .catch(error => {
-        if (error.response.data && error.response.data.errors) {
-          // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
-          //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
-          console.log(error) 
-        }
-      })
+    if(!this.props.isSignedIn) { 
+      alert('ユーザーがログインしていません。')
+      return this.props.hisotyr.push('/welcome')
+    }
+    this.fetchResources()
+  }
+
+  componentDidUpdate () {
+    if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
+      this.state.reloaded = true
+      this.fetchResources()
+    }
   }
 
   render () {

@@ -55,11 +55,12 @@ class MyPage extends React.Component {
         data: '',
         filename: ''
       },
-      avatar: ''
+      avatar: '',
+      reloaded: false // componentDidUpdateの無限ループを防ぐためにリロード済みかどうかを判定するstateを用意
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
+    this.fetchResources = this.fetchResources.bind(this)
   }
 
   getCsrfToken() {
@@ -78,28 +79,7 @@ class MyPage extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
-  }
-
-  componentDidMount() {
-    this.setAxiosDefaults();
-    const authToken = this.userAuthentification()
-    if (!authToken) {
-      // マイページからサインアウトした場合にはここを経由してトップページに戻る
-      alert('ユーザーがサインアウトしました。')
-      this.props.history.push("/")
-    }
+  fetchResources(updated) {
     axios 
     .get('/api/v1/mypage')
     .then(response => {
@@ -116,12 +96,16 @@ class MyPage extends React.Component {
           avatar: Sample
         })
       }
-      return response
     })
     .catch(error =>{
       //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
       console.log(error) 
     })
+  }
+
+  componentDidMount() {
+    this.setAxiosDefaults();
+    this.fetchResources()
     const cookies = new Cookies();
     if (cookies.get('first_session')) {
       // こっちはhistory.pushでいけた
@@ -130,8 +114,13 @@ class MyPage extends React.Component {
   }
 
   componentDidUpdate() {
-    let updatedProps = this.props.location.state
+    if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
+      this.state.reloaded = true
+      this.fetchResources()
+    }
     // 編集後の挙動。非同期で画面に情報を反映させる
+    let updatedProps = this.props.location.state
     if (updatedProps) {
       if (updatedProps.avatar) {
         this.state.avatar = updatedProps.avatar

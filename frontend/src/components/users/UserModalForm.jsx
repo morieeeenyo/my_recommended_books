@@ -114,7 +114,6 @@ class UserModalForm extends React.Component {
     this.updateCsrfToken = this.updateCsrfToken.bind(this)
     this.resetErrorMessages = this.resetErrorMessages.bind(this)
     this.authenticatedUser = this.authenticatedUser.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
   }
 
   getCsrfToken() {
@@ -146,24 +145,14 @@ class UserModalForm extends React.Component {
     cookies.set('authToken', JSON.stringify(axios.defaults.headers.common), { path: '/' , maxAge: 60 * 60, secure: true, sameSite: 'Lax'});
   }
 
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
-  }
-
   formSubmit(e) {
     e.preventDefault()
     // props.content,つまりモーダルの種類ごとに処理を分ける
     if (this.props.location.state.content == 'SignUp') {
+      if (this.props.isSignedIn) {
+        alert('ログイン・新規登録するにはログアウトしてください')
+        return this.props.history.push('/')
+      }
       axios
       .post('/api/v1/users', {user: this.state.user} )
       .then(response => {
@@ -174,7 +163,8 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.history.push('/')
+        this.props.history.push('/books')
+        window.location.reload(false) // 強制的にリロードさせることでヘッダーのstateを更新できるようにする
         return response
       })
       .catch(error => {
@@ -187,6 +177,10 @@ class UserModalForm extends React.Component {
     }
 
     if (this.props.location.state.content == 'SignIn') {
+      if (this.props.isSignedIn) {
+        alert('ログイン・新規登録するにはログアウトしてください')
+        return this.props.history.push('/')
+      }
       axios
       .post('/api/v1/users/sign_in', {user: {email: this.state.user.email, password: this.state.user.password} })
       .then(response => {
@@ -196,7 +190,8 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.history.push('/')
+        this.props.history.push('/books')
+        window.location.reload(false) // 強制的にリロードさせることでヘッダーのstateを更新できるようにする
         return response
       })
       .catch(error => {
@@ -210,7 +205,10 @@ class UserModalForm extends React.Component {
 
     if (this.props.location.state.content == 'SignOut') {
       this.setAxiosDefaults();
-      this.userAuthentification()
+      if(!this.props.isSignedIn) { 
+        alert('ユーザーがログインしていません') 
+        return this.props.history.push('/') 
+      }
       axios
       .delete('/api/v1/users/sign_out', {uid: axios.defaults.headers.common['uid']})
       .then(response => {
@@ -222,7 +220,8 @@ class UserModalForm extends React.Component {
           user: {},
           errors: []
         })
-        this.props.history.push('/')
+        this.props.history.push('/welcome')
+        window.location.reload(true) // 強制的にリロードさせることでヘッダーのstateを更新できるようにする
         return response
       })
       .catch(error => {
@@ -279,21 +278,6 @@ class UserModalForm extends React.Component {
       errors: []
     })
     this.props.close()
-  }
-
-  componentDidMount(){
-    const authToken = this.userAuthentification()
-    if (!authToken && location.pathname == '/users/sign_out/form') {
-      alert('ユーザーがログインしていません')
-      this.props.history.push('/')
-    }
-
-    if (authToken) {
-      if (location.pathname == '/users/sign_in/form' || location.pathname == '/users/sign_up/form') {
-        alert('ログイン・新規登録するにはログアウトしてください')
-        this.props.history.push('/')
-      }
-    }
   }
 
   render () {

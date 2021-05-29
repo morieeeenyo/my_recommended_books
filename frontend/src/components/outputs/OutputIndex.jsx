@@ -29,8 +29,8 @@ class OutputIndex extends React.Component {
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
     this.postBook = this.postBook.bind(this)
+    this.fetchResources = this.fetchResources.bind(this)
   }
 
   getCsrfToken() {
@@ -49,55 +49,50 @@ class OutputIndex extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
+  fetchResources() {
+    axios
+    .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
+    .then(response => {
+      // ユーザーがログイン済みかどうかによる条件分岐
+      // 引数の内容で条件分岐しちゃってるので本当はよくなさそう
+      // サーバー側で条件分岐させるべき？
+      if (response.data.user) {
+        this.setState({
+          outputs: response.data.outputs,
+          myOutputs: response.data.myoutputs,
+          user: response.data.user,
+          posted: response.data.posted
+        })
+      } else {
+        this.setState({
+          outputs: response.data.outputs,
+          myOutputs: response.data.myoutputs
+        })
+      }
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
+        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+        console.log(error) 
+      }
+    })
   }
 
   componentDidMount() {
-    this.userAuthentification()
-    //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
-    axios
-      .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
-      .then(response => {
-        // ユーザーがログイン済みかどうかによる条件分岐
-        // 引数の内容で条件分岐しちゃってるので本当はよくなさそう
-        // サーバー側で条件分岐させるべき？
-        if (response.data.user) {
-          this.setState({
-            outputs: response.data.outputs,
-            myOutputs: response.data.myoutputs,
-            user: response.data.user,
-            posted: response.data.posted
-          })
-        } else {
-          this.setState({
-            outputs: response.data.outputs,
-            myOutputs: response.data.myoutputs
-          })
-        }
-      })
-      .catch(error => {
-        if (error.response.data && error.response.data.errors) {
-          // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
-          //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
-          console.log(error) 
-        }
-      })
+    this.fetchResources()
+  }
+
+  componentDidUpdate () {
+    if (!this.state.reloaded) {
+      // 無限ループを防ぐための条件式
+      this.state.reloaded = true
+      this.fetchResources()
+    }
   }
 
   postBook(e) {
     e.preventDefault()
-    this.userAuthentification()
     this.setAxiosDefaults();
     let to_be_shared_on_twitter = false
     // ユーザーがSNS認証済みの場合

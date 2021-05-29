@@ -13,6 +13,16 @@ RSpec.describe 'Outputs', type: :system, js: true do
   let(:user_1_output) { build(:output, user_id: output_user_one.id, book_id: book.id) }
   let(:user_2_output) { build(:output, user_id: output_user_two.id, book_id: book.id) }
 
+  # metaタグの設定を一時的にonにしてcsrf-tokenを取り出せるようにする。
+  # フロントではsetAxiosDefaultsメソッドでエラーが発生しなくなる
+  before do
+    ActionController::Base.allow_forgery_protection = true
+  end
+  
+  after do
+    ActionController::Base.allow_forgery_protection = false
+  end
+
   describe 'アウトプット一覧' do
     before do
       # 中間テーブルのデータの保存はletでやるとなんかアソシエーションがうまくいかなかった

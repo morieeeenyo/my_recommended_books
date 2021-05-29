@@ -10,7 +10,7 @@ module SignInSupport
     fill_in 'email',	with: user.email
     fill_in 'password',	with: user.password
     click_button 'SignIn'
-    sleep 2 # sleepしないと間に合わない
+    sleep 7 # sleepしないと間に合わない
     # ログインすると表示が切り替わる
     expect(page).to  have_content 'ログアウト'
     expect(page).to  have_content 'マイページ'

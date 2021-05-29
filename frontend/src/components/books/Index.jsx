@@ -4,9 +4,6 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link, withRouter } from "react-router-dom";
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
 // axiosの読み込み
 import axios from 'axios';
 
@@ -87,42 +84,18 @@ class Index extends React.Component {
   }
     
   componentDidMount() {
-    const cookies = new Cookies();
-    let authToken = cookies.get("authToken");
-    let newBookLink = document.getElementById('new_book_link')
-    if (authToken == undefined || !authToken) {
-      // なんかundefinedも判定しないとエラーになる
-      if (location.pathname === "/") {
-        // ルートパスアクセス時、ログインしていなければwelcomeページへ
-        this.props.history.push('/welcome')
-      } 
-
-      // 書籍投稿ボタンはログアウト時は押せないようにする
-      if (newBookLink && newBookLink.getAttribute('style') == 'display: block;') {
-        newBookLink.setAttribute('style', 'display: none;')
-      }
-    } 
-
-    // 書籍投稿ボタンが非表示の場合表示する
-    // else文だとうまく作動しないためauthTokenがあるかどうかで分ける
-    if (authToken && newBookLink) {
-      if (newBookLink.getAttribute('style') == 'display: none;') {
-        newBookLink.setAttribute('style', 'display: block;')
-      }
-    }
-
     axios
     .get('/api/v1/books')
     .then(response => {
-        this.setState({
-          books: response.data.books
-        })
+      this.setState({
+        books: response.data.books
+      })
     })
     .catch(error => {
       alert(error.response.data.errors) //モデルのエラーメッセージではないのでアラートにする
     })
   }
-
+  
   render () {
     return (
       <BookIndexContainer>

@@ -30,6 +30,9 @@ class App extends React.Component {
 
   constructor(props){
     super(props);
+    this.state = {
+      isSignedIn: false // 今まで各ページでcookieを読み込んでいた仕様を変更
+    }
     this.getCsrfToken = this.getCsrfToken.bind(this)
   }
 
@@ -50,6 +53,7 @@ class App extends React.Component {
     const cookies = new Cookies();
     let authToken = cookies.get("authToken");
     if (authToken) { 
+      // omiauth認証時の挙動
       if (cookies.get('first_session')) {
         // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
@@ -59,28 +63,49 @@ class App extends React.Component {
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
+      // ログインしたときにはstateをtrueに変更
+      this.setState({
+        isSignedIn: true
+      })
     } 
+  }
+
+  componentDidUpdate() {
+    const cookies = new Cookies();
+    let authToken = cookies.get("authToken");
+    if (authToken != undefined) {
+      if (!authToken['uid']) {
+        // ログアウト時の挙動。ログアウト時に強制でリロードさせてstateを更新させる。
+        // stateを変更することでヘッダーの表示を変え、ログアウト状態にする
+        cookies.remove('authToken')
+        this.setState({
+          isSignedIn: false
+        })
+      }
+    }
   }
 
   render () {
     return (
       <div className="container">
         <Router>
-          <Header>
+          <Header isSignedIn={this.state.isSignedIn}>
             <Route path="/users/:content/menu">
               <UserModalMenu>
               </UserModalMenu>
             </Route>
             <Route exact path="/users/:content/form">
-              <UserModalForm></UserModalForm>
+              <UserModalForm isSignedIn={this.state.isSignedIn}></UserModalForm>
             </Route>
           </Header>
-          <Container>
+          <Container isSignedIn={this.state.isSignedIn}>
             <Switch>
               <Route exact path='/'>
-                <Index>
-                </Index>
+                {/* ログイン状態に応じて遷移先を変える */}
+                {this.state.isSignedIn 
+                  ? <Index isSignedIn={this.state.isSignedIn}></Index>
+                  : <Welcome></Welcome>
+                }
               </Route>
               <Route exact path='/welcome'>
                 <Welcome>
@@ -88,15 +113,15 @@ class App extends React.Component {
               </Route>
               {/* ログアウト時に一覧を表示するために/booksでもアクセスできるようにしておく */}
               <Route exact path='/books'>
-                <Index>
+                <Index isSignedIn={this.state.isSignedIn}>
                 </Index>
               </Route>
               <Route exact path='/books/:isbn/outputs' key={'outputs'}>
-                <OutputIndex>
+                <OutputIndex isSignedIn={this.state.isSignedIn}>
                 </OutputIndex>
               </Route>
               <Route path="/mypage" key={'mypage'}>
-                <MyPage>
+                <MyPage isSignedIn={this.state.isSignedIn}>
                   <Route exact path="/mypage/books">
                     <MyRecommendedBooks>
                     </MyRecommendedBooks>
@@ -105,21 +130,21 @@ class App extends React.Component {
                     <AccountUpdateModal></AccountUpdateModal>
                   </Route>
                   <Route exact path="/mypage/:content/edit" key={'edit'}>
-                    <AccountUpdateForm></AccountUpdateForm>
+                    <AccountUpdateForm isSignedIn={this.state.isSignedIn}></AccountUpdateForm>
                   </Route>
                   <Route path="/mypage/books/:book_isbn/outputs" key={'myoutputs'}>
-                    <MyOutputs></MyOutputs>
+                    <MyOutputs isSignedIn={this.state.isSignedIn}></MyOutputs>
                   </Route>
                 </MyPage>
               </Route>
             </Switch>
           </Container>
           <Route exact path="/books/new">
-            <NewBookModal>
+            <NewBookModal isSignedIn={this.state.isSignedIn}>
             </NewBookModal>
           </Route>
           <Route exact path="/books/:book_isbn/outputs/new">
-            <OutputModal></OutputModal>
+            <OutputModal isSignedIn={this.state.isSignedIn}></OutputModal>
           </Route>
         </Router>
       </div>

@@ -39,7 +39,6 @@ class AccountUpdateForm extends React.Component {
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.updateCsrfToken = this.updateCsrfToken.bind(this)
-    this.userAuthentification = this.userAuthentification.bind(this)
     this.authenticatedUser = this.authenticatedUser.bind(this)
   }
 
@@ -75,20 +74,6 @@ class AccountUpdateForm extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = csrf_token;
   };
 
-  userAuthentification() {
-    const cookies = new Cookies();
-    const authToken = cookies.get("authToken");
-    // uid, client, access-tokenの3つが揃っているか検証
-    if (authToken) { 
-      axios.defaults.headers.common['uid'] = authToken['uid']
-      axios.defaults.headers.common['client']  = authToken['client']
-      axios.defaults.headers.common['access-token']  = authToken['access-token']
-      return authToken
-    } else {
-      return null
-    }
-  }
-
   authenticatedUser(uid, client, accessToken) {
     // サーバーから返ってきた値をaxios.defaults.headersにセットして非同期処理で使えるようにする
     axios.defaults.headers.common['uid'] = uid;
@@ -100,6 +85,11 @@ class AccountUpdateForm extends React.Component {
 
   formSubmit(e) {
     e.preventDefault()
+    this.setAxiosDefaults();
+    if(!this.props.isSignedIn) { 
+      alert('ユーザーがログインしていません。')
+      return this.props.hisotyr.push('/welcome')
+    }
     // props.content,つまりモーダルの種類ごとに処理を分ける
     if (this.props.location.state.content == 'Edit Profile') {
       axios

@@ -4,9 +4,34 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
+import Cookies from 'universal-cookie';
+
 class Container extends React.Component {
   constructor(){
     super();
+    this.newBookLinkDisplaySwitch = this.newBookLinkDisplaySwitch.bind(this)
+  }
+
+  newBookLinkDisplaySwitch() {
+    // 書籍投稿ボタンが非表示の場合表示する
+    let newBookLink = document.getElementById('new_book_link')
+    if (this.props.isSignedIn) {
+      if (newBookLink) {
+        if (newBookLink.getAttribute('style') == 'display: none;') {
+          newBookLink.setAttribute('style', 'display: block;')
+        }
+      }
+    } else {
+      // 書籍投稿ボタンはログアウト時は押せないようにする
+      if (newBookLink.getAttribute('style') != 'display: none;') {
+        newBookLink.setAttribute('style', 'display: none;')
+      }
+    }
+  }
+
+  componentDidMount() {
+    setTimeout(this.newBookLinkDisplaySwitch, 50)
   }
 
   render () {
