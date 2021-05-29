@@ -30,6 +30,7 @@ class OutputIndex extends React.Component {
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
     this.postBook = this.postBook.bind(this)
+    this.fetchResources = this.fetchResources.bind(this)
   }
 
   getCsrfToken() {
@@ -48,35 +49,45 @@ class OutputIndex extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
-  componentDidMount() {
-    //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
+  fetchResources() {
     axios
-      .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
-      .then(response => {
-        // ユーザーがログイン済みかどうかによる条件分岐
-        // 引数の内容で条件分岐しちゃってるので本当はよくなさそう
-        // サーバー側で条件分岐させるべき？
-        if (response.data.user) {
-          this.setState({
-            outputs: response.data.outputs,
-            myOutputs: response.data.myoutputs,
-            user: response.data.user,
-            posted: response.data.posted
-          })
-        } else {
-          this.setState({
-            outputs: response.data.outputs,
-            myOutputs: response.data.myoutputs
-          })
-        }
-      })
-      .catch(error => {
-        if (error.response.data && error.response.data.errors) {
-          // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
-          //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
-          console.log(error) 
-        }
-      })
+    .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
+    .then(response => {
+      // ユーザーがログイン済みかどうかによる条件分岐
+      // 引数の内容で条件分岐しちゃってるので本当はよくなさそう
+      // サーバー側で条件分岐させるべき？
+      if (response.data.user) {
+        this.setState({
+          outputs: response.data.outputs,
+          myOutputs: response.data.myoutputs,
+          user: response.data.user,
+          posted: response.data.posted
+        })
+      } else {
+        this.setState({
+          outputs: response.data.outputs,
+          myOutputs: response.data.myoutputs
+        })
+      }
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
+        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+        console.log(error) 
+      }
+    })
+  }
+
+  componentDidMount() {
+    this.fetchResources()
+  }
+
+  componentDidUpdate () {
+    if (!this.state.reloaded) {
+      this.state.reloaded = true
+      this.fetchResources()
+    }
   }
 
   postBook(e) {
