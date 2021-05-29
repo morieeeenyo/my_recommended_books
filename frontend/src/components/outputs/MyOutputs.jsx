@@ -18,10 +18,12 @@ class MyOutputs extends React.Component {
   constructor(props){
     super(props);
     this.state ={
-      outputs: []
+      outputs: [],
+      reloaded: false
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.fetchResources = this.fetchResources.bind(this)
   }
 
   getCsrfToken() {
@@ -40,25 +42,36 @@ class MyOutputs extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
+  fetchResources() {
+    //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
+    axios
+    .get('/api/v1/mypage/books/' + this.props.location.state.book.isbn + '/outputs')
+    .then(response => {
+      this.setState({
+          outputs: response.data.outputs
+        }
+      )
+    })
+    .catch(error => {
+      if (error.response.data && error.response.data.errors) {
+        // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
+        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+        console.log(error) 
+      }
+    })
+  }
+
   componentDidMount() {
     this.setAxiosDefaults();
     if(!this.props.isSignedIn) { return null }
-    //MyPage.jsxにてユーザーがログインしていない場合トップページにリダイレクトさせる処理が発火
-    axios
-      .get('/api/v1/mypage/books/' + this.props.location.state.book.isbn + '/outputs')
-      .then(response => {
-        this.setState({
-            outputs: response.data.outputs
-          }
-        )
-      })
-      .catch(error => {
-        if (error.response.data && error.response.data.errors) {
-          // 投稿していない書籍のページに行くときなどにエラーが発生することを想定
-          //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
-          console.log(error) 
-        }
-      })
+    this.fetchResources()
+  }
+
+  componentDidUpdate () {
+    if (!this.state.reloaded) {
+      this.state.reloaded = true
+      this.fetchResources()
+    }
   }
 
   render () {
