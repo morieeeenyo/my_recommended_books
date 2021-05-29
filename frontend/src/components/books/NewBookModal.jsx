@@ -168,9 +168,12 @@ class NewBookModal extends React.Component {
 
   searchBook(e) {
     e.preventDefault()
+    if(!this.props.isSignedIn) { 
+      alert('推薦図書の投稿にはログインが必要です')
+      return this.props.history.push("/");
+     }
     const keyword = this.state.keyword
     // ユーザー認証とcsrf-tokenの準備
-    if(!this.props.isSignedIn) { return null }
     this.setAxiosDefaults();
     axios
     .get(`/api/v1/books/search/?keyword=${keyword}&query=${this.state.queryParams}`)
@@ -228,7 +231,10 @@ class NewBookModal extends React.Component {
 
   postBook(e) {
     e.preventDefault()
-    if(!this.props.isSignedIn) { return null }
+    if(!this.props.isSignedIn) { 
+      alert('推薦図書の投稿にはログインが必要です')
+      return this.props.history.push("/");
+     }
     this.setAxiosDefaults();
     axios
     .post('/api/v1/books', {book: this.state.book, to_be_shared_on_twitter: this.state.to_be_shared_on_twitter})
@@ -250,29 +256,24 @@ class NewBookModal extends React.Component {
   }
 
   componentDidMount(){
-    if (!this.props) { //ログインしていない場合モーダルが開かないようにする。初回起動時はそもそもauthTokenが存在しないのでそれも判定
-      alert('推薦図書の投稿にはログインが必要です')
-      this.props.history.push("/");
-    } else {
-      axios 
-      .get('/api/v1/mypage')
-      .then(response => {
-        if (response.data.avatar) {
-          this.setState({
-            user: response.data.user,
-          })
-        } else {
-          this.setState({
-            user: response.data.user,
-          })
-        }
-        return response
-      })
-      .catch(error =>{
-        //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
-        console.log(error) 
-      })
-    }
+    axios 
+    .get('/api/v1/mypage')
+    .then(response => {
+      if (response.data.avatar) {
+        this.setState({
+          user: response.data.user,
+        })
+      } else {
+        this.setState({
+          user: response.data.user,
+        })
+      }
+      return response
+    })
+    .catch(error =>{
+      //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
+      console.log(error) 
+    })
   }
 
   render () {
