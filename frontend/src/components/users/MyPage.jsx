@@ -55,10 +55,12 @@ class MyPage extends React.Component {
         data: '',
         filename: ''
       },
-      avatar: ''
+      avatar: '',
+      reloaded: false
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
     this.setAxiosDefaults = this.setAxiosDefaults.bind(this)
+    this.fetchResources = this.fetchResources.bind(this)
   }
 
   getCsrfToken() {
@@ -77,13 +79,7 @@ class MyPage extends React.Component {
     axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();
   };
 
-  componentDidMount() {
-    this.setAxiosDefaults();
-    if(!this.props.isSignedIn) { 
-      // マイページからサインアウトした場合にはここを経由してトップページに戻る
-      alert('ユーザーがサインアウトしました。')
-      this.props.history.push("/")
-    }
+  fetchResources(updated) {
     axios 
     .get('/api/v1/mypage')
     .then(response => {
@@ -100,12 +96,16 @@ class MyPage extends React.Component {
           avatar: Sample
         })
       }
-      return response
     })
     .catch(error =>{
       //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
       console.log(error) 
     })
+  }
+
+  componentDidMount() {
+    this.setAxiosDefaults();
+    this.fetchResources()
     const cookies = new Cookies();
     if (cookies.get('first_session')) {
       // こっちはhistory.pushでいけた
@@ -114,8 +114,12 @@ class MyPage extends React.Component {
   }
 
   componentDidUpdate() {
-    let updatedProps = this.props.location.state
+    if (!this.state.reloaded) {
+      this.state.reloaded = true
+      this.fetchResources()
+    }
     // 編集後の挙動。非同期で画面に情報を反映させる
+    let updatedProps = this.props.location.state
     if (updatedProps) {
       if (updatedProps.avatar) {
         this.state.avatar = updatedProps.avatar
