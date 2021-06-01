@@ -129,7 +129,7 @@ RSpec.describe 'Books', type: :system do
         find('a', text: '>').click
         find('a', text: '<').click
         # 1,2冊目が表示されているか検証
-        sleep 3
+        sleep 5
         expect(all('.book-title')[0].text).to  eq @book_list[14].title
         expect(all('.book-title')[1].text).to  eq @book_list[13].title
         expect(page).to have_content '>'
