@@ -1,5 +1,12 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  server "13.112.8.7", user: "togo", roles: %w{app db web}
+
+set :ssh_options, {
+  keys: %w(~/.ssh/kaidoku_2.pem),
+  forward_agent: true,
+  auth_methods: %w(publickey),
+}
 
   # Code is not reloaded between requests.
   config.cache_classes = true
