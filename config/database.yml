@@ -50,6 +50,7 @@ test:
 #
 production:
   <<: *default
-  database: my_recommended_books_production
-  username: my_recommended_books
-  password: <%= ENV['MY_RECOMMENDED_BOOKS_DATABASE_PASSWORD'] %>
+  database: kaidoku_production
+  username: root
+  password: <%= Rails.application.credentials.db[:password] %>
+  host: <%= Rails.application.credentials.db[:hostname] %>
