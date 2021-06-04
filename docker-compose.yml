@@ -18,8 +18,8 @@ services:
       - gem_data:/usr/local/bundle
     ports:
       - "3000:3000"
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     tty: true
     stdin_open: true
   chrome:    #Chromeでのテスト実行用コンテナ
