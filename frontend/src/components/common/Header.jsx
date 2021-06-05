@@ -30,7 +30,7 @@ class Header extends React.Component {
           <Link to={{pathname: "/users/sign_out/form", state: {content: 'SignOut', show: true}}} className="header-link">
               ログアウト
             </Link>
-            <Link to="/mypage" id="link_to_mypage" className="header-link">
+            <Link to="/mypage" className="header-link">
               マイページ
             </Link>
           </HeaderRight>
