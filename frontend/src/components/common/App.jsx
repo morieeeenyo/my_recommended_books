@@ -32,7 +32,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       isSignedIn: false, // 今まで各ページでcookieを読み込んでいた仕様を変更
-      firstSession: false
+      firstSession: false // SNS認証時に初回ログインの情報を持っているstate
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
   }
@@ -74,6 +74,7 @@ class App extends React.Component {
         // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
         // ログインしたときにはstateをtrueに変更
+        // first_sessionはユーザー情報編集フォームにアクセスすると消える仕様なのでフォームが開いたあとリロードすればここが読まれれるはず
         this.setState({
           isSignedIn: true,
           firstSession: false,
