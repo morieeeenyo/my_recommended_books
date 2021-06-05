@@ -72,3 +72,6 @@ gem 'twitter' # ツイッター投稿用
 gem 'omniauth', '1.9.1'
 gem 'omniauth-twitter'
 gem 'rails_same_site_cookie' # cookieにsecure属性(HTTPSのみ受け付ける)とsamesite属性(クロスサイトからのアクセスを防ぐ)を付与。セキュリティ面の補強。
+group :production do
+  gem 'unicorn', '5.4.1'
+end
