@@ -1,7 +1,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.16.0"
 
-set :application, "kaidoku"
+set :application, "my_recommended_books"
 set :repo_url, "git@github.com:togo-mentor/my_recommended_books.git"
 set :rbenv_ruby, File.read('.ruby-version').strip
 set :branch, ENV['BRANCH'] || "master"
