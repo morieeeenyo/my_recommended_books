@@ -544,7 +544,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
     context 'アウトプット一覧からアウトプットを投稿する' do
       it 'アウトプット一覧から「アウトプットを投稿する」ボタンを押すとアウトプットモーダルが開き、投稿できる' do
         click_button 'x'
-        click_link nil, href: '/'
+        click_link nil, href: '/books'
         sleep 3
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         all('a', text: 'アウトプット一覧')[-1].click

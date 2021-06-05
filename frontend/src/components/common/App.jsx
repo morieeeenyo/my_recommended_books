@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // react-routerの読み込み
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 // コンポーネントの読み込み
 import Header from './Header.jsx'
@@ -31,7 +31,8 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      isSignedIn: false // 今まで各ページでcookieを読み込んでいた仕様を変更
+      isSignedIn: false, // 今まで各ページでcookieを読み込んでいた仕様を変更
+      firstSession: false // SNS認証時に初回ログインの情報を持っているstate
     }
     this.getCsrfToken = this.getCsrfToken.bind(this)
   }
@@ -56,16 +57,29 @@ class App extends React.Component {
       axios.defaults.headers.common['uid'] = authToken['uid']
       axios.defaults.headers.common['client']  = authToken['client']
       axios.defaults.headers.common['access-token']  = authToken['access-token']
+      // ログインしたときにはstateをtrueに変更
+      this.setState({
+        isSignedIn: true,
+      })
       // omiauth認証時の挙動
       if (cookies.get('first_session')) {
+        // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
+        axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
         // ログインしたときにはstateをtrueに変更
         this.setState({
           isSignedIn: true,
+          firstSession: true,
         })
+      } else {
         // 実際にはユーザー情報編集ページに飛ばす処理を入れる。次のブランチで
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
-        // 初回ログイン時にマイページに遷移させたいができなくなってた。多分setStateしたせいかな
-      } 
+        // ログインしたときにはstateをtrueに変更
+        // first_sessionはユーザー情報編集フォームにアクセスすると消える仕様なのでフォームが開いたあとリロードすればここが読まれれるはず
+        this.setState({
+          isSignedIn: true,
+          firstSession: false,
+        })
+      }
     } 
   }
 
@@ -105,6 +119,8 @@ class App extends React.Component {
                   ? <Index isSignedIn={this.state.isSignedIn}></Index>
                   : <Welcome></Welcome>
                 }
+                {this.state.firstSession && <Redirect to="/mypage"/>}
+                />
               </Route>
               <Route exact path='/welcome'>
                 <Welcome>
