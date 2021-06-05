@@ -75,7 +75,8 @@ class App extends React.Component {
         axios.defaults.headers.common['X-CSRF-Token'] = this.getCsrfToken();//それ以外のときは既にセットしてあるcsrf-tokenを参照
         // ログインしたときにはstateをtrueに変更
         this.setState({
-          isSignedIn: true
+          isSignedIn: true,
+          firstSession: false,
         })
       }
     } 
@@ -117,7 +118,7 @@ class App extends React.Component {
                   ? <Index isSignedIn={this.state.isSignedIn}></Index>
                   : <Welcome></Welcome>
                 }
-                 {this.state.firstSession && <Redirect to="/mypage"/>}
+                {this.state.firstSession && <Redirect to="/mypage"/>}
                 />
               </Route>
               <Route exact path='/welcome'>
