@@ -30,9 +30,9 @@ set :keep_releases, 5
 desc 'Run rake npm install'
 task :npm_install do
   on roles(:web) do
-    within current_path do
-      execute("cd #{current_path}/frontend && npm install")
-      execute("cd #{current_path}/frontend && webpack")
+    within release_path do
+      execute("cd #{release_path}/frontend && npm install")
+      execute("cd #{release_path}/frontend && webpack")
     end
   end
 end
