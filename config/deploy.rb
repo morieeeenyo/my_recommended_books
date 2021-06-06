@@ -6,6 +6,7 @@ set :application, 'my_recommended_books'
 
 # どのリポジトリからアプリをpullするかを指定する
 set :repo_url,  'git@github.com:togo-mentor/my_recommended_books.git'
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # バージョンが変わっても共通で参照するディレクトリを指定
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads', 'public/javascripts')
@@ -25,7 +26,6 @@ set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 set :unicorn_config_path, -> { "#{current_path}/config/unicorn.rb" }
 set :keep_releases, 5
 
-set :branch, ENV['BRANCH'] || "master"
 
 desc 'Run rake npm install'
 task :npm_install do
