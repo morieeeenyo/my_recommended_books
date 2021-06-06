@@ -6,7 +6,7 @@ set :application, 'my_recommended_books'
 
 # どのリポジトリからアプリをpullするかを指定する
 set :repo_url,  'git@github.com:togo-mentor/my_recommended_books.git'
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # バージョンが変わっても共通で参照するディレクトリを指定
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads', 'public/javascripts')
@@ -30,9 +30,8 @@ set :keep_releases, 5
 desc 'Run rake npm install'
 task :npm_install do
   on roles(:web) do
-    within current_path do
-      execute("cd #{current_path}/frontend && npm install")
-      execute("cd #{current_path}/frontend && webpack")
+    within release_path do
+      execute("cd #{release_path}/frontend && npm install")
     end
   end
 end
