@@ -25,20 +25,6 @@ set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 set :unicorn_config_path, -> { "#{current_path}/config/unicorn.rb" }
 set :keep_releases, 5
 
-set :branch, ENV['BRANCH'] || "master"
-
-desc 'Run rake npm install'
-task :npm_install do
-  on roles(:web) do
-    within release_path do
-      execute("cd #{release_path}/frontend && npm install")
-      execute("cd #{release_path}/frontend && webpack")
-    end
-  end
-end
-before 'deploy:assets:precompile', 'npm_install'
-after 'deploy:finishing', :compile_assets
-
 # デプロイ処理が終わった後、Unicornを再起動するための記述
 after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
