@@ -115,4 +115,4 @@ jobs:
         - slack/notify:
             event: pass
             mentions: '@togo_mori'
-            template: basic_success_1
+            template: success_tagged_deploy_1
