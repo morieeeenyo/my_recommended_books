@@ -1,7 +1,18 @@
 version: 2.1
 orbs:
     slack: circleci/slack@4.3.0
-    heroku: circleci/heroku@1.0.0
+    
+workflows:
+    version: 2.1
+    build-deploy:
+        jobs:
+        - build
+        - deploy:
+            requires:
+                - build
+            filters:
+                branches:
+                only: master
 
 jobs:
   build:
@@ -102,12 +113,14 @@ jobs:
         template: basic_success_1
 
   deploy:
-    executor: heroku/default # 標準の buildpack-deps イメージを使用します。このイメージは、Heroku の CLI をインストールする際に前提条件を提示します。
+    docker:
+        - image: buildpack-deps:trusty
     steps:
         - checkout
-        - heroku/install # 必要に応じて heroku インストール コマンドを実行します。
-        - heroku/deploy-via-git: # git プッシュを使用して Heroku にブランチをデプロイします。
-            only-branch: master # only-branch を指定した場合、他のブランチでデプロイは行われません。
+        - run:
+            name: heroku_deploy
+            command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
         - slack/notify:
             event: fail
             mentions: '@togo_mori'
