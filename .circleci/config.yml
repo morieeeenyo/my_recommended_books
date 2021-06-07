@@ -116,5 +116,3 @@ jobs:
             event: pass
             mentions: '@togo_mori'
             template: basic_success_1
-    requires:
-        - build
