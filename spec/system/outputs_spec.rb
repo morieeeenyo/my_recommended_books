@@ -148,6 +148,7 @@ RSpec.describe 'Outputs', type: :system, js: true do
       all('a', text: 'アウトプット')[0].click
       sleep 10
       find('a', text: 'アウトプットを投稿する').click
+      puts page.driver.browser.manage.logs.get(:browser).collect(&:message)
       expect(page).to have_content 'アウトプットを投稿する'
     end
 

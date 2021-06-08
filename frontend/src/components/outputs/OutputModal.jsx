@@ -20,7 +20,6 @@ import Cookies from 'universal-cookie';
 
 
 function OutputForm(props) {
-  if (props.user.sns_token && props.user.sns_secret) {
     return (
       <OutputFormContent onSubmit={props.submit}>
         <ErrorMessage errors={props.errors}></ErrorMessage>
@@ -71,7 +70,6 @@ function OutputForm(props) {
         </OutputFormBlock>
       </OutputFormContent>
     )
-  }
 }
 
 
