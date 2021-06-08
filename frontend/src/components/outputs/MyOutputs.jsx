@@ -63,10 +63,6 @@ class MyOutputs extends React.Component {
 
   componentDidMount() {
     this.setAxiosDefaults();
-    if(!this.props.isSignedIn) { 
-      alert('ユーザーがログインしていません。')
-      return this.props.hisotyr.push('/welcome')
-    }
     this.fetchResources()
   }
 
@@ -86,9 +82,11 @@ class MyOutputs extends React.Component {
               {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
                 <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
                 {/* スタイルはMyPage→MyOutputsへのリンクと同じ */}
-                <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
-                  アウトプットを投稿する
-                </Link>
+                {this.props.location.state.user &&
+                  <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.props.location.state.user}}}>
+                    アウトプットを投稿する
+                  </Link>
+                }
               </div>
               <OutputList>
                 {/* Todo:編集ボタンをつける */}
