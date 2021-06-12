@@ -108,7 +108,6 @@ class App extends React.Component {
         <Helmet 
           meta = {[
           { name: 'charset', content: 'UTF-8'},
-          { name: 'twitter:card', content: 'summary' },
           { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
           { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
           { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
