@@ -7,9 +7,10 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+// metaタグの設定をするコンポーネント
+import {MetaTags} from './MetaTags.jsx'
 
 class Welcome extends React.Component {
-
   constructor(props){
     super(props);
   }
@@ -25,16 +26,7 @@ class Welcome extends React.Component {
   render (){
     return(
     <WelcomeWrapper>
-    <Helmet 
-          meta = {[
-          { name: 'charset', content: 'UTF-8'},
-          { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
-          { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
-          { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
-          { property: 'og:url', content: location.href },
-          { property: 'twitter:card', content: 'summary' }
-        ]}>    
-    </Helmet>
+    <MetaTags title="【Welcome】Kaidoku - 読書とアウトプットを通じて人生を面白く" description='Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' ></MetaTags>
       {/* 一部リンクの遷移先は未実装 */}
       <div className="title">
         <h1>Kaidoku - 会読</h1>

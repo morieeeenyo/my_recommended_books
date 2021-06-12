@@ -1,6 +1,3 @@
-// Helmetの読み込み(twitterカード使用するmetaタグを設定)
-import { Helmet } from "react-helmet";
-
 import React, { Component } from 'react';
 
 // react-routerの読み込み
@@ -105,16 +102,6 @@ class App extends React.Component {
   render () {
     return (
       <div className="container">
-        <Helmet 
-          meta = {[
-          { name: 'charset', content: 'UTF-8'},
-          { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
-          { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
-          { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
-          { property: 'og:url', content: location.href },
-          { property: 'twitter:card', content: 'summary' }
-        ]}>    
-        </Helmet>
         <Router>
           <Header isSignedIn={this.state.isSignedIn}>
             <Route path="/users/:content/menu">

@@ -12,14 +12,14 @@ import {OutputWrapper} from './MyOutputs.jsx'
 import {OutputContent} from './MyOutputs.jsx'
 import {OutputList} from './MyOutputs.jsx'
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
 //momentの読み込み(投稿日時の表示)
 import moment from 'moment'
 
 // Helmetの読み込み(twitterカード使用するmetaタグを設定)
 import { Helmet } from "react-helmet";
+
+// metaタグの設定をするコンポーネント
+import {MetaTags} from '../common/MetaTags.jsx'
 
 class OutputIndex extends React.Component {
   constructor(props){
@@ -84,8 +84,6 @@ class OutputIndex extends React.Component {
 
   componentDidMount() {
     this.fetchResources()
-    const headElements = document.head.children
-    console.log(headElements)
   }
 
   componentDidUpdate () {
@@ -127,16 +125,7 @@ class OutputIndex extends React.Component {
   render () {
     return (
       <OutputIndexWrapper>
-        <Helmet 
-          meta = {[
-          { name: 'charset', content: 'UTF-8'},
-          { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
-          { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
-          { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
-          { property: 'og:url', content: location.href },
-          { property: 'twitter:card', content: 'summary' }
-        ]}>        
-        </Helmet>
+        <MetaTags title={"【『" + this.props.location.state.book.title + "』のアウトプット一覧】Kaidoku - 読書とアウトプットを通じて人生を面白く"} description='みんなが投稿したアウトプットをご覧になれます。' ></MetaTags>
         <OutputContent>
           <div className="output-header">
           {/* this.props.location.state.bookでリンクから書籍情報を取得 */}

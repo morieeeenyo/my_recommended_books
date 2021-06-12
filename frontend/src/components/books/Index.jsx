@@ -10,6 +10,9 @@ import axios from 'axios';
 // コンポーネントの読み込み
 import {BookList} from '../users/MyPage.jsx'
 
+// metaタグの設定をするコンポーネント
+import {MetaTags} from '../common/MetaTags.jsx'
+
 // paginateの読み込み
 import ReactPaginate from 'react-paginate';
 
@@ -102,16 +105,7 @@ class Index extends React.Component {
   render () {
     return (
       <BookIndexContainer>
-        <Helmet 
-          meta = {[
-          { name: 'charset', content: 'UTF-8'},
-          { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
-          { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
-          { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
-          { property: 'og:url', content: location.href },
-          { property: 'twitter:card', content: 'summary' }
-        ]}>      
-        </Helmet>
+        <MetaTags title="【書籍一覧】Kaidoku - 読書とアウトプットを通じて人生を面白く" description='みんなが投稿した書籍一覧をご覧になれます。気になる本があれば検索してみましょう。' ></MetaTags>
         <div className="search">
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>
