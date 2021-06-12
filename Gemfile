@@ -62,6 +62,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'devise'
 gem 'mini_magick'
+gem 'aws-sdk-s3', require: false
 gem 'image_processing', '~> 1.2'
 gem 'devise_token_auth'
 gem "rack-cors"
