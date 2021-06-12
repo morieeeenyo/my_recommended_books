@@ -90,8 +90,21 @@ module Api
         # ユーザーが認証済みではない、もしくはフォームでTwitterでのシェアをオンにしていない場合には何もしない
         return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
 
-        @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") if !Rails.env.test? # rubocop:disable Style/NegatedIf
-        # ↑アプリURLへの導線を貼る(一通り出来上がってから)
+        if Rails.env.production?
+          @twitter_client.update!("
+            \n『#{@book.title}』を推薦図書に追加しました！ 
+            \n #{root_url(only_path: false)}/books/#{@book.isbn}/outputs
+            \n #読書 #読書好きとつながりたい #Kaidoku 
+          ")
+        else
+          @twitter_client.update!("
+            【API 連携テスト】
+            \n『#{@book.title}』を推薦図書に追加しました！ 
+            \n #{root_url(only_path: false)}books/#{@book.isbn}/outputs
+            \n #読書 #読書好きとつながりたい #Kaidoku
+          ")
+          # ↑アプリURLへの導線を貼る(一通り出来上がってから)
+        end
       end
     end
   end
