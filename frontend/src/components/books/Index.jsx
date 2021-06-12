@@ -103,13 +103,14 @@ class Index extends React.Component {
     return (
       <BookIndexContainer>
         <Helmet 
-        meta = {[
-        { name: 'charset', content: 'UTF-8'},
-        { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
-        { property: 'og:title', content: '推薦図書一覧' },
-        { property: 'og:description', content: 'みんながどんな本を読んだのか知ることができます。' },
-        { property: 'og:url', content: location.href }
-        ]}>    
+          meta = {[
+          { name: 'charset', content: 'UTF-8'},
+          { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
+          { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
+          { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
+          { property: 'og:url', content: location.href },
+          { property: 'twitter:card', content: 'summary' }
+        ]}>      
         </Helmet>
         <div className="search">
           <h2>書籍検索</h2>

@@ -84,6 +84,8 @@ class OutputIndex extends React.Component {
 
   componentDidMount() {
     this.fetchResources()
+    const headElements = document.head.children
+    console.log(headElements)
   }
 
   componentDidUpdate () {
@@ -126,13 +128,14 @@ class OutputIndex extends React.Component {
     return (
       <OutputIndexWrapper>
         <Helmet 
-        meta = {[
-        { name: 'charset', content: 'UTF-8'},
-        { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
-        { property: 'og:title', content: `『${this.props.location.state.book.title}』のアウトプット一覧` },
-        { property: 'og:description', content: `『${this.props.location.state.book.title}』に興味をお持ちですか？まずはみんなのアウトプットを覗いてみましょう。` },
-        { property: 'og:url', content: location.href }
-        ]}>    
+          meta = {[
+          { name: 'charset', content: 'UTF-8'},
+          { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
+          { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
+          { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
+          { property: 'og:url', content: location.href },
+          { property: 'twitter:card', content: 'summary' }
+        ]}>        
         </Helmet>
         <OutputContent>
           <div className="output-header">
