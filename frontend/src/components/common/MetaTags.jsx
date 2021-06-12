@@ -7,7 +7,7 @@ export function MetaTags(props) {
   useEffect(() => {
     const headElements = document.head.children
     Array.from(headElements).forEach(el => {
-      if (!el.getAttribute('data-react-helmet')) {
+      if (el.tagName == 'STYLE' || el.tagName == 'SCRIPT') {
         document.head.appendChild(el)
       }
     })
@@ -16,11 +16,8 @@ export function MetaTags(props) {
   return(
   <Helmet 
       meta = {[
-      { name: 'twitter:card', content: "summary" },
-      { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
-      { property: 'og:title', content: props.title },
-      { property: 'og:description', content: props.description },
-      { property: 'og:url', content: location.href },
+        { property: 'og:description', content: props.description },
+        { property: 'og:url', content: location.href },
     ]}>    
   </Helmet>
   )
