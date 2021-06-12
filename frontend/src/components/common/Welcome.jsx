@@ -1,11 +1,12 @@
+// Helmetの読み込み(twitterカード使用するmetaタグを設定)
+import { Helmet } from "react-helmet";
+
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-// Helmetの読み込み(twitterカード使用するmetaタグを設定)
-import { Helmet } from "react-helmet";
 
 class Welcome extends React.Component {
 
@@ -26,6 +27,7 @@ class Welcome extends React.Component {
     <WelcomeWrapper>
     <Helmet 
       meta = {[
+      { name: 'charset', content: 'UTF-8'},
       { name: 'twitter:card', content: 'summary' },
       { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
       { property: 'og:title', content: '【Welcome】Kaidoku - 読書とアウトプットを通じて人生を面白く' },

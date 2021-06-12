@@ -127,6 +127,7 @@ class OutputIndex extends React.Component {
       <OutputIndexWrapper>
         <Helmet 
         meta = {[
+        { name: 'charset', content: 'UTF-8'},
         { name: 'twitter:card', content: 'summary' },
         { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
         { property: 'og:title', content: `『${this.props.location.state.book.title}』のアウトプット一覧` },
