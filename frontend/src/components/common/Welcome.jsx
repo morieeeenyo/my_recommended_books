@@ -4,10 +4,6 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-// 背景画像の読み込み
-import HeadingRightImage from "../../../images/heading_right_image.jpg"
-import HeadingLeftImage from "../../../images/heading_left_image.jpg"
-
 class Welcome extends React.Component {
 
   constructor(props){
@@ -117,11 +113,11 @@ const WelcomeWrapper = styled.div`
     }
 
     .heading-left {
-      background-image: url(${HeadingLeftImage});
+      background-image: url("https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/heading_left_image.jpg");
     }
 
     .heading-right {
-      background-image: url(${HeadingRightImage});
+      background-image: url("https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/heading_right_image.jpg");
     }
   }
 

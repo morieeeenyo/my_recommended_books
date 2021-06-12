@@ -14,7 +14,8 @@ module Api
                                                                                       only_path: true)
           render json: { user: @user, books: @user.books.includes(:user_books).order('user_books.created_at DESC'), avatar: avatar_path }
         else
-          render json: { user: @user, books: @user.books.includes(:user_books).order('user_books.created_at DESC') }
+          avatar_path = "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/sample_avatar.png"
+          render json: { user: @user, books: @user.books.includes(:user_books).order('user_books.created_at DESC'), avatar: avatar_path }
         end
       end
 
