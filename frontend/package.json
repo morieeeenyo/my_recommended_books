@@ -39,6 +39,7 @@
     "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0",
     "react-paginate": "^7.1.2",
     "styled-components": "^5.2.1",
     "universal-cookie": "^4.0.4"

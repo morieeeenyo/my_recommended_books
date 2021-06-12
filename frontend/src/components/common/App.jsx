@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 // react-routerの読み込み
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
+import { Helmet } from "react-helmet";
+
 // コンポーネントの読み込み
 import Header from './Header.jsx'
 import UserModalForm from '../users/UserModalForm.jsx'
@@ -101,6 +103,15 @@ class App extends React.Component {
   render () {
     return (
       <div className="container">
+        <Helmet 
+          meta = {[
+          { name: 'twitter:card', content: 'summary' },
+          { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
+          { property: 'og:title', content: 'Kaidoku - 読書とアウトプットを通じて人生を面白く' },
+          { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
+          { property: 'og:url', content: location.href }
+        ]}>    
+        </Helmet>
         <Router>
           <Header isSignedIn={this.state.isSignedIn}>
             <Route path="/users/:content/menu">
