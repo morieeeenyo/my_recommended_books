@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // react-routerの読み込み
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
+// Helmetの読み込み(twitterカード使用するmetaタグを設定)
 import { Helmet } from "react-helmet";
 
 // コンポーネントの読み込み

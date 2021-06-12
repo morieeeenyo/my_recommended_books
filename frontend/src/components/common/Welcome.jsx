@@ -4,6 +4,9 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+// Helmetの読み込み(twitterカード使用するmetaタグを設定)
+import { Helmet } from "react-helmet";
+
 class Welcome extends React.Component {
 
   constructor(props){
@@ -21,6 +24,15 @@ class Welcome extends React.Component {
   render (){
     return(
     <WelcomeWrapper>
+    <Helmet 
+      meta = {[
+      { name: 'twitter:card', content: 'summary' },
+      { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
+      { property: 'og:title', content: '【Welcome】Kaidoku - 読書とアウトプットを通じて人生を面白く' },
+      { property: 'og:description', content: 'Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' },
+      { property: 'og:url', content: location.href }
+    ]}>    
+    </Helmet>
       {/* 一部リンクの遷移先は未実装 */}
       <div className="title">
         <h1>Kaidoku - 会読</h1>

@@ -13,6 +13,9 @@ import {BookList} from '../users/MyPage.jsx'
 // paginateの読み込み
 import ReactPaginate from 'react-paginate';
 
+// Helmetの読み込み(twitterカード使用するmetaタグを設定)
+import { Helmet } from "react-helmet";
+
 class Index extends React.Component {
   constructor(props) {
     super(props)
@@ -99,6 +102,15 @@ class Index extends React.Component {
   render () {
     return (
       <BookIndexContainer>
+        <Helmet 
+        meta = {[
+        { name: 'twitter:card', content: 'summary' },
+        { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
+        { property: 'og:title', content: '推薦図書一覧' },
+        { property: 'og:description', content: 'みんながどんな本を読んだのか知ることができます。' },
+        { property: 'og:url', content: location.href }
+        ]}>    
+        </Helmet>
         <div className="search">
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>

@@ -18,6 +18,9 @@ import Cookies from 'universal-cookie';
 //momentの読み込み(投稿日時の表示)
 import moment from 'moment'
 
+// Helmetの読み込み(twitterカード使用するmetaタグを設定)
+import { Helmet } from "react-helmet";
+
 class OutputIndex extends React.Component {
   constructor(props){
     super(props);
@@ -122,6 +125,15 @@ class OutputIndex extends React.Component {
   render () {
     return (
       <OutputIndexWrapper>
+        <Helmet 
+        meta = {[
+        { name: 'twitter:card', content: 'summary' },
+        { property: 'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" },
+        { property: 'og:title', content: `『${this.props.location.state.book.title}』のアウトプット一覧` },
+        { property: 'og:description', content: `『${this.props.location.state.book.title}』に興味をお持ちですか？まずはみんなのアウトプットを覗いてみましょう。` },
+        { property: 'og:url', content: location.href }
+        ]}>    
+        </Helmet>
         <OutputContent>
           <div className="output-header">
           {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
