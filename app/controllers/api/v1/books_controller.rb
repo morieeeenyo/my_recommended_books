@@ -91,14 +91,14 @@ module Api
         if Rails.env.production?
           @twitter_client.update!("
             \n『#{@book.title}』を推薦図書に追加しました！ 
-            \n #{root_url(only_path: false)}
+            \n #{root_url(only_path: false)}books/#{@book.isbn}/outputs
             \n #読書 #読書好きとつながりたい #Kaidoku 
           ")
         else
           @twitter_client.update!("
             【API 連携テスト】
             \n『#{@book.title}』を推薦図書に追加しました！ 
-            \n #{root_url(only_path: false)}
+            \n #{root_url(only_path: false)}books/#{@book.isbn}/outputs
             \n #読書 #読書好きとつながりたい #Kaidoku
           ")
           # ↑アプリURLへの導線を貼る(一通り出来上がってから)

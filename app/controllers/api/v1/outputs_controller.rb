@@ -11,7 +11,7 @@ module Api
         unless @user
           @my_outputs, @outputs = Output.fetch_resources(@book.id, nil)
           # フロントでの条件分岐をへらすためにmy_outputsも返却。フロント側ではuserがいるかどうかで条件分岐
-          return render json: { myoutputs: @my_outputs, outputs: @outputs }
+          return render json: { book: @book, myoutputs: @my_outputs, outputs: @outputs }
         end
 
         # ユーザーが書籍を投稿済みかどうか
@@ -22,7 +22,7 @@ module Api
         # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
         # postedは書籍をユーザーが投稿済みかどうかを管理しているキー
         # 書籍が投稿済みの場合アウトプット投稿ボタンが、投稿済みではない場合推薦図書追加ボタンが表示される
-        render json: { myoutputs: @my_outputs, outputs: @outputs, user: @user, posted: @book_is_posted_by_user.present? }
+        render json: { book: @book, myoutputs: @my_outputs, outputs: @outputs, user: @user, posted: @book_is_posted_by_user.present? }
       end
 
       def create
@@ -73,14 +73,14 @@ module Api
         if Rails.env.production?
           @twitter_client.update!("
             \n『#{book.title}』のアウトプットを投稿しました！
-            \n #{root_url(only_path: false)}
+            \n #{root_url(only_path: false)}books/#{book.isbn}/outputs
             \n #読書 #読書好きとつながりたい #Kaidoku 
           ")
         else
           @twitter_client.update!("
             【API 連携テスト】
             \n『#{book.title}』のアウトプットを投稿しました！
-            \n #{root_url(only_path: false)}
+            \n #{root_url(only_path: false)}books/#{book.isbn}/outputs
             \n #読書 #読書好きとつながりたい #Kaidoku
           ")
         end
