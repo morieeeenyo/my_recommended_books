@@ -6,7 +6,7 @@ export function MetaTags(props) {
       let metaElement = document.createElement('meta')
       metaElement.setAttribute('property', data.property)
       metaElement.setAttribute('content', data.content)
-      document.head.insertBefore(metaElement, document.head.children[1])
+      document.head.insertBefore(metaElement, document.head.children[2])
     })
     meta.forEach(data => {
       let metaElement = document.createElement('meta')
@@ -17,7 +17,6 @@ export function MetaTags(props) {
   })
 
   const meta = [
-    {name:  'twitter:card', content: 'summary'},
     {name:  'charset', content: 'utf-8'},
     {name:  'description', content: 'Kaidokuはアウトプットを通じて人生を面白くすることを目指した読書アプリです。'},
   ]
