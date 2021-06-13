@@ -18,18 +18,18 @@ module Api
         return render status: 401, json: { errors: '推薦図書の投稿にはログインが必要です' } unless @user && @token && @client
 
         @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) # 同じデータを保存しないためにisbnで識別
-        if @book.valid? # 書籍データが送られていればtrue
-          @book.save
-          user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
-          if user_book_relation
-            render status: 422, json: { errors: ['その書籍はすでに追加されています'] } # すでに同じ書籍が投稿されていればエラーメッセージを表示。書籍が空だった場合と合わせるために配列で定義
-          else
-            @user.books << @book # ユーザーと書籍を紐付ける。
-            render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
-            post_tweet if @twitter_client && params[:to_be_shared_on_twitter]  # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
-          end
+      
+        return render status: 422, json: { errors: @book.errors.full_messages }  unless @book.valid? # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+
+        # バリデーション突破時
+        @book.save
+        user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
+        if user_book_relation
+          render status: 422, json: { errors: ['その書籍はすでに追加されています'] } # すでに同じ書籍が投稿されていればエラーメッセージを表示。書籍が空だった場合と合わせるために配列で定義
         else
-          render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+          @user.books << @book # ユーザーと書籍を紐付ける。
+          render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
+          post_tweet if @twitter_client && params[:to_be_shared_on_twitter]  # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
         end
       end
 
