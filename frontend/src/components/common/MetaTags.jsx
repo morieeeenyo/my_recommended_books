@@ -1,35 +1,33 @@
-import DocumentMeta from 'react-document-meta';
 import React, { useEffect } from 'react';
 
 export function MetaTags(props) {
   useEffect(() => {
-    const headElements = document.head.children
-    Array.from(headElements).forEach(el => {
-      if (el.tagName == 'STYLE' || el.tagName == 'SCRIPT') {
-        document.head.appendChild(el)
-      }
+    ogProperties.forEach(data => {
+      let metaElement = document.createElement('meta')
+      metaElement.setAttribute('property', data.property)
+      metaElement.setAttribute('content', data.content)
+      document.head.insertBefore(metaElement, document.head.children[1])
+    })
+    meta.forEach(data => {
+      let metaElement = document.createElement('meta')
+      metaElement.setAttribute('name', data.name)
+      metaElement.setAttribute('content', data.content)
+      document.head.insertBefore(metaElement, document.head.children[1])
     })
   })
 
-  const meta = {
-    title: 'Kaidoku - 読書とアウトプットで人生を面白く',
-    description: 'Kaidokuはアウトプットを通じて人生を面白くすることを目指した読書アプリです。',
-    meta: {
-      charset: 'utf-8',
-      name: {
-        'twitter:card': 'summary'
-      },
-      property: {
-        'og:title': props.title,
-        'og:description': props.description,
-        'og:image': "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png",
-        'og:url': location.href
-      }
-    }
-  }
+  const meta = [
+    {name:  'twitter:card', content: 'summary'},
+    {name:  'charset', content: 'utf-8'},
+    {name:  'description', content: 'Kaidokuはアウトプットを通じて人生を面白くすることを目指した読書アプリです。'},
+  ]
 
-  return(
-    <DocumentMeta {...meta}>
-    </DocumentMeta>
-  )
+  const ogProperties = [
+    {property:  'og:url', content: location.href},
+    {property:  'og:image', content: "https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png",},
+    {property:  'og:description', content: props.description},
+    {property:  'og:title', content: props.title},
+  ]
+
+  return null
 }
