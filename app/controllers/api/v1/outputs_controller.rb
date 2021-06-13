@@ -4,8 +4,6 @@ module Api
       before_action :user_authentification
       # ユーザーが認証済みかどうかチェック
       before_action :set_twitter_client, only: :create
-      # ツイートの投稿
-      after_action :post_tweet, only: :create
 
       def index
         @book = Book.find_by(isbn: params[:book_isbn])
@@ -13,7 +11,7 @@ module Api
         unless @user
           @my_outputs, @outputs = Output.fetch_resources(@book.id, nil)
           # フロントでの条件分岐をへらすためにmy_outputsも返却。フロント側ではuserがいるかどうかで条件分岐
-          return render json: { myoutputs: @my_outputs, outputs: @outputs }
+          return render json: { book: @book, myoutputs: @my_outputs, outputs: @outputs }
         end
 
         # ユーザーが書籍を投稿済みかどうか
@@ -24,7 +22,7 @@ module Api
         # フロント側で自分のアウトプットをまず一番上に出し、その後他人のアウトプットを表示させる
         # postedは書籍をユーザーが投稿済みかどうかを管理しているキー
         # 書籍が投稿済みの場合アウトプット投稿ボタンが、投稿済みではない場合推薦図書追加ボタンが表示される
-        render json: { myoutputs: @my_outputs, outputs: @outputs, user: @user, posted: @book_is_posted_by_user.present? }
+        render json: { book: @book, myoutputs: @my_outputs, outputs: @outputs, user: @user, posted: @book_is_posted_by_user.present? }
       end
 
       def create
@@ -37,6 +35,7 @@ module Api
           output_save_result = @output.save
           # ステータスは手動で設定する。リソース保存時のステータスは201
           render status: 201, json: { awareness: output_save_result[:awareness], action_plans: output_save_result[:action_plans] }
+          post_tweet if @twitter_client && params[:to_be_shared_on_twitter]
         else
           render status: 422, json: { errors: @output.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
@@ -70,12 +69,20 @@ module Api
       end
 
       def post_tweet
-        # ユーザーが認証済みではない、もしくはフォームでTwitterでのシェアをオンにしていない場合には何もしない
-        return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
-
-        if !Rails.env.test? # rubocop:disable Style/NegatedIf, Style/GuardClause
-          book = Book.find_by(isbn: params[:book_isbn])
-          @twitter_client.update!("API連携のテストです。\n『#{book.title}』のアウトプットを投稿しました！ \n #読書 #読書好きとつながりたい #Kaidoku") # アプリURLへの導線を貼る(一通り出来上がってから)
+        book = Book.find_by(isbn: params[:book_isbn])
+        if Rails.env.production?
+          @twitter_client.update!("
+            \n『#{book.title}』のアウトプットを投稿しました！
+            \n #{root_url(only_path: false)}books/#{book.isbn}/outputs
+            \n #読書 #読書好きとつながりたい #Kaidoku 
+          ")
+        else
+          @twitter_client.update!("
+            【API 連携テスト】
+            \n『#{book.title}』のアウトプットを投稿しました！
+            \n #{root_url(only_path: false)}books/#{book.isbn}/outputs
+            \n #読書 #読書好きとつながりたい #Kaidoku
+          ")
         end
       end
     end

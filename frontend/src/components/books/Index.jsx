@@ -10,6 +10,9 @@ import axios from 'axios';
 // コンポーネントの読み込み
 import {BookList} from '../users/MyPage.jsx'
 
+// metaタグの設定をするコンポーネント
+import {MetaTags} from '../common/MetaTags.jsx'
+
 // paginateの読み込み
 import ReactPaginate from 'react-paginate';
 
@@ -99,6 +102,7 @@ class Index extends React.Component {
   render () {
     return (
       <BookIndexContainer>
+        <MetaTags title="【書籍一覧】Kaidoku - 読書とアウトプットで人生を面白く" description="みんなの推薦図書一覧です。気になる本があれば検索してみましょう。"></MetaTags>
         <div className="search">
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>
@@ -122,7 +126,7 @@ class Index extends React.Component {
                 <img src={book.image_url}/>
                 <p className="book-title">{book.title}</p>
                 <p className="book-author">{book.author}</p>
-                <Link to={{pathname: "/books/" + book.isbn + "/outputs", state: {book: book}}}>アウトプット一覧</Link>
+                <Link to={{pathname: "/books/" + book.isbn + "/outputs"}}>アウトプット一覧</Link>
               </li> //returnがないと表示できない
               ) 
             })} 

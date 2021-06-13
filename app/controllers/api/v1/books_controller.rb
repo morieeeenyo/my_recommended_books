@@ -18,18 +18,18 @@ module Api
         return render status: 401, json: { errors: '推薦図書の投稿にはログインが必要です' } unless @user && @token && @client
 
         @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) # 同じデータを保存しないためにisbnで識別
-        if @book.valid? # 書籍データが送られていればtrue
-          @book.save
-          user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
-          if user_book_relation
-            render status: 422, json: { errors: ['その書籍はすでに追加されています'] } # すでに同じ書籍が投稿されていればエラーメッセージを表示。書籍が空だった場合と合わせるために配列で定義
-          else
-            @user.books << @book # ユーザーと書籍を紐付ける。
-            render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
-            post_tweet # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
-          end
+      
+        return render status: 422, json: { errors: @book.errors.full_messages } unless @book.valid? # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+
+        # バリデーション突破時
+        @book.save
+        user_book_relation = UserBook.find_by(user_id: @user.id, book_id: @book.id)
+        if user_book_relation
+          render status: 422, json: { errors: ['その書籍はすでに追加されています'] } # すでに同じ書籍が投稿されていればエラーメッセージを表示。書籍が空だった場合と合わせるために配列で定義
         else
-          render status: 422, json: { errors: @book.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+          @user.books << @book # ユーザーと書籍を紐付ける。
+          render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
+          post_tweet  # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
         end
       end
 
@@ -87,11 +87,22 @@ module Api
       end
 
       def post_tweet
-        # ユーザーが認証済みではない、もしくはフォームでTwitterでのシェアをオンにしていない場合には何もしない
         return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
-
-        @twitter_client.update!("API連携のテストです。\n『#{@book.title}』を推薦図書に追加しました！ \n #読書 #読書好きとつながりたい #Kaidoku") if !Rails.env.test? # rubocop:disable Style/NegatedIf
-        # ↑アプリURLへの導線を貼る(一通り出来上がってから)
+        if Rails.env.production?
+          @twitter_client.update!("
+            \n『#{@book.title}』を推薦図書に追加しました！ 
+            \n #{root_url(only_path: false)}books/#{@book.isbn}/outputs
+            \n #読書 #読書好きとつながりたい #Kaidoku 
+          ")
+        else
+          @twitter_client.update!("
+            【API 連携テスト】
+            \n『#{@book.title}』を推薦図書に追加しました！ 
+            \n #{root_url(only_path: false)}books/#{@book.isbn}/outputs
+            \n #読書 #読書好きとつながりたい #Kaidoku
+          ")
+          # ↑アプリURLへの導線を貼る(一通り出来上がってから)
+        end
       end
     end
   end

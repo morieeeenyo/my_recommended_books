@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // react-routerの読み込み
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
+
 // コンポーネントの読み込み
 import Header from './Header.jsx'
 import UserModalForm from '../users/UserModalForm.jsx'
@@ -120,7 +121,6 @@ class App extends React.Component {
                   : <Welcome></Welcome>
                 }
                 {this.state.firstSession && <Redirect to="/mypage"/>}
-                />
               </Route>
               <Route exact path='/welcome'>
                 <Welcome>

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-// ロゴ画像の読み込み。ダブルクオートじゃないと本番環境で読み込めない
-import Logo from "../../../images/header_logo.png"
-
 // react-router用のlinkを使えるようにする
 import { withRouter } from 'react-router-dom'
 
@@ -24,7 +21,7 @@ class Header extends React.Component {
           <HeaderTitle>
             {/* App.jsxにてfirstSessionが存在しているとルートパスに遷移できないのでパスを変更 */}
             <Link to="/books">
-              <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+              <img src="https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
             </Link>
           </HeaderTitle>
           <HeaderRight>
@@ -43,7 +40,7 @@ class Header extends React.Component {
             {this.props.children}
             <HeaderTitle>
               <Link to="/books">
-                <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+                <img src="https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
               </Link>
             </HeaderTitle>
             <HeaderRight>

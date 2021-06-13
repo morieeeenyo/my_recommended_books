@@ -4,12 +4,10 @@ import styled from 'styled-components';
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
-// 背景画像の読み込み
-import HeadingRightImage from "../../../images/heading_right_image.jpg"
-import HeadingLeftImage from "../../../images/heading_left_image.jpg"
+// metaタグの設定をするコンポーネント
+import {MetaTags} from './MetaTags.jsx'
 
 class Welcome extends React.Component {
-
   constructor(props){
     super(props);
   }
@@ -25,6 +23,7 @@ class Welcome extends React.Component {
   render (){
     return(
     <WelcomeWrapper>
+    <MetaTags title="【Welcome】Kaidoku - 読書とアウトプットで人生を面白く" description="ようこそ。Kaidokuはアウトプットを通じて人生を面白くすることを目指した読書アプリです。"></MetaTags>
       {/* 一部リンクの遷移先は未実装 */}
       <div className="title">
         <h1>Kaidoku - 会読</h1>
@@ -117,11 +116,11 @@ const WelcomeWrapper = styled.div`
     }
 
     .heading-left {
-      background-image: url(${HeadingLeftImage});
+      background-image: url("https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/heading_left_image.jpg");
     }
 
     .heading-right {
-      background-image: url(${HeadingRightImage});
+      background-image: url("https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/heading_right_image.jpg");
     }
   }
 

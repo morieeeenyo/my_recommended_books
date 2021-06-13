@@ -12,17 +12,18 @@ import {OutputWrapper} from './MyOutputs.jsx'
 import {OutputContent} from './MyOutputs.jsx'
 import {OutputList} from './MyOutputs.jsx'
 
-// Cookieの読み込み。localStorageを使用せずCookieを使用する方針に切り替え
-import Cookies from 'universal-cookie';
-
 //momentの読み込み(投稿日時の表示)
 import moment from 'moment'
+
+// metaタグの設定をするコンポーネント
+import {MetaTags} from '../common/MetaTags.jsx'
 
 class OutputIndex extends React.Component {
   constructor(props){
     super(props);
     this.state ={
       outputs: [],
+      book: {},
       myOutputs: [],
       user: {},
       posted: false
@@ -51,7 +52,7 @@ class OutputIndex extends React.Component {
 
   fetchResources() {
     axios
-    .get('/api/v1/books/' + this.props.location.state.book.isbn + '/outputs')
+    .get('/api/v1/books/' + location.pathname.replace(/[^0-9]/g, '') + '/outputs')
     .then(response => {
       // ユーザーがログイン済みかどうかによる条件分岐
       // 引数の内容で条件分岐しちゃってるので本当はよくなさそう
@@ -61,12 +62,14 @@ class OutputIndex extends React.Component {
           outputs: response.data.outputs,
           myOutputs: response.data.myoutputs,
           user: response.data.user,
-          posted: response.data.posted
+          posted: response.data.posted,
+          book: response.data.book
         })
       } else {
         this.setState({
           outputs: response.data.outputs,
-          myOutputs: response.data.myoutputs
+          myOutputs: response.data.myoutputs,
+          book: response.data.book
         })
       }
     })
@@ -102,7 +105,7 @@ class OutputIndex extends React.Component {
       } 
     }
     axios
-    .post('/api/v1/books', {book: this.props.location.state.book, to_be_shared_on_twitter: to_be_shared_on_twitter})
+    .post('/api/v1/books', {book: this.state.book, to_be_shared_on_twitter: to_be_shared_on_twitter})
     .then(response => {
       // 推薦図書に追加した際に推薦図書追加済みにしつつリンクを「アウトプットを投稿する」に変える
       this.setState({
@@ -122,10 +125,11 @@ class OutputIndex extends React.Component {
   render () {
     return (
       <OutputIndexWrapper>
+        <MetaTags title={"『" + this.state.book.title + "』のアウトプット Kaidoku - 読書とアウトプットで人生を面白く"} description="みんなのアウトプット一覧をご覧になれます。"></MetaTags>
         <OutputContent>
           <div className="output-header">
-          {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
-            <h4>『{this.props.location.state.book.title}』のアウトプット</h4>
+          {/* this.state.bookでリンクから書籍情報を取得 */}
+            <h4>『{this.state.book.title}』のアウトプット</h4>
             {/* スタイルはMyPage→MyOutputsへのリンクと同じ */} 
             
             <div className="header-left">
@@ -138,7 +142,7 @@ class OutputIndex extends React.Component {
 
               {/* 推薦図書追加済みの場合のみ出る */}
               {this.state.posted && 
-                <Link to={{pathname: "/books/" + this.props.location.state.book.isbn + "/outputs/new", state: {book: this.props.location.state.book, user: this.state.user}}}>
+                <Link to={{pathname: "/books/" + this.state.book.isbn + "/outputs/new", state: {book: this.state.book, user: this.state.user}}}>
                   アウトプットを投稿する
                 </Link>
               }

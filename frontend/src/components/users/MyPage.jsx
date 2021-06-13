@@ -10,13 +10,8 @@ import { Link, withRouter, useLocation } from "react-router-dom";
 //axiosの読み込み
 import axios from 'axios';
 
-// ロゴ画像の読み込み
-import Sample from "../../../images/sample_avatar.png"
-
 // Cookieの読み込み
 import Cookies from 'universal-cookie';
-
-
 
 
 export function MyRecommendedBooks() {
@@ -83,19 +78,11 @@ class MyPage extends React.Component {
     axios 
     .get('/api/v1/mypage')
     .then(response => {
-      if (response.data.avatar) {
-        this.setState({
-          user: response.data.user,
-          books: response.data.books,
-          avatar: response.data.avatar
-        })
-      } else {
-        this.setState({
-          user: response.data.user,
-          books: response.data.books,
-          avatar: Sample
-        })
-      }
+      this.setState({
+        user: response.data.user,
+        books: response.data.books,
+        avatar: response.data.avatar // アバターが投稿されていない場合サンプルになる
+      })
     })
     .catch(error =>{
       //アラートを出すとうまく動かなかった(アラートが2つ出てくる？？？)
@@ -138,7 +125,7 @@ class MyPage extends React.Component {
       <MyPageWrapper>
         <MyPageBody>
           <MyPageSideBar>
-          <img id="avatar"src={this.state.avatar}/>
+          <img id="avatar" src={this.state.avatar}/>
           <h4 id="nickname">{this.state.user.nickname}さんのマイページ</h4>
             <ul>
               {/* サイドバーをクリックするとパスに応じてメインコンテンツが切り替わる */}
