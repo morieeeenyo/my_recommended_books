@@ -121,7 +121,6 @@ class App extends React.Component {
                   : <Welcome></Welcome>
                 }
                 {this.state.firstSession && <Redirect to="/mypage"/>}
-                />
               </Route>
               <Route exact path='/welcome'>
                 <Welcome>
