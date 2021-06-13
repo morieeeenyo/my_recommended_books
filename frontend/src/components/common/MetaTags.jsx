@@ -3,10 +3,8 @@ import React, { useEffect } from 'react';
 export function MetaTags(props) {
   useEffect(() => {
     ogProperties.forEach(data => {
-      let metaElement = document.createElement('meta')
-      metaElement.setAttribute('property', data.property)
+      let metaElement = document.querySelector(`meta[property="${data.property}"]`)
       metaElement.setAttribute('content', data.content)
-      document.head.insertBefore(metaElement, document.head.children[2])
     })
     meta.forEach(data => {
       let metaElement = document.createElement('meta')
