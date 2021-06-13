@@ -73,14 +73,14 @@ module Api
         if Rails.env.production?
           @twitter_client.update!("
             \n『#{book.title}』のアウトプットを投稿しました！
-            \n #{root_url(only_path: false)}books/#{book.isbn}/outputs
+            \n #{root_url(only_path: false)}
             \n #読書 #読書好きとつながりたい #Kaidoku 
           ")
         else
           @twitter_client.update!("
             【API 連携テスト】
             \n『#{book.title}』のアウトプットを投稿しました！
-            \n #{root_url(only_path: false)}books/#{book.isbn}/outputs
+            \n #{root_url(only_path: false)}
             \n #読書 #読書好きとつながりたい #Kaidoku
           ")
         end
