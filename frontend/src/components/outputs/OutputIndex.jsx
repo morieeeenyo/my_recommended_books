@@ -15,9 +15,6 @@ import {OutputList} from './MyOutputs.jsx'
 //momentの読み込み(投稿日時の表示)
 import moment from 'moment'
 
-// Helmetの読み込み(twitterカード使用するmetaタグを設定)
-import { Helmet } from "react-helmet";
-
 // metaタグの設定をするコンポーネント
 import {MetaTags} from '../common/MetaTags.jsx'
 
@@ -125,7 +122,7 @@ class OutputIndex extends React.Component {
   render () {
     return (
       <OutputIndexWrapper>
-        <MetaTags title={"【『" + this.props.location.state.book.title + "』のアウトプット一覧】Kaidoku - 読書とアウトプットを通じて人生を面白く"} description='みんなが投稿したアウトプットをご覧になれます。' ></MetaTags>
+        <MetaTags title={"『" + this.props.location.state.book.title + "』のアウトプット"} description="みんなのアウトプット一覧をご覧になれます。"></MetaTags>
         <OutputContent>
           <div className="output-header">
           {/* this.props.location.state.bookでリンクから書籍情報を取得 */}

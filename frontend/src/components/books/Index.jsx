@@ -16,9 +16,6 @@ import {MetaTags} from '../common/MetaTags.jsx'
 // paginateの読み込み
 import ReactPaginate from 'react-paginate';
 
-// Helmetの読み込み(twitterカード使用するmetaタグを設定)
-import { Helmet } from "react-helmet";
-
 class Index extends React.Component {
   constructor(props) {
     super(props)
@@ -105,7 +102,7 @@ class Index extends React.Component {
   render () {
     return (
       <BookIndexContainer>
-        <MetaTags title="【書籍一覧】Kaidoku - 読書とアウトプットを通じて人生を面白く" description='みんなが投稿した書籍一覧をご覧になれます。気になる本があれば検索してみましょう。' ></MetaTags>
+        <MetaTags title="【書籍一覧】Kaidoku" description="みんなの推薦図書一覧です。気になる本があれば検索してみましょう。"></MetaTags>
         <div className="search">
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>

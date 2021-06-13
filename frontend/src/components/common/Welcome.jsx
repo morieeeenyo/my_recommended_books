@@ -1,6 +1,3 @@
-// Helmetの読み込み(twitterカード使用するmetaタグを設定)
-import { Helmet } from "react-helmet";
-
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
@@ -26,7 +23,7 @@ class Welcome extends React.Component {
   render (){
     return(
     <WelcomeWrapper>
-    <MetaTags title="【Welcome】Kaidoku - 読書とアウトプットを通じて人生を面白く" description='Kaidokuはアウトプットを通じて人生をより面白くすることを目指した読書アプリです。' ></MetaTags>
+    <MetaTags title="【Welcome】Kaidoku - 読書とアウトプットで人生を面白く" description="ようこそ。Kaidokuはアウトプットを通じて人生を面白くすることを目指した読書アプリです。"></MetaTags>
       {/* 一部リンクの遷移先は未実装 */}
       <div className="title">
         <h1>Kaidoku - 会読</h1>
