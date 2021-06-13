@@ -19,7 +19,7 @@ module Api
 
         @book = Book.where(isbn: book_params[:isbn]).first_or_initialize(book_params) # 同じデータを保存しないためにisbnで識別
       
-        return render status: 422, json: { errors: @book.errors.full_messages }  unless @book.valid? # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
+        return render status: 422, json: { errors: @book.errors.full_messages } unless @book.valid? # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
 
         # バリデーション突破時
         @book.save
@@ -29,7 +29,7 @@ module Api
         else
           @user.books << @book # ユーザーと書籍を紐付ける。
           render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
-          post_tweet if @twitter_client && params[:to_be_shared_on_twitter]  # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
+          post_tweet  # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
         end
       end
 
@@ -87,6 +87,7 @@ module Api
       end
 
       def post_tweet
+        return nil if !@twitter_client || !params[:to_be_shared_on_twitter]
         if Rails.env.production?
           @twitter_client.update!("
             \n『#{@book.title}』を推薦図書に追加しました！ 
