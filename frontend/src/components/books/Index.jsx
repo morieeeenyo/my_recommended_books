@@ -102,7 +102,7 @@ class Index extends React.Component {
   render () {
     return (
       <BookIndexContainer>
-        <MetaTags title="【書籍一覧】Kaidoku" description="みんなの推薦図書一覧です。気になる本があれば検索してみましょう。"></MetaTags>
+        <MetaTags title="【書籍一覧】Kaidoku - 読書とアウトプットで人生を面白く" description="みんなの推薦図書一覧です。気になる本があれば検索してみましょう。"></MetaTags>
         <div className="search">
           <h2>書籍検索</h2>
           <p>気になる本があれば検索してみましょう。<br></br>すでに読んだ方のアウトプットが見つかるかもしれません。</p>

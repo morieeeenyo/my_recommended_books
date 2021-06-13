@@ -122,7 +122,7 @@ class OutputIndex extends React.Component {
   render () {
     return (
       <OutputIndexWrapper>
-        <MetaTags title={"『" + this.props.location.state.book.title + "』のアウトプット"} description="みんなのアウトプット一覧をご覧になれます。"></MetaTags>
+        <MetaTags title={"『" + this.props.location.state.book.title + "』のアウトプット Kaidoku - 読書とアウトプットで人生を面白く"} description="みんなのアウトプット一覧をご覧になれます。"></MetaTags>
         <OutputContent>
           <div className="output-header">
           {/* this.props.location.state.bookでリンクから書籍情報を取得 */}
