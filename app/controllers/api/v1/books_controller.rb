@@ -90,7 +90,7 @@ module Api
         if Rails.env.production?
           @twitter_client.update!("
             \n『#{@book.title}』を推薦図書に追加しました！ 
-            \n #{root_url(only_path: false)}/books/#{@book.isbn}/outputs
+            \n #{root_url(only_path: false)}books/#{@book.isbn}/outputs
             \n #読書 #読書好きとつながりたい #Kaidoku 
           ")
         else
