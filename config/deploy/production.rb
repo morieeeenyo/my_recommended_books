@@ -49,7 +49,7 @@
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
-server "13.112.8.7", user: "togo", roles: %w{app db web}
+server "54.250.76.224", user: "togo", roles: %w{app db web}
 
 set :ssh_options, {
   keys: %w(~/.ssh/kaidoku_2.pem),
