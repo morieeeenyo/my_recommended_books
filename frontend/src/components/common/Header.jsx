@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom'
 // react-routerの読み込み
 import { Link } from "react-router-dom";
 
+import Logo from "../../../images/header_logo.png"
+
 class Header extends React.Component {
   constructor(props){
     super(props);
@@ -21,7 +23,7 @@ class Header extends React.Component {
           <HeaderTitle>
             {/* App.jsxにてfirstSessionが存在しているとルートパスに遷移できないのでパスを変更 */}
             <Link to="/books">
-              <img src="https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+              <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
             </Link>
           </HeaderTitle>
           <HeaderRight>
@@ -40,7 +42,7 @@ class Header extends React.Component {
             {this.props.children}
             <HeaderTitle>
               <Link to="/books">
-                <img src="https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/header_logo.png" alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
+                <img src={Logo} alt="Kaidoku" width="65" height="65"/> {/* ロゴの高さはヘッダーより5pxだけ小さい */}
               </Link>
             </HeaderTitle>
             <HeaderRight>

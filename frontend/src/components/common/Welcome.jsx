@@ -7,6 +7,10 @@ import { Link } from "react-router-dom";
 // metaタグの設定をするコンポーネント
 import {MetaTags} from './MetaTags.jsx'
 
+
+import HeadingRight from "../../../images/heading_right_image.jpg"
+import HeadingLeft from "../../../images/heading_left_image.jpg"
+
 class Welcome extends React.Component {
   constructor(props){
     super(props);
@@ -116,11 +120,11 @@ const WelcomeWrapper = styled.div`
     }
 
     .heading-left {
-      background-image: url("https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/heading_left_image.jpg");
+      background-image: url(${HeadingLeft});
     }
 
     .heading-right {
-      background-image: url("https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/heading_right_image.jpg");
+      background-image: url(${HeadingRight});
     }
   }
 
