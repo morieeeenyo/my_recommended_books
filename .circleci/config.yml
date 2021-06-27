@@ -114,11 +114,15 @@ jobs:
 
   deploy:
     docker:
-        - image: buildpack-deps:trusty
+        - image: circleci/ruby:2.6.5-node-browsers
           environment:
               BUNDLER_VERSION: 2.1.4
     steps:
         - checkout
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-
         - run:
             name: install dependencies
             command: |
