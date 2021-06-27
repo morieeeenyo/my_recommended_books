@@ -119,6 +119,15 @@ jobs:
               BUNDLER_VERSION: 2.1.4
     steps:
         - checkout
+        - run:
+            name: install dependencies
+            command: |
+                gem install bundler -v 2.1.4
+                bundle install --jobs=4 --retry=3 --path vendor/bundle
+        - save_cache:
+            paths:
+            - ./vendor/bundle
+            key: v1-dependencies-{{ checksum "Gemfile.lock" }}
         - add_ssh_keys:
             fingerprints: "e7:1a:e2:f9:73:3c:43:67:9a:58:ee:da:c9:d0:8f:2f"
         - run:
