@@ -117,10 +117,13 @@ jobs:
         - image: buildpack-deps:trusty
     steps:
         - checkout
+        - add_ssh_keys:
+            fingerprints: "e7:1a:e2:f9:73:3c:43:67:9a:58:ee:da:c9:d0:8f:2f"
+              - 
         - run:
-            name: heroku_deploy
+            name: Capistrano deploy
             command: |
-                git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+                bundle exec cap production deploy
         - slack/notify:
             event: fail
             mentions: '@togo_mori'
