@@ -103,17 +103,17 @@ class MyOutputs extends React.Component {
                     </h3>
                     <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                     <h4>気づき</h4>
-                    <p className="awareness">{output.awareness.content}</p>
-                    <div className="action-plan">
+                    <p className="awareness one-indented">{output.awareness.content}</p>
+                    <div className="action-plans">
                       {output.action_plans.map((action_plan, action_plan_index) => {
                       return(
                             <div key={action_plan.id} className="action-plan">
                               <h4>アクションプラン{action_plan_index + 1}</h4>
-                              <p>{action_plan.what_to_do}</p>
-                              <h5>いつやるか</h5>
-                              <p>{action_plan.time_of_execution}</p>
-                              <h5>実施方法・達成基準</h5>
-                              <p>{action_plan.how_to_do}</p>
+                              <p className="one-indented">{action_plan.what_to_do}</p>
+                              <h5 className="one-indented">いつやるか</h5>
+                              <p className="two-indented">{action_plan.time_of_execution}</p>
+                              <h5 className="one-indented">実施方法・達成基準</h5>
+                              <p className="two-indented">{action_plan.how_to_do}</p>
                             </div>
                           )
                       })}
@@ -221,7 +221,14 @@ export const OutputList = styled.ul`
   & p {
     /* テキストの幅 */
     margin: 2px 0;
+  }
+
+  & .one-indented {
     text-indent: 1em;
+  }
+
+  & .two-indented {
+    text-indent: 2em;
   }
 
   .posted-date {
