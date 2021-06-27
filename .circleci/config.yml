@@ -119,7 +119,6 @@ jobs:
         - checkout
         - add_ssh_keys:
             fingerprints: "e7:1a:e2:f9:73:3c:43:67:9a:58:ee:da:c9:d0:8f:2f"
-              - 
         - run:
             name: Capistrano deploy
             command: |
