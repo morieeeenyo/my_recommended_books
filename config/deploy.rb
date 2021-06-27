@@ -12,11 +12,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 set :linked_files, fetch(:linked_files, []).push("config/master.key")
 
 set :rbenv_type, :user
-set :rbenv_ruby, '2.6.5' #カリキュラム通りに進めた場合、’2.6.5’ です
-
-# どの公開鍵を利用してデプロイするか
-set :ssh_options, auth_methods: ['publickey'],
-                                  keys: ['~/.ssh/kaidoku_2.pem'] 
+set :rbenv_ruby, '2.6.5' #カリキュラム通りに進めた場合、’2.6.5’ です 
 
 # プロセス番号を記載したファイルの場所
 set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
