@@ -133,7 +133,7 @@ jobs:
             - ./vendor/bundle
             key: v1-dependencies-{{ checksum "Gemfile.lock" }}
         - add_ssh_keys:
-            fingerprints: "e7:1a:e2:f9:73:3c:43:67:9a:58:ee:da:c9:d0:8f:2f"
+            fingerprints: "8c:79:ba:1a:0b:a1:db:04:05:60:07:e5:0f:f8:a4:e7"
         - run:
             name: Capistrano deploy
             command: |
