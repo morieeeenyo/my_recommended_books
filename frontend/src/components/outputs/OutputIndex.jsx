@@ -251,6 +251,7 @@ const OutputIndexList = styled(OutputList)`
 
     & .action-plan > p {
       margin: 0;
+      text-indent: 1em;
     }
 
     & .action-plan > h5 {
@@ -280,6 +281,7 @@ const MyOutputList = styled(OutputList)`
 
     & .action-plan > p {
       margin: 0;
+      text-indent: 1em;
     }
 
     & .action-plan > h5 {
