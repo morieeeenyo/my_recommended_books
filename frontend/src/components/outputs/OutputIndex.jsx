@@ -165,18 +165,26 @@ class OutputIndex extends React.Component {
                     <Link to="/">削除</Link> 
                   </div>  
                 </h3>
-                <h4>気づき</h4>
-                <p className="awareness">{output.awareness.content}</p>
-                <h4>アクションプラン</h4>
-                <div className="action-plan">
-                  {output.action_plans.map(action_plan => {
-                  return(
-                      <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
+                <div className="awareness-container">
+                  <h4>気づき</h4>
+                  <p className="awareness one-indented">{output.awareness.content}</p>
+                </div>
+                <div className="action-plans">
+                  {output.action_plans.map((action_plan, action_plan_index) => {
+                    return(
+                      <div key={action_plan.id} className="action-plan">
+                        <h4>アクションプラン{action_plan_index + 1}</h4>
+                        <p className="one-indented">{action_plan.what_to_do}</p>
+                        <h5 className="one-indented">いつやるか</h5>
+                        <p className="two-indented">{action_plan.time_of_execution}</p>
+                        <h5 className="one-indented">実施方法・達成基準</h5>
+                        <p className="two-indented">{action_plan.how_to_do}</p>
+                      </div>
                       )
                   })}
                 </div>
                 {/* Railsのcreated_atが汚いので整形 */}
-                <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                 </li>
               )
             })}
@@ -193,18 +201,24 @@ class OutputIndex extends React.Component {
                 <h3 className="output-header output-list-header">
                   {output.username}さんのアウトプット
                 </h3>
+                <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                 <h4>気づき</h4>
-                <p className="awareness">{output.awareness.content}</p>
-                <h4>アクションプラン</h4>
-                <div className="action-plan">
-                  {output.action_plans.map(action_plan => {
-                  return(
-                      <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                <p className="awareness one-indented">{output.awareness.content}</p>
+                <div className="action-plans">
+                  {output.action_plans.map((action_plan, action_plan_index) => {
+                    return(
+                      <div key={action_plan.id} className="action-plan">
+                        <h4>アクションプラン{action_plan_index + 1}</h4>
+                        <p className="one-indented">{action_plan.what_to_do}</p>
+                        <h5 className="one-indented">いつやるか</h5>
+                        <p className="two-indented">{action_plan.time_of_execution}</p>
+                        <h5 className="one-indented">実施方法・達成基準</h5>
+                        <p className="two-indented">{action_plan.how_to_do}</p>
+                      </div>
                       )
                   })}
                 </div>
                 {/* Railsのcreated_atが汚いので整形 */}
-                <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                 </li>
               )
             })}
@@ -230,13 +244,20 @@ const OutputIndexList = styled(OutputList)`
   & li {
     width: 45%;
     margin: 0 20px 25px 0;
-    height: fit-content;
-    padding: 5px 15px 15px;
+    height: 370px;
+    /* アウトプット詳細ページを作ったらhiddenに変える */
+    overflow: scroll;
+    padding: 5px 20px 15px;
 
-    & .output-edit-delete-buttons {
-      width: 18%;
+    & .action-plan > p {
+      margin: 0;
+      text-indent: 1em;
     }
-  }
+
+    & .action-plan > h5 {
+      margin-bottom: 0;
+    }
+}
 `
 
 const MyOutputList = styled(OutputList)`
@@ -249,11 +270,29 @@ const MyOutputList = styled(OutputList)`
   & li {
     width: 45%;
     margin: 0 20px 25px 0;
-    height: fit-content;
-    padding: 5px 15px 15px;
+    height: 370px;
+    /* アウトプット詳細ページを作ったらhiddenに変える */
+    overflow: scroll;
+    padding: 5px 20px 15px;
 
     & .output-edit-delete-buttons {
       width: 18%;
+    }
+
+    & .action-plan > p {
+      margin: 0;
+    }
+
+    & .action-plan > h5 {
+      margin-bottom: 0;
+    }
+
+    & .one-indented {
+      text-indent: 1em;
+    }
+
+    & .two-indented {
+      text-indent: 2em;
     }
   }
 `

@@ -101,18 +101,24 @@ class MyOutputs extends React.Component {
                         <Link to="/">削除</Link>  
                       </div>  
                     </h3>
+                    <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                     <h4>気づき</h4>
-                    <p className="awareness">{output.awareness.content}</p>
-                    <h4>アクションプラン</h4>
-                    <div className="action-plan">
-                      {output.action_plans.map(action_plan => {
+                    <p className="awareness one-indented">{output.awareness.content}</p>
+                    <div className="action-plans">
+                      {output.action_plans.map((action_plan, action_plan_index) => {
                       return(
-                          <p key={action_plan.id}>・{action_plan.time_of_execution}{action_plan.what_to_do}{action_plan.how_to_do}</p>
+                            <div key={action_plan.id} className="action-plan">
+                              <h4>アクションプラン{action_plan_index + 1}</h4>
+                              <p className="one-indented">{action_plan.what_to_do}</p>
+                              <h5 className="one-indented">いつやるか</h5>
+                              <p className="two-indented">{action_plan.time_of_execution}</p>
+                              <h5 className="one-indented">実施方法・達成基準</h5>
+                              <p className="two-indented">{action_plan.how_to_do}</p>
+                            </div>
                           )
                       })}
                     </div>
                     {/* Railsのcreated_atが汚いので整形 */}
-                    <p className="posted-date">投稿日：{moment(output.awareness.created_at).format('YYYY-MM-DD')}</p>
                     </li>
                   )
                 })}
@@ -196,6 +202,15 @@ export const OutputList = styled.ul`
     border-radius: 5px;
     padding: 10px 15px;
     margin-bottom: 5px;
+    padding: 5px 20px 15px;
+
+    & .action-plan > p {
+      margin: 0;
+    }
+
+    & .action-plan > h5 {
+      margin-bottom: 0;
+    }
   }
 
   & h4 {
@@ -206,6 +221,14 @@ export const OutputList = styled.ul`
   & p {
     /* テキストの幅 */
     margin: 2px 0;
+  }
+
+  & .one-indented {
+    text-indent: 1em;
+  }
+
+  & .two-indented {
+    text-indent: 2em;
   }
 
   .posted-date {
