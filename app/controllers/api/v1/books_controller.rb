@@ -30,6 +30,7 @@ module Api
           @user.books << @book # ユーザーと書籍を紐付ける。
           render status: 201, json: { book: @book } # ステータスは手動で入れないと反映されない。リソース保存時のステータスは201
           post_tweet  # ツイートの投稿。書籍追加失敗時にツイートされるのを防ぐ
+          SlackNotification.new.notify_book_post(@book) if @user.is_admin
         end
       end
 
