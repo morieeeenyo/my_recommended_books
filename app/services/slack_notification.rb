@@ -1,5 +1,5 @@
 class SlackNotification
-
+  
   def initialize
     @client = Slack::Web::Client.new
   end
@@ -17,9 +17,7 @@ class SlackNotification
     @client.chat_postMessage(text: text, channel: "#毛利タニア国王の書斎")
   end
 
-  def notify_output_post(book, output)
-    
-    
+  def notify_output_post(book, output) 
     text = ''
     text += "*『#{book.title}』のアウトプットを投稿しました！*\n\n"
     text += "`気づき`\n"
