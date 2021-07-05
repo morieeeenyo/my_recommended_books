@@ -1,12 +1,12 @@
 module Api
   module V1
     class OutputsController < ApplicationController
+      before_action :set_book
       before_action :user_authentification
       # ユーザーが認証済みかどうかチェック
       before_action :set_twitter_client, only: :create
 
       def index
-        @book = Book.find_by(isbn: params[:book_isbn])
         # ログアウト時
         unless @user
           @my_outputs, @outputs = Output.fetch_resources(@book.id, nil)
@@ -35,7 +35,8 @@ module Api
           output_save_result = @output.save
           # ステータスは手動で設定する。リソース保存時のステータスは201
           render status: 201, json: { awareness: output_save_result[:awareness], action_plans: output_save_result[:action_plans] }
-          post_tweet if @twitter_client && params[:to_be_shared_on_twitter]
+          post_tweet(@book) if @twitter_client && params[:to_be_shared_on_twitter]
+          SlackNotification.new.notify_output_post(@book, @output)
         else
           render status: 422, json: { errors: @output.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
         end
@@ -57,6 +58,10 @@ module Api
         @client = request.headers['client']
       end
 
+      def set_book
+        @book = Book.find_by(isbn: params[:book_isbn])
+      end
+
       def set_twitter_client
         # ユーザーがsns認証済みではない場合には何もせず処理を終了
         @twitter_client = Twitter::REST::Client.new do |config|
@@ -68,8 +73,7 @@ module Api
         end
       end
 
-      def post_tweet
-        book = Book.find_by(isbn: params[:book_isbn])
+      def post_tweet(book)
         if Rails.env.production?
           @twitter_client.update!("
             \n『#{book.title}』のアウトプットを投稿しました！
