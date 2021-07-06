@@ -224,6 +224,25 @@ RSpec.describe 'Books', type: :system do
         end.to change(another_user.books, :count).by(1).and change(user.books, :count).by(0) # 投稿したユーザーにのみ紐付いているかどうか検証
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
       end
+
+      it '管理者でログイン時に書籍を追加するとSlackに通知される' do
+        user.is_admin = true
+        allow(SlackNotification).to receive(:notify_book_post).and_return(true)
+        sign_in(user) # ログインする
+        click_link href: '/books/new'
+        expect(page).to  have_content '推薦図書を投稿する'
+        fill_in 'keyword',	with: 'test'
+        find('.search-button').click
+        sleep 2
+        expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
+        all('#search_result > div')[0].click
+        expect do
+          find('input[type="submit"]').click
+          sleep 2
+        end.to change(user.books, :count).by(1) # ユーザーと紐付いているかどうかも検証
+        expect(SlackNotification).to have_received(:notify_book_post).once    
+        expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
+      end
     end
 
     context '投稿に失敗' do
@@ -238,7 +257,7 @@ RSpec.describe 'Books', type: :system do
           find('input[type="submit"]').click # 書籍を選択せずに送信
           sleep 2
         end.to change(Book, :count).by(0)
-        expect(page).to have_content "Author can't be blank"
+        expect(page).to have_content "Title can't be blank"
       end
 
       it '同じ書籍を2回投稿すると投稿に失敗する' do
@@ -268,6 +287,23 @@ RSpec.describe 'Books', type: :system do
         end.to change(user.books, :count).by(0) # ユーザーと紐付いているかどうかも検証
         expect(page).to have_content 'その書籍はすでに追加されています'
       end
+
+      it '管理者でログイン時に書籍を追加に失敗するとSlackに通知されない' do
+        user.is_admin = true
+        sign_in(user) # ログインする
+        allow(SlackNotification).to receive(:notify_book_post).and_return(true)
+        click_link href: '/books/new'
+        expect(page).to  have_content '推薦図書を投稿する'
+        fill_in 'keyword',	with: 'test'
+        find('.search-button').click
+        expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
+        expect do
+          find('input[type="submit"]').click # 書籍を選択せずに送信
+          sleep 2
+        end.to change(Book, :count).by(0)
+        expect(page).to have_content "Title can't be blank"
+        expect(SlackNotification).to have_received(:notify_book_post).exactly(0).times  
+      end
     end
 
     context 'モーダルの開閉' do
@@ -277,11 +313,11 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         find('input[type="submit"]').click
         sleep 2
-        expect(page).to have_content "Author can't be blank"
+        expect(page).to have_content "Title can't be blank"
         click_button 'x'
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
-        expect(page).not_to have_content "Author can't be blank"
+        expect(page).not_to have_content "Title can't be blank"
       end
 
       it '入力内容および検索結果はモーダルを開閉すると消える' do
