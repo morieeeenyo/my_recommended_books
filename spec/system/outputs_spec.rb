@@ -240,6 +240,25 @@ RSpec.describe 'Outputs', type: :system, js: true do
           sleep 1
         end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1)
       end
+
+      it '管理者でログイン時アウトプットを投稿するとSlackに通知される' do
+        user.update(is_admin: true)
+        user.reload
+        allow(SlackNotification).to receive(:notify_output_post).and_return(true)
+        fill_in 'output_content',	with: output.content
+        fill_in 'output_time_of_execution_0',	with: output.action_plans[0][:time_of_execution]
+        fill_in 'output_what_to_do_0',	with: output.action_plans[0][:what_to_do]
+        fill_in 'output_how_to_do_0',	with: output.action_plans[0][:how_to_do]
+        expect do
+          click_button 'この内容で投稿する'
+          sleep 1
+        end.to change(Awareness, :count).by(1).and change(ActionPlan, :count).by(1) # ユーザーや書籍との紐付も同時に検証する
+        expect(page).to have_content "『#{user.books[-1].title}』のアウトプット"
+        sleep 1
+        expect(all('.output-list-header').length).to eq 1 # アウトプットは1件
+        expect(all('.action-plan').length).to eq 1 # アクションプランは1件
+        expect(SlackNotification).to have_received(:notify_output_post).once  
+      end
     end
     context 'アウトプットの投稿に失敗する' do
       it '気づきが空のとき投稿に失敗し、エラーメッセージが表示される' do
@@ -478,6 +497,22 @@ RSpec.describe 'Outputs', type: :system, js: true do
         3.times do |error_message_index|
           expect(page).to have_content "What to do of action plan #{error_message_index + 1} can't be blank"
         end
+      end
+
+      it '管理者でログイン時アウトプット投稿に失敗するとSlackに通知されない' do
+        user.update(is_admin: true)
+        user.reload
+        allow(SlackNotification).to receive(:notify_output_post).and_return(true)
+        fill_in 'output_content',	with: ''
+        fill_in 'output_time_of_execution_0',	with: output.action_plans[0][:time_of_execution]
+        fill_in 'output_what_to_do_0',	with: output.action_plans[0][:what_to_do]
+        fill_in 'output_how_to_do_0',	with: output.action_plans[0][:how_to_do]
+        expect do
+          click_button 'この内容で投稿する'
+          sleep 1
+        end.to change(Awareness, :count).by(0).and change(ActionPlan, :count).by(0)
+        expect(page).to have_content "Content of awareness can't be blank"
+        expect(SlackNotification).to have_received(:notify_output_post).exactly(0).times     
       end
     end
 
