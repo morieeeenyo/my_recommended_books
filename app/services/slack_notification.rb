@@ -1,6 +1,6 @@
 class SlackNotification
   
-  @@client = Slack::Web::Client.new
+  @client = Slack::Web::Client.new
 
   def self.notify_book_post(book)
     text = ''
@@ -9,7 +9,7 @@ class SlackNotification
     text += "著者：#{book.author}\n"
     text += "出版社：#{book.publisher_name}\n"
     text += "楽天ブックスURL：#{book.item_url}\n"
-    @@client.chat_postMessage(text: text, channel: "#毛利タニア国王の書斎")
+    @client.chat_postMessage(text: text, channel: "#毛利タニア国王の書斎")
   end
 
   def self.notify_output_post(book, output) 
@@ -27,6 +27,6 @@ class SlackNotification
       text += "#{action_plan[:how_to_do]}```\n"
     end
     text += "`書籍購入ページURL`\n#{book.item_url}\n"
-    @@client.chat_postMessage(text: text, channel: "#毛利タニア国王の書斎")
+    @client.chat_postMessage(text: text, channel: "#毛利タニア国王の書斎")
   end
 end
