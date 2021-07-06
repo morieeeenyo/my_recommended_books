@@ -10,10 +10,6 @@ class SlackNotification
     text += "著者：#{book.author}\n"
     text += "出版社：#{book.publisher_name}\n"
     text += "楽天ブックスURL：#{book.item_url}\n"
-    if Rails.env.production?
-      text += "↓その他の書籍を見るにはこちらから↓\n"
-      text += "#{Rails.application.routes.url_helpers.root_url(protocol: 'https')}books" 
-    end
     @client.chat_postMessage(text: text, channel: "#毛利タニア国王の書斎")
   end
 
@@ -32,10 +28,6 @@ class SlackNotification
       text += "#{action_plan[:how_to_do]}```\n"
     end
     text += "`書籍購入ページURL`\n#{book.item_url}\n"
-    if Rails.env.production?
-      text += "↓その他の書籍を見るにはこちらから↓\n"
-      text += "#{Rails.application.routes.url_helpers.root_url(protocol: 'https')}books/#{book.isbn}/outputs" 
-    end
     @client.chat_postMessage(text: text, channel: "#毛利タニア国王の書斎")
   end
 end
