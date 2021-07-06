@@ -197,5 +197,26 @@ RSpec.describe 'Books', type: :request do
         expect(json['errors']).to include 'その書籍はすでに追加されています'
       end
     end
+
+    context "管理者ユーザーで投稿した時" do
+      before do
+        user.is_admin = true
+        user.save # uidを取り出すために保存
+        @headers = { uid: user.uid } # ユーザーと書籍を紐付ける処理ではrequest.headersからuidを抜き出しているため
+      end
+
+      it "書籍の投稿に成功した場合Slackに通知される" do
+        allow(SlackNotification).to receive(:notify_book_post).and_return(true)
+        post api_v1_books_path, xhr: true, params: { book: book_params }, headers: headers # headersは認証用のヘッダー
+        expect(SlackNotification).to have_received(:notify_book_post).once        
+      end
+
+      it "書籍の投稿に失敗した場合Slackに通知されない" do
+        allow(SlackNotification).to receive(:notify_book_post).and_return(true)
+        post api_v1_books_path, xhr: true, params: { book: invalid_book_params }, headers: headers # headersは認証用のヘッダー
+        expect(SlackNotification).to have_received(:notify_book_post).exactly(0).times        
+      end
+    end
+    
   end
 end

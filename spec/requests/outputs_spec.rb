@@ -306,5 +306,26 @@ RSpec.describe 'Outputs', type: :request do
         end
       end
     end
+
+
+    context "管理者ユーザーで投稿した時" do
+      before do
+        user.update(is_admin: true)
+        user.reload
+      end
+
+      it "書籍の投稿に成功した場合Slackに通知される" do
+        allow(SlackNotification).to receive(:notify_output_post).and_return(true)
+        post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
+        expect(SlackNotification).to have_received(:notify_output_post).once        
+      end
+
+      it "書籍の投稿に失敗した場合Slackに通知されない" do
+        allow(SlackNotification).to receive(:notify_output_post).and_return(true)
+        output_params[:content] = ''
+        post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
+        expect(SlackNotification).to have_received(:notify_output_post).exactly(0).times        
+      end
+    end
   end
 end
