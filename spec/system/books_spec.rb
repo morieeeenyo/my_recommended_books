@@ -288,7 +288,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to have_content 'その書籍はすでに追加されています'
       end
 
-      it '管理者でログイン時に書籍を追加に失敗するとSlackに通知されない' do
+      it '管理者でログイン時に書籍の追加に失敗するとSlackに通知されない' do
         user.is_admin = true
         sign_in(user) # ログインする
         allow(SlackNotification).to receive(:notify_book_post).and_return(true)
