@@ -310,8 +310,8 @@ RSpec.describe 'Outputs', type: :request do
 
     context "管理者ユーザーで投稿した時" do
       before do
-        user.update(is_admin: true)
-        user.reload
+        user.is_admin = true
+        user.save # uidを取り出すために保存
       end
 
       it "書籍の投稿に成功した場合Slackに通知される" do

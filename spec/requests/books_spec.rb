@@ -150,7 +150,6 @@ RSpec.describe 'Books', type: :request do
     context '書籍が投稿できる時' do
       before do
         user.save # uidを取り出すために保存
-        @headers = { uid: user.uid } # ユーザーと書籍を紐付ける処理ではrequest.headersからuidを抜き出しているため
       end
 
       it 'パラメータが正しければリクエストに成功する' do
@@ -202,8 +201,6 @@ RSpec.describe 'Books', type: :request do
       before do
         user.is_admin = true
         user.save # uidを取り出すために保存
-        @headers = { uid: user.uid } # ユーザーと書籍を紐付ける処理ではrequest.headersからuidを抜き出しているため
-        sleep 1
       end
 
       it "書籍の投稿に成功した場合Slackに通知される" do
