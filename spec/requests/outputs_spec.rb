@@ -310,6 +310,8 @@ RSpec.describe 'Outputs', type: :request do
 
     context "管理者ユーザーで投稿した時" do
       before do
+        one_action_plan = output_params[:action_plans].slice(0, 1)
+        output_params[:action_plans] = one_action_plan
         user.is_admin = true
         user.save # uidを取り出すために保存
       end
