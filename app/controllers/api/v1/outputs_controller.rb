@@ -36,7 +36,7 @@ module Api
           # ステータスは手動で設定する。リソース保存時のステータスは201
           render status: 201, json: { awareness: output_save_result[:awareness], action_plans: output_save_result[:action_plans] }
           post_tweet(@book) if @twitter_client && params[:to_be_shared_on_twitter]
-          puts @user
+          puts @user.is_admin
           SlackNotification.notify_output_post(@book, @output) if @user.is_admin
         else
           render status: 422, json: { errors: @output.errors.full_messages } # バリデーションに引っかかった際のステータスは422(Unprocessable entity)
