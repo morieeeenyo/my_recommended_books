@@ -203,6 +203,7 @@ RSpec.describe 'Books', type: :request do
         user.is_admin = true
         user.save # uidを取り出すために保存
         @headers = { uid: user.uid } # ユーザーと書籍を紐付ける処理ではrequest.headersからuidを抜き出しているため
+        sleep 1
       end
 
       it "書籍の投稿に成功した場合Slackに通知される" do
