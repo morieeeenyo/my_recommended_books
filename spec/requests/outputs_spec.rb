@@ -314,13 +314,13 @@ RSpec.describe 'Outputs', type: :request do
         user.save # uidを取り出すために保存
       end
 
-      it "書籍の投稿に成功した場合Slackに通知される" do
+      it "アウトプットの投稿に成功した場合Slackに通知される" do
         allow(SlackNotification).to receive(:notify_output_post).and_return(true)
         post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
         expect(SlackNotification).to have_received(:notify_output_post).once        
       end
 
-      it "書籍の投稿に失敗した場合Slackに通知されない" do
+      it "アウトプットの投稿に失敗した場合Slackに通知されない" do
         allow(SlackNotification).to receive(:notify_output_post).and_return(true)
         output_params[:content] = ''
         post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers

@@ -4,7 +4,7 @@ class SlackNotification
 
   def self.notify_book_post(book)
     text = ''
-    text = "※API連携のテストです\n" if !Rails.env.production?
+    text += "※API連携のテストです\n" if !Rails.env.production?
     text += "*『#{book.title}』を推薦図書に追加しました！*\n"
     text += "著者：#{book.author}\n"
     text += "出版社：#{book.publisher_name}\n"
@@ -14,7 +14,7 @@ class SlackNotification
 
   def self.notify_output_post(book, output) 
     text = ''
-    text = "※API連携のテストです\n" if !Rails.env.production?
+    text += "※API連携のテストです\n" if !Rails.env.production?
     text += "*『#{book.title}』のアウトプットを投稿しました！*\n\n"
     text += "`気づき`\n"
     text += "```#{output.content}```\n"
