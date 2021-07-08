@@ -18,16 +18,6 @@ RSpec.describe Book, type: :model do
       book.valid?
       expect(book.errors.full_messages).to include "Title can't be blank"
     end
-    it 'authorが空の場合登録できない' do
-      book.author = ''
-      book.valid?
-      expect(book.errors.full_messages).to include "Author can't be blank"
-    end
-    it 'author_kanaが空の場合登録できない' do
-      book.author_kana = ''
-      book.valid?
-      expect(book.errors.full_messages).to include "Author kana can't be blank"
-    end
     it 'publisher_nameが空の場合登録できない' do
       book.publisher_name = ''
       book.valid?

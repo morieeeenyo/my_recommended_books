@@ -306,5 +306,28 @@ RSpec.describe 'Outputs', type: :request do
         end
       end
     end
+
+
+    context "管理者ユーザーで投稿した時" do
+      before do
+        one_action_plan = output_params[:action_plans].slice(0, 1)
+        output_params[:action_plans] = one_action_plan
+        user.is_admin = true
+        user.save # uidを取り出すために保存
+      end
+
+      it "アウトプットの投稿に成功した場合Slackに通知される" do
+        allow(SlackNotification).to receive(:notify_output_post).and_return(true)
+        post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
+        expect(SlackNotification).to have_received(:notify_output_post).once        
+      end
+
+      it "アウトプットの投稿に失敗した場合Slackに通知されない" do
+        allow(SlackNotification).to receive(:notify_output_post).and_return(true)
+        output_params[:content] = ''
+        post api_v1_book_outputs_path(book.isbn), xhr: true, params: { output: output_params }, headers: headers
+        expect(SlackNotification).to have_received(:notify_output_post).exactly(0).times        
+      end
+    end
   end
 end

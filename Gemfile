@@ -76,3 +76,4 @@ gem 'rails_same_site_cookie' # cookieにsecure属性(HTTPSのみ受け付ける)
 group :production do
   gem 'unicorn', '5.4.1'
 end
+gem 'slack-ruby-client'
