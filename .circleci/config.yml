@@ -135,6 +135,10 @@ jobs:
         - add_ssh_keys:
             fingerprints: "8c:79:ba:1a:0b:a1:db:04:05:60:07:e5:0f:f8:a4:e7"
         - run:
+            name: Unicorn stop
+            command: |
+                bundle exec cap production unicorn:stop
+        - run:
             name: Capistrano deploy
             command: |
                 bundle exec cap production deploy
