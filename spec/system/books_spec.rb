@@ -31,7 +31,7 @@ RSpec.describe 'Books', type: :system do
       it 'ログイン時にトップページにアクセスするとすでに投稿された書籍が新しい順に12件一覧で表示されている' do
         sign_in(user) # ログインする
         expect(page).to have_content '新着書籍一覧'
-        sleep 3
+        sleep 2
         # どれだけ投稿しても1ページ目に表示されるのは12件
         expect(all('.book-list-item').length).to  eq 12
         # 新しい順になっていることを検証
@@ -44,7 +44,7 @@ RSpec.describe 'Books', type: :system do
         create_list(:book, 6)
         sign_in(user) # ログインする
         expect(page).to have_content '新着書籍一覧'
-        sleep 3
+        sleep 2
         # 12件に満たない場合は今ある分がすべて出てくる
         expect(all('.book-list-item').length).to eq 6
       end
@@ -53,14 +53,14 @@ RSpec.describe 'Books', type: :system do
         Book.delete_all
         sign_in(user) # ログインする
         expect(page).to have_content '新着書籍一覧'
-        sleep 3
+        sleep 2
         expect(all('.book-list-item').length).to eq 0
       end
 
       it '新しく書籍を追加しても一覧の表示数は12件であり、一番上に最新の投稿が追加される' do
         sign_in(user) # ログインする
         expect(page).to have_content '新着書籍一覧'
-        sleep 3
+        sleep 2
         expect(all('.book-list-item').length).to eq 12
         click_link href: '/books/new'
         expect(page).to  have_content '推薦図書を投稿する'
@@ -73,7 +73,7 @@ RSpec.describe 'Books', type: :system do
         new_book_title = all('#search_result h3')[0].text
         expect do
           find('input[type="submit"]').click
-          sleep 4
+          sleep 2
         end.to change(user.books, :count).by(1) # ユーザーと紐付いているかどうかも検証
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
         # 書籍を追加しても表示されるのは12件
@@ -90,7 +90,7 @@ RSpec.describe 'Books', type: :system do
         visit root_path
         expect(page).to have_content 'Kaidoku - 会読' # welcomeページにいることを検証
         click_link 'みんなのアウトプットを見る' # welcomeページから一覧へのリンク
-        sleep 3
+        sleep 2
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         # 同じく1ページ目には12件しか表示されていない
         expect(all('.book-list-item').length).to eq 12
@@ -102,7 +102,7 @@ RSpec.describe 'Books', type: :system do
         visit root_path
         expect(page).to have_content 'Kaidoku - 会読'
         click_link 'みんなのアウトプットを見る'
-        sleep 3
+        sleep 2
         expect(page).to have_content '新着書籍一覧'
         expect(all('.book-list-item').length).to  eq 12
       end
@@ -129,7 +129,7 @@ RSpec.describe 'Books', type: :system do
         find('a', text: '>').click
         find('a', text: '<').click
         # 1,2冊目が表示されているか検証
-        sleep 5
+        sleep 2
         expect(all('.book-title')[0].text).to  eq @book_list[14].title
         expect(all('.book-title')[1].text).to  eq @book_list[13].title
         expect(page).to have_content '>'
@@ -139,7 +139,7 @@ RSpec.describe 'Books', type: :system do
         find('a', text: '>').click
         find('a', text: '1').click
         # 1,2冊目が表示されているか検証
-        sleep 3
+        sleep 2
         expect(all('.book-title')[0].text).to  eq @book_list[14].title
         expect(all('.book-title')[1].text).to  eq @book_list[13].title
         expect(page).to have_content '>'
@@ -220,7 +220,7 @@ RSpec.describe 'Books', type: :system do
         all('#search_result > div')[0].click
         expect do
           find('input[type="submit"]').click
-          sleep 3
+          sleep 2
         end.to change(another_user.books, :count).by(1).and change(user.books, :count).by(0) # 投稿したユーザーにのみ紐付いているかどうか検証
         expect(page).not_to have_content '推薦図書を投稿する' # トップページに戻ることを検証
       end
@@ -252,6 +252,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'keyword',	with: 'test'
         find('.search-button').click
+        sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
         expect do
           find('input[type="submit"]').click # 書籍を選択せずに送信
@@ -296,6 +297,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'keyword',	with: 'test'
         find('.search-button').click
+        sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
         expect do
           find('input[type="submit"]').click # 書籍を選択せずに送信
@@ -344,13 +346,13 @@ RSpec.describe 'Books', type: :system do
       it 'ログイン中のユーザーは書籍が推薦図書に追加されていない場合アウトプット一覧から推薦図書を追加できる' do
         sign_in(user) # ログインする
         expect(page).to have_content '新着書籍一覧'
-        sleep 3
+        sleep 2
         all('a', text: 'アウトプット一覧')[-1].click
         expect(page).to  have_content "『#{book.title}』のアウトプット"
         expect(page).to  have_selector 'a', text: '推薦図書に追加する'
         expect do
           find('a', text: '推薦図書に追加する').click
-          sleep 3
+          sleep 2
         end.to change(user.books, :count).by(1)
         expect(page).not_to have_selector 'a', text: '推薦図書に追加する'
         expect(page).to have_link 'アウトプットを投稿する'
@@ -369,6 +371,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
+        sleep 2
         expect(all('.book-list-item').length).not_to eq 0
       end
 
@@ -376,6 +379,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
+        sleep 2
         expect(all('.book-list-item').length).to eq 12 # どれだけ投稿しても1ページ目に表示されるのは12件
         first_page_book = all('.book-list-item')[0]
         find('a', text: '>').click
@@ -387,6 +391,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
+        sleep 2
         expect(all('.book-list-item').length).to eq 12 # どれだけ投稿しても1ページ目に表示されるのは12件
         first_page_book = all('.book-list-item')[0]
         find('a', text: '2').click
@@ -399,6 +404,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content @book_list[14].title # 新着順なので一番うしろのデータが先頭に来る
         fill_in 'keyword', with: 'test'
         find('.search-button').click
+        sleep 2
         expect(page).not_to have_content @book_list[14].title # 1ページ目にあった書籍は表示されない。
       end
 
@@ -406,10 +412,12 @@ RSpec.describe 'Books', type: :system do
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
+        sleep 2
         title_search_result = all('.book-list-item')[0] # タイトル検索した際の先頭の要素を変数化しておく
         select '著者名'
         fill_in 'keyword', with: 'test'
         find('.search-button').click
+        sleep 2
         expect(page).not_to have_content title_search_result # タイトル検索したときの内容が消えている
       end
 
@@ -417,14 +425,14 @@ RSpec.describe 'Books', type: :system do
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: ''
         find('.search-button').click
-        sleep 7
+        sleep 2
         expect(page.driver.browser.switch_to.alert.text).to eq 'タイトルを入力してください'
         sleep 2
         page.driver.browser.switch_to.alert.accept
         select '著者名'
         fill_in 'keyword', with: ''
         find('.search-button').click
-        sleep 5
+        sleep 2
         expect(page.driver.browser.switch_to.alert.text).to eq '著者名を入力してください'
         sleep 2
         page.driver.browser.switch_to.alert.accept
@@ -434,7 +442,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: ' ほげほげふが'
         find('.search-button').click
-        sleep 7
+        sleep 2
         expect(page.driver.browser.switch_to.alert.text).to eq '検索結果が見つかりませんでした'
         sleep 2
         page.driver.browser.switch_to.alert.accept
@@ -451,10 +459,11 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content 'ログイン'
         expect(page).to  have_content 'Kaidoku - 会読' # welcomeページにいることを検証
         click_link 'みんなのアウトプットを見る' # welcomeページから一覧へのリンク
-        sleep 3
+        sleep 2
         expect(page).to have_content '新着書籍一覧' # 一覧にいるかどうか検証
         fill_in 'keyword', with: 'test'
         find('.search-button').click
+        sleep 2
         expect(all('.book-list-item').length).not_to eq 0
       end
     end
@@ -466,13 +475,13 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'keyword',	with: 'test'
         find('.search-button').click
-        sleep 5
+        sleep 2
         expect(all('#search_result > div').length).not_to eq 0 # 検索結果が0件ではないことを検証
         title_search_result = all('#search_result h3')[0].text
         select '著者名'
         fill_in 'keyword', with: 'test'
         find('.search-button').click
-        sleep 5
+        sleep 2
         expect(page).not_to have_content title_search_result
       end
 
@@ -482,7 +491,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'keyword',	with: ''
         find('.search-button').click
-        sleep 5
+        sleep 2
         expect(page.driver.browser.switch_to.alert.text).to eq 'タイトルを入力してください'
         sleep 2
         page.driver.browser.switch_to.alert.accept
@@ -491,7 +500,7 @@ RSpec.describe 'Books', type: :system do
         select '著者名'
         fill_in 'keyword', with: ''
         find('.search-button').click
-        sleep 5
+        sleep 2
         expect(page.driver.browser.switch_to.alert.text).to eq '著者名を入力してください'
         sleep 2
         page.driver.browser.switch_to.alert.accept
@@ -506,7 +515,7 @@ RSpec.describe 'Books', type: :system do
         expect(page).to  have_content '推薦図書を投稿する'
         fill_in 'keyword',	with: 'hogefugahoge'
         find('.search-button').click
-        sleep 5
+        sleep 2
         expect(page.driver.browser.switch_to.alert.text).to eq '検索結果が見つかりませんでした'
         sleep 2
         page.driver.browser.switch_to.alert.accept
