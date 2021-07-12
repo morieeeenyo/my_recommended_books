@@ -5,9 +5,9 @@ class OutputMailer < ApplicationMailer
   #
   #   en.output_mailer.action_plan_reminder.subject
   #
-  def action_plan_reminder
-    @greeting = "Hi"
+  def action_plan_reminder(user)
 
-    mail to: "to@example.org"
+    mail to: "#{user.email}",
+         subject: 'アクションプランが達成できたか振り返りましょう！'
   end
 end
