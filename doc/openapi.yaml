@@ -1,15 +1,15 @@
 ---
-openapi: 3.0.3
+openapi: 3.0.3 # openapiの形式
 info:
-  title: my_recommended_books
-  version: 1.0.0
+  title: my_recommended_books # APIタイトル
+  version: 1.0.0 # APIのバージョン
 servers: []
 paths:
-  "/api/v1/books":
+  "/api/v1/books": # path
     get:
       summary: index
       tags:
-      - Api::V1::Book
+      - Api::V1::Books
       responses:
         '200':
           description: 書籍が投稿済みの場合、リクエストに成功する
@@ -48,7 +48,7 @@ paths:
                         updated_at:
                           type: string
                       nullable: true
-              example:
+              example: # レスポンスの例
                 books:
                 - id: 90
                   isbn: '5155231908726'
@@ -113,7 +113,7 @@ paths:
     post:
       summary: create
       tags:
-      - Api::V1::Book
+      - Api::V1::Books
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -219,7 +219,7 @@ paths:
     get:
       summary: search
       tags:
-      - Api::V1::Book
+      - Api::V1::Books
       parameters:
       - name: keyword
         in: query
