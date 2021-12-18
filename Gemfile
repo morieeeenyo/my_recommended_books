@@ -56,6 +56,7 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers', require: !ENV['SELENIUM_DRIVER_URL']
+  gem 'rspec-openapi', '~> 0.4.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -77,5 +78,3 @@ group :production do
   gem 'unicorn', '5.4.1'
 end
 gem 'slack-ruby-client'
-
-gem 'rspec-openapi', group: :test

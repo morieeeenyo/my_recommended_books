@@ -425,7 +425,7 @@ DEPENDENCIES
   rails (~> 6.0.0)
   rails_same_site_cookie
   rakuten_web_service
-  rspec-openapi
+  rspec-openapi (~> 0.4.1)
   rspec-rails
   rubocop
   sass-rails (~> 5)
