@@ -50,9 +50,9 @@ paths:
                       nullable: true
               example:
                 books:
-                - id: 5
-                  isbn: '5619455151404'
-                  title: Vile Bodies
+                - id: 90
+                  isbn: '5155231908726'
+                  title: The Moon by Night
                   author: testさん
                   author_kana: テストさん
                   publisher_name: 株式会社test
@@ -60,11 +60,11 @@ paths:
                   item_price: 1500
                   item_url: https://books.rakuten.co.jp/hoge/12345
                   image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
-                  created_at: '2021-12-18T04:28:04.172Z'
-                  updated_at: '2021-12-18T04:28:04.172Z'
-                - id: 4
-                  isbn: '5463103461893'
-                  title: The Cricket on the Hearth
+                  created_at: '2021-12-18T05:11:22.940Z'
+                  updated_at: '2021-12-18T05:11:22.940Z'
+                - id: 89
+                  isbn: '2651653681678'
+                  title: Beneath the Bleeding
                   author: testさん
                   author_kana: テストさん
                   publisher_name: 株式会社test
@@ -72,11 +72,11 @@ paths:
                   item_price: 1500
                   item_url: https://books.rakuten.co.jp/hoge/12345
                   image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
-                  created_at: '2021-12-18T04:28:04.165Z'
-                  updated_at: '2021-12-18T04:28:04.165Z'
-                - id: 3
-                  isbn: '9988753351177'
-                  title: Dance Dance Dance
+                  created_at: '2021-12-18T05:11:22.930Z'
+                  updated_at: '2021-12-18T05:11:22.930Z'
+                - id: 88
+                  isbn: '4221914946126'
+                  title: Let Us Now Praise Famous Men
                   author: testさん
                   author_kana: テストさん
                   publisher_name: 株式会社test
@@ -84,11 +84,11 @@ paths:
                   item_price: 1500
                   item_url: https://books.rakuten.co.jp/hoge/12345
                   image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
-                  created_at: '2021-12-18T04:28:04.157Z'
-                  updated_at: '2021-12-18T04:28:04.157Z'
-                - id: 2
-                  isbn: '7287494731702'
-                  title: Frequent Hearses
+                  created_at: '2021-12-18T05:11:22.920Z'
+                  updated_at: '2021-12-18T05:11:22.920Z'
+                - id: 87
+                  isbn: '5409564834472'
+                  title: The Wings of the Dove
                   author: testさん
                   author_kana: テストさん
                   publisher_name: 株式会社test
@@ -96,11 +96,11 @@ paths:
                   item_price: 1500
                   item_url: https://books.rakuten.co.jp/hoge/12345
                   image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
-                  created_at: '2021-12-18T04:28:04.149Z'
-                  updated_at: '2021-12-18T04:28:04.149Z'
-                - id: 1
-                  isbn: '5957713329071'
-                  title: Taming a Sea Horse
+                  created_at: '2021-12-18T05:11:22.911Z'
+                  updated_at: '2021-12-18T05:11:22.911Z'
+                - id: 86
+                  isbn: '2253333007978'
+                  title: Number the Stars
                   author: testさん
                   author_kana: テストさん
                   publisher_name: 株式会社test
@@ -108,8 +108,8 @@ paths:
                   item_price: 1500
                   item_url: https://books.rakuten.co.jp/hoge/12345
                   image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
-                  created_at: '2021-12-18T04:28:04.132Z'
-                  updated_at: '2021-12-18T04:28:04.132Z'
+                  created_at: '2021-12-18T05:11:22.901Z'
+                  updated_at: '2021-12-18T05:11:22.901Z'
     post:
       summary: create
       tags:
@@ -143,8 +143,8 @@ paths:
                       type: string
             example:
               book:
-                isbn: '9134621167360'
-                title: Pale Kings and Princes
+                isbn: '7044639387616'
+                title: The Wings of the Dove
                 author: testさん
                 author_kana: テストさん
                 publisher_name: 株式会社test
@@ -189,9 +189,9 @@ paths:
                         type: string
               example:
                 book:
-                  id: 16
-                  isbn: '9134621167360'
-                  title: Pale Kings and Princes
+                  id: 101
+                  isbn: '7044639387616'
+                  title: The Wings of the Dove
                   author: testさん
                   author_kana: テストさん
                   publisher_name: 株式会社test
@@ -199,8 +199,8 @@ paths:
                   item_price: 1500
                   item_url: https://books.rakuten.co.jp/hoge/12345
                   image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
-                  created_at: '2021-12-18T04:28:08.168Z'
-                  updated_at: '2021-12-18T04:28:08.168Z'
+                  created_at: '2021-12-18T05:11:26.309Z'
+                  updated_at: '2021-12-18T05:11:26.309Z'
         '422':
           description: パラメータの中に空の値が含まれる場合リクエストに失敗する
           content:
@@ -1225,36 +1225,36 @@ paths:
                     title: 図解脳に悪い7つの習慣
                     titleKana: ズカイ ノウ ニ ワルイ ナナツ ノ シュウカン
                 - params:
-                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F6487918%2F
-                    author: 植西聰
-                    authorKana: ウエニシ,アキラ
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13377559%2F
+                    author: 倉下忠憲/高畑正幸
+                    authorKana: クラシタ,タダノリ/タカバタケ,マサユキ
                     availability: '1'
-                    booksGenreId: '001008003002/001008004001/001010013003/001020014'
+                    booksGenreId: '001006009004/001006009'
                     chirayomiUrl: ''
                     contents: ''
                     discountPrice: 0
                     discountRate: 0
-                    isbn: '9784845408405'
+                    isbn: '9784768306499'
                     itemCaption: ''
-                    itemPrice: 838
-                    itemUrl: https://books.rakuten.co.jp/rb/6487918/
-                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/8405/9784845408405.jpg?_ex=200x200
+                    itemPrice: 1540
+                    itemUrl: https://books.rakuten.co.jp/rb/13377559/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6499/9784768306499.jpg?_ex=200x200
                     limitedFlag: 0
                     listPrice: 0
-                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/8405/9784845408405.jpg?_ex=120x120
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6499/9784768306499.jpg?_ex=120x120
                     postageFlag: 2
-                    publisherName: ロングセラーズ
-                    reviewAverage: '3.71'
-                    reviewCount: 8
-                    salesDate: 2010年06月
-                    seriesName: ロング新書
-                    seriesNameKana: ロング シンショ
-                    size: 新書
-                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/8405/9784845408405.jpg?_ex=64x64
-                    subTitle: ''
-                    subTitleKana: ''
-                    title: "「行動力」で成功する人の7つの習慣"
-                    titleKana: コウドウリョク デ セイコウスル ヒト ノ ナナツ ノ シュウカン
+                    publisherName: 玄光社
+                    reviewAverage: '3.5'
+                    reviewCount: 5
+                    salesDate: 2015年08月
+                    seriesName: 玄光社mook
+                    seriesNameKana: ゲンコウシャ ムック
+                    size: ムックその他
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6499/9784768306499.jpg?_ex=64x64
+                    subTitle: ヒットを生み出す7つの習慣とメソッド
+                    subTitleKana: ヒット オ ウミダス ナナツ ノ シュウカン ト メソッド
+                    title: 超メモ術
+                    titleKana: チョウ メモジュツ
         '406':
           description: パラメータが空文字列の時ステータス406が返却される
           content:
@@ -1266,3 +1266,1177 @@ paths:
                     type: string
               example:
                 errors: タイトルを入力してください
+  "/api/v1/users/{provider}/callback":
+    get:
+      summary: omniauth_success
+      tags:
+      - Api::V1::Users::OmniauthCallback
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          type: string
+        example: twitter
+      responses:
+        '200':
+          description: oauthのデータが存在する場合ログインに成功する
+          content:
+            text/html:
+              schema:
+                type: string
+              example: |2-
+
+
+                            <html>
+                                    <head></head>
+                                    <body>
+                                            An error occurred
+                                    </body>
+                            </html>
+  "/api/v1/books/{book_isbn}/outputs":
+    get:
+      summary: index
+      tags:
+      - Api::V1::Output
+      parameters:
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5342468521267
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5627562883788
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5378710845906
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2340656887728
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8106631289956
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7135550309382
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2113564720422
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1889660832345
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7087119318326
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6498043623454
+      responses:
+        '200':
+          description: ログイン中のユーザーがアウトプットを投稿していない場合ステータスが200になる
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  book:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      isbn:
+                        type: string
+                      title:
+                        type: string
+                      author:
+                        type: string
+                      author_kana:
+                        type: string
+                      publisher_name:
+                        type: string
+                      sales_date:
+                        type: string
+                      item_price:
+                        type: integer
+                      item_url:
+                        type: string
+                      image_url:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                  myoutputs:
+                    type: array
+                    items:
+                      nullable: true
+                      type: object
+                      properties:
+                        awareness:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            content:
+                              type: string
+                            book_id:
+                              type: integer
+                            user_id:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                        action_plans:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              time_of_execution:
+                                type: string
+                              what_to_do:
+                                type: string
+                              how_to_do:
+                                type: string
+                              awareness_id:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+                  outputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        awareness:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            content:
+                              type: string
+                            book_id:
+                              type: integer
+                            user_id:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                        username:
+                          type: string
+                        action_plans:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              time_of_execution:
+                                type: string
+                              what_to_do:
+                                type: string
+                              how_to_do:
+                                type: string
+                              awareness_id:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+                      nullable: true
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+                  posted:
+                    type: boolean
+              example:
+                book:
+                  id: 108
+                  isbn: '5342468521267'
+                  title: Vanity Fair
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:27.407Z'
+                  updated_at: '2021-12-18T05:11:27.407Z'
+                myoutputs: []
+                outputs:
+                - awareness:
+                    id: 49
+                    content: Voluptates qui amet quia.
+                    book_id: 108
+                    user_id: 149
+                    created_at: '2021-12-18T05:11:27.495Z'
+                    updated_at: '2021-12-18T05:11:27.495Z'
+                  username: Yuki Cruickshank JD
+                  action_plans:
+                  - id: 133
+                    time_of_execution: Ipsa voluptas odit reiciendis.
+                    what_to_do: Dolores ut ad ut.
+                    how_to_do: Qui fugiat perferendis sed.
+                    awareness_id: 49
+                    created_at: '2021-12-18T05:11:27.497Z'
+                    updated_at: '2021-12-18T05:11:27.497Z'
+                  - id: 134
+                    time_of_execution: Pariatur sint sit facere.
+                    what_to_do: Eos vero deleniti unde.
+                    how_to_do: Nobis tempora voluptatem quaerat.
+                    awareness_id: 49
+                    created_at: '2021-12-18T05:11:27.499Z'
+                    updated_at: '2021-12-18T05:11:27.499Z'
+                  - id: 135
+                    time_of_execution: Voluptatem tempore ut amet.
+                    what_to_do: Facilis omnis sint dicta.
+                    how_to_do: Et mollitia excepturi porro.
+                    awareness_id: 49
+                    created_at: '2021-12-18T05:11:27.501Z'
+                    updated_at: '2021-12-18T05:11:27.501Z'
+                - awareness:
+                    id: 48
+                    content: Voluptates qui amet quia.
+                    book_id: 108
+                    user_id: 149
+                    created_at: '2021-12-18T05:11:27.486Z'
+                    updated_at: '2021-12-18T05:11:27.486Z'
+                  username: Yuki Cruickshank JD
+                  action_plans:
+                  - id: 130
+                    time_of_execution: Ipsa voluptas odit reiciendis.
+                    what_to_do: Dolores ut ad ut.
+                    how_to_do: Qui fugiat perferendis sed.
+                    awareness_id: 48
+                    created_at: '2021-12-18T05:11:27.488Z'
+                    updated_at: '2021-12-18T05:11:27.488Z'
+                  - id: 131
+                    time_of_execution: Pariatur sint sit facere.
+                    what_to_do: Eos vero deleniti unde.
+                    how_to_do: Nobis tempora voluptatem quaerat.
+                    awareness_id: 48
+                    created_at: '2021-12-18T05:11:27.490Z'
+                    updated_at: '2021-12-18T05:11:27.490Z'
+                  - id: 132
+                    time_of_execution: Voluptatem tempore ut amet.
+                    what_to_do: Facilis omnis sint dicta.
+                    how_to_do: Et mollitia excepturi porro.
+                    awareness_id: 48
+                    created_at: '2021-12-18T05:11:27.492Z'
+                    updated_at: '2021-12-18T05:11:27.492Z'
+                - awareness:
+                    id: 47
+                    content: Voluptates qui amet quia.
+                    book_id: 108
+                    user_id: 149
+                    created_at: '2021-12-18T05:11:27.460Z'
+                    updated_at: '2021-12-18T05:11:27.460Z'
+                  username: Yuki Cruickshank JD
+                  action_plans:
+                  - id: 127
+                    time_of_execution: Ipsa voluptas odit reiciendis.
+                    what_to_do: Dolores ut ad ut.
+                    how_to_do: Qui fugiat perferendis sed.
+                    awareness_id: 47
+                    created_at: '2021-12-18T05:11:27.479Z'
+                    updated_at: '2021-12-18T05:11:27.479Z'
+                  - id: 128
+                    time_of_execution: Pariatur sint sit facere.
+                    what_to_do: Eos vero deleniti unde.
+                    how_to_do: Nobis tempora voluptatem quaerat.
+                    awareness_id: 47
+                    created_at: '2021-12-18T05:11:27.481Z'
+                    updated_at: '2021-12-18T05:11:27.481Z'
+                  - id: 129
+                    time_of_execution: Voluptatem tempore ut amet.
+                    what_to_do: Facilis omnis sint dicta.
+                    how_to_do: Et mollitia excepturi porro.
+                    awareness_id: 47
+                    created_at: '2021-12-18T05:11:27.483Z'
+                    updated_at: '2021-12-18T05:11:27.483Z'
+                user:
+                  id: 150
+                  provider: email
+                  uid: elizebeth_monahan@hotmail.com
+                  allow_password_change: false
+                  nickname: Rosendo Cartwright LLD
+                  email: elizebeth_monahan@hotmail.com
+                  created_at: '2021-12-18T05:11:27.512Z'
+                  updated_at: '2021-12-18T05:11:27.512Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+                posted: false
+    post:
+      summary: create
+      tags:
+      - Api::V1::Output
+      parameters:
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7298410061600
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1651153862531
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2385573912918
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7060857080230
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1634223081867
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5088559730556
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 3051231051497
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8810135543338
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7640390987329
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7810189179367
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6834268756118
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6373299588037
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6682148506242
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6433935796209
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5808999922874
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8127980197421
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 4469413359879
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8267023731845
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2019808397219
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                output:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                    action_plans:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          time_of_execution:
+                            type: string
+                          what_to_do:
+                            type: string
+                          how_to_do:
+                            type: string
+                    user_id:
+                      type: string
+                    book_id:
+                      type: string
+            example:
+              output:
+                content: Debitis quidem qui qui.
+                action_plans:
+                - time_of_execution: Ipsa voluptas odit reiciendis.
+                  what_to_do: Dolores ut ad ut.
+                  how_to_do: Qui fugiat perferendis sed.
+                - time_of_execution: Pariatur sint sit facere.
+                  what_to_do: Eos vero deleniti unde.
+                  how_to_do: Nobis tempora voluptatem quaerat.
+                - time_of_execution: Voluptatem tempore ut amet.
+                  what_to_do: Facilis omnis sint dicta.
+                  how_to_do: Et mollitia excepturi porro.
+                user_id: '163'
+                book_id: '118'
+      responses:
+        '201':
+          description: 投稿に成功するとステータスが201で返却される
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  awareness:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      content:
+                        type: string
+                      book_id:
+                        type: integer
+                      user_id:
+                        type: integer
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                  action_plans:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        time_of_execution:
+                          type: string
+                        what_to_do:
+                          type: string
+                        how_to_do:
+                          type: string
+              example:
+                awareness:
+                  id: 69
+                  content: Debitis quidem qui qui.
+                  book_id: 118
+                  user_id: 163
+                  created_at: '2021-12-18T05:11:48.903Z'
+                  updated_at: '2021-12-18T05:11:48.903Z'
+                action_plans:
+                - time_of_execution: Ipsa voluptas odit reiciendis.
+                  what_to_do: Dolores ut ad ut.
+                  how_to_do: Qui fugiat perferendis sed.
+                - time_of_execution: Pariatur sint sit facere.
+                  what_to_do: Eos vero deleniti unde.
+                  how_to_do: Nobis tempora voluptatem quaerat.
+                - time_of_execution: Voluptatem tempore ut amet.
+                  what_to_do: Facilis omnis sint dicta.
+                  how_to_do: Et mollitia excepturi porro.
+        '422':
+          description: 必須のカラムが不足している時保存に失敗しステータスが404になる
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - What to do of action plan 3 can't be blank
+  "/api/v1/users":
+    post:
+      summary: create
+      tags:
+      - Api::V1::Users::Registration
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    nickname:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    password_confirmation:
+                      type: string
+                    avatar:
+                      type: object
+                      properties:
+                        data:
+                          type: string
+                        filename:
+                          type: string
+            example:
+              user:
+                nickname: Jong Conroy
+                email: audrie@hotmail.com
+                password: Pass1234
+                password_confirmation: Pass1234
+                avatar:
+                  data: ''
+                  filename: ''
+      responses:
+        '200':
+          description: リクエストに成功する(画像なし)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+              example:
+                user:
+                  id: 182
+                  provider: email
+                  uid: audrie@hotmail.com
+                  allow_password_change: false
+                  nickname: Jong Conroy
+                  email: audrie@hotmail.com
+                  created_at: '2021-12-18T05:12:34.102Z'
+                  updated_at: '2021-12-18T05:12:34.102Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+        '422':
+          description: リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - Email has already been taken
+    put:
+      summary: update
+      tags:
+      - Api::V1::Users::Registration
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    nickname:
+                      type: string
+                    avatar:
+                      type: object
+                      properties:
+                        data:
+                          type: string
+                        filename:
+                          type: string
+            example:
+              user:
+                nickname: updated
+                avatar:
+                  data: ''
+                  filename: ''
+      responses:
+        '200':
+          description: パラメータが正しい時ステータスが200で返却される
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+                  avatar:
+                    nullable: true
+                    type: string
+              example:
+                user:
+                  id: 215
+                  nickname: updated
+                  email: lonny@yahoo.com
+                  provider: email
+                  uid: lonny@yahoo.com
+                  allow_password_change: false
+                  created_at: '2021-12-18T05:12:53.058Z'
+                  updated_at: '2021-12-18T05:12:53.101Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+                avatar: 
+        '401':
+          description: ヘッダーのユーザー情報が存在しない場合リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: ユーザーが存在しません
+        '422':
+          description: nicknameとavatarがともに空の場合リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - Nickname can't be blank
+  "/api/v1/users/sign_in":
+    post:
+      summary: create
+      tags:
+      - Api::V1::Users::Session
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+            example:
+              user:
+                email: angel_fay@yahoo.com
+                password: Pass1234
+      responses:
+        '200':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      email:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+              example:
+                user:
+                  id: 189
+                  provider: email
+                  email: angel_fay@yahoo.com
+                  uid: angel_fay@yahoo.com
+                  allow_password_change: false
+                  nickname: Msgr. Tammi Wolf
+                  created_at: '2021-12-18T05:12:34.649Z'
+                  updated_at: '2021-12-18T05:12:34.702Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+        '401':
+          description: リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - Authorization failed. Invalid email
+  "/api/v1/users/sign_out":
+    delete:
+      summary: destroy
+      tags:
+      - Api::V1::Users::Session
+      responses:
+        '200':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        '404':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                success: false
+                errors:
+                - User was not found or was not logged in.
+  "/api/v1/mypage":
+    get:
+      summary: show
+      tags:
+      - Api::V1::User
+      responses:
+        '200':
+          description: ヘッダーにuidがあればリクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+                  books:
+                    type: array
+                    items:
+                      nullable: true
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        isbn:
+                          type: string
+                        title:
+                          type: string
+                        author:
+                          type: string
+                        author_kana:
+                          type: string
+                        publisher_name:
+                          type: string
+                        sales_date:
+                          type: string
+                        item_price:
+                          type: integer
+                        item_url:
+                          type: string
+                        image_url:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                  avatar:
+                    type: string
+              example:
+                user:
+                  id: 197
+                  provider: email
+                  uid: martha@yahoo.com
+                  allow_password_change: false
+                  nickname: Mrs. Katrice Bartoletti
+                  email: martha@yahoo.com
+                  created_at: '2021-12-18T05:12:35.255Z'
+                  updated_at: '2021-12-18T05:12:35.255Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+                books: []
+                avatar: https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/sample_avatar.png
+        '401':
+          description: ヘッダーのuidが存在しない時ステータスが404
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: ユーザーが見つかりませんでした
+  "/api/v1/mypage/books/{book_isbn}/outputs":
+    get:
+      summary: my_outputs
+      tags:
+      - Api::V1::User
+      parameters:
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6282076001116
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5376074672418
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 3239025844791
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 4047053063935
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6223564288083
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 146
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 148
+      responses:
+        '200':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  outputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        awareness:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            content:
+                              type: string
+                            book_id:
+                              type: integer
+                            user_id:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                        action_plans:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              time_of_execution:
+                                type: string
+                              what_to_do:
+                                type: string
+                              how_to_do:
+                                type: string
+                              awareness_id:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+                      nullable: true
+              example:
+                outputs:
+                - awareness:
+                    id: 90
+                    content: Nobis iure ratione quidem.
+                    book_id: 140
+                    user_id: 208
+                    created_at: '2021-12-18T05:12:36.424Z'
+                    updated_at: '2021-12-18T05:12:36.424Z'
+                  action_plans:
+                  - id: 244
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 90
+                    created_at: '2021-12-18T05:12:36.427Z'
+                    updated_at: '2021-12-18T05:12:36.427Z'
+                  - id: 245
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 90
+                    created_at: '2021-12-18T05:12:36.429Z'
+                    updated_at: '2021-12-18T05:12:36.429Z'
+                  - id: 246
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 90
+                    created_at: '2021-12-18T05:12:36.431Z'
+                    updated_at: '2021-12-18T05:12:36.431Z'
+                - awareness:
+                    id: 89
+                    content: Nobis iure ratione quidem.
+                    book_id: 140
+                    user_id: 208
+                    created_at: '2021-12-18T05:12:36.411Z'
+                    updated_at: '2021-12-18T05:12:36.411Z'
+                  action_plans:
+                  - id: 241
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 89
+                    created_at: '2021-12-18T05:12:36.414Z'
+                    updated_at: '2021-12-18T05:12:36.414Z'
+                  - id: 242
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 89
+                    created_at: '2021-12-18T05:12:36.417Z'
+                    updated_at: '2021-12-18T05:12:36.417Z'
+                  - id: 243
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 89
+                    created_at: '2021-12-18T05:12:36.420Z'
+                    updated_at: '2021-12-18T05:12:36.420Z'
+        '401':
+          description: ヘッダーのユーザーが存在しないときリクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: ユーザーが見つかりませんでした
+        '422':
+          description: 書籍が推薦図書として追加されていない場合、ステータスが422になる
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: 書籍が推薦図書として追加されていません
