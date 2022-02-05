@@ -1,0 +1,2442 @@
+---
+openapi: 3.0.3 # openapiの形式
+info:
+  title: my_recommended_books # APIタイトル
+  version: 1.0.0 # APIのバージョン
+servers: []
+paths:
+  "/api/v1/books": # path
+    get:
+      summary: index
+      tags:
+      - Api::V1::Books
+      responses:
+        '200':
+          description: 書籍が投稿済みの場合、リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        isbn:
+                          type: string
+                        title:
+                          type: string
+                        author:
+                          type: string
+                        author_kana:
+                          type: string
+                        publisher_name:
+                          type: string
+                        sales_date:
+                          type: string
+                        item_price:
+                          type: integer
+                        item_url:
+                          type: string
+                        image_url:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                      nullable: true
+              example: # レスポンスの例
+                books:
+                - id: 90
+                  isbn: '5155231908726'
+                  title: The Moon by Night
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:22.940Z'
+                  updated_at: '2021-12-18T05:11:22.940Z'
+                - id: 89
+                  isbn: '2651653681678'
+                  title: Beneath the Bleeding
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:22.930Z'
+                  updated_at: '2021-12-18T05:11:22.930Z'
+                - id: 88
+                  isbn: '4221914946126'
+                  title: Let Us Now Praise Famous Men
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:22.920Z'
+                  updated_at: '2021-12-18T05:11:22.920Z'
+                - id: 87
+                  isbn: '5409564834472'
+                  title: The Wings of the Dove
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:22.911Z'
+                  updated_at: '2021-12-18T05:11:22.911Z'
+                - id: 86
+                  isbn: '2253333007978'
+                  title: Number the Stars
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:22.901Z'
+                  updated_at: '2021-12-18T05:11:22.901Z'
+    post:
+      summary: create
+      tags:
+      - Api::V1::Books
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                book:
+                  type: object
+                  properties:
+                    isbn:
+                      type: string
+                    title:
+                      type: string
+                    author:
+                      type: string
+                    author_kana:
+                      type: string
+                    publisher_name:
+                      type: string
+                    sales_date:
+                      type: string
+                    item_price:
+                      type: string
+                    item_url:
+                      type: string
+                    image_url:
+                      type: string
+            example:
+              book:
+                isbn: '7044639387616'
+                title: The Wings of the Dove
+                author: testさん
+                author_kana: テストさん
+                publisher_name: 株式会社test
+                sales_date: '1996-12-22'
+                item_price: '1500'
+                item_url: https://books.rakuten.co.jp/hoge/12345
+                image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+      responses:
+        '201':
+          description: パラメータが正しければリクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  book:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      isbn:
+                        type: string
+                      title:
+                        type: string
+                      author:
+                        type: string
+                      author_kana:
+                        type: string
+                      publisher_name:
+                        type: string
+                      sales_date:
+                        type: string
+                      item_price:
+                        type: integer
+                      item_url:
+                        type: string
+                      image_url:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+              example:
+                book:
+                  id: 101
+                  isbn: '7044639387616'
+                  title: The Wings of the Dove
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:26.309Z'
+                  updated_at: '2021-12-18T05:11:26.309Z'
+        '422':
+          description: パラメータの中に空の値が含まれる場合リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - Title can't be blank
+  "/api/v1/books/search":
+    get:
+      summary: search
+      tags:
+      - Api::V1::Books
+      parameters:
+      - name: keyword
+        in: query
+        schema:
+          type: string
+        example: ７つの習慣
+      - name: query
+        in: query
+        schema:
+          type: string
+        example: title
+      - name: keyword
+        in: query
+        schema:
+          type: string
+        example: hogefugahoge
+      - name: query
+        in: query
+        schema:
+          type: string
+        example: author
+      - name: keyword
+        in: query
+        schema:
+          type: string
+        example: ''
+      responses:
+        '200':
+          description: パラメータが存在すればリクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        params:
+                          type: object
+                          properties:
+                            affiliateUrl:
+                              type: string
+                            author:
+                              type: string
+                            authorKana:
+                              type: string
+                            availability:
+                              type: string
+                            booksGenreId:
+                              type: string
+                            chirayomiUrl:
+                              type: string
+                            contents:
+                              type: string
+                            discountPrice:
+                              type: integer
+                            discountRate:
+                              type: integer
+                            isbn:
+                              type: string
+                            itemCaption:
+                              type: string
+                            itemPrice:
+                              type: integer
+                            itemUrl:
+                              type: string
+                            largeImageUrl:
+                              type: string
+                            limitedFlag:
+                              type: integer
+                            listPrice:
+                              type: integer
+                            mediumImageUrl:
+                              type: string
+                            postageFlag:
+                              type: integer
+                            publisherName:
+                              type: string
+                            reviewAverage:
+                              type: string
+                            reviewCount:
+                              type: integer
+                            salesDate:
+                              type: string
+                            seriesName:
+                              type: string
+                            seriesNameKana:
+                              type: string
+                            size:
+                              type: string
+                            smallImageUrl:
+                              type: string
+                            subTitle:
+                              type: string
+                            subTitleKana:
+                              type: string
+                            title:
+                              type: string
+                            titleKana:
+                              type: string
+                      nullable: true
+              example:
+                books:
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16478139%2F
+                    author: スティーブ・R．コヴィー/フランクリン・コヴィー・ジャパン
+                    authorKana: コヴィー,スティーブ・R./フランクリン コヴィー ジャパン
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863941014'
+                    itemCaption: ビジネスから夫婦ゲンカまで。世界中の悩みを解決し続けて３０年。自分を変える、パワフルな教訓。あらゆる年代、あらゆる職業の人々の道しるべとなる“キング・オブ・ビジネス書”。ショーン・コヴィー（コヴィー博士の息子）の寄稿も入った記念版。
+                    itemPrice: 2420
+                    itemUrl: https://books.rakuten.co.jp/rb/16478139/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1014/9784863941014.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1014/9784863941014.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '4.62'
+                    reviewCount: 10
+                    salesDate: 2020年10月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1014/9784863941014.jpg?_ex=64x64
+                    subTitle: 30周年記念版
+                    subTitleKana: サンジュッシュウネン キネンバン*30シュウネン キネンバン
+                    title: 完訳7つの習慣
+                    titleKana: カンヤク ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16284587%2F
+                    author: "「7つの習慣」編集部"
+                    authorKana: ナナツノシュウカンヘンシュウブ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784284204705'
+                    itemCaption: テレビ、ＳＮＳで話題のビジネス書『７つの習慣』に超入門書が登場！！ストーリーと授業形式で学ぶ、成功と幸せを手にする方法。
+                    itemPrice: 1430
+                    itemUrl: https://books.rakuten.co.jp/rb/16284587/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4705/9784284204705.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4705/9784284204705.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 日本図書センター
+                    reviewAverage: '4.53'
+                    reviewCount: 69
+                    salesDate: 2020年06月25日頃
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4705/9784284204705.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: 13歳から分かる！ 7つの習慣　自分を変えるレッスン
+                    titleKana: ジュウサンサイカラワカルナナツノシュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F12453629%2F
+                    author: スティーヴン・R．コヴィー/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヴィー,スティーヴン・R./フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940246'
+                    itemCaption: ''
+                    itemPrice: 2420
+                    itemUrl: https://books.rakuten.co.jp/rb/12453629/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0246/9784863940246.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0246/9784863940246.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '4.53'
+                    reviewCount: 226
+                    salesDate: 2013年08月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0246/9784863940246.jpg?_ex=64x64
+                    subTitle: 人格主義の回復
+                    subTitleKana: ジンカク シュギ ノ カイフク
+                    title: 完訳7つの習慣
+                    titleKana: カンヤク ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F12505149%2F
+                    author: 小山鹿梨子/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヤマ,カリコ/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001006009003/001008003002'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784800215314'
+                    itemCaption: バーテンダーを目指して修業を始めた歩。バー「セブン」での様々な出会いを通して、彼女は少しずつ“本物”への階段を上っていく。歩の生き方、考え方を少しずつ変えたのは、「７つの習慣」だったー。
+                    itemPrice: 1100
+                    itemUrl: https://books.rakuten.co.jp/rb/12505149/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5314/9784800215314.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5314/9784800215314.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 宝島社
+                    reviewAverage: '4.17'
+                    reviewCount: 595
+                    salesDate: 2013年10月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5314/9784800215314.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: まんがでわかる7つの習慣
+                    titleKana: マンガ デ ワカル ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16211129%2F
+                    author: スティーブン・R・コヴィー/フランクリン・コヴィー・ジャパン
+                    authorKana: スティーブン・R・コヴィー/フランクリン コヴィー ジャパン
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940925'
+                    itemCaption: ''
+                    itemPrice: 2178
+                    itemUrl: https://books.rakuten.co.jp/rb/16211129/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0925/9784863940925.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0925/9784863940925.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '4.08'
+                    reviewCount: 24
+                    salesDate: 2020年01月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0925/9784863940925.jpg?_ex=64x64
+                    subTitle: 人格主義の回復
+                    subTitleKana: ジンカク シュギ ノ カイフク
+                    title: 完訳7つの習慣普及版
+                    titleKana: カンヤク ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F12815566%2F
+                    author: 小山鹿梨子/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヤマ,カリコ/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: パラダイムと原則／第1の習慣／第2の習慣
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784800223999'
+                    itemCaption: バー「セブン」で修業を続ける歩は、さらなる出会いを通じ、自分らしく幸せな人生を手にするための核心に改めて気づいていくー。『まんがでわかる７つの習慣』に続き、７つの各習慣をさらに詳しく読み解く物語、ここにスタート！
+                    itemPrice: 1100
+                    itemUrl: https://books.rakuten.co.jp/rb/12815566/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/3999/9784800223999.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/3999/9784800223999.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 宝島社
+                    reviewAverage: '4.26'
+                    reviewCount: 105
+                    salesDate: 2014年07月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/3999/9784800223999.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: まんがでわかる7つの習慣（2）
+                    titleKana: マンガ デ ワカル ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13053697%2F
+                    author: 小山鹿梨子/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヤマ,カリコ/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: 第6の習慣／第7の習慣／第8の習慣
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784800230157'
+                    itemCaption: バー「セブン」に立ち、シェーカーを振り続ける歩。創造的に人とつながるあり方を学び、さらには人間としての存在感を高めるための心構えに目を向けていきー。いよいよ完結、「まんがでわかる７つの習慣」シリーズ第４弾！コヴィー博士が「７つの習慣」の後に提唱した、リーダーの資質を増強し、開花させる「第８の習慣」も解説。
+                    itemPrice: 1100
+                    itemUrl: https://books.rakuten.co.jp/rb/13053697/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0157/9784800230157.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0157/9784800230157.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 宝島社
+                    reviewAverage: '4.44'
+                    reviewCount: 63
+                    salesDate: 2015年01月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0157/9784800230157.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: まんがでわかる7つの習慣（4）
+                    titleKana: マンガ デ ワカル ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F14260493%2F
+                    author: スティーヴン・R．コヴィー/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヴィー,スティーヴン・R./フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '4'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940611'
+                    itemCaption: 国内２００万、世界３，０００万の人生のバイブル。内容はそのままに、いつでも、どこでも、読めるよう、小さく、軽くなった特装版登場！
+                    itemPrice: 2530
+                    itemUrl: https://books.rakuten.co.jp/rb/14260493/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0611/9784863940611.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0611/9784863940611.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '4.77'
+                    reviewCount: 29
+                    salesDate: 2016年05月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0611/9784863940611.jpg?_ex=64x64
+                    subTitle: 人格主義の回復
+                    subTitleKana: ジンカク シュギ ノ カイフク
+                    title: 完訳7つの習慣特装版
+                    titleKana: カンヤク ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F12932701%2F
+                    author: 小山鹿梨子/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヤマ,カリコ/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: 第3の習慣／第4の習慣／第5の習慣
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784800227164'
+                    itemCaption: バー「セブン」で日々、バーテンダーとしての腕を磨く歩。一人の人間として成長すると同時に、人との関わりの中で“共に幸せになる”ために必要な生き方の極意を学んでいくー。大好評「まんがでわかる７つの習慣」シリーズ第３弾！
+                    itemPrice: 1100
+                    itemUrl: https://books.rakuten.co.jp/rb/12932701/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7164/9784800227164.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7164/9784800227164.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 宝島社
+                    reviewAverage: '4.44'
+                    reviewCount: 70
+                    salesDate: 2014年10月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7164/9784800227164.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: まんがでわかる7つの習慣（3）
+                    titleKana: マンガ デ ワカル ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F12159196%2F
+                    author: スティーヴン・R．コヴィー
+                    authorKana: コヴィー,スティーヴン・R.
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003/001019007/001019008'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784800205780'
+                    itemCaption: 高飛車な態度のせいで転校先の高校で孤立した七海。「自分が変わること」の大切さに気づき、“自分の”人生の作り方を知るー。公私ともに充実した人生を送る人の“原則”を解明し、全世界で２０００万部超のベストセラーとなった『７つの習慣』のエッセンスをやさしく解説。著者スティーブン・コヴィー氏が完全監修し、新たに提唱された「第８の習慣」もフォロー。コヴィー氏の単独インタビューもたっぷり収録。成功と幸せに近づく生き方の原則がわかる、人生の教科書。
+                    itemPrice: 712
+                    itemUrl: https://books.rakuten.co.jp/rb/12159196/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5780/9784800205780.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5780/9784800205780.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 宝島社
+                    reviewAverage: '3.95'
+                    reviewCount: 71
+                    salesDate: 2013年01月
+                    seriesName: 宝島sugoi文庫
+                    seriesNameKana: タカラジマ スゴイ ブンコ
+                    size: 文庫
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5780/9784800205780.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: まんがと図解でわかる7つの習慣
+                    titleKana: マンガ ト ズカイ デ ワカル ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F12799973%2F
+                    author: ショーン・コヴィー/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヴィー,ショーン/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940284'
+                    itemCaption: ''
+                    itemPrice: 1760
+                    itemUrl: https://books.rakuten.co.jp/rb/12799973/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0284/9784863940284.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0284/9784863940284.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '4.1'
+                    reviewCount: 24
+                    salesDate: 2014年05月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0284/9784863940284.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: 7つの習慣ティーンズリニューアル版
+                    titleKana: ナナツ ノ シュウカン ティーンズ
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13521614%2F
+                    author: 小山鹿梨子/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヤマ,カリコ/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784800249128'
+                    itemCaption: 悩める現代人は、今日もバー「セブン」の扉を開く…。大好評『まんがでわかる７つの習慣』の新しいラインアップがここに登場。歩たちの成長物語を通して、ダイバーシティの推進、即戦力となる人材像、女性の自分らしい生き方の実現などを「７つの習慣」に基づいて考えます。「７つの習慣」全体の内容もコンパクトに解説。
+                    itemPrice: 1100
+                    itemUrl: https://books.rakuten.co.jp/rb/13521614/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/9128/9784800249128.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/9128/9784800249128.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 宝島社
+                    reviewAverage: '4.07'
+                    reviewCount: 30
+                    salesDate: 2016年01月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/9128/9784800249128.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: まんがでわかる7つの習慣Plus
+                    titleKana: マンガ デ ワカル ナナツ ノ シュウカン プラス
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13261341%2F
+                    author: フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '4'
+                    booksGenreId: '001008012002'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940376'
+                    itemCaption: ''
+                    itemPrice: 1540
+                    itemUrl: https://books.rakuten.co.jp/rb/13261341/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0376/9784863940376.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0376/9784863940376.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '4.5'
+                    reviewCount: 5
+                    salesDate: 2015年05月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0376/9784863940376.jpg?_ex=64x64
+                    subTitle: リーダー・イン・ミー
+                    subTitleKana: リーダー イン ミー
+                    title: ぼくに7つの習慣を教えてよ！
+                    titleKana: ボク ニ ナナツ ノ シュウカン オ オシエテヨ
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16275492%2F
+                    author: スティーブン・R．コヴィー/熊谷正寿
+                    authorKana: コヴィー,スティーブン・R./クマガイ,マサトシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863941007'
+                    itemCaption: ''
+                    itemPrice: 2420
+                    itemUrl: https://books.rakuten.co.jp/rb/16275492/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1007/9784863941007.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1007/9784863941007.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '5.0'
+                    reviewCount: 2
+                    salesDate: 2020年03月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1007/9784863941007.jpg?_ex=64x64
+                    subTitle: 7人の直筆メモ
+                    subTitleKana: ナナニン ノ ジキヒツ メモ*7ニン ノ ジキヒツ メモ
+                    title: 完訳7つの習慣
+                    titleKana: カンヤク ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13350633%2F
+                    author: スティーヴン・R．コヴィー/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コヴィー,スティーヴン・R./フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940390'
+                    itemCaption: ''
+                    itemPrice: 4180
+                    itemUrl: https://books.rakuten.co.jp/rb/13350633/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0390/9784863940390.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0390/9784863940390.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '4.33'
+                    reviewCount: 6
+                    salesDate: 2015年08月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0390/9784863940390.jpg?_ex=64x64
+                    subTitle: 人格主義の回復
+                    subTitleKana: ジンカク シュギ ノ カイフク
+                    title: 完訳7つの習慣
+                    titleKana: カンヤク ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F15940112%2F
+                    author: フランクリン・プランナー・ジャパン
+                    authorKana: フランクリン　プランナー　ジャパン
+                    availability: '1'
+                    booksGenreId: '001026002'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784046044228'
+                    itemCaption: ''
+                    itemPrice: 2200
+                    itemUrl: https://books.rakuten.co.jp/rb/15940112/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4228/9784046044228.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4228/9784046044228.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: KADOKAWA
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2019年09月27日頃
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4228/9784046044228.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: 7つの習慣　入門手帳2020
+                    titleKana: ナナツノシュウカン　ニュウモンテチョウ2020
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F15800539%2F
+                    author: 上條富彦/石井努
+                    authorKana: カミジョウ,トシヒコ/イシイ,ツトム
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784814920396'
+                    itemCaption: "「７つの習慣」で物事はうまくいく！"
+                    itemPrice: 1320
+                    itemUrl: https://books.rakuten.co.jp/rb/15800539/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0396/9784814920396.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0396/9784814920396.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: ゴマブックス
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2019年02月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0396/9784814920396.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: "「7つの習慣」ファシリテーターに聞いた7つの習慣に学ぶ心配ぐせをなおす術"
+                    titleKana: ナナツ ノ シュウカン ファシリテーター ニ キイタ ナナツ ノ シュウカン ニ マナブ
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16868224%2F
+                    author: ナカバヤシ株式会社
+                    authorKana: ナカバヤシカブシキガイシャ
+                    availability: '1'
+                    booksGenreId: '001026002'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784046053763'
+                    itemCaption: ''
+                    itemPrice: 2200
+                    itemUrl: https://books.rakuten.co.jp/rb/16868224/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/3763/9784046053763_1_5.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/3763/9784046053763_1_5.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: KADOKAWA
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2021年09月16日頃
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/3763/9784046053763_1_5.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: 7つの習慣　入門手帳2022
+                    titleKana: ナナツノシュウカン　ニュウモンテチョウ2022
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16082147%2F
+                    author: スティーブン・R．コヴィー/フランクリン・コヴィー・ジャパン
+                    authorKana: コヴィー,スティーブン・R./フランクリン コヴィー ジャパン
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940888'
+                    itemCaption: 全世界３０００万部売上をほこる、ビジネス書の金字塔『７つの習慣』。そんな本書を、時代をリードする７人の賢者は、いかに読み解くのか？“賢者のハイライト”では、賢者直筆のハイライト、実際のメモや言葉をそのまま掲載することで、その思考の足跡を読者が追体験できるようにしました。混迷を極める現代社会だからこそ求められる「ブレない人生の軸」を獲得するための必読書です。
+                    itemPrice: 2640
+                    itemUrl: https://books.rakuten.co.jp/rb/16082147/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0888/9784863940888.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0888/9784863940888.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2019年10月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0888/9784863940888.jpg?_ex=64x64
+                    subTitle: "「7つの習慣」は、私のそして私のチームの運命を間違"
+                    subTitleKana: ナナツ ノ シュウカン ワ ワタシ ノ ソシテ ワタシ ノ チーム ノ
+                    title: 7つの習慣　賢者のハイライト　第5の習慣　麻野耕司スペシャルエディ
+                    titleKana: ナナツ ノ シュウカン ケンジャ ノ ハイライト ダイゴ ノ シュウカン アサノ コ
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16082148%2F
+                    author: スティーブン・R．コヴィー/フランクリン・コヴィー・ジャパン
+                    authorKana: コヴィー,スティーブン・R./フランクリン コヴィー ジャパン
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940895'
+                    itemCaption: 全世界３０００万部売上をほこる、ビジネス書の金字塔『７つの習慣』。そんな本書を、時代をリードする７人の賢者は、いかに読み解くのか？“賢者のハイライト”では、賢者直筆のハイライト、実際のメモや言葉をそのまま掲載することで、その思考の足跡を読者が追体験できるようにしました。混迷を極める現代社会だからこそ求められる「ブレない人生の軸」を獲得するための必読書です。
+                    itemPrice: 2640
+                    itemUrl: https://books.rakuten.co.jp/rb/16082148/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0895/9784863940895.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0895/9784863940895.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2019年10月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0895/9784863940895.jpg?_ex=64x64
+                    subTitle: "『7つの習慣』を身につけるほうが、東大へいくよりも"
+                    subTitleKana: ナナツ ノ シュウカン オ ミニツケル ホウガ トウダイ エ イク
+                    title: 7つの習慣　賢者のハイライト　第6の習慣　桜木健二スペシャルエディ
+                    titleKana: ナナツ ノ シュウカン ケンジャ ノ ハイライト ダイロク ノ シュウカン サクラギ
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13855503%2F
+                    author: 小林昭文/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: コバヤシ,アキフミ/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001008012002'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784382057357'
+                    itemCaption: 生徒が主体性を発揮し、シナジーを生み出す授業とは？アクティブラーニング実践の鍵は「７つの習慣」にあった！
+                    itemPrice: 1760
+                    itemUrl: https://books.rakuten.co.jp/rb/13855503/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7357/9784382057357.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7357/9784382057357.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 産業能率大学出版部
+                    reviewAverage: '3.25'
+                    reviewCount: 4
+                    salesDate: 2016年03月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7357/9784382057357.jpg?_ex=64x64
+                    subTitle: 最強の学習習慣が生まれた！
+                    subTitleKana: サイキョウ ノ ガクシュウ シュウカン ガ ウマレタ
+                    title: 7つの習慣×アクティブラーニング
+                    titleKana: ナナツ ノ シュウカン アクティブ ラーニング
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F6197799%2F
+                    author: 林成之
+                    authorKana: ハヤシ,ナリユキ
+                    availability: '1'
+                    booksGenreId: 001010010001/001010010002/001020014
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784344981447'
+                    itemCaption: 脳は気持ちや生活習慣で、その働きがよくも悪くもなる。この事実を知らないばかりに、脳力を後退させるのはもったいない。脳に悪い習慣とは、「興味がない」と物事を避けることが多い、「嫌だ」「疲れた」とグチを言う、言われたことをコツコツやる、常に効率を考えている、やりたくないのに我慢して勉強する、スポーツや絵などの趣味がない、めったに人をほめない、の７つ。これらをやめるだけで頭の働きが倍増する理由を、脳のしくみからわかりやすく解説。
+                    itemPrice: 814
+                    itemUrl: https://books.rakuten.co.jp/rb/6197799/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1447/9784344981447.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1447/9784344981447.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 幻冬舎
+                    reviewAverage: '4.04'
+                    reviewCount: 545
+                    salesDate: 2009年09月
+                    seriesName: 幻冬舎新書
+                    seriesNameKana: ゲントウシャ シンショ
+                    size: 新書
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1447/9784344981447.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: 脳に悪い7つの習慣
+                    titleKana: ノウ ニ ワルイ ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16249795%2F
+                    author: 佐藤智春/黒川伊保子
+                    authorKana: サトウチハル/クロカワイホコ
+                    availability: '1'
+                    booksGenreId: 001010002001/001010010001
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784074425310'
+                    itemCaption: 背を伸ばすチャンスは今しかない！背を伸ばす食事と生活習慣が学力も伸ばす。
+                    itemPrice: 1430
+                    itemUrl: https://books.rakuten.co.jp/rb/16249795/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5310/9784074425310.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5310/9784074425310.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 主婦の友社
+                    reviewAverage: '4.5'
+                    reviewCount: 6
+                    salesDate: 2020年04月10日頃
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/5310/9784074425310.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: 中高生の身長を伸ばす7つの習慣
+                    titleKana: チュウコウセイノシンチョウヲノバスナナツノシュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16865465%2F
+                    author: 小枝 雅与
+                    authorKana: コエダ マサヨ
+                    availability: '1'
+                    booksGenreId: '001008003002/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784065257357'
+                    itemCaption: "「小さな習慣を積み重ねれば夢は必ずかないます！」テレビショッピングのカリスマが明かす成功の秘密。"
+                    itemPrice: 1430
+                    itemUrl: https://books.rakuten.co.jp/rb/16865465/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7357/9784065257357_1_5.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7357/9784065257357_1_5.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 講談社
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2021年10月13日頃
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7357/9784065257357_1_5.jpg?_ex=64x64
+                    subTitle: ''
+                    subTitleKana: ''
+                    title: シンデレラ　幸せを呼び込む7つの習慣　人生を180度変える幸福のメソッド
+                    titleKana: シンデレラ シアワセヲヨビコム7ツノシュウカン ジンセイヲ180ドカエルコウフクノメソッド
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16082149%2F
+                    author: スティーブン・R．コヴィー/フランクリン・コヴィー・ジャパン
+                    authorKana: コヴィー,スティーブン・R./フランクリン コヴィー ジャパン
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940901'
+                    itemCaption: 全世界３０００万部売上をほこる、ビジネス書の金字塔『７つの習慣』。そんな本書を、時代をリードする７人の賢者は、いかに読み解くのか？“賢者のハイライト”では、賢者直筆のハイライト、実際のメモや言葉をそのまま掲載することで、その思考の足跡を読者が追体験できるようにしました。混迷を極める現代社会だからこそ求められる「ブレない人生の軸」を獲得するための必読書です。
+                    itemPrice: 2640
+                    itemUrl: https://books.rakuten.co.jp/rb/16082149/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0901/9784863940901.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0901/9784863940901.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2019年10月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0901/9784863940901.jpg?_ex=64x64
+                    subTitle: 人生は競争の場所ではない協力の場である！！
+                    subTitleKana: ジンセイ ワ キョウソウ ノ バ デワ ナイ キョウリョク ノ
+                    title: 7つの習慣　賢者のハイライト　第7の習慣　小倉優子スペシャルエディ
+                    titleKana: ナナツ ノ シュウカン ケンジャ ノ ハイライト ダイナナ ノ シュウカン オグラ
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16082144%2F
+                    author: スティーブン・R・コヴィー/フランクリン・コヴィー・ジャパン
+                    authorKana: コヴィー,スティーブン・R./フランクリン コヴィー ジャパン
+                    availability: '1'
+                    booksGenreId: '001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784863940857'
+                    itemCaption: 全世界３０００万部売上をほこる、ビジネス書の金字塔『７つの習慣』。そんな本書を、時代をリードする７人の賢者は、いかに読み解くのか？“賢者のハイライト”では、賢者直筆のハイライト、実際のメモや言葉をそのまま掲載することで、その思考の足跡を読者が追体験できるようにしました。混迷を極める現代社会だからこそ求められる「ブレない人生の軸」を獲得するための必読書です。
+                    itemPrice: 2640
+                    itemUrl: https://books.rakuten.co.jp/rb/16082144/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0857/9784863940857.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0857/9784863940857.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: FCEパブリッシング（キングベアー出版）
+                    reviewAverage: '0.0'
+                    reviewCount: 0
+                    salesDate: 2019年10月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0857/9784863940857.jpg?_ex=64x64
+                    subTitle: "「最後かもしれない」と思うとこの世界が愛おしくなる"
+                    subTitleKana: サイゴ カモシレナイ ト オモウト コノ セカイ ガ イトオシクナ
+                    title: 7つの習慣　賢者のハイライト　第2の習慣　鈴木美穂スペシャルエディ
+                    titleKana: ナナツ ノ シュウカン ケンジャ ノ ハイライト ダイニ ノ シュウカン スズキ ミ
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13441765%2F
+                    author: 中山和義/フランクリン・コヴィー・ジャパン株式会社
+                    authorKana: ナカヤマ,カズヨシ/フランクリン コヴィー ジャパン カブシキ ガイシ
+                    availability: '1'
+                    booksGenreId: '001006009003/001008003002/001008004001/001010013003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784894516908'
+                    itemCaption: １つの物語が、あなたを変える“習慣”を作り出す！世界３０００万部、日本２００万部のベストセラー『７つの習慣』の言葉を、わかりやすい言葉に変えて、そこからイメージできるストーリーでつづる、名著の新しいかたち。
+                    itemPrice: 1430
+                    itemUrl: https://books.rakuten.co.jp/rb/13441765/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6908/9784894516908.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6908/9784894516908.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: フォレスト出版
+                    reviewAverage: '3.8'
+                    reviewCount: 5
+                    salesDate: 2015年12月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6908/9784894516908.jpg?_ex=64x64
+                    subTitle: 1日1話で、あなたの人生が変わる！
+                    subTitleKana: イチニチ イチワ デ アナタ ノ ジンセイ ガ カワル
+                    title: 物語が教えてくれる7つの習慣
+                    titleKana: モノガタリ ガ オシエテクレル ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F15696921%2F
+                    author: 小西浩文
+                    authorKana: コニシ,ヒロフミ
+                    availability: '1'
+                    booksGenreId: 001006007002/001006018002/001009005
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784635310390'
+                    itemCaption: 登山でもビジネスでも「危険」を回避した人は必ずこれをやっている。「危機管理」の視点。トップクライマーが実践する究極の「心」の鍛え方。
+                    itemPrice: 1320
+                    itemUrl: https://books.rakuten.co.jp/rb/15696921/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0390/9784635310390.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0390/9784635310390.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 山と渓谷社
+                    reviewAverage: '3.4'
+                    reviewCount: 7
+                    salesDate: 2018年12月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0390/9784635310390.jpg?_ex=64x64
+                    subTitle: 登山でもビジネスでも「危険」を回避した人は必ずこれ
+                    subTitleKana: トザン デモ ビジネス デモ キケン オ カイヒシタ ヒト
+                    title: 生き残った人の7つの習慣
+                    titleKana: イキノコッタ ヒト ノ ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13156504%2F
+                    author: 林成之
+                    authorKana: ハヤシ,ナリユキ
+                    availability: '1'
+                    booksGenreId: '001008003001/001010010001/001028001003'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784344027473'
+                    itemCaption: 悪い習慣をやめるだけで、脳のパフォーマンスが驚くほどよくなる！多くのオリンピック選手を指導した脳神経外科医による４２万部突破の大ベストセラー、マンガと図解で一新！
+                    itemPrice: 660
+                    itemUrl: https://books.rakuten.co.jp/rb/13156504/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7473/9784344027473.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7473/9784344027473.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 幻冬舎
+                    reviewAverage: '3.57'
+                    reviewCount: 16
+                    salesDate: 2015年03月
+                    seriesName: ''
+                    seriesNameKana: ''
+                    size: 単行本
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7473/9784344027473.jpg?_ex=64x64
+                    subTitle: 素質はあるのに、なぜ仕事や人生がうまくいかないのか
+                    subTitleKana: ソシツ ワ アル ノニ ナゼ シゴト ヤ ジンセイ ガ ウマク
+                    title: 図解脳に悪い7つの習慣
+                    titleKana: ズカイ ノウ ニ ワルイ ナナツ ノ シュウカン
+                - params:
+                    affiliateUrl: https://hb.afl.rakuten.co.jp/hgc/g00q0728.qfhkt41a.g00q0728.qfhku84f/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F13377559%2F
+                    author: 倉下忠憲/高畑正幸
+                    authorKana: クラシタ,タダノリ/タカバタケ,マサユキ
+                    availability: '1'
+                    booksGenreId: '001006009004/001006009'
+                    chirayomiUrl: ''
+                    contents: ''
+                    discountPrice: 0
+                    discountRate: 0
+                    isbn: '9784768306499'
+                    itemCaption: ''
+                    itemPrice: 1540
+                    itemUrl: https://books.rakuten.co.jp/rb/13377559/
+                    largeImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6499/9784768306499.jpg?_ex=200x200
+                    limitedFlag: 0
+                    listPrice: 0
+                    mediumImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6499/9784768306499.jpg?_ex=120x120
+                    postageFlag: 2
+                    publisherName: 玄光社
+                    reviewAverage: '3.5'
+                    reviewCount: 5
+                    salesDate: 2015年08月
+                    seriesName: 玄光社mook
+                    seriesNameKana: ゲンコウシャ ムック
+                    size: ムックその他
+                    smallImageUrl: https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6499/9784768306499.jpg?_ex=64x64
+                    subTitle: ヒットを生み出す7つの習慣とメソッド
+                    subTitleKana: ヒット オ ウミダス ナナツ ノ シュウカン ト メソッド
+                    title: 超メモ術
+                    titleKana: チョウ メモジュツ
+        '406':
+          description: パラメータが空文字列の時ステータス406が返却される
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: タイトルを入力してください
+  "/api/v1/users/{provider}/callback":
+    get:
+      summary: omniauth_success
+      tags:
+      - Api::V1::Users::OmniauthCallback
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          type: string
+        example: twitter
+      responses:
+        '200':
+          description: oauthのデータが存在する場合ログインに成功する
+          content:
+            text/html:
+              schema:
+                type: string
+              example: |2-
+
+
+                            <html>
+                                    <head></head>
+                                    <body>
+                                            An error occurred
+                                    </body>
+                            </html>
+  "/api/v1/books/{book_isbn}/outputs":
+    get:
+      summary: index
+      tags:
+      - Api::V1::Output
+      parameters:
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5342468521267
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5627562883788
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5378710845906
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2340656887728
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8106631289956
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7135550309382
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2113564720422
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1889660832345
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7087119318326
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6498043623454
+      responses:
+        '200':
+          description: ログイン中のユーザーがアウトプットを投稿していない場合ステータスが200になる
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  book:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      isbn:
+                        type: string
+                      title:
+                        type: string
+                      author:
+                        type: string
+                      author_kana:
+                        type: string
+                      publisher_name:
+                        type: string
+                      sales_date:
+                        type: string
+                      item_price:
+                        type: integer
+                      item_url:
+                        type: string
+                      image_url:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                  myoutputs:
+                    type: array
+                    items:
+                      nullable: true
+                      type: object
+                      properties:
+                        awareness:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            content:
+                              type: string
+                            book_id:
+                              type: integer
+                            user_id:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                        action_plans:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              time_of_execution:
+                                type: string
+                              what_to_do:
+                                type: string
+                              how_to_do:
+                                type: string
+                              awareness_id:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+                  outputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        awareness:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            content:
+                              type: string
+                            book_id:
+                              type: integer
+                            user_id:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                        username:
+                          type: string
+                        action_plans:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              time_of_execution:
+                                type: string
+                              what_to_do:
+                                type: string
+                              how_to_do:
+                                type: string
+                              awareness_id:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+                      nullable: true
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+                  posted:
+                    type: boolean
+              example:
+                book:
+                  id: 108
+                  isbn: '5342468521267'
+                  title: Vanity Fair
+                  author: testさん
+                  author_kana: テストさん
+                  publisher_name: 株式会社test
+                  sales_date: '1996-12-22'
+                  item_price: 1500
+                  item_url: https://books.rakuten.co.jp/hoge/12345
+                  image_url: https://hogehoge.image.rakuten.co.jp/fuga/book/test/4151/12345678.jpg
+                  created_at: '2021-12-18T05:11:27.407Z'
+                  updated_at: '2021-12-18T05:11:27.407Z'
+                myoutputs: []
+                outputs:
+                - awareness:
+                    id: 49
+                    content: Voluptates qui amet quia.
+                    book_id: 108
+                    user_id: 149
+                    created_at: '2021-12-18T05:11:27.495Z'
+                    updated_at: '2021-12-18T05:11:27.495Z'
+                  username: Yuki Cruickshank JD
+                  action_plans:
+                  - id: 133
+                    time_of_execution: Ipsa voluptas odit reiciendis.
+                    what_to_do: Dolores ut ad ut.
+                    how_to_do: Qui fugiat perferendis sed.
+                    awareness_id: 49
+                    created_at: '2021-12-18T05:11:27.497Z'
+                    updated_at: '2021-12-18T05:11:27.497Z'
+                  - id: 134
+                    time_of_execution: Pariatur sint sit facere.
+                    what_to_do: Eos vero deleniti unde.
+                    how_to_do: Nobis tempora voluptatem quaerat.
+                    awareness_id: 49
+                    created_at: '2021-12-18T05:11:27.499Z'
+                    updated_at: '2021-12-18T05:11:27.499Z'
+                  - id: 135
+                    time_of_execution: Voluptatem tempore ut amet.
+                    what_to_do: Facilis omnis sint dicta.
+                    how_to_do: Et mollitia excepturi porro.
+                    awareness_id: 49
+                    created_at: '2021-12-18T05:11:27.501Z'
+                    updated_at: '2021-12-18T05:11:27.501Z'
+                - awareness:
+                    id: 48
+                    content: Voluptates qui amet quia.
+                    book_id: 108
+                    user_id: 149
+                    created_at: '2021-12-18T05:11:27.486Z'
+                    updated_at: '2021-12-18T05:11:27.486Z'
+                  username: Yuki Cruickshank JD
+                  action_plans:
+                  - id: 130
+                    time_of_execution: Ipsa voluptas odit reiciendis.
+                    what_to_do: Dolores ut ad ut.
+                    how_to_do: Qui fugiat perferendis sed.
+                    awareness_id: 48
+                    created_at: '2021-12-18T05:11:27.488Z'
+                    updated_at: '2021-12-18T05:11:27.488Z'
+                  - id: 131
+                    time_of_execution: Pariatur sint sit facere.
+                    what_to_do: Eos vero deleniti unde.
+                    how_to_do: Nobis tempora voluptatem quaerat.
+                    awareness_id: 48
+                    created_at: '2021-12-18T05:11:27.490Z'
+                    updated_at: '2021-12-18T05:11:27.490Z'
+                  - id: 132
+                    time_of_execution: Voluptatem tempore ut amet.
+                    what_to_do: Facilis omnis sint dicta.
+                    how_to_do: Et mollitia excepturi porro.
+                    awareness_id: 48
+                    created_at: '2021-12-18T05:11:27.492Z'
+                    updated_at: '2021-12-18T05:11:27.492Z'
+                - awareness:
+                    id: 47
+                    content: Voluptates qui amet quia.
+                    book_id: 108
+                    user_id: 149
+                    created_at: '2021-12-18T05:11:27.460Z'
+                    updated_at: '2021-12-18T05:11:27.460Z'
+                  username: Yuki Cruickshank JD
+                  action_plans:
+                  - id: 127
+                    time_of_execution: Ipsa voluptas odit reiciendis.
+                    what_to_do: Dolores ut ad ut.
+                    how_to_do: Qui fugiat perferendis sed.
+                    awareness_id: 47
+                    created_at: '2021-12-18T05:11:27.479Z'
+                    updated_at: '2021-12-18T05:11:27.479Z'
+                  - id: 128
+                    time_of_execution: Pariatur sint sit facere.
+                    what_to_do: Eos vero deleniti unde.
+                    how_to_do: Nobis tempora voluptatem quaerat.
+                    awareness_id: 47
+                    created_at: '2021-12-18T05:11:27.481Z'
+                    updated_at: '2021-12-18T05:11:27.481Z'
+                  - id: 129
+                    time_of_execution: Voluptatem tempore ut amet.
+                    what_to_do: Facilis omnis sint dicta.
+                    how_to_do: Et mollitia excepturi porro.
+                    awareness_id: 47
+                    created_at: '2021-12-18T05:11:27.483Z'
+                    updated_at: '2021-12-18T05:11:27.483Z'
+                user:
+                  id: 150
+                  provider: email
+                  uid: elizebeth_monahan@hotmail.com
+                  allow_password_change: false
+                  nickname: Rosendo Cartwright LLD
+                  email: elizebeth_monahan@hotmail.com
+                  created_at: '2021-12-18T05:11:27.512Z'
+                  updated_at: '2021-12-18T05:11:27.512Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+                posted: false
+    post:
+      summary: create
+      tags:
+      - Api::V1::Output
+      parameters:
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7298410061600
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1651153862531
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2385573912918
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7060857080230
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1634223081867
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5088559730556
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 3051231051497
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8810135543338
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7640390987329
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 7810189179367
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6834268756118
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6373299588037
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6682148506242
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6433935796209
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5808999922874
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8127980197421
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 4469413359879
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8267023731845
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2019808397219
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                output:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                    action_plans:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          time_of_execution:
+                            type: string
+                          what_to_do:
+                            type: string
+                          how_to_do:
+                            type: string
+                    user_id:
+                      type: string
+                    book_id:
+                      type: string
+            example:
+              output:
+                content: Debitis quidem qui qui.
+                action_plans:
+                - time_of_execution: Ipsa voluptas odit reiciendis.
+                  what_to_do: Dolores ut ad ut.
+                  how_to_do: Qui fugiat perferendis sed.
+                - time_of_execution: Pariatur sint sit facere.
+                  what_to_do: Eos vero deleniti unde.
+                  how_to_do: Nobis tempora voluptatem quaerat.
+                - time_of_execution: Voluptatem tempore ut amet.
+                  what_to_do: Facilis omnis sint dicta.
+                  how_to_do: Et mollitia excepturi porro.
+                user_id: '163'
+                book_id: '118'
+      responses:
+        '201':
+          description: 投稿に成功するとステータスが201で返却される
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  awareness:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      content:
+                        type: string
+                      book_id:
+                        type: integer
+                      user_id:
+                        type: integer
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                  action_plans:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        time_of_execution:
+                          type: string
+                        what_to_do:
+                          type: string
+                        how_to_do:
+                          type: string
+              example:
+                awareness:
+                  id: 69
+                  content: Debitis quidem qui qui.
+                  book_id: 118
+                  user_id: 163
+                  created_at: '2021-12-18T05:11:48.903Z'
+                  updated_at: '2021-12-18T05:11:48.903Z'
+                action_plans:
+                - time_of_execution: Ipsa voluptas odit reiciendis.
+                  what_to_do: Dolores ut ad ut.
+                  how_to_do: Qui fugiat perferendis sed.
+                - time_of_execution: Pariatur sint sit facere.
+                  what_to_do: Eos vero deleniti unde.
+                  how_to_do: Nobis tempora voluptatem quaerat.
+                - time_of_execution: Voluptatem tempore ut amet.
+                  what_to_do: Facilis omnis sint dicta.
+                  how_to_do: Et mollitia excepturi porro.
+        '422':
+          description: 必須のカラムが不足している時保存に失敗しステータスが404になる
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - What to do of action plan 3 can't be blank
+  "/api/v1/users":
+    post:
+      summary: create
+      tags:
+      - Api::V1::Users::Registration
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    nickname:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    password_confirmation:
+                      type: string
+                    avatar:
+                      type: object
+                      properties:
+                        data:
+                          type: string
+                        filename:
+                          type: string
+            example:
+              user:
+                nickname: Jong Conroy
+                email: audrie@hotmail.com
+                password: Pass1234
+                password_confirmation: Pass1234
+                avatar:
+                  data: ''
+                  filename: ''
+      responses:
+        '200':
+          description: リクエストに成功する(画像なし)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+              example:
+                user:
+                  id: 182
+                  provider: email
+                  uid: audrie@hotmail.com
+                  allow_password_change: false
+                  nickname: Jong Conroy
+                  email: audrie@hotmail.com
+                  created_at: '2021-12-18T05:12:34.102Z'
+                  updated_at: '2021-12-18T05:12:34.102Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+        '422':
+          description: リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - Email has already been taken
+    put:
+      summary: update
+      tags:
+      - Api::V1::Users::Registration
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    nickname:
+                      type: string
+                    avatar:
+                      type: object
+                      properties:
+                        data:
+                          type: string
+                        filename:
+                          type: string
+            example:
+              user:
+                nickname: updated
+                avatar:
+                  data: ''
+                  filename: ''
+      responses:
+        '200':
+          description: パラメータが正しい時ステータスが200で返却される
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+                  avatar:
+                    nullable: true
+                    type: string
+              example:
+                user:
+                  id: 215
+                  nickname: updated
+                  email: lonny@yahoo.com
+                  provider: email
+                  uid: lonny@yahoo.com
+                  allow_password_change: false
+                  created_at: '2021-12-18T05:12:53.058Z'
+                  updated_at: '2021-12-18T05:12:53.101Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+                avatar: 
+        '401':
+          description: ヘッダーのユーザー情報が存在しない場合リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: ユーザーが存在しません
+        '422':
+          description: nicknameとavatarがともに空の場合リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - Nickname can't be blank
+  "/api/v1/users/sign_in":
+    post:
+      summary: create
+      tags:
+      - Api::V1::Users::Session
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+            example:
+              user:
+                email: angel_fay@yahoo.com
+                password: Pass1234
+      responses:
+        '200':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      email:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+              example:
+                user:
+                  id: 189
+                  provider: email
+                  email: angel_fay@yahoo.com
+                  uid: angel_fay@yahoo.com
+                  allow_password_change: false
+                  nickname: Msgr. Tammi Wolf
+                  created_at: '2021-12-18T05:12:34.649Z'
+                  updated_at: '2021-12-18T05:12:34.702Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+        '401':
+          description: リクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                - Authorization failed. Invalid email
+  "/api/v1/users/sign_out":
+    delete:
+      summary: destroy
+      tags:
+      - Api::V1::Users::Session
+      responses:
+        '200':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        '404':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                success: false
+                errors:
+                - User was not found or was not logged in.
+  "/api/v1/mypage":
+    get:
+      summary: show
+      tags:
+      - Api::V1::User
+      responses:
+        '200':
+          description: ヘッダーにuidがあればリクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      provider:
+                        type: string
+                      uid:
+                        type: string
+                      allow_password_change:
+                        type: boolean
+                      nickname:
+                        type: string
+                      email:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      sns_token:
+                        nullable: true
+                      sns_secret:
+                        nullable: true
+                      is_admin:
+                        type: boolean
+                  books:
+                    type: array
+                    items:
+                      nullable: true
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        isbn:
+                          type: string
+                        title:
+                          type: string
+                        author:
+                          type: string
+                        author_kana:
+                          type: string
+                        publisher_name:
+                          type: string
+                        sales_date:
+                          type: string
+                        item_price:
+                          type: integer
+                        item_url:
+                          type: string
+                        image_url:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                  avatar:
+                    type: string
+              example:
+                user:
+                  id: 197
+                  provider: email
+                  uid: martha@yahoo.com
+                  allow_password_change: false
+                  nickname: Mrs. Katrice Bartoletti
+                  email: martha@yahoo.com
+                  created_at: '2021-12-18T05:12:35.255Z'
+                  updated_at: '2021-12-18T05:12:35.255Z'
+                  sns_token: 
+                  sns_secret: 
+                  is_admin: false
+                books: []
+                avatar: https://kaidoku.s3.ap-northeast-1.amazonaws.com/public/sample_avatar.png
+        '401':
+          description: ヘッダーのuidが存在しない時ステータスが404
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: ユーザーが見つかりませんでした
+  "/api/v1/mypage/books/{book_isbn}/outputs":
+    get:
+      summary: my_outputs
+      tags:
+      - Api::V1::User
+      parameters:
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6282076001116
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 5376074672418
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 3239025844791
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 4047053063935
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 6223564288083
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 146
+      - name: book_isbn
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 148
+      responses:
+        '200':
+          description: リクエストに成功する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  outputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        awareness:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            content:
+                              type: string
+                            book_id:
+                              type: integer
+                            user_id:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                        action_plans:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              time_of_execution:
+                                type: string
+                              what_to_do:
+                                type: string
+                              how_to_do:
+                                type: string
+                              awareness_id:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+                      nullable: true
+              example:
+                outputs:
+                - awareness:
+                    id: 90
+                    content: Nobis iure ratione quidem.
+                    book_id: 140
+                    user_id: 208
+                    created_at: '2021-12-18T05:12:36.424Z'
+                    updated_at: '2021-12-18T05:12:36.424Z'
+                  action_plans:
+                  - id: 244
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 90
+                    created_at: '2021-12-18T05:12:36.427Z'
+                    updated_at: '2021-12-18T05:12:36.427Z'
+                  - id: 245
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 90
+                    created_at: '2021-12-18T05:12:36.429Z'
+                    updated_at: '2021-12-18T05:12:36.429Z'
+                  - id: 246
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 90
+                    created_at: '2021-12-18T05:12:36.431Z'
+                    updated_at: '2021-12-18T05:12:36.431Z'
+                - awareness:
+                    id: 89
+                    content: Nobis iure ratione quidem.
+                    book_id: 140
+                    user_id: 208
+                    created_at: '2021-12-18T05:12:36.411Z'
+                    updated_at: '2021-12-18T05:12:36.411Z'
+                  action_plans:
+                  - id: 241
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 89
+                    created_at: '2021-12-18T05:12:36.414Z'
+                    updated_at: '2021-12-18T05:12:36.414Z'
+                  - id: 242
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 89
+                    created_at: '2021-12-18T05:12:36.417Z'
+                    updated_at: '2021-12-18T05:12:36.417Z'
+                  - id: 243
+                    time_of_execution: test
+                    what_to_do: test
+                    how_to_do: ''
+                    awareness_id: 89
+                    created_at: '2021-12-18T05:12:36.420Z'
+                    updated_at: '2021-12-18T05:12:36.420Z'
+        '401':
+          description: ヘッダーのユーザーが存在しないときリクエストに失敗する
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: ユーザーが見つかりませんでした
+        '422':
+          description: 書籍が推薦図書として追加されていない場合、ステータスが422になる
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+              example:
+                errors: 書籍が推薦図書として追加されていません
